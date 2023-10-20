@@ -17,13 +17,14 @@ public class BowCharacters : Characters
     private Vector3 Direction;
     private AimState aimState = AimState.NONE;
     private GameObject CrossHair;
-    private float threasHold_Charged = 0.1f;
+    private float threasHold_Charged;
 
     private void Awake()
     {
         BaseFireSpeed = 100f;
         ChargeElapsed = 0;
         ChargedMaxElapsed = 3f;
+        threasHold_Charged = 0;
     }
 
     protected override void Start()
@@ -59,7 +60,7 @@ public class BowCharacters : Characters
     protected virtual void Fire(Vector3 direction)
     {
         Rigidbody ArrowFire = Instantiate(ArrowPrefab, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-        ArrowFire.velocity = direction.normalized * BaseFireSpeed * (1 + ChargeElapsed);
+        ArrowFire.velocity = direction.normalized * BaseFireSpeed * (1 + ChargeElapsed * 0.1f);
 
         ChargeElapsed = 0;
     }
@@ -90,7 +91,7 @@ public class BowCharacters : Characters
         UpdateCameraAim();
         aimState = AimState.AIM;
         Vector3 ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f);
-        Direction = (ElementalHitPos - transform.position).normalized;
+        Direction = (ElementalHitPos - GetPlayerController().transform.position).normalized;
         LookAtDirection(Direction);
     }
 
@@ -102,7 +103,7 @@ public class BowCharacters : Characters
         }
         else
         {
-            Vector3 forward = transform.forward;
+            Vector3 forward = GetPlayerController().transform.forward;
             forward.y = 0;
             forward.Normalize();
             Direction = forward;

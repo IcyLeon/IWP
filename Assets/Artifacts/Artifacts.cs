@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Artifacts : UpgradableItems
 {
-    private Characters characters;
+    private CharacterData characterData;
     public enum ArtifactsStat
     {
         HP,
@@ -262,14 +262,14 @@ public class Artifacts : UpgradableItems
         base.Upgrade();
     }
 
-    public Characters GetCharacter()
+    public CharacterData GetCharacter()
     {
-        return characters;
+        return characterData;
     }
 
-    public void SetEquippedCharacter(Characters characters)
+    public void SetEquippedCharacter(CharacterData characterData)
     {
-        this.characters = characters;
+        this.characterData = characterData;
     }
 
     public ArtifactsStat GetStats(int idx)

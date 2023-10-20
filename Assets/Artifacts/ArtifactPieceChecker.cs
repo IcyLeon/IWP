@@ -34,9 +34,9 @@ public class ArtifactPieceChecker : MonoBehaviour
             itemlist = InventoryManager.GetInstance().GetINVList();
         else
         {
-            for (int i = 0; i < CharacterManager.GetInstance().GetCurrentCharacter().GetEquippedArtifactsList().Count; i++)
+            for (int i = 0; i < InventoryManager.GetInstance().GetCurrentEquipCharacterData().GetEquippedArtifactsList().Count; i++)
             {
-                Artifacts artifacts = CharacterManager.GetInstance().GetCurrentCharacter().GetEquippedArtifactsList()[i];
+                Artifacts artifacts = InventoryManager.GetInstance().GetCurrentEquipCharacterData().GetEquippedArtifactsList()[i];
                 itemlist.Add(artifacts);
             }
         }

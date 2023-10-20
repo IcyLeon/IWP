@@ -1,15 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+using static UnityEditor.PlayerSettings;
 
 public class InventoryManager : MonoBehaviour {
     private static InventoryManager instance;
     private PlayerStats PlayerStats;
-    private List<Characters> equipcharacterslist;
-    private Characters currentequipCharacter;
+    private List<CharacterData> EquipCharactersDatalist;
+    private CharacterData currentequipCharacter;
 
     public delegate void OnInventoryListChanged();
     public OnInventoryListChanged onInventoryListChanged;
+
+
+    [SerializeField] PlayersSO[] startupSOTest;
 
     private void Awake()
     {
@@ -21,10 +28,44 @@ public class InventoryManager : MonoBehaviour {
         return instance;
     }
 
-    public InventoryManager()
-    {
+    void Start()
+    {   
         PlayerStats = new PlayerStats();
-        equipcharacterslist = new List<Characters>();
+        EquipCharactersDatalist = new List<CharacterData>();
+
+        for (int i = 0; i < startupSOTest.Length; i++)
+        {
+            CharacterData characterData = new CharacterData();
+            characterData.SetItemsSO(startupSOTest[i]);
+            AddCharacterDataToOwnList(characterData);
+        }
+
+        CharacterManager.GetInstance().SwapCharacters(0);
+
+    }
+
+
+    public List<CharacterData> GetCharactersOwnedList()
+    {
+        if (PlayerStats == null)
+            return null;
+
+        return PlayerStats.GetCharactersOwnedList();
+    }
+    public CharacterData GetOwnedCharacterData(PlayersSO playersSO)
+    {
+        if (PlayerStats == null)
+            return null;
+
+        return PlayerStats.GetOwnedCharacterData(playersSO);
+    }
+
+    private void AddCharacterDataToOwnList(CharacterData characterData)
+    {
+        if (PlayerStats == null)
+            return;
+
+        PlayerStats.AddCharacterToOwnList(characterData);
     }
 
     public PlayerStats GetPlayerStats()
@@ -76,18 +117,18 @@ public class InventoryManager : MonoBehaviour {
         PlayerStats.RemoveItems(item);
         onInventoryListChanged?.Invoke();
     }
-    public List<Characters> GetEquipCharactersList()
+    public List<CharacterData> GetEquipCharactersDataList()
     {
-        return equipcharacterslist;
+        return EquipCharactersDatalist;
     }
 
-    public Characters GetCurrentEquipCharacter()
+    public CharacterData GetCurrentEquipCharacterData()
     {
         return currentequipCharacter;
     }
 
-    public void SetCurrentEquipCharacter(Characters characters)
+    public void SetCurrentEquipCharacter(CharacterData CharacterData)
     {
-        currentequipCharacter = characters;
+        currentequipCharacter = CharacterData;
     }
 }

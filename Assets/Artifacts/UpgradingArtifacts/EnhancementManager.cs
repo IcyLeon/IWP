@@ -313,7 +313,7 @@ public class EnhancementManager : MonoBehaviour
                 if (upgradableItems is Artifacts)
                 {
                     Artifacts artifacts = upgradableItems as Artifacts;
-                    if (artifacts.GetCharacter())
+                    if (artifacts.GetCharacter() != null)
                         return;
                 }
             }
@@ -529,7 +529,7 @@ public class EnhancementManager : MonoBehaviour
                 if (upgradableItems is Artifacts)
                 {
                     Artifacts artifacts = upgradableItems as Artifacts;
-                    if (artifacts.GetCharacter())
+                    if (artifacts.GetCharacter() != null)
                         continue;
                 }
             }

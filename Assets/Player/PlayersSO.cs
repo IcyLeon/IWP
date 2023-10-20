@@ -4,11 +4,9 @@ using System.Diagnostics.Contracts;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayersSO", menuName = "ScriptableObjects/PlayersSO")]
-public class PlayersSO : ScriptableObject
+public class PlayersSO : ItemTemplate
 {
-    public string CharacterName;
-    public string CharacterDesc;
-    public Sprite CharacterSprites;
     public float ElementalSkillsCooldown;
     public float UltiSkillCooldown;
+    public float EnergyCost;
 }

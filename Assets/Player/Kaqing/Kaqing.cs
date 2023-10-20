@@ -16,8 +16,13 @@ public class Kaqing : Characters
     private GameObject targetOrb;
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject TargetOrbPrefab;
+    private float threasHold_Charged;
     ElementalSKill elementalSKill = ElementalSKill.NONE;
 
+    private void Awake()
+    {
+        threasHold_Charged = 0;
+    }
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -39,7 +44,7 @@ public class Kaqing : Characters
         if (elementalOrb != null)
         {
             if (!elementalOrb.GetEnergyOrbMoving())
-                UpdateDefaultPosOffsetAndZoom(1f);
+                UpdateDefaultPosOffsetAndZoom(0.65f);
         }
         UpdateTargetOrb();
     }
@@ -60,11 +65,22 @@ public class Kaqing : Characters
         switch (elementalSKill)
         {
             case ElementalSKill.THROW:
-                if (targetOrb == null)
-                    targetOrb = Instantiate(TargetOrbPrefab);
-                UpdateCameraAim();
-                ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 10f);
-                LookAtDirection(ElementalHitPos - transform.position);
+                if (threasHold_Charged > 0.1f)
+                {
+                    if (targetOrb == null)
+                        targetOrb = Instantiate(TargetOrbPrefab);
+                    UpdateCameraAim();
+                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 7.5f);
+                    LookAtDirection(ElementalHitPos - transform.position);
+                }
+                else
+                {
+                    Vector3 forward = transform.forward;
+                    forward.y = 0;
+                    forward.Normalize();
+                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, forward, 7.5f);
+                }
+                threasHold_Charged += Time.deltaTime;
                 break;
         }
 
@@ -84,6 +100,12 @@ public class Kaqing : Characters
     {
     }
 
+    private void ResetThresHold()
+    {
+        threasHold_Charged = 0;
+        UpdateDefaultPosOffsetAndZoom(0);
+    }
+
     protected override void ElementalSkillTrigger()
     {
         switch(elementalSKill)
@@ -91,13 +113,13 @@ public class Kaqing : Characters
             case ElementalSKill.THROW:
                 ElementalOrb Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<ElementalOrb>();
                 elementalOrb = Orb;
-                StartCoroutine(elementalOrb.MoveToTargetLocation(ElementalHitPos, 80f));
-
+                StartCoroutine(elementalOrb.MoveToTargetLocation(ElementalHitPos, 50f));
+                ResetThresHold();
                 elementalSKill = ElementalSKill.SLASH;
                 break;
             case ElementalSKill.SLASH:
                 LookAtDirection(elementalOrb.transform.position - transform.position);
-                transform.position = elementalOrb.transform.position;
+                GetPlayerController().transform.position = elementalOrb.transform.position;
                 ResetVelocity();
                 Destroy(elementalOrb.gameObject);
 

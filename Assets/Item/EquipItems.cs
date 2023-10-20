@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class EquipItems : MonoBehaviour, IPointerClickHandler
 {
-    private Characters currentCharacterREF;
+    private CharacterData currentCharacterREF;
     [SerializeField] TextMeshProUGUI EquipTxt;
     private Item itemREF;
 
@@ -56,7 +56,7 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
     // Update is called once per frame
     void Update()
     {
-        currentCharacterREF = CharacterManager.GetInstance().GetCurrentCharacter();
+        currentCharacterREF = InventoryManager.GetInstance().GetCurrentEquipCharacterData();
 
         if (itemREF != null)
         {

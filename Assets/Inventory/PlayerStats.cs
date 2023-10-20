@@ -8,7 +8,30 @@ public class PlayerStats
     private int Load;
     private int MaxLoad;
     private int mora;
+    List<CharacterData> CharactersOwnedList;
     List<Item> InventoryList;
+
+    public void AddCharacterToOwnList(CharacterData characterData)
+    {
+        if (characterData == null)
+            return;
+
+        if (GetOwnedCharacterData(characterData.GetItemSO() as PlayersSO) == null) {
+            CharactersOwnedList.Add(characterData);
+        }
+    }
+
+    public CharacterData GetOwnedCharacterData(PlayersSO playersSO)
+    {
+        for (int i = 0; i < CharactersOwnedList.Count; i++)
+        {
+            if (CharactersOwnedList[i].GetItemSO() == playersSO)
+            {
+                return CharactersOwnedList[i];
+            }
+        }
+        return null;
+    }
 
     public int GetMora()
     {
@@ -39,5 +62,11 @@ public class PlayerStats
         MaxLoad = 10000;
         mora = 0;
         InventoryList = new List<Item>();
+        CharactersOwnedList = new List<CharacterData>();
+    }
+
+    public List<CharacterData> GetCharactersOwnedList()
+    {
+        return CharactersOwnedList;
     }
 }

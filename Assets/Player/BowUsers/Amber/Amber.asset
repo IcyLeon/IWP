@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a47102e57592a94abc9d25cd725a33d, type: 3}
   m_Name: Amber
   m_EditorClassIdentifier: 
-  CharacterName: Amber
-  CharacterDesc: Amber fire
-  CharacterSprites: {fileID: 0}
+  ItemName: Amber
+  ItemDesc: Amber
+  ItemSprite: {fileID: 0}
+  Rarity: 3
   ElementalSkillsCooldown: 10
   UltiSkillCooldown: 15

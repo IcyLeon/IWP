@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a47102e57592a94abc9d25cd725a33d, type: 3}
   m_Name: Kaqing
   m_EditorClassIdentifier: 
-  CharacterName: Keqing
-  CharacterDesc: 
-  CharacterSprites: {fileID: 0}
+  ItemName: Keqing
+  ItemDesc: Keqing is cute
+  ItemSprite: {fileID: 0}
+  Rarity: 4
   ElementalSkillsCooldown: 5
   UltiSkillCooldown: 15

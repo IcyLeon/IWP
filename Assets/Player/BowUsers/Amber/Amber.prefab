@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 7071931528069142078}
   - component: {fileID: 1056945109542587122}
   - component: {fileID: 8061317013492004223}
-  - component: {fileID: 2689416646951005362}
   - component: {fileID: 7290668167338267333}
   - component: {fileID: 1701627816755134425}
   m_Layer: 0
@@ -202,22 +201,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &2689416646951005362
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2901747049663663568}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
 --- !u!136 &7290668167338267333
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -244,6 +227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f38c0ae1a849234abb2b1a741cb28cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
+  PlayersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}

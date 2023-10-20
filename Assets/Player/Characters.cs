@@ -4,19 +4,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Characters : MonoBehaviour
+public interface IDamage
+{
+    public void TakeDamage(GameObject source);
+}
+public class Characters : MonoBehaviour, IDamage
 {
     protected float AimSpeed = 20f;
+    [SerializeField] PlayersSO PlayersSO;
     private CharacterData characterData;
-    // Start is called before the first frame update
-    protected List<Artifacts> EquippedArtifacts = new List<Artifacts>();
     private PlayerController playerController;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
-    [SerializeField] PlayersSO playersSO;
+
+    public CharacterData GetCharacterData()
+    {
+        return characterData;
+    }
 
     public PlayersSO GetPlayersSO()
     {
-        return playersSO;
+        return PlayersSO;
+    }
+
+    public void SetCharacterData(CharacterData characterData)
+    {
+        this.characterData = characterData;
     }
 
     public void Attack()
@@ -27,7 +39,7 @@ public class Characters : MonoBehaviour
     public int GetLevel()
     {
         if (characterData == null)
-            return 1;
+            return -1;
 
         return characterData.GetLevel();
     }
@@ -36,6 +48,7 @@ public class Characters : MonoBehaviour
     {
         return playerController;
     }
+
     protected virtual void Start()
     {
         playerController = CharacterManager.GetInstance().GetPlayerController();
@@ -62,7 +75,8 @@ public class Characters : MonoBehaviour
         if (CameraZoomAndPosOffsetCoroutine != null)
             StopCoroutine(CameraZoomAndPosOffsetCoroutine);
 
-        CameraZoomAndPosOffsetCoroutine = StartCoroutine(UpdateDefaultPosOffsetAndZoomAnim(delay));
+        if (gameObject.activeSelf)
+            CameraZoomAndPosOffsetCoroutine = StartCoroutine(UpdateDefaultPosOffsetAndZoomAnim(delay));
     }
 
     // Update is called once per frame
@@ -143,7 +157,6 @@ public class Characters : MonoBehaviour
 
     protected virtual void ElementalSkillHold()
     {
-
     }
 
     protected virtual void EKey_1Down()
@@ -162,20 +175,22 @@ public class Characters : MonoBehaviour
     {
 
     }
-    public List<Artifacts> GetEquippedArtifactsList()
+
+    private void OnDestroy()
     {
-        return EquippedArtifacts;
+        if (GetPlayerController() != null)
+        {
+            GetPlayerController().OnElementalSkillHold -= ElementalSkillHold;
+            GetPlayerController().OnElementalBurstTrigger -= ElementalBurstTrigger;
+            GetPlayerController().OnElementalSkillTrigger -= ElementalSkillTrigger;
+            GetPlayerController().OnE_1Down -= EKey_1Down;
+            GetPlayerController().OnChargeHold -= ChargeHold;
+            GetPlayerController().OnChargeTrigger -= ChargeTrigger;
+        }
     }
 
-    public Artifacts CheckIfArtifactTypeExist(ArtifactType artifacttype)
+    public void TakeDamage(GameObject source)
     {
-        for (int i = 0; i < EquippedArtifacts.Count; i++)
-        {
-            if (EquippedArtifacts[i].GetArtifactType() == artifacttype)
-            {
-                return EquippedArtifacts[i];
-            }
-        }
-        return null;
+
     }
 }

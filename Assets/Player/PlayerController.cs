@@ -12,6 +12,7 @@ public enum PlayerStatus
     FALL
 }
 
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float Speed, SlowMultiplier, ZoomMultiplier;
@@ -39,6 +40,8 @@ public class PlayerController : MonoBehaviour
     public event Action OnElementalBurstTrigger;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
+    public delegate void OnNumsKeyInput(int val);
+    public OnNumsKeyInput onNumsKeyInput;
 
     public CinemachineVirtualCamera GetVirtualCamera()
     {
@@ -49,8 +52,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject obj = Instantiate(CharacterManager.GetInstance().GetCharacterList()[0].gameObject, transform);
-        InventoryManager.GetInstance().SetCurrentEquipCharacter(obj.GetComponent<Characters>());
         InitData();
     }
 
@@ -59,8 +60,8 @@ public class PlayerController : MonoBehaviour
         CameraDistance = MaxCameraDistance;
         CharacterManager.GetInstance().SetPlayerController(this);
         cinemachineFramingTransposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-        rb = InventoryManager.GetInstance().GetCurrentEquipCharacter().gameObject.GetComponent<Rigidbody>();
         timeToReachTargetRotation = 0.14f;
+        rb = GetComponent<Rigidbody>();
     }
 
     public void SetTargetRotation(Quaternion quaternion)
@@ -70,7 +71,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //rb = InventoryManager.GetInstance().GetCurrentEquipCharacter().gameObject.GetComponent<Rigidbody>();
+        //rb = CharacterManager.GetInstance().GetCurrentCharacter().GetComponent<Rigidbody>();
+
+        if (rb == null)
+            return;
+
         GatherInput();
         UpdateControls();
         UpdateGrounded();
@@ -143,7 +148,10 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateGrounded()
     {
-        if (Physics.Raycast(rb.position, Vector3.down, (rb.transform.GetComponent<CapsuleCollider>().height / 2) + 0.05f))
+        if (CharacterManager.GetInstance().GetCurrentCharacter() == null)
+            return;
+
+        if (Physics.Raycast(rb.position, Vector3.down, (CharacterManager.GetInstance().GetCurrentCharacter().transform.GetComponent<CapsuleCollider>().height / 2) + 0.05f))
         {
             playerStatus = PlayerStatus.IDLE;
         }
@@ -171,21 +179,33 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
     }
 
+    private int GetInputNums()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            if (Input.GetKeyDown((KeyCode)(48 + i)))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
     private void UpdateControls()
     {
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
+        else if (GetInputNums() != -1)
+            onNumsKeyInput?.Invoke(GetInputNums());
         else if (Input.GetKey(KeyCode.E))
             OnElementalSkillHold?.Invoke();
         else if (Input.GetKeyUp(KeyCode.E))
             OnElementalSkillTrigger?.Invoke();
-        else if(Input.GetKey(KeyCode.Q))
+        else if (Input.GetKey(KeyCode.Q))
             OnElementalBurstTrigger?.Invoke();
-        else if(Input.GetMouseButton(0))
+        else if (Input.GetMouseButton(0))
             OnChargeHold?.Invoke();
         else if (Input.GetMouseButtonUp(0))
             OnChargeTrigger?.Invoke();
-
     }
 
 
@@ -230,6 +250,9 @@ public class PlayerController : MonoBehaviour
     }
     private void RotateTowardsTargetRotation()
     {
+        if (rb == null)
+            return;
+
         float currentYAngle = rb.rotation.eulerAngles.y;
 
         if (currentYAngle == CurrentTargetRotation.eulerAngles.y)
@@ -324,6 +347,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 GetVerticalVelocity()
     {
+        if (rb == null)
+            return Vector3.zero;
+
         return new Vector3(0f, rb.velocity.y, 0f);
     }
     public Rigidbody GetCharacterRB()

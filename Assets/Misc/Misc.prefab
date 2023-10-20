@@ -84,9 +84,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36282a9bc4bed964d8235be63669306f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characters:
-  - {fileID: 1701627816755134425, guid: 38488f1bfa0f45045bfb7d2753be07e2, type: 3}
-  - {fileID: 4089876988080089552, guid: aaf82c83986815f449a11817f05cacf3, type: 3}
+  charactersInfo:
+  - CharacterPrefab: {fileID: 2109403457525059256, guid: aaf82c83986815f449a11817f05cacf3,
+      type: 3}
+    playersSO: {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
+  - CharacterPrefab: {fileID: 2901747049663663568, guid: 38488f1bfa0f45045bfb7d2753be07e2,
+      type: 3}
+    playersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
 --- !u!114 &3512376120949758771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,3 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27de27f7cf22d943a7bd795caebec28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startupSOTest:
+  - {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
+  - {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
