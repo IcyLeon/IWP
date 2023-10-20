@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d342366e911762c4493e82a13f4f4612, type: 3}
+  m_Name: ArtifactsData
+  m_EditorClassIdentifier: 
+  artifactsInfo:
+  - {fileID: 11400000, guid: 891e646c402228140aff19cc89fb8762, type: 2}
+  - {fileID: 11400000, guid: c44d73d4ed6eb554ca829d0f98b895e8, type: 2}
+  artifactsInfoTypeName:
+  - artifactType: 0
+    artifactPieceName: Flower of Life
+  - artifactType: 1
+    artifactPieceName: Plume of Death
+  - artifactType: 2
+    artifactPieceName: Sands of Eon
+  - artifactType: 3
+    artifactPieceName: Goblet of Eonothem
+  - artifactType: 4
+    artifactPieceName: Circlet of Logos

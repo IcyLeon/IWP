@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0bb145ad90ee764283ac5790d0891c5, type: 3}
+  m_Name: NoblesseOblige
+  m_EditorClassIdentifier: 
+  ArtifactSet: 1
+  ArtifactsSetName: Nobless Oblige
+  artifactSOList:
+  - {fileID: 11400000, guid: 3704e950be39b0f44b38efc82ed70f6c, type: 2}
+  - {fileID: 11400000, guid: 0dbb7456c844550469875a451584c4b7, type: 2}
+  - {fileID: 11400000, guid: cd9b21edae110504992c627f8edb219c, type: 2}
+  - {fileID: 11400000, guid: 7caf1a9b955110a4990ef013542c071f, type: 2}
+  - {fileID: 11400000, guid: bc8f97a5e4ea6d948bfbb1259c5a7097, type: 2}
+  TwoPieceDesc: Elemental Burst DMG +20%
+  FourPieceDesc: Using an Elemental Burst increases all party members' ATK by 20%
+    for 12s. This effect cannot stack.

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0bb145ad90ee764283ac5790d0891c5, type: 3}
+  m_Name: ThunderingFury
+  m_EditorClassIdentifier: 
+  ArtifactSet: 0
+  ArtifactsSetName: Thundering Fury
+  artifactSOList:
+  - {fileID: 11400000, guid: 2af62432d39fe494090901cdc8c3f2a8, type: 2}
+  - {fileID: 11400000, guid: 0a78cbcb1407bd243845ca3b434399af, type: 2}
+  - {fileID: 11400000, guid: e1e57180f52883e48beff4973740dc71, type: 2}
+  - {fileID: 11400000, guid: 16565e8101f9eff4d8fc6422c4ad4946, type: 2}
+  - {fileID: 11400000, guid: dc25700fbdacece40b1c7189d56a6161, type: 2}
+  TwoPieceDesc: Electro DMG Bonus +15%
+  FourPieceDesc: Increases DMG caused by Overloaded, Electro-Charged, Superconduct,
+    and Hyperbloom by 40%, and the DMG Bonus conferred by Aggravate is increased
+    by 20%. When Quicken or the aforementioned Elemental Reactions are triggered,
+    Elemental Skill CD is decreased by 1s. Can only occur once every 0.8s.

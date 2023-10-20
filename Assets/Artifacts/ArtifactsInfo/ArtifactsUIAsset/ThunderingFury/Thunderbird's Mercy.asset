@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b50b643dc2d224eaa7ba7e791ebc9c, type: 3}
+  m_Name: Thunderbird's Mercy
+  m_EditorClassIdentifier: 
+  ItemName: Thunderbird's Mercy
+  ItemDesc: A lightning-infused flower, somehow spared the fate of being trodden
+    underfoot or reduced to ash by the furious purple fire, making it the sole survivor
+    on the day of disaster.
+  ItemSprite: {fileID: 21300000, guid: 09e0ab2a8f0ac0c489669ed678c9a16a, type: 3}
+  Rarity: 0
+  artifactType: 0
