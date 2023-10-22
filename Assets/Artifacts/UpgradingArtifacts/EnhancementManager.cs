@@ -80,12 +80,34 @@ public class EnhancementManager : MonoBehaviour
             }
         }
 
-        upgradeCanvas.SlotPopup.HideItem(GetItemREF());
+        HideItem();
         ClearAllBtn.gameObject.SetActive(GetNoofSlotsTaken() != 0);
         if (!UpgradinginProgress)
         {
             UpdateContent();
             UpdatePreviewEXP();
+        }
+    }
+
+    private void HideItem()
+    {
+        upgradeCanvas.SlotPopup.HideItem(GetItemREF());
+
+        if (upgradeCanvas.SlotPopup.GetItemButtonList() != null)
+        {
+            for (int i = 0; i < upgradeCanvas.SlotPopup.GetItemButtonList().Count; i++)
+            {
+                ItemButton itemButton = upgradeCanvas.SlotPopup.GetItemButtonList()[i];
+                if (itemButton.GetItemREF() is Artifacts)
+                {
+                    Artifacts artifacts = itemButton.GetItemREF() as Artifacts;
+                    if (artifacts.GetCharacterEquipped() != null)
+                    {
+                        upgradeCanvas.SlotPopup.HideItem(artifacts);
+                        i--;
+                    }
+                }
+            }
         }
     }
 
@@ -313,7 +335,7 @@ public class EnhancementManager : MonoBehaviour
                 if (upgradableItems is Artifacts)
                 {
                     Artifacts artifacts = upgradableItems as Artifacts;
-                    if (artifacts.GetCharacter() != null)
+                    if (artifacts.GetCharacterEquipped() != null)
                         return;
                 }
             }
@@ -529,7 +551,7 @@ public class EnhancementManager : MonoBehaviour
                 if (upgradableItems is Artifacts)
                 {
                     Artifacts artifacts = upgradableItems as Artifacts;
-                    if (artifacts.GetCharacter() != null)
+                    if (artifacts.GetCharacterEquipped() != null)
                         continue;
                 }
             }

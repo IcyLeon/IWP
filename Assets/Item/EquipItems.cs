@@ -31,15 +31,42 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
                 {
                     Artifacts ExistArtifacts = currentCharacterREF.CheckIfArtifactTypeExist(artifacts.GetArtifactType());
 
-                    if (artifacts.GetCharacter() == null)
+                    if (artifacts.GetCharacterEquipped() == null)
                     {
                         artifacts.SetEquippedCharacter(currentCharacterREF);
                         currentCharacterREF.GetEquippedArtifactsList().Add(artifacts);
                     }
                     else
                     {
-                        currentCharacterREF.GetEquippedArtifactsList().Remove(artifacts);
-                        artifacts.SetEquippedCharacter(null);
+                        if (ExistArtifacts != null)
+                        {
+                            if (artifacts.GetCharacterEquipped() != ExistArtifacts.GetCharacterEquipped())
+                            {
+
+                                artifacts.GetCharacterEquipped().GetEquippedArtifactsList().Remove(artifacts);
+                                ExistArtifacts.GetCharacterEquipped().GetEquippedArtifactsList().Remove(ExistArtifacts);
+
+                                CharacterData temp = artifacts.GetCharacterEquipped();
+                                artifacts.SetEquippedCharacter(ExistArtifacts.GetCharacterEquipped());
+                                ExistArtifacts.SetEquippedCharacter(temp);
+
+                                artifacts.GetCharacterEquipped().GetEquippedArtifactsList().Add(artifacts);
+                                ExistArtifacts.GetCharacterEquipped().GetEquippedArtifactsList().Add(ExistArtifacts);
+                                return;
+                            }
+                            else
+                            {
+                                currentCharacterREF.GetEquippedArtifactsList().Remove(ExistArtifacts);
+                                ExistArtifacts.SetEquippedCharacter(null);
+                            }
+                        }
+                        else
+                        {
+                            artifacts.GetCharacterEquipped().GetEquippedArtifactsList().Remove(artifacts);
+                            artifacts.SetEquippedCharacter(currentCharacterREF);
+                            currentCharacterREF.GetEquippedArtifactsList().Add(artifacts);
+
+                        }
                     }
 
                     if (ExistArtifacts != null)
@@ -66,13 +93,21 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
                     Artifacts artifacts = itemREF as Artifacts;
                     if (artifacts != null)
                     {
-                        if (artifacts.GetCharacter() == null)
+                        if (artifacts.GetCharacterEquipped() == null)
                         {
                             EquipTxt.text = "Equip";
                         }
                         else
                         {
                             EquipTxt.text = "Remove";
+                            Artifacts ExistArtifacts = currentCharacterREF.CheckIfArtifactTypeExist(artifacts.GetArtifactType());
+                            if (ExistArtifacts != null)
+                            {
+                                if (artifacts.GetCharacterEquipped() != ExistArtifacts.GetCharacterEquipped())
+                                {
+                                    EquipTxt.text = "Switch";
+                                }
+                            }
                         }
                     }
                     break;

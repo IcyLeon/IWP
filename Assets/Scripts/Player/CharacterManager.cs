@@ -8,7 +8,7 @@ using UnityEngine.TextCore.Text;
 public class CharacterInfo
 {
     public GameObject CharacterPrefab;
-    public PlayersSO playersSO;
+    public PlayerCharacterSO playersSO;
 }
 
 public class CharacterManager : MonoBehaviour
@@ -16,7 +16,7 @@ public class CharacterManager : MonoBehaviour
     private static CharacterManager instance;
     private PlayerController playerController;
     [SerializeField] List<CharacterInfo> charactersInfo = new List<CharacterInfo>();
-    private Characters CurrentCharacter;
+    private PlayerCharacters CurrentCharacter;
 
     private void Awake()
     {
@@ -34,24 +34,26 @@ public class CharacterManager : MonoBehaviour
     {
         SwapCharacters(index - 1);
     }
+
     public void SwapCharacters(int index)
     {
         InventoryManager inventoryManager = InventoryManager.GetInstance();
         if (index >= inventoryManager.GetCharactersOwnedList().Count)
             return;
 
-        CharacterInfo characterInfo = GetCharacterInfo(inventoryManager.GetCharactersOwnedList()[index].GetItemSO() as PlayersSO);
-        CharacterData characterData = inventoryManager.GetOwnedCharacterData(inventoryManager.GetCharactersOwnedList()[index].GetItemSO() as PlayersSO);
+        CharacterInfo characterInfo = GetCharacterInfo(inventoryManager.GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
+        CharacterData characterData = inventoryManager.GetOwnedCharacterData(inventoryManager.GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
 
         if (characterData != null && characterInfo != null)
         {
-            Characters CurrentCharacter = GetCurrentCharacter();
+            PlayerCharacters CurrentCharacter = GetCurrentCharacter();
             if (CurrentCharacter != null)
             {
                 Destroy(CurrentCharacter.gameObject);
                 SetCurrentCharacter(null);
             }
-            CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, playerController.transform).GetComponent<Characters>();
+
+            CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, playerController.transform).GetComponent<PlayerCharacters>();
             CurrentCharacter.SetCharacterData(characterData);
             inventoryManager.SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(CurrentCharacter);
@@ -59,12 +61,12 @@ public class CharacterManager : MonoBehaviour
 
     }
 
-    public void SetCurrentCharacter(Characters character)
+    public void SetCurrentCharacter(PlayerCharacters character)
     {
         CurrentCharacter = character;
     }
 
-    public Characters GetCurrentCharacter()
+    public PlayerCharacters GetCurrentCharacter()
     {
         return CurrentCharacter;
     }
@@ -75,7 +77,7 @@ public class CharacterManager : MonoBehaviour
         this.playerController = playerController;
     }
 
-    public CharacterInfo GetCharacterInfo(PlayersSO playersSO)
+    public CharacterInfo GetCharacterInfo(PlayerCharacterSO playersSO)
     {
         for (int i = 0; i < charactersInfo.Count; i++)
         {

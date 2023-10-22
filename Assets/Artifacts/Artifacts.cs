@@ -262,7 +262,7 @@ public class Artifacts : UpgradableItems
         base.Upgrade();
     }
 
-    public CharacterData GetCharacter()
+    public CharacterData GetCharacterEquipped()
     {
         return characterData;
     }

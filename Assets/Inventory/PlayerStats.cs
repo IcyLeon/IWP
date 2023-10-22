@@ -16,12 +16,12 @@ public class PlayerStats
         if (characterData == null)
             return;
 
-        if (GetOwnedCharacterData(characterData.GetItemSO() as PlayersSO) == null) {
+        if (GetOwnedCharacterData(characterData.GetItemSO() as PlayerCharacterSO) == null) {
             CharactersOwnedList.Add(characterData);
         }
     }
 
-    public CharacterData GetOwnedCharacterData(PlayersSO playersSO)
+    public CharacterData GetOwnedCharacterData(PlayerCharacterSO playersSO)
     {
         for (int i = 0; i < CharactersOwnedList.Count; i++)
         {

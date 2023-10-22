@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c232271823b8db44fad6d854571a9f26, type: 3}
+  m_Name: WorldTextSO
+  m_EditorClassIdentifier: 
+  ElementalTextColorList:
+  - elemental: 0
+    color:
+      serializedVersion: 2
+      rgba: 4294967295
+  - elemental: 1
+    color:
+      serializedVersion: 2
+      rgba: 4278755571
+  - elemental: 3
+    color:
+      serializedVersion: 2
+      rgba: 4294678249
+  - elemental: 4
+    color:
+      serializedVersion: 2
+      rgba: 4291690085
+  - elemental: 2
+    color:
+      serializedVersion: 2
+      rgba: 4294168460

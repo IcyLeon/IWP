@@ -48,6 +48,10 @@ public class PlayerController : MonoBehaviour
         return virtualCamera;
     }
 
+    private void Awake()
+    {
+        CharacterManager.GetInstance().SetPlayerController(this);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +62,6 @@ public class PlayerController : MonoBehaviour
     void InitData()
     {
         CameraDistance = MaxCameraDistance;
-        CharacterManager.GetInstance().SetPlayerController(this);
         cinemachineFramingTransposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         timeToReachTargetRotation = 0.14f;
         rb = GetComponent<Rigidbody>();
@@ -71,8 +74,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //rb = CharacterManager.GetInstance().GetCurrentCharacter().GetComponent<Rigidbody>();
-
         if (rb == null)
             return;
 
@@ -326,7 +327,7 @@ public class PlayerController : MonoBehaviour
 
     private void LimitFallVelocity()
     {
-        float FallSpeedLimit = 50f;
+        float FallSpeedLimit = 35f;
         Vector3 velocity = GetVerticalVelocity();
         if (velocity.y >= -FallSpeedLimit)
         {
@@ -340,6 +341,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 GetHorizontalVelocity()
     {
+        if (rb == null)
+            return Vector3.zero;
+
         Vector3 vel = rb.velocity;
         vel.y = 0;
         return vel;

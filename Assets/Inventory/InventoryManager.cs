@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static UnityEditor.PlayerSettings;
 
 public class InventoryManager : MonoBehaviour {
     private static InventoryManager instance;
@@ -16,7 +14,7 @@ public class InventoryManager : MonoBehaviour {
     public OnInventoryListChanged onInventoryListChanged;
 
 
-    [SerializeField] PlayersSO[] startupSOTest;
+    [SerializeField] PlayerCharacterSO[] startupSOTest;
 
     private void Awake()
     {
@@ -35,8 +33,7 @@ public class InventoryManager : MonoBehaviour {
 
         for (int i = 0; i < startupSOTest.Length; i++)
         {
-            CharacterData characterData = new CharacterData();
-            characterData.SetItemsSO(startupSOTest[i]);
+            CharacterData characterData = new CharacterData(startupSOTest[i]);
             AddCharacterDataToOwnList(characterData);
         }
 
@@ -52,7 +49,7 @@ public class InventoryManager : MonoBehaviour {
 
         return PlayerStats.GetCharactersOwnedList();
     }
-    public CharacterData GetOwnedCharacterData(PlayersSO playersSO)
+    public CharacterData GetOwnedCharacterData(PlayerCharacterSO playersSO)
     {
         if (PlayerStats == null)
             return null;

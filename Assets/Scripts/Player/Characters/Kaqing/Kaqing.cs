@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kaqing : Characters
+public class Kaqing : PlayerCharacters
 {
     private enum ElementalSKill
     {
@@ -47,6 +47,7 @@ public class Kaqing : Characters
                 UpdateDefaultPosOffsetAndZoom(0.65f);
         }
         UpdateTargetOrb();
+        base.Update();
     }
 
     private void UpdateTargetOrb()

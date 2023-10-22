@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
     [SerializeField] LockItem LockButton;
     [SerializeField] GameObject UpgradeButton;
     [SerializeField] EquipItems EquipButton;
+    [SerializeField] EquippedByCharacter EquippedByCharacter;
     [SerializeField] Image SelectedItemImage;
     [SerializeField] ItemContentDisplay ItemContentDisplay;
     [SerializeField] ParticleSystem burst;
@@ -43,7 +45,25 @@ public class DisplayItemsStatsManager : MonoBehaviour
         DetailsPanel.SetActive(false);
     }
 
+    private void Update()
+    {
+        UpdateArtifactEquipContent();
+    }
 
+    private void UpdateArtifactEquipContent()
+    {
+        Artifacts artifacts = SelectedItem as Artifacts;
+        EquippedByCharacter.gameObject.SetActive(false);
+        if (artifacts != null)
+        {
+            if (artifacts.GetCharacterEquipped() != null)
+            {
+                PlayerCharacterSO playersCharacterSO = artifacts.GetCharacterEquipped().GetItemSO() as PlayerCharacterSO;
+                EquippedByCharacter.UpdateContent(playersCharacterSO.PartyIcon, playersCharacterSO.ItemName);
+                EquippedByCharacter.gameObject.SetActive(true);
+            }
+        }
+    }
     private void ChangeParticleColor(Color color)
     {
         ParticleSystem.Particle[] particles = new ParticleSystem.Particle[fog.particleCount];
@@ -93,7 +113,6 @@ public class DisplayItemsStatsManager : MonoBehaviour
             SetCurrentBackground(SelectedItemsSO.Rarity);
 
         EquipButton.SetItemREF(SelectedItem);
-
         LockButton.SetItemREF(SelectedItem);
         ItemContentDisplay.RefreshItemContentDisplay(SelectedItem, SelectedItemsSO);
     }
@@ -134,6 +153,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
             ItemButton itemButton = go.GetComponent<ItemButton>();
             itemButton.SetItemsSO(item.GetItemSO());
             itemButton.SetItemREF(item);
+            itemButton.onButtonUpdate += GetItemButtonUpdate;
 
             UpgradableItems UpgradableItemREF = itemButton.GetItemREF() as UpgradableItems;
             switch (UpgradableItemREF.GetCategory)
@@ -149,6 +169,26 @@ public class DisplayItemsStatsManager : MonoBehaviour
         }
 
         UpdateOutlineSelection();
+    }
+
+    private void GetItemButtonUpdate(ItemButton itemButton)
+    {
+        if (itemButton.GetItemREF() != null)
+        {
+            switch (itemButton.GetItemREF().GetCategory)
+            {
+                case Category.ARTIFACTS:
+                    Artifacts artifacts = itemButton.GetItemREF() as Artifacts;
+                    if (artifacts != null)
+                    {
+                        PlayerCharacterSO playersCharacterSO = artifacts.GetCharacterEquipped()?.GetItemSO() as PlayerCharacterSO;
+                        if (playersCharacterSO)
+                            itemButton.GetEquipByIconContent().UpdateContent(playersCharacterSO.PartyIcon);
+                    }
+                    itemButton.GetEquipByIconContent().gameObject.SetActive(artifacts?.GetCharacterEquipped() != null);
+                    break;
+            }
+        }
     }
 
     private void GetItemSelected(ItemButton itemButton)

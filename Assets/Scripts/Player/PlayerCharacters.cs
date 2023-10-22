@@ -1,17 +1,12 @@
 using Cinemachine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDamage
-{
-    public void TakeDamage(GameObject source);
-}
-public class Characters : MonoBehaviour, IDamage
+public class PlayerCharacters : Characters
 {
     protected float AimSpeed = 20f;
-    [SerializeField] PlayersSO PlayersSO;
+    [SerializeField] PlayerCharacterSO PlayersSO;
     private CharacterData characterData;
     private PlayerController playerController;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
@@ -21,7 +16,7 @@ public class Characters : MonoBehaviour, IDamage
         return characterData;
     }
 
-    public PlayersSO GetPlayersSO()
+    public CharactersSO GetPlayersSO()
     {
         return PlayersSO;
     }
@@ -36,7 +31,7 @@ public class Characters : MonoBehaviour, IDamage
 
     }
 
-    public int GetLevel()
+    public override int GetLevel()
     {
         if (characterData == null)
             return -1;
@@ -44,12 +39,30 @@ public class Characters : MonoBehaviour, IDamage
         return characterData.GetLevel();
     }
 
+    public override float GetHealth()
+    {
+        if (characterData == null)
+            return 1;
+
+        return characterData.GetHealth();
+    }
+
+    public override float GetMaxHealth()
+    {
+        if (characterData == null)
+            return 1;
+
+        return characterData.GetMaxHealth();
+    }
+
+
+
     protected PlayerController GetPlayerController()
     {
         return playerController;
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
         playerController = CharacterManager.GetInstance().GetPlayerController();
         GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
@@ -58,6 +71,9 @@ public class Characters : MonoBehaviour, IDamage
         GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
+
+        healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
+        base.Start();
     }
 
     private IEnumerator UpdateDefaultPosOffsetAndZoomAnim(float delay)
@@ -80,8 +96,9 @@ public class Characters : MonoBehaviour, IDamage
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
 
     }
 
@@ -187,10 +204,5 @@ public class Characters : MonoBehaviour, IDamage
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
         }
-    }
-
-    public void TakeDamage(GameObject source)
-    {
-
     }
 }

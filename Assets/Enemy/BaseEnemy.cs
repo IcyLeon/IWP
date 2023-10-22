@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseEnemy : MonoBehaviour, IDamage
+public class BaseEnemy : Characters
 {
+    [SerializeField] CharactersSO EnemysSO;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +18,4 @@ public class BaseEnemy : MonoBehaviour, IDamage
         
     }
 
-    public virtual void TakeDamage(GameObject source)
-    {
-
-    }
 }

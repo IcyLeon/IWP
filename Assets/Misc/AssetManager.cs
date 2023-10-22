@@ -14,9 +14,13 @@ public class AssetManager : MonoBehaviour
     [SerializeField] PopupPanel PopupPanel;
     [SerializeField] ItemsList itemlisttemplate;
 
+
     [Header("Normal Attack Bow")]
     [SerializeField] GameObject CrossHair;
     [SerializeField] GameObject HitEffect;
+    [Header("Health UI")]
+    public GameObject HealthUIPrefab;
+
 
     public GameObject StarPrefab;
     private GameObject DraggingItem;

@@ -2,39 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BowCharacters : Characters
+public class BowCharacters : PlayerCharacters
 {
-    private enum AimState
-    {
-        NONE,
-        AIM
-    }
-    private float BaseFireSpeed;
-    [SerializeField] GameObject ArrowPrefab;
-    private float BasicAttackFireRate;
+    private enum AimState { NONE, AIM }
+    
+    [SerializeField] private GameObject ArrowPrefab;
+    private GameObject CrossHair;
+    
+    private float BaseFireSpeed = 100f;
+    private float ChargedMaxElapsed = 3f;
     private float ChargeElapsed;
-    private float ChargedMaxElapsed;
     private Vector3 Direction;
     private AimState aimState = AimState.NONE;
-    private GameObject CrossHair;
     private float threasHold_Charged;
+    private bool isAimHold;
 
     private void Awake()
     {
-        BaseFireSpeed = 100f;
-        ChargeElapsed = 0;
-        ChargedMaxElapsed = 3f;
         threasHold_Charged = 0;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
     }
 
     protected override void Update()
     {
-        switch(aimState)
+        switch (aimState)
         {
             case AimState.NONE:
                 UpdateInputTargetQuaternion();
@@ -46,52 +36,35 @@ public class BowCharacters : Characters
         }
 
         if (Input.GetMouseButton(1))
-            AimHold();
+        {
+            UpdateAim();
+            isAimHold = true;
+        }
+        else
+        {
+            isAimHold = false;
+        }
         if (Input.GetMouseButtonUp(1))
             ResetThresHold();
-    }
 
-    protected void UpdateCharged()
-    {
-        if (ChargeElapsed < 1)
-            ChargeElapsed += Time.deltaTime / ChargedMaxElapsed;
+        base.Update();
     }
 
     protected virtual void Fire(Vector3 direction)
     {
         Rigidbody ArrowFire = Instantiate(ArrowPrefab, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
         ArrowFire.velocity = direction.normalized * BaseFireSpeed * (1 + ChargeElapsed * 0.1f);
-
         ChargeElapsed = 0;
-    }
-
-    protected override void ElementalSkillHold()
-    {
-    }
-
-    protected override void EKey_1Down()
-    {
-    }
-
-    protected virtual void AimHold()
-    {
-        UpdateAim();
-    }
-
-    protected override void ElementalBurstTrigger()
-    {
-    }
-
-    protected override void ElementalSkillTrigger()
-    {
     }
 
     private void UpdateAim()
     {
+        if (ChargeElapsed < 1)
+            ChargeElapsed += Time.deltaTime / ChargedMaxElapsed;
+
         UpdateCameraAim();
         aimState = AimState.AIM;
-        Vector3 ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f);
-        Direction = (ElementalHitPos - GetPlayerController().transform.position).normalized;
+        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f) - GetPlayerController().transform.position).normalized;
         LookAtDirection(Direction);
     }
 
@@ -114,7 +87,8 @@ public class BowCharacters : Characters
     protected override void ChargeTrigger()
     {
         Fire(Direction);
-        ResetThresHold();
+        if (!isAimHold)
+            ResetThresHold();
     }
 
     private void ResetThresHold()

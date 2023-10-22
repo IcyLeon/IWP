@@ -25,6 +25,10 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     public event SendItemButtonInfo onButtonClick;
     public event SendItemButtonInfo onButtonRemoveClick;
     public event SendItemButtonInfo onButtonSpawn;
+    public event SendItemButtonInfo onButtonUpdate;
+
+    [Header("Icons")]
+    [SerializeField] EquippedByCharacter EquipByIconContent;
 
     [Header("Item")]
     [SerializeField] TextMeshProUGUI ConsumableAmountTxt;
@@ -47,6 +51,10 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     private RectTransform ItemButton_Rect;
     private ItemButton ItemButton_Drag;
 
+    public EquippedByCharacter GetEquipByIconContent()
+    {
+        return EquipByIconContent;
+    }
     public RectTransform GetItemButtonRect()
     {
         return ItemButton_Rect;
@@ -171,6 +179,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
                     break;
             }
         }
+        onButtonUpdate?.Invoke(this);
     }
 
     public void ToggleRemoveItemImage(bool input)
