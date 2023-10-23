@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
-        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance))
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, ~LayerMask.GetMask("Player")))
         {
             return hit.point;
         }
@@ -316,7 +316,7 @@ public class PlayerController : MonoBehaviour
         forward.y = 0;
         forward.Normalize();
 
-        rb.AddForce((forward * Speed * 1.5f) - GetHorizontalVelocity() * SlowMultiplier, ForceMode.VelocityChange);
+        rb.AddForce((forward * Speed * 2f) - GetHorizontalVelocity() * SlowMultiplier, ForceMode.VelocityChange);
     }
 
     private void Jump()

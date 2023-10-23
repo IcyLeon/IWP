@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8251562225289510568}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Emitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 8687698407470774653}
   - component: {fileID: 1840391478219328150}
   - component: {fileID: 4089876988080089552}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Kaqing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 7112288499874423540}
   - component: {fileID: 4133070491555705486}
   - component: {fileID: 3276432934543288060}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

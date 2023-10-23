@@ -161,6 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6553279804258009739}
   - component: {fileID: 5753772055079421076}
+  - component: {fileID: 4684581209734514547}
   m_Layer: 5
   m_Name: DamageText
   m_TagString: Untagged
@@ -184,8 +185,8 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -202,4 +203,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamageTextTMP: {fileID: 1712504823774757587}
+  canvasGroup: {fileID: 4684581209734514547}
   worldTextSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}
+--- !u!225 &4684581209734514547
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6137207957608146381}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

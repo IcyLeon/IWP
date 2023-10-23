@@ -13,7 +13,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] MessagePanel InfomationPanel;
     [SerializeField] PopupPanel PopupPanel;
     [SerializeField] ItemsList itemlisttemplate;
-
+    [SerializeField] GameObject WorldText;
 
     [Header("Normal Attack Bow")]
     [SerializeField] GameObject CrossHair;
@@ -94,4 +94,10 @@ public class AssetManager : MonoBehaviour
         }
     }
 
+
+    public void SpawnWorldText(Vector3 position, Elemental element, string text)
+    {
+        DamageText dt = Instantiate(WorldText, GetCanvasGO().transform).GetComponent<DamageText>();
+        dt.SpawnText(position, element, text);
+    }
 }

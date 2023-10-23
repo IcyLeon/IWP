@@ -16,7 +16,7 @@ public class PlayerCharacters : Characters
         return characterData;
     }
 
-    public CharactersSO GetPlayersSO()
+    public PlayerCharacterSO GetPlayersSO()
     {
         return PlayersSO;
     }

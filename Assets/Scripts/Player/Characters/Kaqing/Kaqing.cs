@@ -71,15 +71,15 @@ public class Kaqing : PlayerCharacters
                     if (targetOrb == null)
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
-                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 7.5f);
-                    LookAtDirection(ElementalHitPos - transform.position);
+                    ElementalHitPos = GetRayPosition3D(EmitterPivot.transform.position, GetVirtualCamera().transform.forward, 7.5f);
+                    LookAtDirection(ElementalHitPos - EmitterPivot.position);
                 }
                 else
                 {
                     Vector3 forward = transform.forward;
                     forward.y = 0;
                     forward.Normalize();
-                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, forward, 7.5f);
+                    ElementalHitPos = GetRayPosition3D(EmitterPivot.transform.position, forward, 7.5f);
                 }
                 threasHold_Charged += Time.deltaTime;
                 break;

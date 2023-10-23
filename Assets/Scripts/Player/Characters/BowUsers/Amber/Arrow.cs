@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    private Elements elements;
     private float FlightTime = 10f;
 
     // Start is called before the first frame update
@@ -18,10 +19,20 @@ public class Arrow : MonoBehaviour
         
     }
 
+    public void SetElements(Elements elements)
+    {
+        this.elements = elements;
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<PlayerCharacters>() == null)
+        PlayerCharacters player = other.transform.GetComponent<PlayerCharacters>();
+    
+        if (player == null)
         {
+            if (other.gameObject.GetComponent<IDamage>() != null)
+            {
+                other.gameObject.GetComponent<IDamage>().TakeDamage(transform.position, elements, 1);
+            }
             Destroy(gameObject);
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ElementalOrb : MonoBehaviour
 {
+    private Elements elements;
     private bool EnergyOrbMoving;
     // Start is called before the first frame update
     void Start()

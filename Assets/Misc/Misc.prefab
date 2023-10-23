@@ -63,6 +63,8 @@ MonoBehaviour:
   InfomationPanel: {fileID: 0}
   PopupPanel: {fileID: 0}
   itemlisttemplate: {fileID: 11400000, guid: fc5ef0a01831d8c42ae8b7b2e7075098, type: 2}
+  WorldText: {fileID: 6137207957608146381, guid: 6659fe4fdc95f994e8d8d8982a109955,
+    type: 3}
   CrossHair: {fileID: 8100762868000659337, guid: 35cd60bf475dacb45a6480fe5d70705f,
     type: 3}
   HitEffect: {fileID: 0}

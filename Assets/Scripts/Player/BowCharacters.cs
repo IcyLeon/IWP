@@ -6,10 +6,11 @@ public class BowCharacters : PlayerCharacters
 {
     private enum AimState { NONE, AIM }
     
-    [SerializeField] private GameObject ArrowPrefab;
+    [SerializeField] GameObject ArrowPrefab;
+    [SerializeField] Transform EmitterPivot;
     private GameObject CrossHair;
     
-    private float BaseFireSpeed = 100f;
+    private float BaseFireSpeed = 50f;
     private float ChargedMaxElapsed = 3f;
     private float ChargeElapsed;
     private Vector3 Direction;
@@ -52,8 +53,10 @@ public class BowCharacters : PlayerCharacters
 
     protected virtual void Fire(Vector3 direction)
     {
-        Rigidbody ArrowFire = Instantiate(ArrowPrefab, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-        ArrowFire.velocity = direction.normalized * BaseFireSpeed * (1 + ChargeElapsed * 0.1f);
+        Arrow ArrowFire = Instantiate(ArrowPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<Arrow>();
+        Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
+        ArrowFire.SetElements(new Elements(GetPlayersSO().Elemental));
+        ArrowRB.velocity = direction.normalized * BaseFireSpeed * (1 + ChargeElapsed * 0.1f);
         ChargeElapsed = 0;
     }
 
@@ -64,7 +67,7 @@ public class BowCharacters : PlayerCharacters
 
         UpdateCameraAim();
         aimState = AimState.AIM;
-        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f) - GetPlayerController().transform.position).normalized;
+        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 10000f) - EmitterPivot.transform.position).normalized;
         LookAtDirection(Direction);
     }
 

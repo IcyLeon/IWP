@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4121526741792941192}
   - component: {fileID: 1999826102154862927}
   - component: {fileID: 2500673610178162332}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6749223529404473901}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Emitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2627973142910781119}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.513, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 8061317013492004223}
   - component: {fileID: 7290668167338267333}
   - component: {fileID: 1701627816755134425}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Amber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,3 +230,4 @@ MonoBehaviour:
   PlayersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}
+  EmitterPivot: {fileID: 6749223529404473901}
