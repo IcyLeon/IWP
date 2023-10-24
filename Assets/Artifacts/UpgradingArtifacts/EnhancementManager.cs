@@ -74,14 +74,18 @@ public class EnhancementManager : MonoBehaviour
         for (int i = 0; i < EnhancementItemList.Count; i++)
         {
             Slot slot = EnhancementItemList[i].GetComponent<Slot>();
-            if (slot.GetItemButton()?.GetItemREF() is UpgradableItems upgradableItem && upgradableItem.GetLockStatus())
+            if (slot.GetItemButton())
             {
-                slot.SetItemButton(null);
+                if (slot.GetItemButton().GetItemREF() is UpgradableItems upgradableItem && upgradableItem.GetLockStatus())
+                {
+                    slot.SetItemButton(null);
+                }
             }
         }
 
         HideItem();
         ClearAllBtn.gameObject.SetActive(GetNoofSlotsTaken() != 0);
+
         if (!UpgradinginProgress)
         {
             UpdateContent();

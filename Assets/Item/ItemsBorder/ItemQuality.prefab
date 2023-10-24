@@ -6039,7 +6039,7 @@ GameObject:
   - component: {fileID: 1971888268948067304}
   - component: {fileID: 3103989371819289980}
   m_Layer: 5
-  m_Name: Outline (1)
+  m_Name: SelectedOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

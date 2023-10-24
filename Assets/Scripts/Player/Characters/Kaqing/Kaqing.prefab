@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b6845e319c5f649a1f560fd8f731c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayersSO: {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
+  CharactersSO: {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
   EmitterPivot: {fileID: 8251562225289510568}
   ElementalOrbPrefab: {fileID: 8455810837854244540, guid: 038cc286a7384c54e86b6e5e09da6fdb,
     type: 3}

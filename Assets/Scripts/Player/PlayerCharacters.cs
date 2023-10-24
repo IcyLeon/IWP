@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerCharacters : Characters
 {
     protected float AimSpeed = 20f;
-    [SerializeField] PlayerCharacterSO PlayersSO;
     private CharacterData characterData;
     private PlayerController playerController;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
@@ -18,7 +17,7 @@ public class PlayerCharacters : Characters
 
     public PlayerCharacterSO GetPlayersSO()
     {
-        return PlayersSO;
+        return CharactersSO as PlayerCharacterSO;
     }
 
     public void SetCharacterData(CharacterData characterData)
@@ -50,7 +49,7 @@ public class PlayerCharacters : Characters
     public override float GetMaxHealth()
     {
         if (characterData == null)
-            return 1;
+            return base.GetMaxHealth();
 
         return characterData.GetMaxHealth();
     }
@@ -164,7 +163,7 @@ public class PlayerCharacters : Characters
 
     protected void UpdateCameraAim()
     {
-        UpdateCameraOffsetPosition(0.25f, 0.5f, AimSpeed);
+        UpdateCameraOffsetPosition(0.25f, 0.55f, AimSpeed);
         UpdateCameraZoomOffset(3f, AimSpeed);
     }
 

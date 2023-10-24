@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterData : UpgradableItems
 {
-    private float Health;
+    private float CurrentHealth;
     private float BaseMaxHealth;
     private float Damage;
     private float CurrentEnergyBurstCost;
@@ -34,7 +34,7 @@ public class CharacterData : UpgradableItems
     {
         SetItemsSO(playerCharacterSO);
         BaseMaxHealth = playerCharacterSO.BaseHP;
-        Health = BaseMaxHealth;
+        CurrentHealth = BaseMaxHealth;
         Damage = 0;
         CurrentEnergyBurstCost = 0;
         ElementalEnergyCooldown = 0;
@@ -48,7 +48,7 @@ public class CharacterData : UpgradableItems
     {
         SetItemsSO(playerCharacterSO);
         BaseMaxHealth = playerCharacterSO.BaseHP;
-        Health = BaseMaxHealth;
+        CurrentHealth = BaseMaxHealth;
         Damage = damage;
         Level = level;
         CurrentEnergyBurstCost = currentEnergy;
@@ -66,12 +66,12 @@ public class CharacterData : UpgradableItems
 
     public float GetHealth()
     {
-        return Health;
+        return CurrentHealth;
     }
 
     public void SetHealth(float Hp)
     {
-        Health = Hp;
+        CurrentHealth = Hp;
     }
 
     public override void Upgrade()

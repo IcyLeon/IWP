@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c232271823b8db44fad6d854571a9f26, type: 3}
-  m_Name: WorldTextSO
+  m_Script: {fileID: 11500000, guid: 13786a801fb3aca499cd2284cc8c5d7e, type: 3}
+  m_Name: ElementalColorSO
   m_EditorClassIdentifier: 
   ElementalTextColorList:
   - elemental: 0
@@ -33,3 +33,12 @@ MonoBehaviour:
     color:
       serializedVersion: 2
       rgba: 4294168460
+  ElementalReactionTextColorList:
+  - elementalReaction: 0
+    color:
+      serializedVersion: 2
+      rgba: 4289301227
+  - elementalReaction: 1
+    color:
+      serializedVersion: 2
+      rgba: 4284926719

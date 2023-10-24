@@ -10,8 +10,8 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] Transform EmitterPivot;
     private GameObject CrossHair;
     
-    private float BaseFireSpeed = 50f;
-    private float ChargedMaxElapsed = 3f;
+    private float BaseFireSpeed = 1500f;
+    private float ChargedMaxElapsed = 1.5f;
     private float ChargeElapsed;
     private Vector3 Direction;
     private AimState aimState = AimState.NONE;
@@ -56,7 +56,7 @@ public class BowCharacters : PlayerCharacters
         Arrow ArrowFire = Instantiate(ArrowPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(GetPlayersSO().Elemental));
-        ArrowRB.velocity = direction.normalized * BaseFireSpeed * (1 + ChargeElapsed * 0.1f);
+        ArrowRB.AddForce(direction.normalized * BaseFireSpeed * (1 + ChargeElapsed));
         ChargeElapsed = 0;
     }
 
@@ -67,8 +67,8 @@ public class BowCharacters : PlayerCharacters
 
         UpdateCameraAim();
         aimState = AimState.AIM;
-        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 10000f) - EmitterPivot.transform.position).normalized;
-        LookAtDirection(Direction);
+        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f) - EmitterPivot.transform.position).normalized;
+        LookAtDirection(GetVirtualCamera().transform.forward);
     }
 
     protected override void ChargeHold()
@@ -82,7 +82,7 @@ public class BowCharacters : PlayerCharacters
             Vector3 forward = GetPlayerController().transform.forward;
             forward.y = 0;
             forward.Normalize();
-            Direction = forward;
+            Direction = (GetRayPosition3D(transform.position, forward, 5f) - EmitterPivot.position).normalized;
         }
         threasHold_Charged += Time.deltaTime;
     }

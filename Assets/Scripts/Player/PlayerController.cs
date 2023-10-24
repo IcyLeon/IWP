@@ -5,13 +5,11 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public enum PlayerStatus
+public enum GroundStatus
 {
-    IDLE,
-    JUMP,
-    FALL
+    GROUND,
+    AIR
 }
-
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,8 +21,7 @@ public class PlayerController : MonoBehaviour
     private float CameraDistance;
     private Rigidbody rb;
     private Vector3 InputDirection;
-    private PlayerStatus playerStatus;
-
+    private GroundStatus groundStatus;
 
     private Quaternion CurrentTargetRotation, Target_Rotation;
     private float timeToReachTargetRotation;
@@ -82,7 +79,7 @@ public class PlayerController : MonoBehaviour
         UpdateGrounded();
         UpdateCamera();
   
-        if (Input.GetKeyDown(KeyCode.Space) && playerStatus == PlayerStatus.IDLE)
+        if (Input.GetKeyDown(KeyCode.Space) && GetGroundStatus() == GroundStatus.GROUND)
         {
             Jump();
         }
@@ -92,6 +89,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public GroundStatus GetGroundStatus()
+    {
+        return groundStatus;
+    }
     private IEnumerator UpdateCameraOffsetPosition(float ModifierX, float ModifierY, float Speed)
     {
         while (cinemachineFramingTransposer.m_ScreenX != ModifierX)
@@ -154,12 +155,11 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(rb.position, Vector3.down, (CharacterManager.GetInstance().GetCurrentCharacter().transform.GetComponent<CapsuleCollider>().height / 2) + 0.05f))
         {
-            playerStatus = PlayerStatus.IDLE;
+            groundStatus = GroundStatus.GROUND;
         }
-
-        if (IsMovingDown() && playerStatus == PlayerStatus.JUMP)
+        else
         {
-            playerStatus = PlayerStatus.FALL;
+            groundStatus = GroundStatus.AIR;
         }
     }
 
@@ -193,6 +193,9 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
+        if (GetGroundStatus() != GroundStatus.GROUND)
+            return;
+
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)
@@ -285,7 +288,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdatePhysicsMovement()
     {
-        if (InputDirection == Vector3.zero || playerStatus != PlayerStatus.IDLE)
+        if (InputDirection == Vector3.zero || GetGroundStatus() == GroundStatus.AIR)
             return;
 
         rb.AddForce((InputDirection * Speed) - GetHorizontalVelocity() * SlowMultiplier, ForceMode.VelocityChange);
@@ -309,7 +312,7 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (playerStatus != PlayerStatus.IDLE)
+        if (GetGroundStatus() == GroundStatus.AIR)
             return;
 
         Vector3 forward = rb.transform.forward;
@@ -321,7 +324,6 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        playerStatus = PlayerStatus.JUMP;
         rb.AddForce(300f * Vector3.up);
     }
 

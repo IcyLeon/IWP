@@ -27,7 +27,6 @@ public class DisplayItemsStatsManager : MonoBehaviour
     [SerializeField] EquippedByCharacter EquippedByCharacter;
     [SerializeField] Image SelectedItemImage;
     [SerializeField] ItemContentDisplay ItemContentDisplay;
-    [SerializeField] ParticleSystem burst;
 
     [Header("Display Artifacts")]
     [SerializeField] ArtifactTabGroup TabGroup;
@@ -204,10 +203,6 @@ public class DisplayItemsStatsManager : MonoBehaviour
             return;
 
         SelectedItemImage.sprite = SelectedItemsSO.ItemSprite;
-        if (SelectedItem != PreviousSelectedItem)
-        {
-            burst.Emit(1);
-        }
 
         DisplaySelectedItem();
     }

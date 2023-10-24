@@ -19,8 +19,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject CrossHair;
     [SerializeField] GameObject HitEffect;
     [Header("Health UI")]
-    public GameObject HealthUIPrefab;
-
+    public GameObject EnemyHealthUIPrefab;
 
     public GameObject StarPrefab;
     private GameObject DraggingItem;
@@ -95,7 +94,13 @@ public class AssetManager : MonoBehaviour
     }
 
 
-    public void SpawnWorldText(Vector3 position, Elemental element, string text)
+    public void SpawnWorldText_Elemental(Vector3 position, Elemental element, string text)
+    {
+        DamageText dt = Instantiate(WorldText, GetCanvasGO().transform).GetComponent<DamageText>();
+        dt.SpawnText(position, element, text);
+    }
+
+    public void SpawnWorldText_ElementalReaction(Vector3 position, ElementalReactionState element, string text)
     {
         DamageText dt = Instantiate(WorldText, GetCanvasGO().transform).GetComponent<DamageText>();
         dt.SpawnText(position, element, text);

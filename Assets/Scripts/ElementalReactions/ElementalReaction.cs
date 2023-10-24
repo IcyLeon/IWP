@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElementalReactionManager
+public class ElementalReaction
 {
     private List<Elements> ElementsList;
+    private ElementalReactionsManager elementalReactionsManager;
 
     public void UpdateElementsList()
     {
@@ -22,6 +23,15 @@ public class ElementalReactionManager
             }
         }
     }
+
+    public ElementalReactionsInfo GetElementalReactionsInfo(List<Elements> Elementals)
+    {
+        if (elementalReactionsManager == null)
+            return null;
+
+        return elementalReactionsManager.GetElementalReactionState(Elementals);
+    }
+
     public void AddElements(Elements elements)
     {
         if (elements == null)
@@ -30,13 +40,9 @@ public class ElementalReactionManager
         Elements ExistingElements = isElementsAlreadyExisted(elements);
 
         if (ExistingElements == null)
-        {
             ElementsList.Add(elements);
-        }
         else
-        {
             ExistingElements.ResetElementalEffect();
-        }
     }
 
     private Elements isElementsAlreadyExisted(Elements e)
@@ -52,9 +58,10 @@ public class ElementalReactionManager
         return null;
     }
 
-    public ElementalReactionManager()
+    public ElementalReaction()
     {
         ElementsList = new List<Elements>();
+        elementalReactionsManager = ElementalReactionsManager.GetInstance();
     }
 
     public List<Elements> GetElementsList()

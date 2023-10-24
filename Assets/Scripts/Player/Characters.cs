@@ -10,24 +10,17 @@ public interface IDamage {
 
 public class Characters : MonoBehaviour, IDamage
 {
+    protected float BaseMaxHealth;
     protected float CurrentHealth;
-    protected float MaxHealth;
     protected int Level;
+    [SerializeField] protected CharactersSO CharactersSO;
     protected HealthBarScript healthBarScript;
-    private ElementalReactionManager elementalReactionManager;
+    private ElementalReaction elementalReaction;
 
     protected virtual void Start()
     {
-        elementalReactionManager = new ElementalReactionManager();
-    }
-
-    public void PrintReaction()
-    {
-        for (int i = 0; i < elementalReactionManager.GetElementsList().Count; i++)
-        {
-            Elements e = elementalReactionManager.GetElementsList()[i];
-        }
-        Debug.Log(elementalReactionManager.GetElementsList().Count);
+        BaseMaxHealth = CharactersSO.BaseHP;
+        elementalReaction = new ElementalReaction();
     }
 
     protected virtual void Update()
@@ -38,8 +31,17 @@ public class Characters : MonoBehaviour, IDamage
             healthBarScript.UpdateContent(GetHealth(), GetLevel());
         }
 
-        if (elementalReactionManager != null)
-            elementalReactionManager.UpdateElementsList();
+        if (elementalReaction != null)
+            elementalReaction.UpdateElementsList();
+    }
+
+    private Rigidbody GetRB()
+    {
+        if (this is PlayerCharacters)
+        {
+            return CharacterManager.GetInstance().GetPlayerController().GetCharacterRB();
+        }
+        return transform.GetComponent<Rigidbody>();
     }
 
     public void TakeDamage(Vector3 pos, Elements elements, float amt)
@@ -50,10 +52,26 @@ public class Characters : MonoBehaviour, IDamage
         else
             elemental = Elemental.NONE;
 
-        if (elementalReactionManager != null)
-            elementalReactionManager.AddElements(elements);
+        if (elementalReaction != null)
+            elementalReaction.AddElements(elements);
 
-        AssetManager.GetInstance().SpawnWorldText(pos, elemental, amt.ToString());
+        ElementalReactionsInfo e = elementalReaction.GetElementalReactionsInfo(elementalReaction.GetElementsList());
+        if (e != null)
+        {
+            switch(e.elementalReactionState)
+            {
+                case ElementalReactionState.OVERLOAD:
+                    GetRB().AddForce(Vector3.up * 8f, ForceMode.Impulse);
+                    break;
+                case ElementalReactionState.MELT:
+                    break;
+            }
+            AssetManager.GetInstance().SpawnWorldText_ElementalReaction(transform.position, e.elementalReactionState, ElementalReactionsManager.GetInstance().GetElementalReactionText(e.elementalReactionState));
+            
+            elementalReaction.GetElementsList().Clear();
+        }
+
+        AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, amt.ToString());
     }
 
     public virtual float GetHealth()
@@ -63,7 +81,7 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual float GetMaxHealth()
     {
-        return MaxHealth;
+        return 1;
     }
 
     public virtual int GetLevel()

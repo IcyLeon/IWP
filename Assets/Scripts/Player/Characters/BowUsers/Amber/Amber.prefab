@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f38c0ae1a849234abb2b1a741cb28cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
+  CharactersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}
   EmitterPivot: {fileID: 6749223529404473901}

@@ -17,6 +17,7 @@ public class Kaqing : PlayerCharacters
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject TargetOrbPrefab;
     private float threasHold_Charged;
+    private float Range = 8f;
     ElementalSKill elementalSKill = ElementalSKill.NONE;
 
     private void Awake()
@@ -71,7 +72,7 @@ public class Kaqing : PlayerCharacters
                     if (targetOrb == null)
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
-                    ElementalHitPos = GetRayPosition3D(EmitterPivot.transform.position, GetVirtualCamera().transform.forward, 7.5f);
+                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, Range);
                     LookAtDirection(ElementalHitPos - EmitterPivot.position);
                 }
                 else
@@ -79,7 +80,8 @@ public class Kaqing : PlayerCharacters
                     Vector3 forward = transform.forward;
                     forward.y = 0;
                     forward.Normalize();
-                    ElementalHitPos = GetRayPosition3D(EmitterPivot.transform.position, forward, 7.5f);
+                    ElementalHitPos = GetRayPosition3D(transform.position, forward, Range);
+                    ElementalHitPos.y = EmitterPivot.position.y;
                 }
                 threasHold_Charged += Time.deltaTime;
                 break;
@@ -113,6 +115,7 @@ public class Kaqing : PlayerCharacters
         {
             case ElementalSKill.THROW:
                 ElementalOrb Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<ElementalOrb>();
+                Orb.SetElements(new Elements(GetPlayersSO().Elemental));
                 elementalOrb = Orb;
                 StartCoroutine(elementalOrb.MoveToTargetLocation(ElementalHitPos, 50f));
                 ResetThresHold();

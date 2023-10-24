@@ -8,7 +8,6 @@ public class DamageText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI DamageTextTMP;
     [SerializeField] CanvasGroup canvasGroup;
-    [SerializeField] WorldTextSO worldTextSO;
     private RectTransform RT;
     private Vector3 AnimationVelocity;
     private Vector3 position;
@@ -22,7 +21,15 @@ public class DamageText : MonoBehaviour
     {
         position = pos;
         DamageTextTMP.text = text;
-        DamageTextTMP.color = worldTextSO.GetColor(elemental);
+        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetColor_Elemental(elemental);
+        StartCoroutine(WorldTextAnim());
+    }
+
+    public void SpawnText(Vector3 pos, ElementalReactionState elementalReaction, string text)
+    {
+        position = pos;
+        DamageTextTMP.text = text;
+        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetColor_ElementalReaction(elementalReaction);
         StartCoroutine(WorldTextAnim());
     }
 
@@ -35,8 +42,8 @@ public class DamageText : MonoBehaviour
     {
         float AnimationTime = 0.2f;
         float ElaspedTime = 0f;
-        transform.localScale = Vector3.one * 5f;
-        Vector3 target = Vector3.one;
+        transform.localScale = Vector3.one * 8f;
+        Vector3 target = Vector3.one * Random.Range(1.5f, 2.5f);
 
         while (transform.localScale != target)
         {
@@ -53,7 +60,7 @@ public class DamageText : MonoBehaviour
         canvasGroup.alpha = 1f;
         float ElaspedTime = 0f;
         float AnimationTime = 1f;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
         while (canvasGroup.alpha > 0)
         {
             canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 0f, ElaspedTime / AnimationTime);

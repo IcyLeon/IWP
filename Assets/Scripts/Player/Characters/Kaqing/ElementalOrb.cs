@@ -18,6 +18,11 @@ public class ElementalOrb : MonoBehaviour
 
     }
 
+    public void SetElements(Elements elements)
+    {
+        this.elements = elements;
+    }
+
     public IEnumerator MoveToTargetLocation(Vector3 target, float speed)
     {
         while (transform.position != target)
@@ -25,10 +30,24 @@ public class ElementalOrb : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
             yield return null;
         }
+        TravelDamage();
         yield return new WaitForSeconds(1f);
         EnergyOrbMoving = false;
     }
 
+    private void TravelDamage()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude);
+        for(int i = 0; i < colliders.Length; i++)
+        {
+            Collider collider = colliders[i];
+            IDamage damage = collider.GetComponent<IDamage>();
+            if (damage != null)
+            {
+                damage.TakeDamage(collider.transform.position, elements, 1);
+            }
+        }
+    }
     public bool GetEnergyOrbMoving()
     {
         return EnergyOrbMoving;
