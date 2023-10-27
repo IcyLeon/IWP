@@ -23,7 +23,7 @@ public class BaseEnemy : Characters
         UpdateHealthBar();
 
         if (elementsIndicator)
-            elementsIndicator.transform.position = transform.position + Vector3.up * 2f;
+            elementsIndicator.transform.position = transform.position + Vector3.up * 2.1f;
     }
 
     private void UpdateHealthBar()
