@@ -306,12 +306,12 @@ public class PlayerController : MonoBehaviour
     private void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 2f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * 3f, ForceMode.Acceleration);
     }
     private void DecelerateHorizontal()
     {
         Vector3 playerVerticalVelocity = GetHorizontalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 2f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * 3f, ForceMode.Acceleration);
     }
 
     private bool IsMovingUp(float minimumVelocity = 0f)
