@@ -6,7 +6,8 @@ public class CharacterData : UpgradableItems
 {
     private float CurrentHealth;
     private float BaseMaxHealth;
-    private float Damage;
+    private float BaseATK;
+    private float BaseDEF;
     private float CurrentEnergyBurstCost;
     private float EnergyBurstCost;
     private float CurrentElementalEnergyCooldown;
@@ -35,9 +36,9 @@ public class CharacterData : UpgradableItems
         SetItemsSO(playerCharacterSO);
         BaseMaxHealth = playerCharacterSO.BaseHP;
         CurrentHealth = BaseMaxHealth;
-        Damage = 0;
+        BaseATK = playerCharacterSO.BaseATK;
         CurrentEnergyBurstCost = 0;
-        ElementalEnergyCooldown = 0;
+        ElementalEnergyCooldown = playerCharacterSO.ElementalSkillsCooldown;
         CurrentElementalEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         Level = 1;
@@ -49,10 +50,10 @@ public class CharacterData : UpgradableItems
         SetItemsSO(playerCharacterSO);
         BaseMaxHealth = playerCharacterSO.BaseHP;
         CurrentHealth = BaseMaxHealth;
-        Damage = damage;
+        BaseATK = damage;
         Level = level;
         CurrentEnergyBurstCost = currentEnergy;
-        ElementalEnergyCooldown = 0;
+        ElementalEnergyCooldown = playerCharacterSO.ElementalSkillsCooldown;
         CurrentElementalEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         MaxLevel = 20;
@@ -61,7 +62,22 @@ public class CharacterData : UpgradableItems
     public void UpdateEnergyCooldown()
     {
         CurrentElementalEnergyCooldown -= Time.deltaTime;
-        CurrentElementalEnergyCooldown = Mathf.Clamp(CurrentElementalEnergyCooldown, 0, ElementalEnergyCooldown);
+        CurrentElementalEnergyCooldown = Mathf.Clamp(CurrentElementalEnergyCooldown, 0f, ElementalEnergyCooldown);
+    }
+
+    public void ResetEnergyCooldown()
+    {
+        CurrentElementalEnergyCooldown = ElementalEnergyCooldown;
+    }
+
+    public bool CanTriggerSKill()
+    {
+        return CurrentElementalEnergyCooldown <= 0;
+    }
+
+    public float GetCurrentElementalSkillCooldown()
+    {
+        return CurrentElementalEnergyCooldown;
     }
 
     public float GetHealth()
@@ -86,5 +102,15 @@ public class CharacterData : UpgradableItems
     public float GetMaxHealth()
     {
         return BaseMaxHealth + (BaseMaxHealth * (Level - 1));
+    }
+
+    public float GetDamage()
+    {
+        return BaseATK * (1 + 0);
+    }
+
+    public float GetDEF()
+    {
+        return BaseDEF * (1 + 0);
     }
 }

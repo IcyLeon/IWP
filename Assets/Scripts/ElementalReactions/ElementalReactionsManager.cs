@@ -5,8 +5,9 @@ using UnityEngine;
 
 public enum ElementalReactionState
 {
-    OVERLOAD,
-    MELT
+    OVERCLOCKED,
+    MELT,
+    STUN
 }
 
 [Serializable]

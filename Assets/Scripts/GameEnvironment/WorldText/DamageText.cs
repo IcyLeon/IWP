@@ -8,29 +8,35 @@ public class DamageText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI DamageTextTMP;
     [SerializeField] CanvasGroup canvasGroup;
+    private Vector3 Offset;
     private RectTransform RT;
     private Vector3 AnimationVelocity;
     private Vector3 position;
 
-    private void Start()
+    private void Awake()
     {
         RT = GetComponent<RectTransform>();
+        Offset = Vector3.one * 0.85f;
     }
     // Start is called before the first frame update
     public void SpawnText(Vector3 pos, Elemental elemental, string text)
     {
-        position = pos;
-        DamageTextTMP.text = text;
-        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetColor_Elemental(elemental);
-        StartCoroutine(WorldTextAnim());
+        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(elemental).color;
+        Init(pos, text);
+        StartCoroutine(WorldTextAnim(1.15f, 1.75f));
     }
 
     public void SpawnText(Vector3 pos, ElementalReactionState elementalReaction, string text)
     {
-        position = pos;
+        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalReactionInfo(elementalReaction).color;
+        Init(pos, text);
+        StartCoroutine(WorldTextAnim(0.8f, 1.2f));
+    }
+
+    private void Init(Vector3 pos, string text)
+    {
+        position = pos + new Vector3(Random.Range(-Offset.x, Offset.x), Random.Range(-Offset.y, Offset.y), Random.Range(-Offset.z, Offset.z));
         DamageTextTMP.text = text;
-        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetColor_ElementalReaction(elementalReaction);
-        StartCoroutine(WorldTextAnim());
     }
 
     private void Update()
@@ -38,12 +44,12 @@ public class DamageText : MonoBehaviour
         Vector3 pos = Camera.main.WorldToScreenPoint(position);
         RT.anchoredPosition = new Vector2(pos.x, pos.y);
     }
-    private IEnumerator WorldTextAnim()
+    private IEnumerator WorldTextAnim(float Min, float Max)
     {
         float AnimationTime = 0.2f;
         float ElaspedTime = 0f;
-        transform.localScale = Vector3.one * 8f;
-        Vector3 target = Vector3.one * Random.Range(1.5f, 2.5f);
+        transform.localScale = Vector3.one * 7.5f;
+        Vector3 target = Vector3.one * Random.Range(Min, Max);
 
         while (transform.localScale != target)
         {

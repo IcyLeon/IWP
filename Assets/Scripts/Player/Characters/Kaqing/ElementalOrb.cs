@@ -5,6 +5,7 @@ using UnityEngine;
 public class ElementalOrb : MonoBehaviour
 {
     private Elements elements;
+    private CharacterData Kaqing;
     private bool EnergyOrbMoving;
     // Start is called before the first frame update
     void Start()
@@ -44,9 +45,14 @@ public class ElementalOrb : MonoBehaviour
             IDamage damage = collider.GetComponent<IDamage>();
             if (damage != null)
             {
-                damage.TakeDamage(collider.transform.position, elements, 1);
+                damage.TakeDamage(collider.transform.position, elements, Kaqing.GetDamage());
             }
         }
+    }
+
+    public void SetCharacterData(CharacterData characterData)
+    {
+        Kaqing = characterData;
     }
     public bool GetEnergyOrbMoving()
     {

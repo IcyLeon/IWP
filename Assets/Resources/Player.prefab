@@ -45,10 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64be746642b6dcd4799935d023c5d34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  WalkSpeed: 5
   SlowMultiplier: 1
   ZoomMultiplier: 3
-  virtualCamera: {fileID: 0}
+  playerCamera: {fileID: 0}
+  aimCamera: {fileID: 0}
 --- !u!54 &6912044472943968364
 Rigidbody:
   m_ObjectHideFlags: 0

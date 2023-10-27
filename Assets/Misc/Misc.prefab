@@ -69,6 +69,7 @@ MonoBehaviour:
   CrossHair: {fileID: 8100762868000659337, guid: 35cd60bf475dacb45a6480fe5d70705f,
     type: 3}
   HitEffect: {fileID: 0}
+  WorldUIContainer: {fileID: 0}
   EnemyHealthUIPrefab: {fileID: 5718291668450855976, guid: b57b9d02a01b1c44bb3ae2d66fc7312a,
     type: 3}
   StarPrefab: {fileID: 3037185799881192553, guid: 56ffe41a903e65746b49e860c8f6dab2,
@@ -76,6 +77,8 @@ MonoBehaviour:
   ItemBorderPrefab: {fileID: 5117009378638399214, guid: eaae2fd93d549274883a11e9ffce66e6,
     type: 3}
   SlotPrefab: {fileID: 537154594175900035, guid: 04bec387e0da13642a751ac93a6748a2,
+    type: 3}
+  ElementalContainerPrefab: {fileID: 5926851558734250938, guid: 0bb29b25cfb5fee4c8e8c14654adeb03,
     type: 3}
 --- !u!114 &1871728354791102326
 MonoBehaviour:
@@ -128,4 +131,6 @@ MonoBehaviour:
     elementalReactionState: 1
   - elementals: 0100000003000000
     elementalReactionState: 0
+  - elementals: 0200000003000000
+    elementalReactionState: 2
   elementalColorSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}

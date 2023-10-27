@@ -17,6 +17,9 @@ public class CharacterManager : MonoBehaviour
     private PlayerController playerController;
     [SerializeField] List<CharacterInfo> charactersInfo = new List<CharacterInfo>();
     private PlayerCharacters CurrentCharacter;
+    public delegate void OnCharacterChange(CharacterData characterData);
+    public OnCharacterChange onCharacterChange;
+    private InventoryManager inventoryManager;
 
     private void Awake()
     {
@@ -27,7 +30,21 @@ public class CharacterManager : MonoBehaviour
     private void Start()
     {
         if (playerController)
-            playerController.onNumsKeyInput += SwapCharactersControls;
+            playerController.OnNumsKeyInput += SwapCharactersControls;
+    }
+
+    private void Update()
+    {
+        UpdateCooldown();
+    }
+
+    private void UpdateCooldown()
+    {
+        for (int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
+        {
+            CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
+            characterData.UpdateEnergyCooldown();
+        }
     }
 
     private void SwapCharactersControls(int index)
@@ -37,7 +54,7 @@ public class CharacterManager : MonoBehaviour
 
     public void SwapCharacters(int index)
     {
-        InventoryManager inventoryManager = InventoryManager.GetInstance();
+        inventoryManager = InventoryManager.GetInstance();
         if (index >= inventoryManager.GetCharactersOwnedList().Count)
             return;
 
@@ -57,6 +74,7 @@ public class CharacterManager : MonoBehaviour
             CurrentCharacter.SetCharacterData(characterData);
             inventoryManager.SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(CurrentCharacter);
+            onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData());
         }
 
     }

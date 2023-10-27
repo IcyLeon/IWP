@@ -3,30 +3,48 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class HealthBarScript : MonoBehaviour
 {
     [SerializeField] Slider slider;
     [SerializeField] TextMeshProUGUI HealthTextDisplay;
     [SerializeField] TextMeshProUGUI LevelTextDisplay;
-    public void UpdateContent(float HealthVal, int Level, bool DisplayText = true)
+
+    private void Start()
+    {
+        slider.onValueChanged.AddListener(UpdateContent);
+    }
+
+    private void UpdateContent(float val)
     {
         if (HealthTextDisplay)
         {
-            HealthTextDisplay.gameObject.SetActive(DisplayText);
-            HealthTextDisplay.text = HealthVal.ToString() + "/" + slider.maxValue.ToString();
+            HealthTextDisplay.text = val.ToString() + "/" + slider.maxValue.ToString();
         }
+    }
 
+    public void UpdateHealth(float HealthVal)
+    {
+        slider.value = HealthVal;
+    }
+
+    public void UpdateLevel(int Level)
+    {
         if (LevelTextDisplay)
         {
             LevelTextDisplay.text = "Lv." + Level.ToString();
         }
-        slider.value = HealthVal;
     }
 
     public void SetupMinAndMax(float min, float max)
     {
         slider.minValue = min;
         slider.maxValue = max;
+    }
+
+    public void SliderInvsibleOnlyFullHealth()
+    {
+        slider.gameObject.SetActive(slider.value != slider.maxValue);
     }
 }

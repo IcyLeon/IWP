@@ -9,7 +9,7 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] GameObject ArrowPrefab;
     [SerializeField] Transform EmitterPivot;
     private GameObject CrossHair;
-    
+    private Elemental CurrentElemental;
     private float BaseFireSpeed = 1500f;
     private float ChargedMaxElapsed = 1.5f;
     private float ChargeElapsed;
@@ -21,6 +21,7 @@ public class BowCharacters : PlayerCharacters
     private void Awake()
     {
         threasHold_Charged = 0;
+        CurrentElemental = Elemental.NONE;
     }
 
     protected override void Update()
@@ -45,6 +46,7 @@ public class BowCharacters : PlayerCharacters
         {
             isAimHold = false;
         }
+
         if (Input.GetMouseButtonUp(1))
             ResetThresHold();
 
@@ -55,7 +57,9 @@ public class BowCharacters : PlayerCharacters
     {
         Arrow ArrowFire = Instantiate(ArrowPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
-        ArrowFire.SetElements(new Elements(GetPlayersSO().Elemental));
+        ArrowFire.SetElements(new Elements(CurrentElemental));
+        ArrowFire.SetCharacterData(GetCharacterData());
+
         ArrowRB.AddForce(direction.normalized * BaseFireSpeed * (1 + ChargeElapsed));
         ChargeElapsed = 0;
     }
@@ -63,7 +67,14 @@ public class BowCharacters : PlayerCharacters
     private void UpdateAim()
     {
         if (ChargeElapsed < 1)
+        {
             ChargeElapsed += Time.deltaTime / ChargedMaxElapsed;
+            CurrentElemental = Elemental.NONE;
+        }
+        else
+        {
+            CurrentElemental = GetPlayersSO().Elemental;
+        }
 
         UpdateCameraAim();
         aimState = AimState.AIM;

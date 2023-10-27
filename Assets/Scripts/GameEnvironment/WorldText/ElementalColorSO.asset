@@ -12,33 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13786a801fb3aca499cd2284cc8c5d7e, type: 3}
   m_Name: ElementalColorSO
   m_EditorClassIdentifier: 
-  ElementalTextColorList:
+  ElementalInfoList:
   - elemental: 0
+    ElementSprite: {fileID: 0}
     color:
       serializedVersion: 2
       rgba: 4294967295
   - elemental: 1
+    ElementSprite: {fileID: 21300000, guid: 881220943809535439f45f097fb53877, type: 3}
     color:
       serializedVersion: 2
-      rgba: 4278755571
-  - elemental: 3
-    color:
-      serializedVersion: 2
-      rgba: 4294678249
-  - elemental: 4
-    color:
-      serializedVersion: 2
-      rgba: 4291690085
+      rgba: 4278688763
   - elemental: 2
+    ElementSprite: {fileID: 21300000, guid: ee58ebf305c2bc748ab14b6536c87ef0, type: 3}
     color:
       serializedVersion: 2
-      rgba: 4294168460
-  ElementalReactionTextColorList:
+      rgba: 4294900884
+  - elemental: 3
+    ElementSprite: {fileID: 21300000, guid: b47e003034e54d14bb0ddc75b1c14191, type: 3}
+    color:
+      serializedVersion: 2
+      rgba: 4294947071
+  ElementalReactionInfoList:
   - elementalReaction: 0
     color:
       serializedVersion: 2
-      rgba: 4289301227
+      rgba: 4288188401
   - elementalReaction: 1
     color:
       serializedVersion: 2
-      rgba: 4284926719
+      rgba: 4285058300
+  - elementalReaction: 2
+    color:
+      serializedVersion: 2
+      rgba: 4289921279

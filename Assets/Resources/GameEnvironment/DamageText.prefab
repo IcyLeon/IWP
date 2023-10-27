@@ -101,7 +101,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -204,7 +204,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamageTextTMP: {fileID: 1712504823774757587}
   canvasGroup: {fileID: 4684581209734514547}
-  worldTextSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}
 --- !u!225 &4684581209734514547
 CanvasGroup:
   m_ObjectHideFlags: 0

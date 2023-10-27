@@ -7,56 +7,59 @@ using UnityEngine;
 public class ElementalColorSO : ScriptableObject
 {
     [Serializable]
-    public class ElementalTextColor
+    public class ElementalInfo
     {
         public Elemental elemental;
+        public Sprite ElementSprite;
         public Color32 color;
     }
 
     [Serializable]
-    public class ElementalReactionTextColor
+    public class ElementalReactionInfo
     {
         public ElementalReactionState elementalReaction;
         public Color32 color;
     }
 
-    [SerializeField] ElementalTextColor[] ElementalTextColorList;
-    [SerializeField] ElementalReactionTextColor[] ElementalReactionTextColorList;
+    [SerializeField] ElementalInfo[] ElementalInfoList;
+    [SerializeField] ElementalReactionInfo[] ElementalReactionInfoList;
 
-    public Color32 GetColor_Elemental(Elemental elemental)
+    public ElementalInfo GetElementalInfo(Elemental elemental)
     {
-        for (int i = 0; i < ElementalTextColorList.Length; i++)
+        for (int i = 0; i < ElementalInfoList.Length; i++)
         {
-            ElementalTextColor elementalTextColor = ElementalTextColorList[i];
-            if (elementalTextColor.elemental == elemental)
+            ElementalInfo e = ElementalInfoList[i];
+            if (e.elemental == elemental)
             {
-                return elementalTextColor.color;
+                return e;
             }
         }
-        return default(Color32);
+        return null;
     }
 
-    public Color32 GetColor_ElementalReaction(ElementalReactionState elementalReaction)
+    public ElementalReactionInfo GetElementalReactionInfo(ElementalReactionState elementalReaction)
     {
-        for (int i = 0; i < ElementalReactionTextColorList.Length; i++)
+        for (int i = 0; i < ElementalReactionInfoList.Length; i++)
         {
-            ElementalReactionTextColor E = ElementalReactionTextColorList[i];
+            ElementalReactionInfo E = ElementalReactionInfoList[i];
             if (E.elementalReaction == elementalReaction)
             {
-                return E.color;
+                return E;
             }
         }
-        return default(Color32);
+        return null;
     }
 
     public string GetElementalReactionText(ElementalReactionState elementalReaction)
     {
         switch(elementalReaction)
         {
-            case ElementalReactionState.OVERLOAD:
-                return "Overload";
+            case ElementalReactionState.OVERCLOCKED:
+                return "Overclocked";
             case ElementalReactionState.MELT:
                 return "Melt";
+            case ElementalReactionState.STUN:
+                return "Stun";
         }
         return null;
     }

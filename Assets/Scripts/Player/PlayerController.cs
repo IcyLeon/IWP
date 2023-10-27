@@ -11,24 +11,31 @@ public enum GroundStatus
     AIR
 }
 
+public enum PlayerActionStatus
+{
+    IDLE,
+    JUMP,
+    FALL
+}
+
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float Speed, SlowMultiplier, ZoomMultiplier;
-    [SerializeField] CinemachineVirtualCamera virtualCamera;
-    private CinemachineFramingTransposer cinemachineFramingTransposer;
+    [SerializeField] float WalkSpeed, SlowMultiplier, ZoomMultiplier;
+    [SerializeField] CinemachineVirtualCamera playerCamera, aimCamera;
 
+    private float Speed;
     private float MaxCameraDistance = 5f;
     private float CameraDistance;
     private Rigidbody rb;
     private Vector3 InputDirection;
     private GroundStatus groundStatus;
+    private PlayerActionStatus playerActionStatus;
 
     private Quaternion CurrentTargetRotation, Target_Rotation;
     private float timeToReachTargetRotation;
     private float dampedTargetRotationCurrentVelocity;
     private float dampedTargetRotationPassedTime;
 
-    private Coroutine CameraZoomOffsetCoroutine, CameraPosOffsetCoroutine;
     public delegate void OnMouseScroll(float inputValue);
     public OnMouseScroll onMouseScroll;
     public event Action OnElementalSkillHold;
@@ -37,12 +44,23 @@ public class PlayerController : MonoBehaviour
     public event Action OnElementalBurstTrigger;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
-    public delegate void OnNumsKeyInput(int val);
-    public OnNumsKeyInput onNumsKeyInput;
+    public delegate void onNumsKeyInput(int val);
+    public onNumsKeyInput OnNumsKeyInput;
+
+    public delegate void OnPlayerStateChange(PlayerActionStatus PlayerActionStatus);
+    public OnPlayerStateChange onPlayerStateChange;
 
     public CinemachineVirtualCamera GetVirtualCamera()
     {
-        return virtualCamera;
+        if (!playerCamera.gameObject.activeSelf)
+            return aimCamera;
+        else
+            return playerCamera;
+    }
+
+    public float GetSpeed()
+    {
+        return Mathf.Pow(GetHorizontalVelocity().magnitude, 0.5f);
     }
 
     private void Awake()
@@ -58,8 +76,8 @@ public class PlayerController : MonoBehaviour
 
     void InitData()
     {
+        ResetSpeed();
         CameraDistance = MaxCameraDistance;
-        cinemachineFramingTransposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         timeToReachTargetRotation = 0.14f;
         rb = GetComponent<Rigidbody>();
     }
@@ -67,6 +85,11 @@ public class PlayerController : MonoBehaviour
     public void SetTargetRotation(Quaternion quaternion)
     {
         Target_Rotation = quaternion;
+    }
+
+    public PlayerActionStatus GetPlayerActionStatus()
+    {
+        return playerActionStatus;
     }
 
     void Update()
@@ -83,9 +106,13 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            Dash();
+            Sprint();
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            ResetSpeed();
         }
     }
 
@@ -93,50 +120,7 @@ public class PlayerController : MonoBehaviour
     {
         return groundStatus;
     }
-    private IEnumerator UpdateCameraOffsetPosition(float ModifierX, float ModifierY, float Speed)
-    {
-        while (cinemachineFramingTransposer.m_ScreenX != ModifierX)
-        {
-            if (cinemachineFramingTransposer.m_ScreenX != ModifierX)
-                cinemachineFramingTransposer.m_ScreenX = Mathf.Lerp(cinemachineFramingTransposer.m_ScreenX, ModifierX, Time.deltaTime * Speed);
 
-            yield return null;
-        }
-        while (cinemachineFramingTransposer.m_ScreenX != ModifierX)
-        {
-            if (cinemachineFramingTransposer.m_ScreenY != ModifierY)
-                cinemachineFramingTransposer.m_ScreenY = Mathf.Lerp(cinemachineFramingTransposer.m_ScreenY, ModifierY, Time.deltaTime * Speed);
-
-            yield return null;
-        }
-        CameraPosOffsetCoroutine = null;
-    }
-
-    private IEnumerator UpdateCameraZoomPosition(float CameraDistance, float Speed)
-    {
-        while (cinemachineFramingTransposer.m_CameraDistance != CameraDistance)
-        {
-            cinemachineFramingTransposer.m_CameraDistance = Mathf.Lerp(cinemachineFramingTransposer.m_CameraDistance, CameraDistance, Time.deltaTime * Speed);
-            yield return null;
-        }
-        CameraZoomOffsetCoroutine = null;
-    }
-
-    public void CameraOffsetPositionAnim(float ModifierX, float ModifierY, float Speed)
-    {
-        if (CameraPosOffsetCoroutine != null)
-            StopCoroutine(CameraPosOffsetCoroutine);
-
-        CameraPosOffsetCoroutine = StartCoroutine(UpdateCameraOffsetPosition(ModifierX, ModifierY, Speed));
-    }
-
-    public void CameraZoomOffsetAnim(float CameraDistance, float Speed)
-    {
-        if (CameraZoomOffsetCoroutine != null)
-            StopCoroutine(CameraZoomOffsetCoroutine);
-
-        CameraZoomOffsetCoroutine = StartCoroutine(UpdateCameraZoomPosition(CameraDistance, Speed));
-    }
 
 
     private void UpdateCamera()
@@ -144,8 +128,10 @@ public class PlayerController : MonoBehaviour
         if (GetCharacterRB() == null)
             return;
 
-        virtualCamera.Follow = GetCharacterRB().transform;
-        virtualCamera.LookAt = GetCharacterRB().transform;
+        playerCamera.Follow = GetCharacterRB().transform;
+        playerCamera.LookAt = GetCharacterRB().transform;
+        aimCamera.Follow = playerCamera.Follow;
+        aimCamera.LookAt = playerCamera.LookAt;
     }
 
     private void UpdateGrounded()
@@ -153,9 +139,11 @@ public class PlayerController : MonoBehaviour
         if (CharacterManager.GetInstance().GetCurrentCharacter() == null)
             return;
 
-        if (Physics.Raycast(rb.position, Vector3.down, (CharacterManager.GetInstance().GetCurrentCharacter().transform.GetComponent<CapsuleCollider>().height / 2) + 0.05f))
+        if (Physics.Raycast(rb.position, Vector3.down, 0.1f))
         {
             groundStatus = GroundStatus.GROUND;
+            playerActionStatus = PlayerActionStatus.IDLE;
+            onPlayerStateChange?.Invoke(playerActionStatus);
         }
         else
         {
@@ -193,13 +181,14 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
+        Debug.Log(GetGroundStatus());
         if (GetGroundStatus() != GroundStatus.GROUND)
             return;
 
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)
-            onNumsKeyInput?.Invoke(GetInputNums());
+            OnNumsKeyInput?.Invoke(GetInputNums());
         else if (Input.GetKey(KeyCode.E))
             OnElementalSkillHold?.Invoke();
         else if (Input.GetKeyUp(KeyCode.E))
@@ -215,9 +204,16 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateDefaultPosOffsetAndZoom()
     {
-        CameraOffsetPositionAnim(0.5f, 0.5f, 5f); // return to default
-        CameraZoomOffsetAnim(5f, 10f);
+        playerCamera.gameObject.SetActive(true);
+        aimCamera.gameObject.SetActive(false);
     }
+
+    public void UpdateAim()
+    {
+        playerCamera.gameObject.SetActive(false);
+        aimCamera.gameObject.SetActive(true);
+    }
+
 
     private void GatherInput()
     {
@@ -284,8 +280,21 @@ public class PlayerController : MonoBehaviour
         {
             DecelerateVertically();
         }
+        if (IsMovingHorizontally())
+        {
+            DecelerateHorizontal();
+        }
+
+        if (IsMovingDown())
+        {
+            playerActionStatus = PlayerActionStatus.FALL;
+        }
     }
 
+    private void ResetSpeed()
+    {
+        Speed = WalkSpeed;
+    }
     private void UpdatePhysicsMovement()
     {
         if (InputDirection == Vector3.zero || GetGroundStatus() == GroundStatus.AIR)
@@ -297,39 +306,49 @@ public class PlayerController : MonoBehaviour
     private void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 1.8f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * 2f, ForceMode.Acceleration);
     }
-    private bool IsMovingUp(float minimumVelocity = 0.1f)
+    private void DecelerateHorizontal()
+    {
+        Vector3 playerVerticalVelocity = GetHorizontalVelocity();
+        rb.AddForce(-playerVerticalVelocity * 2f, ForceMode.Acceleration);
+    }
+
+    private bool IsMovingUp(float minimumVelocity = 0f)
     {
         return GetVerticalVelocity().y > minimumVelocity;
     }
 
-    private bool IsMovingDown(float minimumVelocity = 0.1f)
+    private bool IsMovingDown(float minimumVelocity = 0f)
     {
         return GetVerticalVelocity().y < minimumVelocity;
     }
 
+    private bool IsMovingHorizontally(float minimumVelocity = 0f)
+    {
+        Vector2 horizontal = new Vector2(GetHorizontalVelocity().x, GetHorizontalVelocity().z);
+        return horizontal.magnitude > minimumVelocity;
+    }
 
-    private void Dash()
+    private void Sprint()
     {
         if (GetGroundStatus() == GroundStatus.AIR)
             return;
 
-        Vector3 forward = rb.transform.forward;
-        forward.y = 0;
-        forward.Normalize();
-
-        rb.AddForce((forward * Speed * 2f) - GetHorizontalVelocity() * SlowMultiplier, ForceMode.VelocityChange);
+        Speed = WalkSpeed * 1.5f;
     }
 
     private void Jump()
     {
+        ResetVelocity();
         rb.AddForce(300f * Vector3.up);
+        playerActionStatus = PlayerActionStatus.JUMP;
+        onPlayerStateChange?.Invoke(playerActionStatus);
     }
 
     private void LimitFallVelocity()
     {
-        float FallSpeedLimit = 35f;
+        float FallSpeedLimit = 45f;
         Vector3 velocity = GetVerticalVelocity();
         if (velocity.y >= -FallSpeedLimit)
         {

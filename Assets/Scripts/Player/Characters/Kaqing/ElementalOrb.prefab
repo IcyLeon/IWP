@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2044688702609478517}
   - component: {fileID: 7971908848072225307}
   - component: {fileID: 2509340710535583296}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9056683522043158385}
   - component: {fileID: 3209496471578366145}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ElementalOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}

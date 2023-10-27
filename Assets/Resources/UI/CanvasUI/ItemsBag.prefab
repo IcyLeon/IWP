@@ -43642,7 +43642,6 @@ MonoBehaviour:
   EquippedByCharacter: {fileID: 1744574295815048011}
   SelectedItemImage: {fileID: 4646048842291109571}
   ItemContentDisplay: {fileID: 4646048842711512171}
-  burst: {fileID: 0}
   TabGroup: {fileID: 2404738263509157490}
 --- !u!223 &8099876040330363184
 Canvas:

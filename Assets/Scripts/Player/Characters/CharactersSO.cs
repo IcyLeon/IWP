@@ -7,4 +7,6 @@ using UnityEngine;
 public class CharactersSO : ItemTemplate
 {
     public float BaseHP;
+    public float BaseATK;
+    public float BaseDEF;
 }

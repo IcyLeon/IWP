@@ -18,13 +18,15 @@ public class AssetManager : MonoBehaviour
     [Header("Normal Attack Bow")]
     [SerializeField] GameObject CrossHair;
     [SerializeField] GameObject HitEffect;
-    [Header("Health UI")]
-    public GameObject EnemyHealthUIPrefab;
+    [SerializeField] GameObject WorldUIContainer;
 
+    [Header("UI")]
+    public GameObject EnemyHealthUIPrefab;
     public GameObject StarPrefab;
     private GameObject DraggingItem;
     public GameObject ItemBorderPrefab;
     public GameObject SlotPrefab;
+    public GameObject ElementalContainerPrefab;
 
     private static AssetManager instance;
     // Start is called before the first frame update

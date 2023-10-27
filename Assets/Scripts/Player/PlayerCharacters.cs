@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,26 @@ public class PlayerCharacters : Characters
 
     }
 
+
+    public Characters GetNearestCharacters()
+    {
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 7.5f, LayerMask.GetMask("Entity"));
+        if (colliders.Length == 0)
+            return null;
+
+        Collider CurrentCollider = colliders[0];
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider collider = colliders[i];
+            float Dist1 = (collider.transform.position - GetPlayerController().transform.position).magnitude;
+            float Dist2 = (collider.transform.position - CurrentCollider.transform.position).magnitude;
+            if (Dist1 < Dist2)
+                CurrentCollider = collider;
+        }
+        return CurrentCollider.GetComponent<Characters>();
+    } 
+
     public override int GetLevel()
     {
         if (characterData == null)
@@ -54,13 +75,34 @@ public class PlayerCharacters : Characters
         return characterData.GetMaxHealth();
     }
 
+    public override float GetDamage()
+    {
+        if (characterData == null)
+            return base.GetDamage();
 
+        return characterData.GetDamage();
+    }
+
+    public override void SetHealth(float val)
+    {
+        if (characterData == null)
+            return;
+
+        characterData.SetHealth(val);
+    }
+
+    public override float GetDEF()
+    {
+        if (characterData == null)
+            return base.GetDEF();
+
+        return characterData.GetDEF();
+    }
 
     protected PlayerController GetPlayerController()
     {
         return playerController;
     }
-
     protected override void Start()
     {
         playerController = CharacterManager.GetInstance().GetPlayerController();
@@ -98,7 +140,6 @@ public class PlayerCharacters : Characters
     protected override void Update()
     {
         base.Update();
-
     }
 
     public CinemachineVirtualCamera GetVirtualCamera()
@@ -107,22 +148,6 @@ public class PlayerCharacters : Characters
             return null;
 
         return GetPlayerController().GetVirtualCamera();
-    }
-
-    protected void UpdateCameraOffsetPosition(float ModifierX, float ModifierY, float Speed)
-    {
-        if (GetPlayerController() == null)
-            return;
-
-        GetPlayerController().CameraOffsetPositionAnim(ModifierX, ModifierY, Speed);
-    }
-
-    protected void UpdateCameraZoomOffset(float CameraDistance, float Speed)
-    {
-        if (GetPlayerController() == null)
-            return;
-
-        GetPlayerController().CameraZoomOffsetAnim(CameraDistance, Speed);
     }
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
@@ -163,8 +188,10 @@ public class PlayerCharacters : Characters
 
     protected void UpdateCameraAim()
     {
-        UpdateCameraOffsetPosition(0.25f, 0.55f, AimSpeed);
-        UpdateCameraZoomOffset(3f, AimSpeed);
+        if (GetPlayerController() == null)
+            return;
+
+        GetPlayerController().UpdateAim();
     }
 
     protected virtual void ElementalSkillTrigger()
@@ -192,7 +219,7 @@ public class PlayerCharacters : Characters
 
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         if (GetPlayerController() != null)
         {

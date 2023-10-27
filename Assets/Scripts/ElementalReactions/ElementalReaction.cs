@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ public class ElementalReaction
 {
     private List<Elements> ElementsList;
     private ElementalReactionsManager elementalReactionsManager;
+    public delegate void OnElementChanged(bool isChanged);
+    public OnElementChanged onElementChanged;
 
     public void UpdateElementsList()
     {
@@ -24,7 +27,7 @@ public class ElementalReaction
         }
     }
 
-    public ElementalReactionsInfo GetElementalReactionsInfo(List<Elements> Elementals)
+    private ElementalReactionsInfo GetElementalReactionsInfo(List<Elements> Elementals)
     {
         if (elementalReactionsManager == null)
             return null;
@@ -32,9 +35,28 @@ public class ElementalReaction
         return elementalReactionsManager.GetElementalReactionState(Elementals);
     }
 
+    public ElementalReactionsTrigger GetElementalReactionsTrigger(Vector3 position)
+    {
+        ElementalReactionsInfo ElementalReactionsInfo = GetElementalReactionsInfo(ElementsList);
+        if (ElementalReactionsInfo == null)
+            return null;
+
+        ElementalReactionsTrigger trigger = new ElementalReactionsTrigger();
+        trigger.SetERState(ElementalReactionsInfo.elementalReactionState);
+
+        AssetManager.GetInstance().SpawnWorldText_ElementalReaction(position, trigger.GetERState(), ElementalReactionsManager.GetInstance().GetElementalReactionText(trigger.GetERState()));
+
+        return trigger;
+    }
+
+
+
     public void AddElements(Elements elements)
     {
         if (elements == null)
+            return;
+
+        if (elements.GetElements() == Elemental.NONE)
             return;
 
         Elements ExistingElements = isElementsAlreadyExisted(elements);
@@ -43,6 +65,8 @@ public class ElementalReaction
             ElementsList.Add(elements);
         else
             ExistingElements.ResetElementalEffect();
+
+        onElementChanged?.Invoke(ExistingElements == null);
     }
 
     private Elements isElementsAlreadyExisted(Elements e)
@@ -58,14 +82,15 @@ public class ElementalReaction
         return null;
     }
 
+    public List<Elements> GetElementList()
+    {
+        return ElementsList;
+    }
+
     public ElementalReaction()
     {
         ElementsList = new List<Elements>();
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
     }
 
-    public List<Elements> GetElementsList()
-    {
-        return ElementsList;
-    }
 }

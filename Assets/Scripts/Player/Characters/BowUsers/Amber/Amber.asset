@@ -17,6 +17,8 @@ MonoBehaviour:
   ItemSprite: {fileID: 0}
   Rarity: 3
   BaseHP: 793
+  BaseATK: 18
+  BaseDEF: 50
   Elemental: 1
   PartyIcon: {fileID: 21300000, guid: 6e349c75f188ca54bbe143cfc6623cba, type: 3}
   ElementalSkillsCooldown: 0
