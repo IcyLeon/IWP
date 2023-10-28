@@ -96,7 +96,7 @@ MonoBehaviour:
   - CharacterPrefab: {fileID: 2109403457525059256, guid: aaf82c83986815f449a11817f05cacf3,
       type: 3}
     playersSO: {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
-  - CharacterPrefab: {fileID: 2901747049663663568, guid: 38488f1bfa0f45045bfb7d2753be07e2,
+  - CharacterPrefab: {fileID: 2313908216546761985, guid: c8ba7ffa1db7e3143ad3a0def77f8cd7,
       type: 3}
     playersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
 --- !u!114 &8947986169262794112

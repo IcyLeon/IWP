@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    [SerializeField] Rigidbody rb;
     private Elements elements;
     private CharacterData BowCharacters;
     private float FlightTime = 10f;
+
+    private float gravityScale = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
         Destroy(gameObject, FlightTime);
+    }
+
+    void FixedUpdate()
+    {
+        rb.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
     }
 
     // Update is called once per frame

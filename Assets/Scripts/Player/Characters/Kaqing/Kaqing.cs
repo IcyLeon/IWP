@@ -36,7 +36,6 @@ public class Kaqing : SwordCharacters
     protected override void Start()
     {
         base.Start();
-        GetPlayerController().onPlayerStateChange += OnJump;
         ElementalHitPos = Vector3.zero;
     }
 
@@ -67,14 +66,6 @@ public class Kaqing : SwordCharacters
 
         UpdateTargetOrb();
         base.Update();
-    }
-
-    private void OnJump(PlayerActionStatus state)
-    {
-        if (state != PlayerActionStatus.JUMP)
-            return;
-
-        Animator.SetTrigger("Jump");
     }
 
     private void UpdateTargetOrb()
@@ -204,15 +195,5 @@ public class Kaqing : SwordCharacters
         GetPlayerController().GetCharacterRB().useGravity = false;
         yield return new WaitForSeconds(sec);
         GetPlayerController().GetCharacterRB().useGravity = true;
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-
-        if (GetPlayerController() != null)
-        {
-            GetPlayerController().onPlayerStateChange -= OnJump;
-        }
     }
 }

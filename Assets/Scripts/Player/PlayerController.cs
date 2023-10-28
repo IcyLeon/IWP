@@ -1,4 +1,5 @@
 using Cinemachine;
+using Cinemachine.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ public enum PlayerActionStatus
 {
     IDLE,
     JUMP,
-    FALL
+    FALL,
+    PLUNGE
 }
 
 public class PlayerController : MonoBehaviour
@@ -106,14 +108,6 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            Sprint();
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            ResetSpeed();
-        }
     }
 
     public GroundStatus GetGroundStatus()
@@ -121,6 +115,10 @@ public class PlayerController : MonoBehaviour
         return groundStatus;
     }
 
+    private void CanPlungeAttack()
+    {
+        float PlungeAttackRange = 50f;
+    }
 
 
     private void UpdateCamera()
@@ -139,7 +137,7 @@ public class PlayerController : MonoBehaviour
         if (CharacterManager.GetInstance().GetCurrentCharacter() == null)
             return;
 
-        if (Physics.Raycast(rb.position, Vector3.down, 0.1f))
+        if (Physics.Raycast(rb.position, Vector3.down, 0.5f))
         {
             groundStatus = GroundStatus.GROUND;
             playerActionStatus = PlayerActionStatus.IDLE;
@@ -200,12 +198,14 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateDefaultPosOffsetAndZoom()
     {
+        ResetSpeed();
         playerCamera.gameObject.SetActive(true);
         aimCamera.gameObject.SetActive(false);
     }
 
     public void UpdateAim()
     {
+        Speed = WalkSpeed / 2.5f;
         playerCamera.gameObject.SetActive(false);
         aimCamera.gameObject.SetActive(true);
     }
@@ -326,14 +326,6 @@ public class PlayerController : MonoBehaviour
         return horizontal.magnitude > minimumVelocity;
     }
 
-    private void Sprint()
-    {
-        if (GetGroundStatus() == GroundStatus.AIR)
-            return;
-
-        Speed = WalkSpeed * 1.5f;
-    }
-
     private void Jump()
     {
         ResetVelocity();
@@ -356,7 +348,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private Vector3 GetHorizontalVelocity()
+    public Vector3 GetHorizontalVelocity()
     {
         if (rb == null)
             return Vector3.zero;

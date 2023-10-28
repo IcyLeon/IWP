@@ -19,7 +19,7 @@ MonoBehaviour:
   BaseHP: 1020
   BaseATK: 25
   BaseDEF: 62
-  Elemental: 1
+  Elemental: 3
   PartyIcon: {fileID: 21300000, guid: 50a4657062194a746b5e026bbeb8dedd, type: 3}
   ElementalSkillSprite: {fileID: 21300000, guid: 3d9964099f93fa6439a7c9c0d689b251,
     type: 3}

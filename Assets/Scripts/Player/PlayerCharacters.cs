@@ -112,6 +112,7 @@ public class PlayerCharacters : Characters
         GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
+        GetPlayerController().onPlayerStateChange += OnJump;
 
         healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
         base.Start();
@@ -229,6 +230,16 @@ public class PlayerCharacters : Characters
             GetPlayerController().OnE_1Down -= EKey_1Down;
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
+            GetPlayerController().onPlayerStateChange -= OnJump;
         }
+    }
+
+    private void OnJump(PlayerActionStatus state)
+    {
+        if (state != PlayerActionStatus.JUMP)
+            return;
+
+        if (Animator != null)
+            Animator.SetTrigger("Jump");
     }
 }

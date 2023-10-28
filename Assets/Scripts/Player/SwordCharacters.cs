@@ -7,7 +7,6 @@ public class SwordCharacters : PlayerCharacters
     [SerializeField] protected Sword SwordREF;
     protected int BasicAttackPhase;
     protected int AttackLayer;
-
     private float TimeOutTimer;
     private float AttackAnimeElapsed;
 
