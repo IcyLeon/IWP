@@ -181,10 +181,6 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
-        Debug.Log(GetGroundStatus());
-        if (GetGroundStatus() != GroundStatus.GROUND)
-            return;
-
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)

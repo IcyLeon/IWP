@@ -55,6 +55,7 @@ public class BowCharacters : PlayerCharacters
 
     protected virtual void Fire(Vector3 direction)
     {
+        Debug.Log("Fire");
         Arrow ArrowFire = Instantiate(ArrowPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(CurrentElemental));

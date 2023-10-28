@@ -41,6 +41,10 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
+        if (GetPlayerController().GetGroundStatus() != GroundStatus.GROUND)
+            return;
+
+
         BasicAttackPhase++;
         if (BasicAttackPhase > 2)
         {
