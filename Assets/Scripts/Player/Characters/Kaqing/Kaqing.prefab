@@ -659,8 +659,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
   Animator: {fileID: 41062414002266592}
-  SwordREF: {fileID: 2316705126754495589}
-  EmitterPivot: {fileID: 2132850761548433918}
+  SwordModel: {fileID: 3228397461706563601}
+  EmitterPivot: {fileID: 2848037268507769515}
   ElementalOrbPrefab: {fileID: 8455810837854244540, guid: 038cc286a7384c54e86b6e5e09da6fdb,
     type: 3}
   TargetOrbPrefab: {fileID: 260796668554883667, guid: c7219445ca073fd4088e1595e66881e1,
@@ -2728,21 +2728,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb7c6d468911dbf4293b6e834dc5de85, type: 3}
---- !u!114 &2316705126754495589 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 888146972988425238, guid: eb7c6d468911dbf4293b6e834dc5de85,
-    type: 3}
-  m_PrefabInstance: {fileID: 3203682208599992435}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b4f96e5443522243a62258f111d13a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2848037268507769515 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 861174000417362648, guid: eb7c6d468911dbf4293b6e834dc5de85,
+    type: 3}
+  m_PrefabInstance: {fileID: 3203682208599992435}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3228397461706563601 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 51881127414958178, guid: eb7c6d468911dbf4293b6e834dc5de85,
     type: 3}
   m_PrefabInstance: {fileID: 3203682208599992435}
   m_PrefabAsset: {fileID: 0}

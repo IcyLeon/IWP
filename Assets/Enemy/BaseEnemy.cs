@@ -14,6 +14,7 @@ public class BaseEnemy : Characters
         CurrentHealth = GetMaxHealth();
         Level = 1;
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
+        elementalReaction = new ElementalReaction();
     }
 
     // Update is called once per frame
@@ -24,6 +25,9 @@ public class BaseEnemy : Characters
 
         if (elementsIndicator)
             elementsIndicator.transform.position = transform.position + Vector3.up * 2.1f;
+
+        if (GetElementalReaction() != null)
+            GetElementalReaction().UpdateElementsList();
     }
 
     private void UpdateHealthBar()
@@ -32,15 +36,22 @@ public class BaseEnemy : Characters
         healthBarScript.SliderInvsibleOnlyFullHealth();
     }
 
-    public override void TakeDamage(Vector3 pos, Elements elements, float amt)
+    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt)
     {
-        base.TakeDamage(pos, elements, amt);
+        Elements e = base.TakeDamage(pos, elements, amt);
 
         if (elementsIndicator == null)
         {
             elementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab).GetComponent<ElementsIndicator>();
             elementsIndicator.SetCharacters(this);
         }
+
+        if (e.GetElements() != Elemental.NONE)
+        {
+            GameObject go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, transform.position, Quaternion.identity);
+        }
+
+        return e;
     }
 
 

@@ -13,14 +13,17 @@ public class SkillsManager : MonoBehaviour
 
     [Header("Elemental Burst")]
     [SerializeField] TextMeshProUGUI BurstSkillCooldownTxt;
-    [SerializeField] Image ElementalBurstSprite;
+    [SerializeField] Image ElementalBurstImage;
+    [SerializeField] Sprite ElementalBurstBackgroundSprite_Default;
     [SerializeField] Image BurstFill;
 
     private CharacterData PlayerCharacterData;
+    private ElementalReactionsManager elementalReactionsManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        elementalReactionsManager = ElementalReactionsManager.GetInstance();
         CharacterManager.GetInstance().onCharacterChange += OnCharacterSwitch;
         OnCharacterSwitch(InventoryManager.GetInstance().GetCurrentEquipCharacterData());
     }
@@ -31,18 +34,32 @@ public class SkillsManager : MonoBehaviour
         if (PlayerCharacterData != null)
         {
             UpdateElementalSkill();
+            UpdateElementalBurst();
         }
 
     }
 
     private void UpdateElementalBurst()
     {
+        if (PlayerCharacterData.CanTriggerBurstSKillCost())
+        {
+            ElementalBurstImage.sprite = elementalReactionsManager.GetElementalColorSO().GetElementalInfo(PlayerCharacterData.GetPlayerCharacterSO().Elemental).ElementBurstBackground;
+        }
+        else
+        {
+            ElementalBurstImage.sprite = ElementalBurstBackgroundSprite_Default;
+        }
+        BurstFill.gameObject.SetActive(!PlayerCharacterData.CanTriggerBurstSKillCost());
+
+        BurstSkillCooldownTxt.text = PlayerCharacterData.GetCurrentElementalBurstCooldown().ToString("0.0") + "s";
+        BurstFill.fillAmount = PlayerCharacterData.GetCurrentEnergyBurstCost() / PlayerCharacterData.GetEnergyBurstCost();
+        BurstSkillCooldownTxt.gameObject.SetActive(!PlayerCharacterData.CanTriggerBurstSKill());
     }
 
     private void UpdateElementalSkill()
     {
         ElementalSkillCooldownTxt.text = PlayerCharacterData.GetCurrentElementalSkillCooldown().ToString("0.0") + "s";
-        if (PlayerCharacterData.CanTriggerSKill())
+        if (PlayerCharacterData.CanTriggerESKill())
             ElementalSkillBackgroundCanvasGroup.alpha = 1f;
         else
             ElementalSkillBackgroundCanvasGroup.alpha = 0.5f;
@@ -51,7 +68,7 @@ public class SkillsManager : MonoBehaviour
         {
             ElementalSkillSprite.sprite = GetPlayerCharacterSO().ElementalSkillSprite;
         }
-        ElementalSkillCooldownTxt.gameObject.SetActive(!PlayerCharacterData.CanTriggerSKill());
+        ElementalSkillCooldownTxt.gameObject.SetActive(!PlayerCharacterData.CanTriggerESKill());
     }
 
     void OnCharacterSwitch(CharacterData PlayerCharacterData)

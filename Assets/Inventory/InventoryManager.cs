@@ -37,8 +37,6 @@ public class InventoryManager : MonoBehaviour {
             AddCharacterDataToOwnList(characterData);
         }
 
-        CharacterManager.GetInstance().SwapCharacters(0);
-
     }
 
 

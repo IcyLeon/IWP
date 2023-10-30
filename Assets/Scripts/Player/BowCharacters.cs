@@ -13,10 +13,9 @@ public class BowCharacters : PlayerCharacters
     private float BaseFireSpeed = 1500f;
     private float ChargedMaxElapsed = 1.5f;
     private float ChargeElapsed;
-    private Vector3 Direction;
+    private Vector3 Direction, ShootDirection;
     private AimState aimState = AimState.NONE;
     private float threasHold_Charged;
-    private Coroutine FireDelayCoroutine;
     private bool isAimHold;
 
     private void Awake()
@@ -57,33 +56,24 @@ public class BowCharacters : PlayerCharacters
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
 
         base.Update();
-
-
-        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
-        {
-            if (Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
-                Animator.SetBool("isAttacking", false);
-        }
     }
 
     protected virtual void Fire(Vector3 direction)
     {
-        if (FireDelayCoroutine == null)
-            FireDelayCoroutine = StartCoroutine(FireDelay(Direction));
+        ShootDirection = direction;
     }
 
-    private IEnumerator FireDelay(Vector3 direction)
+    public void FireArrows()
     {
-        yield return new WaitForSeconds(0.2f);
         Arrow ArrowFire = Instantiate(ArrowPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(CurrentElemental));
         ArrowFire.SetCharacterData(GetCharacterData());
 
-        ArrowRB.AddForce(direction.normalized * BaseFireSpeed * (1 + ChargeElapsed));
+        ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + ChargeElapsed));
         ChargeElapsed = 0;
-        FireDelayCoroutine = null;
     }
+
     private void UpdateAim()
     {
         if (ChargeElapsed < 1)
@@ -111,10 +101,23 @@ public class BowCharacters : PlayerCharacters
         }
         else
         {
-            Vector3 forward = GetPlayerController().transform.forward;
-            forward.y = 0;
-            forward.Normalize();
-            Direction = (GetRayPosition3D(transform.position, forward, 10f) - EmitterPivot.position).normalized;
+            Characters NearestEnemy = GetNearestCharacters();
+            Vector3 forward;
+            if (NearestEnemy == null)
+            {
+
+                forward = transform.forward;
+                forward.y = 0;
+                forward.Normalize();
+                Direction = ((transform.position + forward * 10f) - EmitterPivot.position).normalized;
+            }
+            else
+            {
+                forward = NearestEnemy.transform.position - transform.position;
+                forward.Normalize();
+                Direction = (NearestEnemy.transform.position - EmitterPivot.position).normalized;
+                LookAtDirection(forward);
+            }
         }
         threasHold_Charged += Time.deltaTime;
     }

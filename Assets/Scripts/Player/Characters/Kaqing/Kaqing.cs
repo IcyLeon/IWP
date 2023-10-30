@@ -16,9 +16,8 @@ public class Kaqing : SwordCharacters
         THROW,
         SLASH
     }
-    [SerializeField] Transform EmitterPivot;
     private Vector3 ElementalHitPos;
-    private ElementalOrb elementalOrb;
+    private KaqingTeleporter elementalOrb;
     private GameObject targetOrb;
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject TargetOrbPrefab;
@@ -44,7 +43,7 @@ public class Kaqing : SwordCharacters
     {
         if (elementalOrb == null && elementalSKill == ElementalSKill.SLASH)
         {
-            GetCharacterData().ResetEnergyCooldown();
+            GetCharacterData().ResetElementalSkillCooldown();
             elementalSKill = ElementalSKill.NONE;
         }
 
@@ -55,7 +54,7 @@ public class Kaqing : SwordCharacters
         {
             if (!elementalOrb.GetEnergyOrbMoving() && elementalOrbState == ElementalOrbState.MOVING)
             {
-                UpdateDefaultPosOffsetAndZoom(0.15f);
+                UpdateDefaultPosOffsetAndZoom(0.1f);
                 elementalOrbState = ElementalOrbState.IDLE;
             }
         }
@@ -66,6 +65,17 @@ public class Kaqing : SwordCharacters
 
         UpdateTargetOrb();
         base.Update();
+    }
+
+    //protected override void FixedUpdate()
+    //{
+    //    if (elementalSKill != ElementalSKill.THROW)
+    //        base.FixedUpdate();
+    //}
+
+    protected override bool ElementalBurstTrigger()
+    {
+        return base.ElementalBurstTrigger();
     }
 
     private void UpdateTargetOrb()
@@ -79,7 +89,7 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerSKill())
+        if (!GetCharacterData().CanTriggerESKill())
             return;
 
         switch (elementalSKill)
@@ -114,7 +124,7 @@ public class Kaqing : SwordCharacters
                         LookAtDirection(ElementalHitPos - EmitterPivot.position);
                     }
                 }
-                GetSword().gameObject.SetActive(false);
+                SwordModel.gameObject.SetActive(false);
                 Animator.SetBool("2ndSkillAim", true);
                 threasHold_Charged += Time.deltaTime;
                 break;
@@ -124,7 +134,7 @@ public class Kaqing : SwordCharacters
 
     protected override void EKey_1Down()
     {
-        if (!GetCharacterData().CanTriggerSKill())
+        if (!GetCharacterData().CanTriggerESKill())
             return;
 
         switch (elementalSKill)
@@ -135,20 +145,16 @@ public class Kaqing : SwordCharacters
         }
     }
 
-    protected override void ElementalBurstTrigger()
-    {
-    }
-
     private void ResetThresHold()
     {
         threasHold_Charged = 0;
         elementalOrbState = ElementalOrbState.MOVING;
-        GetSword().gameObject.SetActive(true);
+        SwordModel.gameObject.SetActive(true);
     }
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerSKill())
+        if (!GetCharacterData().CanTriggerESKill())
             return;
 
         switch (elementalSKill)
@@ -174,13 +180,12 @@ public class Kaqing : SwordCharacters
         if (targetOrb != null)
             Destroy(targetOrb.gameObject);
 
-        // Wait until the animation is complete
         while (!Animator.GetCurrentAnimatorStateInfo(0).IsName("2ndSkillThrow") || Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.45f)
         {
             yield return null;
         }
 
-        ElementalOrb Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<ElementalOrb>();
+        KaqingTeleporter Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<KaqingTeleporter>();
         Orb.SetElements(new Elements(GetPlayersSO().Elemental));
         Orb.SetCharacterData(GetCharacterData());
         elementalOrb = Orb;

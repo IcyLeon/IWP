@@ -21,24 +21,17 @@ public class Sword : MonoBehaviour
         if (GetSwordCharacters() == null)
             return;
 
-        if (GetSwordCharacters().GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("Hit1") ||
-            GetSwordCharacters().GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("Hit2") ||
-            GetSwordCharacters().GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("Hit3") ||
-            GetSwordCharacters().GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("2ndSkillSlash")
-            )
-        {
-            BaseEnemy enemy = other.GetComponent<BaseEnemy>();
+        BaseEnemy enemy = other.GetComponent<BaseEnemy>();
 
-            if (enemy != null) {
-                Vector3 hitPosition = enemy.transform.position;
+        if (enemy != null) {
+            Vector3 hitPosition = enemy.transform.position;
 
-                if (other is MeshCollider meshCollider)
-                {
-                    hitPosition = meshCollider.ClosestPointOnBounds(enemy.transform.position);
-                }
-
-                enemy.TakeDamage(hitPosition, new Elements (GetSwordCharacters().GetPlayersSO().Elemental), 1000f);
+            if (other is MeshCollider meshCollider)
+            {
+                hitPosition = meshCollider.ClosestPointOnBounds(enemy.transform.position);
             }
+
+            enemy.TakeDamage(hitPosition, new Elements (GetSwordCharacters().GetPlayersSO().Elemental), 1000f);
         }
     }
 }

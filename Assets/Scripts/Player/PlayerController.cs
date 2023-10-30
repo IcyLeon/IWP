@@ -6,18 +6,18 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public enum GroundStatus
-{
-    GROUND,
-    AIR
-}
-
 public enum PlayerActionStatus
 {
     IDLE,
     JUMP,
     FALL,
     PLUNGE
+}
+
+public enum PlayerGroundStatus
+{
+    GROUND,
+    AIR
 }
 
 public class PlayerController : MonoBehaviour
@@ -30,8 +30,8 @@ public class PlayerController : MonoBehaviour
     private float CameraDistance;
     private Rigidbody rb;
     private Vector3 InputDirection;
-    private GroundStatus groundStatus;
     private PlayerActionStatus playerActionStatus;
+    private PlayerGroundStatus playerGroundStatus;
 
     private Quaternion CurrentTargetRotation, Target_Rotation;
     private float timeToReachTargetRotation;
@@ -42,8 +42,9 @@ public class PlayerController : MonoBehaviour
     public OnMouseScroll onMouseScroll;
     public event Action OnElementalSkillHold;
     public event Action OnE_1Down;
+    public delegate bool OnElementalBurst();
     public event Action OnElementalSkillTrigger;
-    public event Action OnElementalBurstTrigger;
+    public event OnElementalBurst OnElementalBurstTrigger;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
     public delegate void onNumsKeyInput(int val);
@@ -103,16 +104,6 @@ public class PlayerController : MonoBehaviour
         UpdateControls();
         UpdateGrounded();
         UpdateCamera();
-  
-        if (Input.GetKeyDown(KeyCode.Space) && GetGroundStatus() == GroundStatus.GROUND)
-        {
-            Jump();
-        }
-    }
-
-    public GroundStatus GetGroundStatus()
-    {
-        return groundStatus;
     }
 
     private void CanPlungeAttack()
@@ -137,15 +128,16 @@ public class PlayerController : MonoBehaviour
         if (CharacterManager.GetInstance().GetCurrentCharacter() == null)
             return;
 
-        if (Physics.Raycast(rb.position, Vector3.down, 0.5f))
+        Vector3 collider = CharacterManager.GetInstance().GetCurrentCharacter().GetComponent<CapsuleCollider>().bounds.center;
+        if (Physics.Raycast(collider, Vector3.down, 1f))
         {
-            groundStatus = GroundStatus.GROUND;
             playerActionStatus = PlayerActionStatus.IDLE;
+            playerGroundStatus = PlayerGroundStatus.GROUND;
             onPlayerStateChange?.Invoke(playerActionStatus);
         }
         else
         {
-            groundStatus = GroundStatus.AIR;
+            playerGroundStatus = PlayerGroundStatus.AIR;
         }
     }
 
@@ -179,6 +171,13 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+            Jump();
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            Dash();
+
+
+
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)
@@ -264,13 +263,12 @@ public class PlayerController : MonoBehaviour
         rb.MoveRotation(targetRotation);
     }
 
-
     // Update is called once per frame
     void FixedUpdate()
     {
         UpdatePhysicsMovement();
-        LimitFallVelocity();
         UpdateTargetRotation();
+        LimitFallVelocity();
 
         if (IsMovingUp())
         {
@@ -284,6 +282,7 @@ public class PlayerController : MonoBehaviour
         if (IsMovingDown())
         {
             playerActionStatus = PlayerActionStatus.FALL;
+            onPlayerStateChange?.Invoke(playerActionStatus);
         }
     }
 
@@ -291,9 +290,9 @@ public class PlayerController : MonoBehaviour
     {
         Speed = WalkSpeed;
     }
-    private void UpdatePhysicsMovement()
+    public void UpdatePhysicsMovement()
     {
-        if (InputDirection == Vector3.zero || GetGroundStatus() == GroundStatus.AIR)
+        if (InputDirection == Vector3.zero || playerGroundStatus != PlayerGroundStatus.GROUND)
             return;
 
         rb.AddForce((InputDirection * Speed) - GetHorizontalVelocity() * SlowMultiplier, ForceMode.VelocityChange);
@@ -306,8 +305,8 @@ public class PlayerController : MonoBehaviour
     }
     private void DecelerateHorizontal()
     {
-        Vector3 playerVerticalVelocity = GetHorizontalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 3f, ForceMode.Acceleration);
+        Vector3 playerHorizontalVelocity = GetHorizontalVelocity();
+        rb.AddForce(-playerHorizontalVelocity * 3f, ForceMode.Acceleration);
     }
 
     private bool IsMovingUp(float minimumVelocity = 0f)
@@ -328,15 +327,36 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        if (playerGroundStatus != PlayerGroundStatus.GROUND)
+            return;
+
         ResetVelocity();
-        rb.AddForce(300f * Vector3.up);
+        rb.AddForce(5f * Vector3.up, ForceMode.VelocityChange);
         playerActionStatus = PlayerActionStatus.JUMP;
         onPlayerStateChange?.Invoke(playerActionStatus);
     }
 
+    private void Dash()
+    {
+        if (playerGroundStatus != PlayerGroundStatus.GROUND)
+            return;
+
+        Vector3 dashDirection = rb.transform.forward;
+
+        dashDirection.y = 0f;
+
+        if (InputDirection != Vector3.zero)
+        {
+            dashDirection = InputDirection;
+        }
+
+        dashDirection.Normalize();
+        rb.velocity = dashDirection * WalkSpeed * 5f;
+    }
+
     private void LimitFallVelocity()
     {
-        float FallSpeedLimit = 45f;
+        float FallSpeedLimit = 35f;
         Vector3 velocity = GetVerticalVelocity();
         if (velocity.y >= -FallSpeedLimit)
         {

@@ -11,6 +11,7 @@ public class ElementalColorSO : ScriptableObject
     {
         public Elemental elemental;
         public Sprite ElementSprite;
+        public Sprite ElementBurstBackground;
         public Color32 color;
     }
 

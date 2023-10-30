@@ -7,6 +7,7 @@ public class MainUI : MonoBehaviour
     private static MainUI instance;
 
     [SerializeField] GameObject PlayerHealthBarREF;
+    [SerializeField] Transform ElementalDisplayUITransform;
 
     public static MainUI GetInstance()
     {
@@ -26,16 +27,9 @@ public class MainUI : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public Transform GetElementalDisplayUITransform()
     {
-            
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return ElementalDisplayUITransform;
     }
 
     public HealthBarScript GetPlayerHealthBar()

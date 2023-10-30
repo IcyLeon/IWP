@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElementalOrb : MonoBehaviour
+public class KaqingTeleporter : MonoBehaviour
 {
     private Elements elements;
     private CharacterData Kaqing;
@@ -38,7 +38,7 @@ public class ElementalOrb : MonoBehaviour
 
     private void TravelDamage()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude * 2f);
         for(int i = 0; i < colliders.Length; i++)
         {
             Collider collider = colliders[i];

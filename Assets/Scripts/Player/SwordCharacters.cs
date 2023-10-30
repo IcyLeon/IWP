@@ -4,20 +4,16 @@ using UnityEngine;
 
 public class SwordCharacters : PlayerCharacters
 {
-    [SerializeField] protected Sword SwordREF;
+    [SerializeField] protected GameObject SwordModel;
+    [SerializeField] protected Transform EmitterPivot;
     protected int BasicAttackPhase;
     protected int AttackLayer;
-    private float TimeOutTimer;
-    private float AttackAnimeElapsed;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         ResetBasicAttacks();
-
-        if (GetCharacterData() != null)
-            GetSword().SetSwordCharacterWield(this);
     }
 
     // Update is called once per frame
@@ -26,32 +22,37 @@ public class SwordCharacters : PlayerCharacters
         base.Update();
     }
 
-    public Sword GetSword()
+    public Transform GetEmitterPivot()
     {
-        return SwordREF;
+        return EmitterPivot;
     }
-
     public void ResetBasicAttacks()
     {
         BasicAttackPhase = 0;
-        AttackAnimeElapsed = 0;
         Animator.SetInteger("AttackPhase", BasicAttackPhase);
     }
 
     protected override void ChargeTrigger()
     {
-        if (GetPlayerController().GetGroundStatus() != GroundStatus.GROUND)
+        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
             return;
 
-
-        BasicAttackPhase++;
         if (BasicAttackPhase > 2)
         {
             ResetBasicAttacks();
         }
-        AttackAnimeElapsed = 0;
 
         Animator.SetInteger("AttackPhase", BasicAttackPhase);
         Animator.SetTrigger("Attack");
+    }
+
+    public int GetBasicAttackPhase()
+    {
+        return BasicAttackPhase;
+    }
+
+    public void SetAttackPhase(int phase)
+    {
+        BasicAttackPhase = phase;
     }
 }

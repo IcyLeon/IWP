@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3616427452168378293}
   - component: {fileID: 476761880861391340}
   m_Layer: 0
-  m_Name: Elemental_Display
+  m_Name: Elemental_Display_World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

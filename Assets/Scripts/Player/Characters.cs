@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IDamage {
-    void TakeDamage(Vector3 position, Elements elements, float damageAmt);
+    Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
 }
 
 public class Characters : MonoBehaviour, IDamage
@@ -18,12 +18,11 @@ public class Characters : MonoBehaviour, IDamage
     [SerializeField] protected CharactersSO CharactersSO;
     [SerializeField] protected Animator Animator;
     protected HealthBarScript healthBarScript;
-    private ElementalReaction elementalReaction;
+    protected ElementalReaction elementalReaction;
 
     protected virtual void Start()
     {
         BaseMaxHealth = CharactersSO.BaseHP;
-        elementalReaction = new ElementalReaction();
     }
 
     public Animator GetAnimator()
@@ -39,12 +38,9 @@ public class Characters : MonoBehaviour, IDamage
             healthBarScript.UpdateHealth(GetHealth());
             healthBarScript.UpdateLevel(GetLevel());
         }
-
-        if (GetElementalReaction() != null)
-            GetElementalReaction().UpdateElementsList();
     }
 
-    public ElementalReaction GetElementalReaction()
+    public virtual ElementalReaction GetElementalReaction()
     {
         return elementalReaction;
     }
@@ -58,21 +54,26 @@ public class Characters : MonoBehaviour, IDamage
         return transform.GetComponent<Rigidbody>();
     }
 
-    public virtual void TakeDamage(Vector3 pos, Elements elements, float amt)
+    public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt)
     {
         Elemental elemental;
-        if (elements != null)
-            elemental = elements.GetElements();
+        if (elementsREF != null)
+        {
+            elemental = elementsREF.GetElements();
+        }
         else
+        {
             elemental = Elemental.NONE;
+        }
+        Elements e = new Elements(elemental);
 
         if (GetElementalReaction() != null)
-            GetElementalReaction().AddElements(elements);
+            GetElementalReaction().AddElements(e);
 
-        ElementalReactionsTrigger e = GetElementalReaction().GetElementalReactionsTrigger(pos);
-        if (e != null)
+        ElementalReactionsTrigger ElementalReactionsTrigger = GetElementalReaction().GetElementalReactionsTrigger(pos);
+        if (ElementalReactionsTrigger != null)
         {
-            switch(e.GetERState())
+            switch(ElementalReactionsTrigger.GetERState())
             {
                 case ElementalReactionState.OVERCLOCKED:
                     GetRB().AddForce(Vector3.up * 5f, ForceMode.Impulse);
@@ -84,12 +85,14 @@ public class Characters : MonoBehaviour, IDamage
         }
         SetHealth(GetHealth() - amt);
         AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, amt.ToString());
+
+        return e;
     }
 
     private IEnumerator RemoveDelayElementalReaction()
     {
         yield return new WaitForSeconds(0.35f);
-        elementalReaction.GetElementList().Clear();
+        GetElementalReaction().GetElementList().Clear();
     }
 
     public virtual float GetHealth()

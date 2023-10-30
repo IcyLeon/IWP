@@ -19,7 +19,22 @@ public class Arrow : MonoBehaviour
 
     void FixedUpdate()
     {
+        LimitFallVelocity();
         rb.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
+    }
+
+    private void LimitFallVelocity()
+    {
+        float FallSpeedLimit = 15f;
+        Vector3 velocity = new Vector3(0f, rb.velocity.y, 0f);
+        if (velocity.y >= -FallSpeedLimit)
+        {
+            return;
+        }
+
+        Vector3 limitVel = new Vector3(0f, -FallSpeedLimit - velocity.y, 0f);
+        rb.AddForce(limitVel, ForceMode.VelocityChange);
+
     }
 
     // Update is called once per frame

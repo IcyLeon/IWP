@@ -20,10 +20,21 @@ public class CharacterManager : MonoBehaviour
     public delegate void OnCharacterChange(CharacterData characterData);
     public OnCharacterChange onCharacterChange;
     private InventoryManager inventoryManager;
+    private ElementsIndicator elementsIndicator;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    public ElementsIndicator GetElementsIndicator()
+    {
+        return elementsIndicator;
+    }
+
+    public void SetElementsIndicator(ElementsIndicator ElementsIndicator)
+    {
+        elementsIndicator = ElementsIndicator;
     }
 
 
@@ -31,6 +42,8 @@ public class CharacterManager : MonoBehaviour
     {
         if (playerController)
             playerController.OnNumsKeyInput += SwapCharactersControls;
+
+        SwapCharacters(0);
     }
 
     private void Update()
@@ -43,7 +56,7 @@ public class CharacterManager : MonoBehaviour
         for (int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
         {
             CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
-            characterData.UpdateEnergyCooldown();
+            characterData.Update();
         }
     }
 
@@ -74,6 +87,11 @@ public class CharacterManager : MonoBehaviour
             CurrentCharacter.SetCharacterData(characterData);
             inventoryManager.SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(CurrentCharacter);
+
+            if (GetElementsIndicator() != null)
+            {
+                Destroy(GetElementsIndicator().gameObject);
+            }
             onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData());
         }
 
@@ -88,7 +106,6 @@ public class CharacterManager : MonoBehaviour
     {
         return CurrentCharacter;
     }
-
 
     public void SetPlayerController(PlayerController playerController)
     {
@@ -113,6 +130,12 @@ public class CharacterManager : MonoBehaviour
     {
         return InventoryManager.GetInstance().GetEquipCharactersDataList();
     }
+
+    public List<CharacterData> GetCharactersOwnedList()
+    {
+        return InventoryManager.GetInstance().GetCharactersOwnedList();
+    }
+
     public List<CharacterInfo> GetCharacterList()
     {
         return charactersInfo;

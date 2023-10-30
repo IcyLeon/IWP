@@ -16,6 +16,14 @@ public class PlayerCharacters : Characters
         return characterData;
     }
 
+    public override ElementalReaction GetElementalReaction()
+    {
+        if (characterData == null)
+            return new ElementalReaction();
+
+        return characterData.GetElementalReaction();
+    }
+
     public PlayerCharacterSO GetPlayersSO()
     {
         return CharactersSO as PlayerCharacterSO;
@@ -31,6 +39,21 @@ public class PlayerCharacters : Characters
 
     }
 
+    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt)
+    {
+        Elements e = base.TakeDamage(pos, elements, amt);
+        return e;
+    }
+
+    private ElementsIndicator GetElementsIndicator()
+    {
+        return CharacterManager.GetInstance().GetElementsIndicator();
+    }
+
+    private void SetElementsIndicator(ElementsIndicator ElementsIndicator)
+    {
+        CharacterManager.GetInstance().SetElementsIndicator(ElementsIndicator);
+    }
 
     public Characters GetNearestCharacters()
     {
@@ -141,6 +164,27 @@ public class PlayerCharacters : Characters
     protected override void Update()
     {
         base.Update();
+
+        if (GetElementalReaction().GetElementList().Count != 0)
+        {
+            if (GetElementsIndicator() == null)
+            {
+                SetElementsIndicator(Instantiate(AssetManager.GetInstance().ElementalContainerUIPrefab, MainUI.GetInstance().GetElementalDisplayUITransform()).GetComponent<ElementsIndicator>());
+                GetElementsIndicator().SetCharacters(this);
+            }
+        }
+        else
+        {
+            if (GetElementsIndicator() != null)
+            {
+                Destroy(GetElementsIndicator().gameObject);
+            }
+        }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        //GetPlayerController().UpdatePhysicsMovement();
     }
 
     public CinemachineVirtualCamera GetVirtualCamera()
@@ -207,10 +251,20 @@ public class PlayerCharacters : Characters
     {
 
     }
-    protected virtual void ElementalBurstTrigger()
+    protected virtual bool ElementalBurstTrigger()
     {
+        if (characterData == null)
+            return false;
 
+        if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
+        {
+            characterData.ResetElementalBurstCooldown();
+            return true;
+        }
+
+        return false;
     }
+
     protected virtual void ChargeHold()
     {
 

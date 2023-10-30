@@ -19,11 +19,11 @@ MonoBehaviour:
   BaseHP: 1020
   BaseATK: 25
   BaseDEF: 62
-  Elemental: 3
+  Elemental: 1
   PartyIcon: {fileID: 21300000, guid: 50a4657062194a746b5e026bbeb8dedd, type: 3}
   ElementalSkillSprite: {fileID: 21300000, guid: 3d9964099f93fa6439a7c9c0d689b251,
     type: 3}
   ElementalBurstSprite: {fileID: 0}
-  ElementalSkillsCooldown: 1
-  UltiSkillCooldown: 0
+  ElementalSkillsCooldown: 5
+  UltiSkillCooldown: 10
   EnergyCost: 40

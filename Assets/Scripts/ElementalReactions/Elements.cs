@@ -21,10 +21,10 @@ public class Elements
 
     public void UpdateElementalEffectTime()
     {
-        if (CurrentElementalEffectTime > 0) {
+        if (CurrentElementalEffectTime >= 0) {
             CurrentElementalEffectTime -= Time.deltaTime;
         }
-        active = CurrentElementalEffectTime > 0;
+        active = CurrentElementalEffectTime >= 0;
     }
 
     public bool GetActive()

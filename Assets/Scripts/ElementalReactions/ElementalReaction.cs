@@ -62,9 +62,14 @@ public class ElementalReaction
         Elements ExistingElements = isElementsAlreadyExisted(elements);
 
         if (ExistingElements == null)
+        {
+            elements.ResetElementalEffect();
             ElementsList.Add(elements);
+        }
         else
+        {
             ExistingElements.ResetElementalEffect();
+        }
 
         onElementChanged?.Invoke(ExistingElements == null);
     }
@@ -92,5 +97,4 @@ public class ElementalReaction
         ElementsList = new List<Elements>();
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
     }
-
 }

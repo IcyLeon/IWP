@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public interface IToggle
 {
@@ -11,9 +12,10 @@ public interface IToggle
 public class AssetManager : MonoBehaviour
 {
     [SerializeField] MessagePanel InfomationPanel;
-    [SerializeField] PopupPanel PopupPanel;
+    [SerializeField] GameObject PopupPanelPrefab;
     [SerializeField] ItemsList itemlisttemplate;
     [SerializeField] GameObject WorldText;
+    [SerializeField] GameObject SlashPrefab;
 
     [Header("Normal Attack Bow")]
     [SerializeField] GameObject CrossHair;
@@ -24,9 +26,13 @@ public class AssetManager : MonoBehaviour
     public GameObject EnemyHealthUIPrefab;
     public GameObject StarPrefab;
     private GameObject DraggingItem;
+    private PopupPanel PopupPanel;
     public GameObject ItemBorderPrefab;
     public GameObject SlotPrefab;
     public GameObject ElementalContainerPrefab;
+    public GameObject ElementalContainerUIPrefab;
+
+    public GameObject ElementalOrbPrefab;
 
     private static AssetManager instance;
     // Start is called before the first frame update
@@ -63,6 +69,10 @@ public class AssetManager : MonoBehaviour
 
     public void OpenPopupPanel(string text)
     {
+        if (PopupPanel != null)
+            Destroy(PopupPanel.gameObject);
+
+        PopupPanel = Instantiate(PopupPanelPrefab, GetCanvasGO().transform).GetComponent<PopupPanel>();
         PopupPanel.SetMessage(text);
     }
 
@@ -106,5 +116,12 @@ public class AssetManager : MonoBehaviour
     {
         DamageText dt = Instantiate(WorldText, GetCanvasGO().transform).GetComponent<DamageText>();
         dt.SpawnText(position, element, text);
+    }
+
+    public GameObject SpawnSlashEffect(Vector3 pos, Quaternion angle)
+    {
+        GameObject slash = Instantiate(SlashPrefab, pos, angle);
+        Destroy(slash, 0.5f);
+        return slash;
     }
 }

@@ -26,7 +26,6 @@ public class PopupPanel : MonoBehaviour
 
     public virtual void SetMessage(string text)
     {
-        gameObject.SetActive(true);
         MessageText.text = text;
         ShowPopup();
     }
@@ -64,7 +63,7 @@ public class PopupPanel : MonoBehaviour
 
         if (!fadeIn)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         yield return new WaitForSeconds(2.5f);

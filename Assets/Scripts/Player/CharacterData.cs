@@ -10,8 +10,11 @@ public class CharacterData : UpgradableItems
     private float BaseDEF;
     private float CurrentEnergyBurstCost;
     private float EnergyBurstCost;
-    private float CurrentElementalEnergyCooldown;
-    private float ElementalEnergyCooldown;
+    private float CurrentElementalSkillCooldown;
+    private float ElementalSkillCooldown;
+    private float CurrentElementalBurstEnergyCooldown;
+    private float ElementalBurstEnergyCooldown;
+    private ElementalReaction elementalReaction;
     private List<Artifacts> EquippedArtifacts = new List<Artifacts>();
 
     public List<Artifacts> GetEquippedArtifactsList()
@@ -31,6 +34,21 @@ public class CharacterData : UpgradableItems
         return null;
     }
 
+    public float GetCurrentEnergyBurstCost()
+    {
+        return CurrentEnergyBurstCost;
+    }
+
+    public void AddorRemoveCurrentEnergyBurstCost(float amt)
+    {
+        CurrentEnergyBurstCost += amt;
+    }
+
+    public float GetEnergyBurstCost()
+    {
+        return EnergyBurstCost;
+    }
+
     public CharacterData(PlayerCharacterSO playerCharacterSO) : base()
     {
         SetItemsSO(playerCharacterSO);
@@ -38,11 +56,14 @@ public class CharacterData : UpgradableItems
         CurrentHealth = BaseMaxHealth;
         BaseATK = playerCharacterSO.BaseATK;
         CurrentEnergyBurstCost = 0;
-        ElementalEnergyCooldown = playerCharacterSO.ElementalSkillsCooldown;
-        CurrentElementalEnergyCooldown = 0;
+        ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
+        ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
+        CurrentElementalSkillCooldown = 0;
+        CurrentElementalBurstEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         Level = 1;
         MaxLevel = 20;
+        elementalReaction = new ElementalReaction();
     }
 
     public CharacterData(PlayerCharacterSO playerCharacterSO, float damage, int level, float currentEnergy)
@@ -53,31 +74,70 @@ public class CharacterData : UpgradableItems
         BaseATK = damage;
         Level = level;
         CurrentEnergyBurstCost = currentEnergy;
-        ElementalEnergyCooldown = playerCharacterSO.ElementalSkillsCooldown;
-        CurrentElementalEnergyCooldown = 0;
+        ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
+        ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
+        CurrentElementalSkillCooldown = 0;
+        CurrentElementalBurstEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         MaxLevel = 20;
+        elementalReaction = new ElementalReaction();
     }
 
-    public void UpdateEnergyCooldown()
+    public ElementalReaction GetElementalReaction()
     {
-        CurrentElementalEnergyCooldown -= Time.deltaTime;
-        CurrentElementalEnergyCooldown = Mathf.Clamp(CurrentElementalEnergyCooldown, 0f, ElementalEnergyCooldown);
+        return elementalReaction;
+    }
+    public PlayerCharacterSO GetPlayerCharacterSO()
+    {
+        return GetItemSO() as PlayerCharacterSO;
     }
 
-    public void ResetEnergyCooldown()
+    public void Update()
     {
-        CurrentElementalEnergyCooldown = ElementalEnergyCooldown;
+        CurrentElementalSkillCooldown -= Time.deltaTime;
+        CurrentElementalSkillCooldown = Mathf.Clamp(CurrentElementalSkillCooldown, 0f, ElementalSkillCooldown);
+
+        CurrentElementalBurstEnergyCooldown -= Time.deltaTime;
+        CurrentElementalBurstEnergyCooldown = Mathf.Clamp(CurrentElementalBurstEnergyCooldown, 0f, ElementalBurstEnergyCooldown);
+
+        CurrentEnergyBurstCost = Mathf.Clamp(CurrentEnergyBurstCost, 0f, EnergyBurstCost);
+
+        if (GetElementalReaction() != null)
+            GetElementalReaction().UpdateElementsList();
     }
 
-    public bool CanTriggerSKill()
+    public void ResetElementalSkillCooldown()
     {
-        return CurrentElementalEnergyCooldown <= 0;
+        CurrentElementalSkillCooldown = ElementalSkillCooldown;
+    }
+
+    public void ResetElementalBurstCooldown()
+    {
+        CurrentElementalBurstEnergyCooldown = ElementalBurstEnergyCooldown;
+        CurrentEnergyBurstCost = 0;
+    }
+
+    public bool CanTriggerESKill()
+    {
+        return CurrentElementalSkillCooldown <= 0;
+    }
+
+    public bool CanTriggerBurstSKill()
+    {
+        return CurrentElementalBurstEnergyCooldown <= 0;
+    }
+    public bool CanTriggerBurstSKillCost()
+    {
+        return CurrentEnergyBurstCost >= EnergyBurstCost;
     }
 
     public float GetCurrentElementalSkillCooldown()
     {
-        return CurrentElementalEnergyCooldown;
+        return CurrentElementalSkillCooldown;
+    }
+    public float GetCurrentElementalBurstCooldown()
+    {
+        return CurrentElementalBurstEnergyCooldown;
     }
 
     public float GetHealth()
