@@ -7,6 +7,7 @@ public class SwordCharacters : PlayerCharacters
     [SerializeField] protected GameObject SwordModel;
     [SerializeField] protected Transform EmitterPivot;
     protected int BasicAttackPhase;
+    protected Elemental CurrentElement;
     protected int AttackLayer;
 
     // Start is called before the first frame update
@@ -32,6 +33,20 @@ public class SwordCharacters : PlayerCharacters
         Animator.SetInteger("AttackPhase", BasicAttackPhase);
     }
 
+    protected override Collider[] PlungeAttackGroundHit()
+    {
+        Collider[] colliders = base.PlungeAttackGroundHit();
+        foreach (Collider collider in colliders)
+        {
+            IDamage damageObject = collider.gameObject.GetComponent<IDamage>();
+            if (damageObject != null)
+            {
+                damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetDamage());
+            }
+        }
+        return colliders;
+    }
+
     protected override void ChargeTrigger()
     {
         if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
@@ -54,5 +69,10 @@ public class SwordCharacters : PlayerCharacters
     public void SetAttackPhase(int phase)
     {
         BasicAttackPhase = phase;
+    }
+
+    public Elemental GetCurrentSwordElemental()
+    {
+        return CurrentElement;
     }
 }

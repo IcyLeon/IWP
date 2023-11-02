@@ -545,7 +545,7 @@ PrefabInstance:
     - target: {fileID: 8466442129360495665, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 8466442129360495665, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
@@ -831,8 +831,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 392064792}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.080866605, y: -0.88170815, z: 0.16392992, w: 0.43494648}
+  m_LocalPosition: {x: 1.506, y: 2.231, z: 1.155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3463,7 +3463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 1.2, z: 0}
+  m_TrackedObjectOffset: {x: 0, y: 0.2, z: 0}
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
@@ -3506,7 +3506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9beda531928fc40968802117a5d256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RecenterTarget: 0
+  m_RecenterTarget: 1
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 1
@@ -4465,7 +4465,7 @@ MonoBehaviour:
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
-    m_BlendHint: 0
+    m_BlendHint: 3
     m_InheritPosition: 1
     m_OnCameraLive:
       m_PersistentCalls:
@@ -4479,8 +4479,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1397872798}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.08086667, y: 0.8817081, z: -0.16393004, w: -0.4349465}
+  m_LocalPosition: {x: 1.506, y: 2.231, z: 1.155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4611,9 +4611,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9beda531928fc40968802117a5d256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RecenterTarget: 0
+  m_RecenterTarget: 1
   m_VerticalAxis:
-    Value: 0
+    Value: 21.064701
     m_SpeedMode: 1
     m_MaxSpeed: 5
     m_AccelTime: 0.8
@@ -4637,7 +4637,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: 0
+    Value: -127.48577
     m_SpeedMode: 1
     m_MaxSpeed: 3.5
     m_AccelTime: 0.8
@@ -4656,8 +4656,8 @@ MonoBehaviour:
       m_LegacyVelocityFilterStrength: -1
   m_HorizontalRecentering:
     m_enabled: 0
-    m_WaitTime: 1
-    m_RecenteringTime: 2
+    m_WaitTime: 0
+    m_RecenteringTime: 4
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0
@@ -4685,17 +4685,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 1, z: 0}
+  m_TrackedObjectOffset: {x: 0, y: 0, z: 0}
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 0
-  m_YDamping: 0
+  m_XDamping: 0.2
+  m_YDamping: 0.4
   m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 4
+  m_CameraDistance: 3
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -10442,7 +10442,7 @@ PrefabInstance:
     - target: {fileID: 1738650214646950395, guid: d1df96262b8c8ba40b7750d104d2f33d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30.19
+      value: 27.88
       objectReference: {fileID: 0}
     - target: {fileID: 1738650214646950395, guid: d1df96262b8c8ba40b7750d104d2f33d,
         type: 3}

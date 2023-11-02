@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Kaqing : SwordCharacters
 {
-    private enum ElementalOrbState 
-    { 
-        IDLE,
-        MOVING
+    private enum ElementalBurst
+    {
+        First_Phase,
+        Last_Hit,
     }
 
     private enum ElementalSKill
@@ -16,6 +16,7 @@ public class Kaqing : SwordCharacters
         THROW,
         SLASH
     }
+    private Coroutine ElementalTimerCoroutine;
     private Vector3 ElementalHitPos;
     private KaqingTeleporter elementalOrb;
     private GameObject targetOrb;
@@ -23,9 +24,9 @@ public class Kaqing : SwordCharacters
     [SerializeField] GameObject TargetOrbPrefab;
     private float threasHold_Charged;
     private float Range = 8f;
-
-    ElementalOrbState elementalOrbState = ElementalOrbState.IDLE;
-    ElementalSKill elementalSKill = ElementalSKill.NONE;
+    private ElementalSKill elementalSKill = ElementalSKill.NONE;
+    private ElementalBurst elementalBurst = ElementalBurst.First_Phase;
+    private Coroutine BurstCoroutine;
 
     private void Awake()
     {
@@ -36,6 +37,23 @@ public class Kaqing : SwordCharacters
     {
         base.Start();
         ElementalHitPos = Vector3.zero;
+        CurrentElement = Elemental.NONE;
+    }
+
+    private IEnumerator ElementalTimer(float timer)
+    {
+        CurrentElement = GetCharacterData().GetPlayerCharacterSO().Elemental;
+        yield return new WaitForSeconds(timer);
+        CurrentElement = Elemental.NONE;
+        ElementalTimerCoroutine = null;
+    }
+
+    private void StartElementalTimer(float timer)
+    {
+        if (ElementalTimerCoroutine != null)
+            StopCoroutine(ElementalTimerCoroutine);
+
+        ElementalTimerCoroutine = StartCoroutine(ElementalTimer(timer));
     }
 
     // Update is called once per frame
@@ -52,30 +70,86 @@ public class Kaqing : SwordCharacters
 
         if (elementalOrb != null)
         {
-            if (!elementalOrb.GetEnergyOrbMoving() && elementalOrbState == ElementalOrbState.MOVING)
+            if (elementalOrb.GetEnergyOrbMoving())
             {
                 UpdateDefaultPosOffsetAndZoom(0.1f);
-                elementalOrbState = ElementalOrbState.IDLE;
             }
         }
 
         Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
-        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed());
+        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed(), 0.15f, Time.deltaTime);
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
 
         UpdateTargetOrb();
         base.Update();
     }
 
-    //protected override void FixedUpdate()
-    //{
-    //    if (elementalSKill != ElementalSKill.THROW)
-    //        base.FixedUpdate();
-    //}
+    private void BurstAreaDamage(Vector3 pos)
+    {
+        Collider[] colliders = Physics.OverlapSphere(pos, 10f, LayerMask.GetMask("Entity"));
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider collider = colliders[i];
+            IDamage damage = collider.GetComponent<IDamage>();
+            if (damage != null)
+            {
+                damage.TakeDamage(collider.transform.position, new Elements(GetPlayersSO().Elemental), 100f);
+            }
+        }
+    }
+
+    private IEnumerator Burst()
+    {
+        int TotalHits = 8;
+        float TimeInBetweenHits = 2.5f / (TotalHits * 2);
+        float HitElapsed = TimeInBetweenHits;
+        int CurrentHits = 0;
+
+        Vector3 pos = GetPlayerController().transform.position;
+
+        while (CurrentHits < TotalHits) {
+
+            switch (elementalBurst)
+            {
+                case ElementalBurst.First_Phase:
+                    if (CurrentHits >= TotalHits - 1)
+                        elementalBurst = ElementalBurst.Last_Hit;
+
+                    if (HitElapsed > TimeInBetweenHits)
+                    {
+                        BurstAreaDamage(pos);
+                        HitElapsed = 0;
+                        CurrentHits++;
+                    }
+                    break;
+                case ElementalBurst.Last_Hit:
+                    yield return new WaitForSeconds(0.8f);
+                    BurstAreaDamage(pos);
+                    CurrentHits++;
+                    break;
+            }
+            Debug.Log(CurrentHits);
+            HitElapsed += Time.deltaTime;
+            yield return null;
+        }
+        BurstCoroutine = null;
+    }
 
     protected override bool ElementalBurstTrigger()
     {
-        return base.ElementalBurstTrigger();
+        bool canTrigger = base.ElementalBurstTrigger();
+        if (canTrigger)
+        {
+            if (BurstCoroutine != null)
+            {
+                StopCoroutine(BurstCoroutine);
+                BurstCoroutine = null;
+            }
+            elementalBurst = ElementalBurst.First_Phase;
+            BurstCoroutine = StartCoroutine(Burst());
+        }
+
+        return canTrigger;
     }
 
     private void UpdateTargetOrb()
@@ -148,7 +222,6 @@ public class Kaqing : SwordCharacters
     private void ResetThresHold()
     {
         threasHold_Charged = 0;
-        elementalOrbState = ElementalOrbState.MOVING;
         SwordModel.gameObject.SetActive(true);
     }
 
@@ -167,9 +240,10 @@ public class Kaqing : SwordCharacters
                 LookAtDirection(elementalOrb.transform.position - transform.position);
                 GetPlayerController().transform.position = elementalOrb.transform.position;
                 Animator.SetTrigger("Slash");
+                StartElementalTimer(5f);
                 ResetThresHold();
                 UpdateDefaultPosOffsetAndZoom(0);
-                StartCoroutine(FloatFor(0.5f));
+                FloatFor(0.5f);
                 Destroy(elementalOrb.gameObject);
                 break;
         }
@@ -194,11 +268,8 @@ public class Kaqing : SwordCharacters
         elementalSKill = ElementalSKill.SLASH;
     }
 
-    private IEnumerator FloatFor(float sec)
+    private void FloatFor(float sec)
     {
-        ResetVelocity();
-        GetPlayerController().GetCharacterRB().useGravity = false;
-        yield return new WaitForSeconds(sec);
-        GetPlayerController().GetCharacterRB().useGravity = true;
+        GetPlayerController().StayAfloatFor(sec);
     }
 }

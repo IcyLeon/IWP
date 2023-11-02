@@ -80,6 +80,7 @@ public class CharacterManager : MonoBehaviour
             if (CurrentCharacter != null)
             {
                 Destroy(CurrentCharacter.gameObject);
+                CurrentCharacter.gameObject.SetActive(false);
                 SetCurrentCharacter(null);
             }
 

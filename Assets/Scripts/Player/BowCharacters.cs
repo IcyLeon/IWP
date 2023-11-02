@@ -50,9 +50,9 @@ public class BowCharacters : PlayerCharacters
             ResetThresHold();
 
         Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
-        Animator.SetFloat("AimVelocityX", GetPlayerController().GetHorizontalVelocity().x);
-        Animator.SetFloat("AimVelocityZ", GetPlayerController().GetHorizontalVelocity().z);
-        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed());
+        Animator.SetFloat("AimVelocityX", GetPlayerController().GetHorizontalVelocity().x, 0.15f, Time.deltaTime);
+        Animator.SetFloat("AimVelocityZ", GetPlayerController().GetHorizontalVelocity().z, 0.15f, Time.deltaTime);
+        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed(), 0.15f, Time.deltaTime);
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
 
         base.Update();

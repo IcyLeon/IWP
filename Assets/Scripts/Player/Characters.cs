@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public interface IDamage {
@@ -15,6 +16,7 @@ public class Characters : MonoBehaviour, IDamage
     protected float BaseATK;
     protected float BaseDEF;
     protected int Level;
+
     [SerializeField] protected CharactersSO CharactersSO;
     [SerializeField] protected Animator Animator;
     protected HealthBarScript healthBarScript;
@@ -38,6 +40,19 @@ public class Characters : MonoBehaviour, IDamage
             healthBarScript.UpdateHealth(GetHealth());
             healthBarScript.UpdateLevel(GetLevel());
         }
+    }
+
+    private void OnAnimatorMove()
+    {
+        if (!Animator) { return; }
+
+        AnimatorMove(Animator.deltaPosition, Animator.rootRotation);
+    }
+
+    public virtual void AnimatorMove(Vector3 deltaPosition, Quaternion rootRotation)
+    {
+        transform.position += deltaPosition;
+        transform.rotation = rootRotation;
     }
 
     public virtual ElementalReaction GetElementalReaction()

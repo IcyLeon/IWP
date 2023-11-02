@@ -10,7 +10,12 @@ public class PlayerCharacters : Characters
     private CharacterData characterData;
     private PlayerController playerController;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
+    [SerializeField] CinemachineVirtualCamera BurstCamera;
 
+    public CinemachineVirtualCamera GetBurstCamera()
+    {
+        return BurstCamera;
+    }
     public CharacterData GetCharacterData()
     {
         return characterData;
@@ -27,6 +32,12 @@ public class PlayerCharacters : Characters
     public PlayerCharacterSO GetPlayersSO()
     {
         return CharactersSO as PlayerCharacterSO;
+    }
+
+    public override void AnimatorMove(Vector3 deltaPosition, Quaternion rootRotation)
+    {
+        GetPlayerController().GetCharacterRB().MovePosition(GetPlayerController().GetCharacterRB().position + deltaPosition);
+        GetPlayerController().GetCharacterRB().transform.rotation = rootRotation;
     }
 
     public void SetCharacterData(CharacterData characterData)
@@ -72,7 +83,7 @@ public class PlayerCharacters : Characters
                 CurrentCollider = collider;
         }
         return CurrentCollider.GetComponent<Characters>();
-    } 
+    }
 
     public override int GetLevel()
     {
@@ -136,9 +147,20 @@ public class PlayerCharacters : Characters
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
         GetPlayerController().onPlayerStateChange += OnJump;
+        GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
         healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
+
+        if (GetBurstCamera())
+            GetBurstCamera().gameObject.SetActive(false);
+
         base.Start();
+    }
+
+    protected virtual Collider[] PlungeAttackGroundHit()
+    {
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 5f, LayerMask.GetMask("Entity"));
+        return colliders;
     }
 
     private IEnumerator UpdateDefaultPosOffsetAndZoomAnim(float delay)
@@ -285,12 +307,13 @@ public class PlayerCharacters : Characters
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
             GetPlayerController().onPlayerStateChange -= OnJump;
+            GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
         }
     }
 
-    private void OnJump(PlayerActionStatus state)
+    private void OnJump()
     {
-        if (state != PlayerActionStatus.JUMP)
+        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.JUMP)
             return;
 
         if (Animator != null)

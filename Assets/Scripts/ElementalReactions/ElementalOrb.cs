@@ -63,7 +63,7 @@ public class ElementalOrb : MonoBehaviour
     private void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 5f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * 8f, ForceMode.Acceleration);
     }
 
     private bool IsMovingUp(float minimumVelocity = 0.1f)
@@ -89,9 +89,9 @@ public class ElementalOrb : MonoBehaviour
                 CharacterData characterData = characterManager.GetCharactersOwnedList()[i];
 
                 if (characterData.GetPlayerCharacterSO().Elemental == elemental)
-                    characterData.AddorRemoveCurrentEnergyBurstCost(2.5f); // change this
+                    characterData.AddorRemoveCurrentEnergyBurstCost(2.5f);
                 else
-                    characterData.AddorRemoveCurrentEnergyBurstCost(1f); // change this
+                    characterData.AddorRemoveCurrentEnergyBurstCost(1f);
             }
             Destroy(gameObject);
         }

@@ -22,12 +22,12 @@ public enum PlayerGroundStatus
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float WalkSpeed, SlowMultiplier, ZoomMultiplier;
+    [SerializeField] float WalkSpeed, ZoomMultiplier;
+    [SerializeField] Transform CameraLook;
     [SerializeField] CinemachineVirtualCamera playerCamera, aimCamera;
 
     private float Speed;
-    private float MaxCameraDistance = 5f;
-    private float CameraDistance;
+
     private Rigidbody rb;
     private Vector3 InputDirection;
     private PlayerActionStatus playerActionStatus;
@@ -38,8 +38,6 @@ public class PlayerController : MonoBehaviour
     private float dampedTargetRotationCurrentVelocity;
     private float dampedTargetRotationPassedTime;
 
-    public delegate void OnMouseScroll(float inputValue);
-    public OnMouseScroll onMouseScroll;
     public event Action OnElementalSkillHold;
     public event Action OnE_1Down;
     public delegate bool OnElementalBurst();
@@ -47,11 +45,12 @@ public class PlayerController : MonoBehaviour
     public event OnElementalBurst OnElementalBurstTrigger;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
+    public delegate Collider[] onPlungeAttack();
+    public event onPlungeAttack OnPlungeAttack;
     public delegate void onNumsKeyInput(int val);
     public onNumsKeyInput OnNumsKeyInput;
-
-    public delegate void OnPlayerStateChange(PlayerActionStatus PlayerActionStatus);
-    public OnPlayerStateChange onPlayerStateChange;
+    public event Action onPlayerStateChange;
+    private Coroutine FloatCoroutine;
 
     public CinemachineVirtualCamera GetVirtualCamera()
     {
@@ -80,7 +79,6 @@ public class PlayerController : MonoBehaviour
     void InitData()
     {
         ResetSpeed();
-        CameraDistance = MaxCameraDistance;
         timeToReachTargetRotation = 0.14f;
         rb = GetComponent<Rigidbody>();
     }
@@ -102,38 +100,104 @@ public class PlayerController : MonoBehaviour
 
         GatherInput();
         UpdateControls();
-        UpdateGrounded();
         UpdateCamera();
+        OnFall();
+        OnPlunge();
     }
 
-    private void CanPlungeAttack()
+    private void OnFall()
     {
-        float PlungeAttackRange = 50f;
+        if (GetPlayerActionStatus() == PlayerActionStatus.JUMP && IsTouchingTerrain())
+            playerActionStatus = PlayerActionStatus.FALL;
+
+        if (GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
+        {
+            if (IsMovingDown(0f) && playerGroundStatus == PlayerGroundStatus.AIR)
+            {
+                playerActionStatus = PlayerActionStatus.FALL;
+                onPlayerStateChange?.Invoke();
+            }
+        }
     }
 
+    private void OnPlunge()
+    {
+        float PlungeAttackRange = 2f;
+
+        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
+            return;
+
+        if (playerGroundStatus == PlayerGroundStatus.AIR)
+        {
+            if (Input.GetMouseButtonDown(0) && !Physics.Raycast(rb.position, Vector3.down, PlungeAttackRange))
+            {
+                playerActionStatus = PlayerActionStatus.PLUNGE;
+                StayAfloatFor(0.45f);
+            }
+        }
+    }
+
+    public void StayAfloatFor(float sec)
+    {
+        if (FloatCoroutine != null)
+            StopCoroutine(FloatCoroutine);
+
+        FloatCoroutine = StartCoroutine(FloatFor(sec));
+    }
+
+    private void UpdatePlungeAttack()
+    {
+        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE && rb.useGravity)
+        {
+            rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
+        }
+    }
 
     private void UpdateCamera()
     {
         if (GetCharacterRB() == null)
             return;
 
-        playerCamera.Follow = GetCharacterRB().transform;
-        playerCamera.LookAt = GetCharacterRB().transform;
+        playerCamera.Follow = CameraLook;
+        playerCamera.LookAt = CameraLook;
         aimCamera.Follow = playerCamera.Follow;
         aimCamera.LookAt = playerCamera.LookAt;
     }
 
+    private bool IsTouchingTerrain()
+    {
+        CapsuleCollider CapsuleCollider = rb.GetComponent<CapsuleCollider>();
+        return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, CapsuleCollider.radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
+    }
+
+    private Vector3 GroundPoint()
+    {
+        CapsuleCollider CapsuleCollider = rb.GetComponent<CapsuleCollider>();
+        if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit hit, CapsuleCollider.radius / 1.5f))
+        {
+            return hit.point;
+        }
+        return default(Vector3);
+    }
+
     private void UpdateGrounded()
     {
-        if (CharacterManager.GetInstance().GetCurrentCharacter() == null)
-            return;
-
-        Vector3 collider = CharacterManager.GetInstance().GetCurrentCharacter().GetComponent<CapsuleCollider>().bounds.center;
-        if (Physics.Raycast(collider, Vector3.down, 1f))
+        if (IsTouchingTerrain() && GetPlayerActionStatus() != PlayerActionStatus.JUMP)
         {
-            playerActionStatus = PlayerActionStatus.IDLE;
+            rb.velocity = GetHorizontalVelocity();
+            if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
+            {
+                Vector3 groundcheckpos = GroundPoint();
+                if (groundcheckpos != default(Vector3))
+                {
+                    rb.position = groundcheckpos;
+                    ResetVelocity();
+                }
+                OnPlungeAttack?.Invoke();
+            }
             playerGroundStatus = PlayerGroundStatus.GROUND;
-            onPlayerStateChange?.Invoke(playerActionStatus);
+            playerActionStatus = PlayerActionStatus.IDLE;
+            onPlayerStateChange?.Invoke();
         }
         else
         {
@@ -158,6 +222,15 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
     }
 
+    public IEnumerator FloatFor(float sec)
+    {
+        ResetVelocity();
+        GetCharacterRB().useGravity = false;
+        yield return new WaitForSeconds(sec);
+        GetCharacterRB().useGravity = true;
+        FloatCoroutine = null;
+    }
+
     private int GetInputNums()
     {
         for (int i = 0; i < 10; i++)
@@ -173,10 +246,6 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            Dash();
-
-
 
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
@@ -216,13 +285,16 @@ public class PlayerController : MonoBehaviour
         float VerticalInput = Input.GetAxisRaw("Vertical");
         float MouseInput = Input.GetAxisRaw("Mouse ScrollWheel");
 
-        CameraDistance += MouseInput * ZoomMultiplier * -1;
-        CameraDistance = Mathf.Clamp(CameraDistance, 2f, 5f);
-
         InputDirection = (GetVirtualCamera().transform.forward * VerticalInput) + (GetVirtualCamera().transform.right * HorizontalInput);
         InputDirection.y = 0;
         InputDirection.Normalize();
 
+    }
+
+
+    public void SetInputDirection(Vector3 dir)
+    {
+        InputDirection = dir;
     }
 
     public void UpdateInputTargetQuaternion()
@@ -266,9 +338,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        UpdateGrounded();
         UpdatePhysicsMovement();
         UpdateTargetRotation();
         LimitFallVelocity();
+        UpdatePlungeAttack();
 
         if (IsMovingUp())
         {
@@ -278,12 +352,6 @@ public class PlayerController : MonoBehaviour
         {
             DecelerateHorizontal();
         }
-
-        if (IsMovingDown())
-        {
-            playerActionStatus = PlayerActionStatus.FALL;
-            onPlayerStateChange?.Invoke(playerActionStatus);
-        }
     }
 
     private void ResetSpeed()
@@ -292,10 +360,10 @@ public class PlayerController : MonoBehaviour
     }
     public void UpdatePhysicsMovement()
     {
-        if (InputDirection == Vector3.zero || playerGroundStatus != PlayerGroundStatus.GROUND)
+        if (InputDirection == Vector3.zero)
             return;
 
-        rb.AddForce((InputDirection * Speed) - GetHorizontalVelocity() * SlowMultiplier, ForceMode.VelocityChange);
+        rb.AddForce((InputDirection * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
     private void DecelerateVertically()
@@ -316,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsMovingDown(float minimumVelocity = 0f)
     {
-        return GetVerticalVelocity().y < minimumVelocity;
+        return GetVerticalVelocity().y < -minimumVelocity;
     }
 
     private bool IsMovingHorizontally(float minimumVelocity = 0f)
@@ -327,31 +395,13 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (playerGroundStatus != PlayerGroundStatus.GROUND)
+        if (GetPlayerActionStatus() != PlayerActionStatus.IDLE)
             return;
 
-        ResetVelocity();
-        rb.AddForce(5f * Vector3.up, ForceMode.VelocityChange);
         playerActionStatus = PlayerActionStatus.JUMP;
-        onPlayerStateChange?.Invoke(playerActionStatus);
-    }
-
-    private void Dash()
-    {
-        if (playerGroundStatus != PlayerGroundStatus.GROUND)
-            return;
-
-        Vector3 dashDirection = rb.transform.forward;
-
-        dashDirection.y = 0f;
-
-        if (InputDirection != Vector3.zero)
-        {
-            dashDirection = InputDirection;
-        }
-
-        dashDirection.Normalize();
-        rb.velocity = dashDirection * WalkSpeed * 5f;
+        onPlayerStateChange?.Invoke();
+        ResetVelocity();
+        rb.AddForce(8f * Vector3.up, ForceMode.VelocityChange);
     }
 
     private void LimitFallVelocity()
@@ -388,10 +438,5 @@ public class PlayerController : MonoBehaviour
     public Rigidbody GetCharacterRB()
     {
         return rb;
-    }
-
-    void UpdateDash()
-    {
-
     }
 }
