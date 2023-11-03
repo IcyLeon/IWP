@@ -16,7 +16,7 @@ public class DamageText : MonoBehaviour
     private void Awake()
     {
         RT = GetComponent<RectTransform>();
-        Offset = Vector3.one * 0.25f;
+        Offset = Vector3.one * 0.2f;
     }
     // Start is called before the first frame update
     public void SpawnText(Vector3 pos, Elemental elemental, string text)
@@ -65,8 +65,8 @@ public class DamageText : MonoBehaviour
     {
         canvasGroup.alpha = 1f;
         float ElaspedTime = 0f;
-        float AnimationTime = 0.8f;
-        yield return new WaitForSeconds(0.3f);
+        float AnimationTime = 0.7f;
+        yield return new WaitForSeconds(0.25f);
         while (canvasGroup.alpha > 0)
         {
             canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 0f, ElaspedTime / AnimationTime);

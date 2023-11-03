@@ -32,13 +32,13 @@ public class KaqingTeleporter : MonoBehaviour
             yield return null;
         }
         TravelDamage();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
         EnergyOrbMoving = false;
     }
 
     private void TravelDamage()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude * 2f);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude * 2f, LayerMask.GetMask("Entity"));
         for(int i = 0; i < colliders.Length; i++)
         {
             Collider collider = colliders[i];

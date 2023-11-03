@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -626,6 +626,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 66870212}
+  - {fileID: 2048446600}
   m_Father: {fileID: 1183630817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3928,7 +3929,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 384697556}
-  - {fileID: 2048446600}
   m_Father: {fileID: 501360610}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10255,13 +10255,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1183630817}
+  m_Father: {fileID: 384697556}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 165, y: 165}
+  m_AnchoredPosition: {x: 0, y: -2.5}
+  m_SizeDelta: {x: 135, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2048446601
 MonoBehaviour:
@@ -10283,7 +10283,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3d9964099f93fa6439a7c9c0d689b251, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8773fa1e0cc433441a843f3c3681bf45, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10382,8 +10382,10 @@ MonoBehaviour:
   ElementalSkillBackgroundCanvasGroup: {fileID: 851362821}
   ElementalSkillSprite: {fileID: 1960016964}
   ElementalSkillCooldownTxt: {fileID: 1923779240}
+  ElementalBurstBackgroundCanvasGroup: {fileID: 1183630818}
   BurstSkillCooldownTxt: {fileID: 906864401}
   ElementalBurstImage: {fileID: 384697557}
+  ElementalBurstSkillSprite: {fileID: 2048446601}
   ElementalBurstBackgroundSprite_Default: {fileID: 21300000, guid: 66611879f59d137469ee39363c46fb28,
     type: 3}
   BurstFill: {fileID: 66870213}

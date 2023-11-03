@@ -170,6 +170,11 @@ public class PlayerController : MonoBehaviour
         return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, CapsuleCollider.radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
     }
 
+    public bool IsAiming()
+    {
+        return aimCamera.gameObject.activeSelf;
+    }
+
     private Vector3 GroundPoint()
     {
         CapsuleCollider CapsuleCollider = rb.GetComponent<CapsuleCollider>();
@@ -339,7 +344,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         UpdateGrounded();
-        UpdatePhysicsMovement();
         UpdateTargetRotation();
         LimitFallVelocity();
         UpdatePlungeAttack();

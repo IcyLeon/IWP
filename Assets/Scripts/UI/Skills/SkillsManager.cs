@@ -12,8 +12,10 @@ public class SkillsManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI ElementalSkillCooldownTxt;
 
     [Header("Elemental Burst")]
+    [SerializeField] CanvasGroup ElementalBurstBackgroundCanvasGroup;
     [SerializeField] TextMeshProUGUI BurstSkillCooldownTxt;
     [SerializeField] Image ElementalBurstImage;
+    [SerializeField] Image ElementalBurstSkillSprite;
     [SerializeField] Sprite ElementalBurstBackgroundSprite_Default;
     [SerializeField] Image BurstFill;
 
@@ -42,15 +44,21 @@ public class SkillsManager : MonoBehaviour
     private void UpdateElementalBurst()
     {
         if (PlayerCharacterData.CanTriggerBurstSKillCost())
-        {
             ElementalBurstImage.sprite = elementalReactionsManager.GetElementalColorSO().GetElementalInfo(PlayerCharacterData.GetPlayerCharacterSO().Elemental).ElementBurstBackground;
-        }
         else
-        {
             ElementalBurstImage.sprite = ElementalBurstBackgroundSprite_Default;
-        }
+
+        if (PlayerCharacterData.CanTriggerBurstSKill() && PlayerCharacterData.CanTriggerBurstSKillCost())
+            ElementalBurstBackgroundCanvasGroup.alpha = 1f;
+        else
+            ElementalBurstBackgroundCanvasGroup.alpha = 0.5f;
+
         BurstFill.gameObject.SetActive(!PlayerCharacterData.CanTriggerBurstSKillCost());
 
+        if (GetPlayerCharacterSO())
+        {
+            ElementalBurstSkillSprite.sprite = GetPlayerCharacterSO().ElementalBurstSprite;
+        }
         BurstSkillCooldownTxt.text = PlayerCharacterData.GetCurrentElementalBurstCooldown().ToString("0.0") + "s";
         BurstFill.fillAmount = PlayerCharacterData.GetCurrentEnergyBurstCost() / PlayerCharacterData.GetEnergyBurstCost();
         BurstSkillCooldownTxt.gameObject.SetActive(!PlayerCharacterData.CanTriggerBurstSKill());

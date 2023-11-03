@@ -26,7 +26,7 @@ public class Kaqing : SwordCharacters
     private float Range = 8f;
     private ElementalSKill elementalSKill = ElementalSKill.NONE;
     private ElementalBurst elementalBurst = ElementalBurst.First_Phase;
-    private Coroutine BurstCoroutine;
+    private Coroutine BurstCoroutine, ShootCoroutine;
 
     private void Awake()
     {
@@ -77,11 +77,17 @@ public class Kaqing : SwordCharacters
         }
 
         Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
-        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed(), 0.15f, Time.deltaTime);
+        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed(), 0.1f, Time.deltaTime);
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
 
         UpdateTargetOrb();
         base.Update();
+    }
+
+    protected override void FixedUpdate()
+    {
+        if (!GetPlayerController().IsAiming() && !GetBurstCamera().gameObject.activeSelf && GetModel().activeSelf)
+            base.FixedUpdate();
     }
 
     private void BurstAreaDamage(Vector3 pos)
@@ -100,7 +106,11 @@ public class Kaqing : SwordCharacters
 
     private IEnumerator Burst()
     {
-        int TotalHits = 8;
+        yield return new WaitUntil(() => !GetBurstCamera().gameObject.activeSelf);
+        GetModel().SetActive(false);
+        yield return new WaitForSeconds(0.25f);
+
+        int TotalHits = 10;
         float TimeInBetweenHits = 2.5f / (TotalHits * 2);
         float HitElapsed = TimeInBetweenHits;
         int CurrentHits = 0;
@@ -112,6 +122,8 @@ public class Kaqing : SwordCharacters
             switch (elementalBurst)
             {
                 case ElementalBurst.First_Phase:
+                    GetModel().SetActive(CurrentHits >= TotalHits / 1.15f);
+
                     if (CurrentHits >= TotalHits - 1)
                         elementalBurst = ElementalBurst.Last_Hit;
 
@@ -128,7 +140,6 @@ public class Kaqing : SwordCharacters
                     CurrentHits++;
                     break;
             }
-            Debug.Log(CurrentHits);
             HitElapsed += Time.deltaTime;
             yield return null;
         }
@@ -163,7 +174,10 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill())
+        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+            return;
+
+        if (ShootCoroutine != null)
             return;
 
         switch (elementalSKill)
@@ -208,7 +222,7 @@ public class Kaqing : SwordCharacters
 
     protected override void EKey_1Down()
     {
-        if (!GetCharacterData().CanTriggerESKill())
+        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
             return;
 
         switch (elementalSKill)
@@ -227,16 +241,22 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill())
+        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
             return;
 
         switch (elementalSKill)
         {
             case ElementalSKill.THROW:
-                Animator.SetBool("2ndSkillAim", false);
-                StartCoroutine(Shoot());
+                if (ShootCoroutine == null)
+                {
+                    Animator.SetBool("2ndSkillAim", false);
+                    ShootCoroutine = StartCoroutine(Shoot());
+                }
                 break;
             case ElementalSKill.SLASH:
+                if (elementalOrb.GetEnergyOrbMoving())
+                    return;
+
                 LookAtDirection(elementalOrb.transform.position - transform.position);
                 GetPlayerController().transform.position = elementalOrb.transform.position;
                 Animator.SetTrigger("Slash");
@@ -254,7 +274,7 @@ public class Kaqing : SwordCharacters
         if (targetOrb != null)
             Destroy(targetOrb.gameObject);
 
-        while (!Animator.GetCurrentAnimatorStateInfo(0).IsName("2ndSkillThrow") || Animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.45f)
+        while ((Animator.GetCurrentAnimatorStateInfo(0).IsName("2ndSkillThrow") || Animator.GetCurrentAnimatorStateInfo(0).IsName("AimState")) && Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.45f)
         {
             yield return null;
         }
@@ -266,6 +286,7 @@ public class Kaqing : SwordCharacters
         StartCoroutine(elementalOrb.MoveToTargetLocation(ElementalHitPos, 50f));
         ResetThresHold();
         elementalSKill = ElementalSKill.SLASH;
+        ShootCoroutine = null;
     }
 
     private void FloatFor(float sec)

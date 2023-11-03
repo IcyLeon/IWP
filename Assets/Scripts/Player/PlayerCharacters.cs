@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCharacters : Characters
@@ -11,7 +12,12 @@ public class PlayerCharacters : Characters
     private PlayerController playerController;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
+    [SerializeField] GameObject Model;
 
+    public GameObject GetModel()
+    {
+        return Model;
+    }
     public CinemachineVirtualCamera GetBurstCamera()
     {
         return BurstCamera;
@@ -68,7 +74,7 @@ public class PlayerCharacters : Characters
 
     public Characters GetNearestCharacters()
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 7.5f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 5f, LayerMask.GetMask("Entity"));
         if (colliders.Length == 0)
             return null;
 
@@ -206,7 +212,7 @@ public class PlayerCharacters : Characters
 
     protected virtual void FixedUpdate()
     {
-        //GetPlayerController().UpdatePhysicsMovement();
+        GetPlayerController().UpdatePhysicsMovement();
     }
 
     public CinemachineVirtualCamera GetVirtualCamera()
@@ -275,16 +281,26 @@ public class PlayerCharacters : Characters
     }
     protected virtual bool ElementalBurstTrigger()
     {
-        if (characterData == null)
+        if (characterData == null || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
             return false;
 
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
         {
             characterData.ResetElementalBurstCooldown();
+            if (GetBurstCamera())
+                StartCoroutine(StartBurstAnimation());
             return true;
         }
 
         return false;
+    }
+
+    private IEnumerator StartBurstAnimation()
+    {
+        GetBurstCamera().gameObject.SetActive(true);
+        Animator.SetBool("IsBurst", true);
+        Animator.SetTrigger("BurstTrigger");
+        yield return new WaitUntil(() => !Animator.GetBool("IsBurst"));
     }
 
     protected virtual void ChargeHold()

@@ -20,7 +20,6 @@ public class ElementalOrb : MonoBehaviour
     }
 
 
-    // Function to generate a random vector within a cone shape
     Vector3 RandomVectorInCone()
     {
         // Get a random rotation within the cone angle
