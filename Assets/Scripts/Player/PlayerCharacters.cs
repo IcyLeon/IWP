@@ -281,27 +281,24 @@ public class PlayerCharacters : Characters
     }
     protected virtual bool ElementalBurstTrigger()
     {
-        if (characterData == null || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (characterData == null || GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
             return false;
 
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
         {
             characterData.ResetElementalBurstCooldown();
             if (GetBurstCamera())
-                StartCoroutine(StartBurstAnimation());
+            {
+                GetBurstCamera().gameObject.SetActive(true);
+                Animator.SetBool("IsBurst", true);
+                Animator.SetTrigger("BurstTrigger");
+            }
             return true;
         }
 
         return false;
     }
 
-    private IEnumerator StartBurstAnimation()
-    {
-        GetBurstCamera().gameObject.SetActive(true);
-        Animator.SetBool("IsBurst", true);
-        Animator.SetTrigger("BurstTrigger");
-        yield return new WaitUntil(() => !Animator.GetBool("IsBurst"));
-    }
 
     protected virtual void ChargeHold()
     {

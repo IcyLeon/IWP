@@ -210,6 +210,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public PlayerGroundStatus GetPlayerGroundStatus()
+    {
+        return playerGroundStatus;
+    }
+
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
         if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, ~LayerMask.GetMask("Player")))
