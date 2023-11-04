@@ -22,6 +22,7 @@ public class AmberESkillArrows : MonoBehaviour
     void Start()
     {
         StartCoroutine(Moving());
+        Destroy(gameObject, 5f);
     }
 
     public void SetCharacterData(CharacterData characterData)

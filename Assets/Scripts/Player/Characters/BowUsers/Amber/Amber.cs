@@ -72,8 +72,12 @@ public class Amber : BowCharacters, ICoordinateAttack
 
             forward = transform.forward;
             forward.y = 0;
-            forward.Normalize();
-            return ((transform.position + forward * range));
+            Vector3 endPos = transform.position + forward * range;
+            if (Physics.Raycast(endPos, Vector3.down, out RaycastHit hit))
+            {
+                endPos = hit.point;
+            }
+            return endPos;
         }
         else
         {

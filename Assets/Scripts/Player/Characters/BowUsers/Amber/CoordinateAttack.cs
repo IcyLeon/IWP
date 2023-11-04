@@ -18,10 +18,10 @@ public class CoordinateAttack : MonoBehaviour
     private IEnumerator ShootDelay()
     {
         yield return new WaitForSeconds(0.1f);
-        AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
+        AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
         eSkillArrows.SetCharacterData(characterData);
-        eSkillArrows.GetRB().velocity = GetShootDirection(EmitterPivot.transform.position) * 10f;
-        eSkillArrows.SetFocalPointContact(GetContactPoint(EmitterPivot.transform.position));
+        eSkillArrows.GetRB().velocity = GetShootDirection(EmitterPivot.position) * 10f;
+        eSkillArrows.SetFocalPointContact(GetContactPoint(EmitterPivot.position));
     }
 
     public void SetCharacterData(CharacterData characterData)
@@ -51,8 +51,12 @@ public class CoordinateAttack : MonoBehaviour
 
             forward = transform.forward;
             forward.y = 0;
-            forward.Normalize();
-            return ((transform.position + forward * range));
+            Vector3 endPos = transform.position + forward * range;
+            if (Physics.Raycast(endPos, Vector3.down, out RaycastHit hit))
+            {
+                endPos = hit.point;
+            }
+            return endPos;
         }
         else
         {
