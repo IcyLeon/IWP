@@ -72,9 +72,9 @@ public class PlayerCharacters : Characters
         CharacterManager.GetInstance().SetElementsIndicator(ElementsIndicator);
     }
 
-    public Characters GetNearestCharacters()
+    public Characters GetNearestCharacters(float range)
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 5f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, range, LayerMask.GetMask("Entity"));
         if (colliders.Length == 0)
             return null;
 
@@ -143,17 +143,10 @@ public class PlayerCharacters : Characters
     {
         return playerController;
     }
+
     protected override void Start()
     {
-        playerController = CharacterManager.GetInstance().GetPlayerController();
-        GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
-        GetPlayerController().OnElementalBurstTrigger += ElementalBurstTrigger;
-        GetPlayerController().OnElementalSkillTrigger += ElementalSkillTrigger;
-        GetPlayerController().OnE_1Down += EKey_1Down;
-        GetPlayerController().OnChargeHold += ChargeHold;
-        GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerController().onPlayerStateChange += OnJump;
-        GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
+
 
         healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
 
@@ -182,7 +175,9 @@ public class PlayerCharacters : Characters
     public void UpdateDefaultPosOffsetAndZoom(float delay)
     {
         if (CameraZoomAndPosOffsetCoroutine != null)
+        {
             StopCoroutine(CameraZoomAndPosOffsetCoroutine);
+        }
 
         if (gameObject.activeSelf)
             CameraZoomAndPosOffsetCoroutine = StartCoroutine(UpdateDefaultPosOffsetAndZoomAnim(delay));
@@ -213,6 +208,7 @@ public class PlayerCharacters : Characters
     protected virtual void FixedUpdate()
     {
         GetPlayerController().UpdatePhysicsMovement();
+        GetPlayerController().UpdateTargetRotation();
     }
 
     public CinemachineVirtualCamera GetVirtualCamera()
@@ -309,7 +305,36 @@ public class PlayerCharacters : Characters
 
     }
 
-    protected virtual void OnDestroy()
+    public virtual void CoordinateAttackTrigger()
+    {
+
+    }
+
+    private void OnEnable()
+    {
+        playerController = CharacterManager.GetInstance().GetPlayerController();
+        GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
+        GetPlayerController().OnElementalBurstTrigger += ElementalBurstTrigger;
+        GetPlayerController().OnElementalSkillTrigger += ElementalSkillTrigger;
+        GetPlayerController().OnE_1Down += EKey_1Down;
+        GetPlayerController().OnChargeHold += ChargeHold;
+        GetPlayerController().OnChargeTrigger += ChargeTrigger;
+        GetPlayerController().onPlayerStateChange += OnJump;
+        GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
+
+    }
+
+    private void OnDestroy()
+    {
+        DisableInputs();
+    }
+
+    private void OnDisable()
+    {
+        DisableInputs();
+    }
+
+    private void DisableInputs()
     {
         if (GetPlayerController() != null)
         {

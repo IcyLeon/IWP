@@ -18,6 +18,10 @@ public class BowCharacters : PlayerCharacters
     private float threasHold_Charged;
     private bool isAimHold;
 
+    public Transform GetEmitterPivot()
+    {
+        return EmitterPivot;
+    }
     private void Awake()
     {
         threasHold_Charged = 0;
@@ -50,9 +54,9 @@ public class BowCharacters : PlayerCharacters
             ResetThresHold();
 
         Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
-        Animator.SetFloat("AimVelocityX", GetPlayerController().GetHorizontalVelocity().x, 0.1f, Time.deltaTime);
-        Animator.SetFloat("AimVelocityZ", GetPlayerController().GetHorizontalVelocity().z, 0.1f, Time.deltaTime);
-        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed(), 0.1f, Time.deltaTime);
+        Animator.SetFloat("AimVelocityX", GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
+        Animator.SetFloat("AimVelocityZ", GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
+        Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
 
         base.Update();
@@ -65,11 +69,11 @@ public class BowCharacters : PlayerCharacters
 
     public void FireArrows()
     {
-        Arrow ArrowFire = Instantiate(ArrowPrefab, EmitterPivot.transform.position, Quaternion.identity).GetComponent<Arrow>();
+        Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(CurrentElemental));
         ArrowFire.SetCharacterData(GetCharacterData());
-
+        ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
         ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + ChargeElapsed));
         ChargeElapsed = 0;
     }
@@ -89,19 +93,23 @@ public class BowCharacters : PlayerCharacters
         UpdateCameraAim();
         Animator.SetBool("IsAiming", true);
         aimState = AimState.AIM;
-        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f) - EmitterPivot.transform.position).normalized;
+        Direction = (GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, 100f) - GetEmitterPivot().transform.position).normalized;
         LookAtDirection(GetVirtualCamera().transform.forward);
     }
 
     protected override void ChargeHold()
     {
+        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+            return;
+
         if (threasHold_Charged > 0.25f)
         {
             UpdateAim();
         }
         else
         {
-            Characters NearestEnemy = GetNearestCharacters();
+            float range = 10f;
+            Characters NearestEnemy = GetNearestCharacters(range);
             Vector3 forward;
             if (NearestEnemy == null)
             {
@@ -109,13 +117,13 @@ public class BowCharacters : PlayerCharacters
                 forward = transform.forward;
                 forward.y = 0;
                 forward.Normalize();
-                Direction = ((transform.position + forward * 10f) - EmitterPivot.position).normalized;
+                Direction = ((transform.position + forward * range) - GetEmitterPivot().position).normalized;
             }
             else
             {
                 forward = NearestEnemy.transform.position - transform.position;
                 forward.Normalize();
-                Direction = (NearestEnemy.transform.position - EmitterPivot.position).normalized;
+                Direction = (NearestEnemy.transform.position - GetEmitterPivot().position).normalized;
                 LookAtDirection(forward);
             }
         }
@@ -124,6 +132,9 @@ public class BowCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
+        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+            return;
+
         if (!isAimHold)
             ResetThresHold();
 
@@ -146,4 +157,5 @@ public class BowCharacters : PlayerCharacters
             Destroy(CrossHair.gameObject);
         }
     }
+
 }

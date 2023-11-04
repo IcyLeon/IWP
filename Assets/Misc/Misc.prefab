@@ -74,6 +74,10 @@ MonoBehaviour:
   HitEffect: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7,
     type: 3}
   WorldUIContainer: {fileID: 0}
+  ESkillArrowsPrefab: {fileID: 5003447499198803686, guid: 9434ba4b8c65c1b4b9b4ac39b1cebe2f,
+    type: 3}
+  CoordinateAttackPrefab: {fileID: 4021347431716728331, guid: d7339b3d6c0e36345a89584779533594,
+    type: 3}
   EnemyHealthUIPrefab: {fileID: 5718291668450855976, guid: b57b9d02a01b1c44bb3ae2d66fc7312a,
     type: 3}
   StarPrefab: {fileID: 3037185799881192553, guid: 56ffe41a903e65746b49e860c8f6dab2,

@@ -21,8 +21,9 @@ MonoBehaviour:
   BaseDEF: 50
   Elemental: 1
   PartyIcon: {fileID: 21300000, guid: 6e349c75f188ca54bbe143cfc6623cba, type: 3}
-  ElementalSkillSprite: {fileID: 0}
+  ElementalSkillSprite: {fileID: 21300000, guid: 32c78eb0e64026b45ae3670d6612e33e,
+    type: 3}
   ElementalBurstSprite: {fileID: 0}
-  ElementalSkillsCooldown: 3
+  ElementalSkillsCooldown: 10
   UltiSkillCooldown: 10
-  EnergyCost: 30
+  EnergyCost: 1

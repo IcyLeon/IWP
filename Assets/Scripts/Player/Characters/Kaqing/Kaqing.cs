@@ -77,8 +77,11 @@ public class Kaqing : SwordCharacters
         }
 
         Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
-        Animator.SetFloat("Velocity", GetPlayerController().GetSpeed(), 0.1f, Time.deltaTime);
+        Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
+
+        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("BurstWait") && Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.8f)
+            Animator.SetBool("IsBurstFinish", false);
 
         UpdateTargetOrb();
         base.Update();
@@ -87,7 +90,9 @@ public class Kaqing : SwordCharacters
     protected override void FixedUpdate()
     {
         if (!GetPlayerController().IsAiming() && !GetBurstCamera().gameObject.activeSelf && GetModel().activeSelf)
-            base.FixedUpdate();
+            GetPlayerController().UpdatePhysicsMovement();
+
+        GetPlayerController().UpdateTargetRotation();
     }
 
     private void BurstAreaDamage(Vector3 pos)
@@ -108,7 +113,7 @@ public class Kaqing : SwordCharacters
     {
         yield return new WaitUntil(() => !GetBurstCamera().gameObject.activeSelf);
         GetModel().SetActive(false);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.2f);
 
         int TotalHits = 10;
         float TimeInBetweenHits = 2.5f / (TotalHits * 2);
@@ -122,7 +127,9 @@ public class Kaqing : SwordCharacters
             switch (elementalBurst)
             {
                 case ElementalBurst.First_Phase:
-                    GetModel().SetActive(CurrentHits >= TotalHits / 1.15f);
+                    bool Visible = CurrentHits >= TotalHits / 1.15f;
+                    GetModel().SetActive(Visible);
+                    Animator.SetBool("IsBurstFinish", Visible);
 
                     if (CurrentHits >= TotalHits - 1)
                         elementalBurst = ElementalBurst.Last_Hit;
@@ -193,7 +200,7 @@ public class Kaqing : SwordCharacters
                 }
                 else
                 {
-                    Characters NearestEnemy = GetNearestCharacters();
+                    Characters NearestEnemy = GetNearestCharacters(5f);
                     Vector3 forward;
                     if (NearestEnemy == null)
                     {

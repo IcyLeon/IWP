@@ -1058,9 +1058,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
   Animator: {fileID: 2641773154839491820}
+  BurstCamera: {fileID: 0}
+  Model: {fileID: 0}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}
   EmitterPivot: {fileID: 8566315180538934675}
+  ESkillArrowsPrefab: {fileID: 5003447499198803686, guid: 9434ba4b8c65c1b4b9b4ac39b1cebe2f,
+    type: 3}
 --- !u!95 &2641773154839491820
 Animator:
   serializedVersion: 5
@@ -1070,7 +1074,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2313908216546761985}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 36d8c85d00077664c8c01c513bf64685, type: 3}
   m_Controller: {fileID: 9100000, guid: 0f2219cdb03ee634287a371b3d7faaf9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0

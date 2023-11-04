@@ -14,7 +14,7 @@ public class BurstState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (stateInfo.normalizedTime > 0.4f)
+        if (stateInfo.normalizedTime > 0.5f)
             animator.SetBool("IsBurst", false);
     }
 
@@ -25,8 +25,11 @@ public class BurstState : StateMachineBehaviour
         if (pc != null)
         {
             if (pc.GetBurstCamera())
+            {
                 pc.GetBurstCamera().gameObject.SetActive(false);
+            }
         }
+        animator.SetBool("IsBurstFinish", false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

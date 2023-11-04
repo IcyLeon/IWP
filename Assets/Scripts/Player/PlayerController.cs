@@ -25,10 +25,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float WalkSpeed, ZoomMultiplier;
     [SerializeField] Transform CameraLook;
     [SerializeField] CinemachineVirtualCamera playerCamera, aimCamera;
+    [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
 
     private float Speed;
 
     private Rigidbody rb;
+    private Vector3 Direction;
     private Vector3 InputDirection;
     private PlayerActionStatus playerActionStatus;
     private PlayerGroundStatus playerGroundStatus;
@@ -51,6 +53,11 @@ public class PlayerController : MonoBehaviour
     public onNumsKeyInput OnNumsKeyInput;
     public event Action onPlayerStateChange;
     private Coroutine FloatCoroutine;
+
+    public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
+    {
+        return PlayerCoordinateAttackManager;
+    }
 
     public CinemachineVirtualCamera GetVirtualCamera()
     {
@@ -295,27 +302,29 @@ public class PlayerController : MonoBehaviour
         float VerticalInput = Input.GetAxisRaw("Vertical");
         float MouseInput = Input.GetAxisRaw("Mouse ScrollWheel");
 
-        InputDirection = (GetVirtualCamera().transform.forward * VerticalInput) + (GetVirtualCamera().transform.right * HorizontalInput);
-        InputDirection.y = 0;
-        InputDirection.Normalize();
+        InputDirection = new Vector3(HorizontalInput, 0f, VerticalInput);
+
+        Direction = (GetVirtualCamera().transform.forward * VerticalInput) + (GetVirtualCamera().transform.right * HorizontalInput);
+        Direction.y = 0;
+        Direction.Normalize();
 
     }
 
 
     public void SetInputDirection(Vector3 dir)
     {
-        InputDirection = dir;
+        Direction = dir;
     }
 
     public void UpdateInputTargetQuaternion()
     {
-        if (InputDirection == Vector3.zero)
+        if (Direction == Vector3.zero)
             return;
 
-        Target_Rotation = Quaternion.LookRotation(InputDirection);
+        Target_Rotation = Quaternion.LookRotation(Direction);
     }
 
-    private void UpdateTargetRotation()
+    public void UpdateTargetRotation()
     {
         if (CurrentTargetRotation != Target_Rotation)
         {
@@ -349,7 +358,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         UpdateGrounded();
-        UpdateTargetRotation();
         LimitFallVelocity();
         UpdatePlungeAttack();
 
@@ -369,10 +377,10 @@ public class PlayerController : MonoBehaviour
     }
     public void UpdatePhysicsMovement()
     {
-        if (InputDirection == Vector3.zero)
+        if (Direction == Vector3.zero)
             return;
 
-        rb.AddForce((InputDirection * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+        rb.AddForce((Direction * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
     private void DecelerateVertically()
@@ -404,7 +412,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (GetPlayerActionStatus() != PlayerActionStatus.IDLE || IsAiming())
             return;
 
         playerActionStatus = PlayerActionStatus.JUMP;
@@ -427,6 +435,10 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public Vector3 GetInputDirection()
+    {
+        return InputDirection;
+    }
     public Vector3 GetHorizontalVelocity()
     {
         if (rb == null)

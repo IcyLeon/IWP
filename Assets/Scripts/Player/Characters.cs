@@ -9,6 +9,16 @@ public interface IDamage {
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
 }
 
+public interface ICoordinateAttack
+{
+    float GetCoordinateAttackTimer();
+    void UpdateCoordinateAttack();
+    bool CoordinateAttackEnded();
+
+    bool CoordinateCanShoot();
+
+}
+
 public class Characters : MonoBehaviour, IDamage
 {
     protected float BaseMaxHealth;
@@ -106,7 +116,7 @@ public class Characters : MonoBehaviour, IDamage
 
     private IEnumerator RemoveDelayElementalReaction()
     {
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.3f);
         GetElementalReaction().GetElementList().Clear();
     }
 

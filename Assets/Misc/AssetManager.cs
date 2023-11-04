@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Random = UnityEngine.Random;
 
 public interface IToggle
 {
@@ -21,6 +22,9 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject CrossHair;
     [SerializeField] GameObject HitEffect;
     [SerializeField] GameObject WorldUIContainer;
+    [Header("Amber")]
+    public GameObject ESkillArrowsPrefab;
+    public GameObject CoordinateAttackPrefab;
 
     [Header("UI")]
     public GameObject EnemyHealthUIPrefab;
@@ -105,6 +109,14 @@ public class AssetManager : MonoBehaviour
         }
     }
 
+    public static Vector3 RandomVectorInCone(Vector3 front, float Angle)
+    {
+        float randomPitch = Random.Range(-Angle / 2, Angle / 2);
+        float randomYaw = Random.Range(-Angle / 2, Angle / 2);
+        Quaternion Adjustment = Quaternion.Euler(randomPitch, randomYaw, 0);
+        Vector3 randomDirection = Adjustment * front;
+        return randomDirection.normalized;
+    }
 
     public void SpawnWorldText_Elemental(Vector3 position, Elemental element, string text)
     {

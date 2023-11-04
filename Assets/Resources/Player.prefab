@@ -31,6 +31,37 @@ Transform:
   m_Father: {fileID: 8466442129360495665}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2902523375309634049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6226555689438477991}
+  m_Layer: 3
+  m_Name: CoordinateAttackPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6226555689438477991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2902523375309634049}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.984, z: -0.559}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8466442129360495665}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8466442129360495668
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,6 +74,7 @@ GameObject:
   - component: {fileID: 804135296878626476}
   - component: {fileID: 6912044472943968364}
   - component: {fileID: 6930265667632514165}
+  - component: {fileID: 5889022338644147868}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -63,6 +95,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2798339205668980939}
+  - {fileID: 6226555689438477991}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -83,6 +116,7 @@ MonoBehaviour:
   CameraLook: {fileID: 2798339205668980939}
   playerCamera: {fileID: 0}
   aimCamera: {fileID: 0}
+  PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
 --- !u!54 &6912044472943968364
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -113,3 +147,16 @@ CapsuleCollider:
   m_Height: 1.75
   m_Direction: 1
   m_Center: {x: 0, y: 0.86, z: 0}
+--- !u!114 &5889022338644147868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8466442129360495668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2819cd84226eb3244858c83a6ef34055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoordinateAttackPivot: {fileID: 6226555689438477991}

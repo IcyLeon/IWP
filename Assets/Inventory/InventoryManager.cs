@@ -34,6 +34,10 @@ public class InventoryManager : MonoBehaviour {
         {
             CharacterData characterData = new CharacterData(startupSOTest[i]);
             AddCharacterDataToOwnList(characterData);
+
+            CharacterInfo characterInfo = CharacterManager.GetInstance().GetCharacterInfo(GetCharactersOwnedList()[i].GetItemSO() as PlayerCharacterSO);
+            PlayerCharacters CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, CharacterManager.GetInstance().GetPlayerController().transform).GetComponent<PlayerCharacters>();
+            CharacterManager.GetInstance().AddPlayerCharactersList(CurrentCharacter);
         }
 
     }

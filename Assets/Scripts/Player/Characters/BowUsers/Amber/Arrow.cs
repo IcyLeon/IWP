@@ -40,7 +40,8 @@ public class Arrow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (rb.velocity != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(rb.velocity);
     }
 
     public void SetElements(Elements elements)

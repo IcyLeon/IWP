@@ -22,12 +22,8 @@ public class ElementalOrb : MonoBehaviour
 
     Vector3 RandomVectorInCone()
     {
-        // Get a random rotation within the cone angle
         Quaternion randomRotation = Quaternion.AngleAxis(Random.Range(0, coneAngle), Random.onUnitSphere);
-
-        // Generate a random direction within the cone
         Vector3 randomDirection = randomRotation * Vector3.up;
-
         return randomDirection.normalized;
     }
 
@@ -62,10 +58,10 @@ public class ElementalOrb : MonoBehaviour
     private void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 8f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * 8.5f, ForceMode.Acceleration);
     }
 
-    private bool IsMovingUp(float minimumVelocity = 0.1f)
+    private bool IsMovingUp(float minimumVelocity = 0.15f)
     {
         return GetVerticalVelocity().y > minimumVelocity;
     }
