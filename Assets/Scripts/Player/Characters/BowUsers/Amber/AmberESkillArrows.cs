@@ -74,6 +74,9 @@ public class AmberESkillArrows : MonoBehaviour
                 damageObject.TakeDamage(transform.position, new Elements(Amber.GetPlayerCharacterSO().Elemental), 10f);
             }
         }
+
+        ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitExplosion, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(hitEffect.gameObject, hitEffect.main.duration);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -19,9 +19,10 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject SlashPrefab;
 
     [Header("Normal Attack Bow")]
-    [SerializeField] GameObject CrossHair;
-    [SerializeField] GameObject HitEffect;
-    [SerializeField] GameObject WorldUIContainer;
+    public GameObject CrossHair;
+    public GameObject HitEffect;
+    public GameObject HitExplosion;
+
     [Header("Amber")]
     public GameObject ESkillArrowsPrefab;
     public GameObject CoordinateAttackPrefab;
@@ -37,6 +38,9 @@ public class AssetManager : MonoBehaviour
     public GameObject ElementalContainerUIPrefab;
 
     public GameObject ElementalOrbPrefab;
+
+    [Header("UI")]
+    public GameObject ElectricEffect;
 
     private static AssetManager instance;
     // Start is called before the first frame update
@@ -130,9 +134,10 @@ public class AssetManager : MonoBehaviour
         dt.SpawnText(position, element, text);
     }
 
-    public GameObject SpawnSlashEffect(Vector3 pos, Quaternion angle)
+    public GameObject SpawnSlashEffect(Transform source)
     {
-        GameObject slash = Instantiate(SlashPrefab, pos, angle);
+        GameObject slash = Instantiate(SlashPrefab, source);
+        slash.transform.SetParent(null);
         Destroy(slash, 0.5f);
         return slash;
     }

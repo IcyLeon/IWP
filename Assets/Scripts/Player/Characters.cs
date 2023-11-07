@@ -101,7 +101,7 @@ public class Characters : MonoBehaviour, IDamage
             switch(ElementalReactionsTrigger.GetERState())
             {
                 case ElementalReactionState.OVERCLOCKED:
-                    GetRB().AddForce(Vector3.up * 5f, ForceMode.Impulse);
+                    GetRB().AddForce((pos - transform.position).normalized * 2f + Vector3.up * 1f, ForceMode.Impulse);
                     break;
                 case ElementalReactionState.MELT:
                     break;

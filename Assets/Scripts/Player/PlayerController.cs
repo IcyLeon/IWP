@@ -20,8 +20,15 @@ public enum PlayerGroundStatus
     AIR
 }
 
+
 public class PlayerController : MonoBehaviour
 {
+    public enum LockMovement
+    {
+        Enable,
+        Disable
+    }
+
     [SerializeField] float WalkSpeed, ZoomMultiplier;
     [SerializeField] Transform CameraLook;
     [SerializeField] CinemachineVirtualCamera playerCamera, aimCamera;
@@ -39,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private float timeToReachTargetRotation;
     private float dampedTargetRotationCurrentVelocity;
     private float dampedTargetRotationPassedTime;
+    private LockMovement lockMovement;
 
     public event Action OnElementalSkillHold;
     public event Action OnE_1Down;
@@ -67,6 +75,11 @@ public class PlayerController : MonoBehaviour
             return playerCamera;
     }
 
+    public void SetLockMovemnt(LockMovement lockMovement)
+    {
+        this.lockMovement = lockMovement;
+    }
+
     public float GetSpeed()
     {
         return Mathf.Pow(GetHorizontalVelocity().magnitude, 0.5f);
@@ -74,6 +87,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        lockMovement = LockMovement.Enable;
         CharacterManager.GetInstance().SetPlayerController(this);
     }
 
@@ -377,7 +391,7 @@ public class PlayerController : MonoBehaviour
     }
     public void UpdatePhysicsMovement()
     {
-        if (Direction == Vector3.zero)
+        if (Direction == Vector3.zero || lockMovement == LockMovement.Enable)
             return;
 
         rb.AddForce((Direction * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
@@ -412,7 +426,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (GetPlayerActionStatus() != PlayerActionStatus.IDLE || IsAiming())
+        if (GetPlayerActionStatus() != PlayerActionStatus.IDLE || IsAiming() || lockMovement == LockMovement.Enable)
             return;
 
         playerActionStatus = PlayerActionStatus.JUMP;

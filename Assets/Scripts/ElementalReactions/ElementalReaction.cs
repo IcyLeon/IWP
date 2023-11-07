@@ -5,11 +5,16 @@ using UnityEngine;
 
 public class ElementalReaction
 {
+    private GameObject source;
     private List<Elements> ElementsList;
     private ElementalReactionsManager elementalReactionsManager;
     public delegate void OnElementChanged(bool isChanged);
     public OnElementChanged onElementChanged;
 
+    public void SetSource(GameObject go)
+    {
+        source = go;
+    }
     public void UpdateElementsList()
     {
         for (int i = 0; i < ElementsList.Count; i++)

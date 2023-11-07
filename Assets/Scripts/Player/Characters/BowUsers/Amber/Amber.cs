@@ -6,8 +6,11 @@ public class Amber : BowCharacters, ICoordinateAttack
 {
     private float CoodinateTimerElapsed;
     private float CoordinateTimer = 8f;
-    private int SkillsArrows = 6;
+    private int SkillsArrows = 4;
     private float nextFire;
+    [SerializeField] GameObject AmberAuraBurstPrefab;
+    private ParticleSystem BurstAura;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -19,6 +22,18 @@ public class Amber : BowCharacters, ICoordinateAttack
     protected override void Update()
     {
         base.Update();
+
+        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("BurstWait") && Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0f)
+            Animator.SetBool("IsBurstFinish", true);
+
+    }
+
+    protected override void FixedUpdate()
+    {
+        if (!GetBurstCamera().gameObject.activeSelf)
+            GetPlayerController().UpdatePhysicsMovement();
+
+        GetPlayerController().UpdateTargetRotation();
     }
 
     protected override bool ElementalBurstTrigger()
@@ -27,7 +42,12 @@ public class Amber : BowCharacters, ICoordinateAttack
 
         if (canTrigger)
         {
+            isBurstActive = true;
             CoodinateTimerElapsed = CoordinateTimer;
+            if (BurstAura == null)
+                BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
+
+            Destroy(BurstAura.gameObject, CoordinateTimer);
             GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
         }
         return canTrigger;
@@ -97,6 +117,9 @@ public class Amber : BowCharacters, ICoordinateAttack
     {
         CoodinateTimerElapsed -= Time.deltaTime;
         CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, CoordinateTimer);
+
+        if (BurstAura)
+            BurstAura.transform.position = transform.position;
     }
 
     public bool CoordinateAttackEnded()

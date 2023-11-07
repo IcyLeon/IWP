@@ -57,8 +57,14 @@ public class PlayerCoordinateAttackManager : MonoBehaviour
                 case Amber amber when amber != null:
                     if (amber.CoordinateCanShoot())
                     {
-                        CoordinateAttack ca = Instantiate(AssetManager.GetInstance().CoordinateAttackPrefab, GetCoordinateAttackPivot()).GetComponent<CoordinateAttack>();
-                        ca.SetCharacterData(amber.GetCharacterData());
+                        int RandomValue = Random.Range(1, 4);
+                        for (int j = 0; j < RandomValue; j++)
+                        {
+                            CoordinateAttack ca = Instantiate(AssetManager.GetInstance().CoordinateAttackPrefab, GetCoordinateAttackPivot()).GetComponent<CoordinateAttack>();
+                            Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
+                            ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
+                            ca.SetCharacterData(amber.GetCharacterData());
+                        }
                     }
                     break;
             }

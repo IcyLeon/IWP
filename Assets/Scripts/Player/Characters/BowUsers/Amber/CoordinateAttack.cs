@@ -21,6 +21,7 @@ public class CoordinateAttack : MonoBehaviour
         AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
         eSkillArrows.SetCharacterData(characterData);
         eSkillArrows.GetRB().velocity = GetShootDirection(EmitterPivot.position) * 10f;
+        eSkillArrows.GetRB().transform.rotation = Quaternion.LookRotation(eSkillArrows.GetRB().velocity);
         eSkillArrows.SetFocalPointContact(GetContactPoint(EmitterPivot.position));
     }
 

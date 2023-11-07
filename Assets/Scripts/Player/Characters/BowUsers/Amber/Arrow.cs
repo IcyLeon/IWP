@@ -48,6 +48,7 @@ public class Arrow : MonoBehaviour
     {
         this.elements = elements;
     }
+
     private void OnTriggerEnter(Collider other)
     {
         PlayerCharacters player = other.transform.GetComponent<PlayerCharacters>();
@@ -59,7 +60,12 @@ public class Arrow : MonoBehaviour
             {
                 damageObject.TakeDamage(transform.position, elements, BowCharacters.GetDamage());
             }
-            Destroy(gameObject);
+            if (other.tag != "Player")
+            {
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                Destroy(gameObject);
+            }
         }
     }
 

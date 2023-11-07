@@ -135,6 +135,9 @@ public class BowCharacters : PlayerCharacters
         if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
             return;
 
+        if (GetBurstActive())
+            return;
+
         if (!isAimHold)
             ResetThresHold();
 

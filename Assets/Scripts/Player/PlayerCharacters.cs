@@ -10,10 +10,19 @@ public class PlayerCharacters : Characters
     protected float AimSpeed = 20f;
     private CharacterData characterData;
     private PlayerController playerController;
+    protected bool isBurstActive;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
     [SerializeField] GameObject Model;
 
+    public void SetBurstActive(bool value)
+    {
+        isBurstActive = value;
+    }
+    public bool GetBurstActive()
+    {
+        return isBurstActive;
+    }
     public GameObject GetModel()
     {
         return Model;
@@ -139,14 +148,14 @@ public class PlayerCharacters : Characters
         return characterData.GetDEF();
     }
 
-    protected PlayerController GetPlayerController()
+    public PlayerController GetPlayerController()
     {
         return playerController;
     }
 
     protected override void Start()
     {
-
+        isBurstActive = false;
 
         healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
 
