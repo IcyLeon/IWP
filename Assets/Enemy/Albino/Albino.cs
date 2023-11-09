@@ -108,7 +108,8 @@ public class Albino : BaseEnemy
         yield return new WaitForSeconds(0.3f);
         collider.isTrigger = true;
         Animator.SetTrigger("Jump");
-        
+        rb.velocity = Vector3.zero;
+
 
         float elapsed = 0f;
         float duration = 1f;
@@ -127,10 +128,9 @@ public class Albino : BaseEnemy
             yield return null;
         }
 
-
         while (true)
         {
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit GroundHit, 1.0f, ~LayerMask.GetMask("Player")))
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit GroundHit, 3.0f, ~LayerMask.GetMask("Player")))
             {
                 break;
             }
@@ -173,6 +173,8 @@ public class Albino : BaseEnemy
 
     public void SlamAreaDamage()
     {
+        ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(hitEffect.gameObject, hitEffect.main.duration);
 
     }
 }
