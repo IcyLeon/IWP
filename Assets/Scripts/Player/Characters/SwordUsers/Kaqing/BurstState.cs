@@ -6,10 +6,10 @@ using UnityEngine;
 public class BurstState : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        animator.ResetTrigger("BurstTrigger");
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -28,6 +28,7 @@ public class BurstState : StateMachineBehaviour
             {
                 pc.GetBurstCamera().gameObject.SetActive(false);
             }
+            pc.SetBurstActive(false);
         }
         animator.SetBool("IsBurstFinish", false);
     }

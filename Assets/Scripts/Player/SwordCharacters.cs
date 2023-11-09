@@ -9,7 +9,7 @@ public class SwordCharacters : PlayerCharacters
     [SerializeField] protected Transform EmitterPivot;
     protected int BasicAttackPhase = -1;
     protected Elemental CurrentElement;
-    private float LastClickedTime, AttackRate = 0.15f;
+    private float LastClickedTime, AttackRate = 0.3f;
     protected int AttackLayer;
 
     public void SpawnSlash()
@@ -68,6 +68,13 @@ public class SwordCharacters : PlayerCharacters
 
         if (Time.time - LastClickedTime > AttackRate && !Animator.GetCurrentAnimatorStateInfo(1).IsName("Attack3"))
         {
+            if (NearestEnemy != null)
+            {
+                Vector3 forward = NearestEnemy.transform.position - transform.position;
+                forward.Normalize();
+                LookAtDirection(forward);
+            }
+
             BasicAttackPhase++;
             if (BasicAttackPhase > 4)
             {

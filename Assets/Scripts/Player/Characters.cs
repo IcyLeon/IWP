@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Characters;
 
 public interface IDamage {
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
@@ -28,9 +29,14 @@ public class Characters : MonoBehaviour, IDamage
     protected int Level;
 
     [SerializeField] protected CharactersSO CharactersSO;
+    [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Animator Animator;
+    [SerializeField] protected GameObject Model;
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
+    public delegate void onElementReactionHit(ElementalReactionsTrigger e);
+    public onElementReactionHit OnElementReactionHit;
+    protected Coroutine DieCoroutine;
 
     protected virtual void Start()
     {
@@ -42,6 +48,10 @@ public class Characters : MonoBehaviour, IDamage
         return Animator;
     }
 
+    public GameObject GetModel()
+    {
+        return Model;
+    }
     protected virtual void Update()
     {
         if (healthBarScript)
@@ -79,6 +89,10 @@ public class Characters : MonoBehaviour, IDamage
         return transform.GetComponent<Rigidbody>();
     }
 
+    public virtual void UpdateDie()
+    {
+
+    }
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt)
     {
         Elemental elemental;
@@ -106,6 +120,7 @@ public class Characters : MonoBehaviour, IDamage
                 case ElementalReactionState.MELT:
                     break;
             }
+            OnElementReactionHit?.Invoke(ElementalReactionsTrigger);
             StartCoroutine(RemoveDelayElementalReaction());
         }
         SetHealth(GetHealth() - amt);

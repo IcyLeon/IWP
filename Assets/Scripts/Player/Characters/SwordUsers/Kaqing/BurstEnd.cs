@@ -23,12 +23,7 @@ public class BurstEnd : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
-        if (playerCharacters != null)
-        {
-            playerCharacters.SetBurstActive(false);
-            animator.SetBool("IsBurstFinish", false);
-        }
+
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

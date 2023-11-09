@@ -23,9 +23,6 @@ public class Amber : BowCharacters, ICoordinateAttack
     {
         base.Update();
 
-        if (Animator.GetCurrentAnimatorStateInfo(0).IsName("BurstWait") && Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0f)
-            Animator.SetBool("IsBurstFinish", true);
-
     }
 
     protected override void FixedUpdate()

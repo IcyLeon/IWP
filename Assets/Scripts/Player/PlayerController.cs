@@ -114,6 +114,25 @@ public class PlayerController : MonoBehaviour
         return playerActionStatus;
     }
 
+
+    private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 0.35f))
+        {
+            var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            var adjustedVelocity = slopeRotation * velocity;
+
+            if (adjustedVelocity.y < 0)
+            {
+                return adjustedVelocity;
+            }
+        }
+
+        return velocity;
+    }
+
     void Update()
     {
         if (rb == null)
@@ -395,6 +414,8 @@ public class PlayerController : MonoBehaviour
             return;
 
         rb.AddForce((Direction * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+
+        rb.velocity = AdjustVelocityToSlope(rb.velocity);
     }
 
     private void DecelerateVertically()

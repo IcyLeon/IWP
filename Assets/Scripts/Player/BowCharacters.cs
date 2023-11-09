@@ -17,6 +17,7 @@ public class BowCharacters : PlayerCharacters
     private AimState aimState = AimState.NONE;
     private float threasHold_Charged;
     private bool isAimHold;
+    private float LastClickedTime, AttackRate = 0.35f;
 
     public Transform GetEmitterPivot()
     {
@@ -26,6 +27,7 @@ public class BowCharacters : PlayerCharacters
     {
         threasHold_Charged = 0;
         CurrentElemental = Elemental.NONE;
+        Range = 10f;
     }
     protected override void Update()
     {
@@ -108,8 +110,7 @@ public class BowCharacters : PlayerCharacters
         }
         else
         {
-            float range = 10f;
-            Characters NearestEnemy = GetNearestCharacters(range);
+
             Vector3 forward;
             if (NearestEnemy == null)
             {
@@ -117,7 +118,7 @@ public class BowCharacters : PlayerCharacters
                 forward = transform.forward;
                 forward.y = 0;
                 forward.Normalize();
-                Direction = ((transform.position + forward * range) - GetEmitterPivot().position).normalized;
+                Direction = ((transform.position + forward * Range) - GetEmitterPivot().position).normalized;
             }
             else
             {
@@ -141,12 +142,12 @@ public class BowCharacters : PlayerCharacters
         if (!isAimHold)
             ResetThresHold();
 
-        if (Animator.GetBool("isAttacking"))
-            return;
-
-        Fire(Direction);
-        Animator.SetTrigger("TriggerAtk");
-        Animator.SetBool("isAttacking", true);
+        if (Time.time - LastClickedTime > AttackRate)
+        {
+            Fire(Direction);
+            Animator.SetTrigger("TriggerAtk");
+            LastClickedTime = Time.time;
+        }
     }
 
     private void ResetThresHold()

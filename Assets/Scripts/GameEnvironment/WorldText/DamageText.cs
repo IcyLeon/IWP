@@ -37,9 +37,16 @@ public class DamageText : MonoBehaviour
     {
         position = pos + new Vector3(Random.Range(-Offset.x, Offset.x), Random.Range(-Offset.y, Offset.y), Random.Range(-Offset.z, Offset.z));
         DamageTextTMP.text = text;
+
+        UpdateText();
     }
 
     private void Update()
+    {
+        UpdateText();
+    }
+
+    private void UpdateText()
     {
         Vector3 pos = Camera.main.WorldToScreenPoint(position);
         RT.anchoredPosition = new Vector2(pos.x, pos.y);

@@ -24,7 +24,6 @@ public class Kaqing : SwordCharacters
     [SerializeField] GameObject BurstRangeEffectPrefab;
     [SerializeField] GameObject TargetOrbPrefab;
     private float threasHold_Charged;
-    private float Range = 10f;
     private ElementalSKill elementalSKill = ElementalSKill.NONE;
     private ElementalBurst elementalBurst = ElementalBurst.First_Phase;
     private Coroutine BurstCoroutine, ShootCoroutine;
@@ -33,7 +32,9 @@ public class Kaqing : SwordCharacters
     private void Awake()
     {
         threasHold_Charged = 0;
+        Range = 8f;
     }
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -217,7 +218,6 @@ public class Kaqing : SwordCharacters
                 }
                 else
                 {
-                    Characters NearestEnemy = GetNearestCharacters(5f);
                     Vector3 forward;
                     if (NearestEnemy == null)
                     {

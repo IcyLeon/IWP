@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class PlayerCharacters : Characters
 {
@@ -13,7 +14,8 @@ public class PlayerCharacters : Characters
     protected bool isBurstActive;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
-    [SerializeField] GameObject Model;
+    protected Characters NearestEnemy;
+    protected float Range = 1f;
 
     public void SetBurstActive(bool value)
     {
@@ -23,10 +25,7 @@ public class PlayerCharacters : Characters
     {
         return isBurstActive;
     }
-    public GameObject GetModel()
-    {
-        return Model;
-    }
+
     public CinemachineVirtualCamera GetBurstCamera()
     {
         return BurstCamera;
@@ -195,6 +194,7 @@ public class PlayerCharacters : Characters
     // Update is called once per frame
     protected override void Update()
     {
+        NearestEnemy = GetNearestCharacters(Range);
         base.Update();
 
         if (GetElementalReaction().GetElementList().Count != 0)

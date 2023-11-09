@@ -30,6 +30,7 @@ public class Sword : MonoBehaviour
             {
                 hitPosition = meshCollider.ClosestPointOnBounds(enemy.transform.position);
             }
+
             enemy.TakeDamage(hitPosition, new Elements (GetSwordCharacters().GetCurrentSwordElemental()), 100f);
         }
     }
