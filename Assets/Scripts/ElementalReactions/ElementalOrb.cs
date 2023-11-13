@@ -79,6 +79,8 @@ public class ElementalOrb : MonoBehaviour
         PlayerCharacters playerCharacters = collision.transform.GetComponent<PlayerCharacters>();
         if (playerCharacters != null)
         {
+            characterManager = CharacterManager.GetInstance();
+
             for (int i = 0; i < characterManager.GetCharactersOwnedList().Count; i++)
             {
                 CharacterData characterData = characterManager.GetCharactersOwnedList()[i];

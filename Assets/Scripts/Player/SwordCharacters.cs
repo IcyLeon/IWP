@@ -14,9 +14,36 @@ public class SwordCharacters : PlayerCharacters
 
     public void SpawnSlash()
     {
-        GameObject slash = AssetManager.GetInstance().SpawnSlashEffect(GetEmitterPivot());
-        slash.GetComponentInChildren<Sword>().SetSwordCharacterWield(this);
+        AssetManager.GetInstance().SpawnSlashEffect(GetEmitterPivot());
+        Collider[] Colliders = Physics.OverlapSphere(GetPlayerController().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity"));
+        foreach (Collider other in Colliders)
+        {
+            IDamage damageObj = other.GetComponent<IDamage>();
+            if (damageObj != null)
+            {
+                if (!damageObj.IsDead())
+                {
+                    Vector3 hitPosition = other.transform.position;
+
+                    if (other is MeshCollider meshCollider)
+                    {
+                        hitPosition = meshCollider.ClosestPointOnBounds(other.transform.position);
+                    }
+
+                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
+                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                    damageObj.TakeDamage(hitPosition, new Elements(GetCurrentSwordElemental()), 100f);
+                }
+            }
+        }
+
     }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(GetPlayerController().GetPlayerOffsetPosition().position + transform.forward * 2f, 2f);
+    }
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -47,7 +74,8 @@ public class SwordCharacters : PlayerCharacters
             IDamage damageObject = collider.gameObject.GetComponent<IDamage>();
             if (damageObject != null)
             {
-                damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetDamage());
+                if (!damageObject.IsDead())
+                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetDamage());
             }
         }
         return colliders;
@@ -80,7 +108,7 @@ public class SwordCharacters : PlayerCharacters
             {
                 ResetBasicAttacks();
             }
-
+            SetisAttacking(true);
             Animator.SetTrigger("Attack" + BasicAttackPhase);
             LastClickedTime = Time.time;
         }

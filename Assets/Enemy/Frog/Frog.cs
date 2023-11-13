@@ -10,13 +10,13 @@ public class Frog : BaseEnemy
     {
         PATROL,
         CHASE,
-        HEADBUTT,
-
+        STRAFE,
+        BASICATK,
     }
     private States state;
     private Coroutine PatrolCoroutine, HopCoroutine;
-    private float hopHeight = 0.75f;
-    private float hopFrequency = 0.3f;
+    private float hopHeight = 0.5f;
+    private float hopFrequency = 0.2f;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -62,7 +62,10 @@ public class Frog : BaseEnemy
                 
 
                 break;
-            case States.HEADBUTT:
+            case States.STRAFE:
+
+                break;
+            case States.BASICATK:
 
                 break;
         }

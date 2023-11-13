@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64be746642b6dcd4799935d023c5d34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WalkSpeed: 5
+  WalkSpeed: 4
   ZoomMultiplier: 3
   CameraLook: {fileID: 2798339205668980939}
   playerCamera: {fileID: 0}

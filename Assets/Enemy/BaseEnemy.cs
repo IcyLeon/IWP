@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class BaseEnemy : Characters
 {
+    [SerializeField] protected Collider collider;
     protected float DetectionRange;
     private ElementsIndicator elementsIndicator;
     protected float Ratio;
@@ -23,9 +24,9 @@ public class BaseEnemy : Characters
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
-
         Player = CharacterManager.GetInstance().GetPlayerController();
     }
+
 
     // Update is called once per frame
     protected override void Update()
@@ -40,10 +41,40 @@ public class BaseEnemy : Characters
             GetElementalReaction().UpdateElementsList();
     }
 
+    protected void LookAtPlayer()
+    {
+        Vector3 forward = GetPlayerLocation() - transform.position;
+        float angle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, angle, 0);
+    }
+
+
+    protected IEnumerator Disappear()
+    {
+        yield return new WaitForSeconds(8f);
+        Destroy(gameObject);
+    }
+
+    public override bool UpdateDie()
+    {
+        bool isdead = base.UpdateDie();
+        if (isdead)
+        {
+            if (healthBarScript)
+                Destroy(healthBarScript.gameObject);
+            if (elementsIndicator)
+                Destroy(elementsIndicator.gameObject);
+        }
+        return isdead;
+    }
+
     private void UpdateHealthBar()
     {
-        healthBarScript.transform.position = GetModel().transform.position + Vector3.up * 1.5f;
-        healthBarScript.SliderInvsibleOnlyFullHealth();
+        if (healthBarScript)
+        {
+            healthBarScript.transform.position = GetModel().transform.position + Vector3.up * 1.5f;
+            healthBarScript.SliderInvsibleOnlyFullHealth();
+        }
     }
 
     public override Elements TakeDamage(Vector3 pos, Elements elements, float amt)
@@ -74,7 +105,7 @@ public class BaseEnemy : Characters
         if (NavMeshAgent == null)
             return false;
 
-        return (transform.position - target).magnitude <= NavMeshAgent.stoppingDistance + 0.5f;
+        return (transform.position - target).magnitude <= NavMeshAgent.stoppingDistance + 0.25f;
     }
 
     protected void SetRandomDestination()
@@ -84,8 +115,7 @@ public class BaseEnemy : Characters
 
         Vector3 randomPoint = transform.position + new Vector3(Random.Range(-DetectionRange, DetectionRange), 0, Random.Range(-DetectionRange, DetectionRange));
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPoint, out hit, DetectionRange, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, DetectionRange, NavMesh.AllAreas))
         {
             RamdomDestination = hit.position;
         }
@@ -95,9 +125,10 @@ public class BaseEnemy : Characters
         }
     }
 
+
     protected Vector3 GetPlayerLocation()
     {
-        return Player.GetCharacterRB().position;
+        return Player.GetPlayerOffsetPosition().position;
     }
 
     protected bool isInDetectionRange(float range)
@@ -120,8 +151,11 @@ public class BaseEnemy : Characters
         NavMeshAgent.updatePosition = false;
         NavMeshAgent.updateRotation = false;
         NavMeshAgent.velocity = Vector3.zero;
-        NavMeshAgent.isStopped = true;
-        NavMeshAgent.enabled = false;
+        if (NavMeshAgent.enabled)
+        {
+            NavMeshAgent.isStopped = true;
+            NavMeshAgent.enabled = false;
+        }
     }
 
     protected void EnableAgent()

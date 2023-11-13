@@ -4,10 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static Characters;
-
 public interface IDamage {
+    bool IsDead();
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
+    void OnHit();
 }
 
 public interface ICoordinateAttack
@@ -37,12 +37,26 @@ public class Characters : MonoBehaviour, IDamage
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
     public onElementReactionHit OnElementReactionHit;
     protected Coroutine DieCoroutine;
-
+    protected bool isAttacking;
     protected virtual void Start()
     {
         BaseMaxHealth = CharactersSO.BaseHP;
+        isAttacking = false;
+    }
+    public void ResetAttack()
+    {
+        isAttacking = false;
     }
 
+    public void SetisAttacking(bool value)
+    {
+        isAttacking = value;
+    }
+
+    public bool IsDead()
+    {
+        return GetHealth() <= 0;
+    }
     public Animator GetAnimator()
     {
         return Animator;
@@ -89,9 +103,12 @@ public class Characters : MonoBehaviour, IDamage
         return transform.GetComponent<Rigidbody>();
     }
 
-    public virtual void UpdateDie()
+    public virtual bool UpdateDie()
     {
+        if (GetHealth() <= 0)
+            return true;
 
+        return false;
     }
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt)
     {
@@ -125,8 +142,14 @@ public class Characters : MonoBehaviour, IDamage
         }
         SetHealth(GetHealth() - amt);
         AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, amt.ToString());
+        OnHit();
 
         return e;
+    }
+
+    public virtual void OnHit()
+    {
+
     }
 
     private IEnumerator RemoveDelayElementalReaction()

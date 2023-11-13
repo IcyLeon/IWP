@@ -45,7 +45,8 @@ public class KaqingTeleporter : MonoBehaviour
             IDamage damage = collider.GetComponent<IDamage>();
             if (damage != null)
             {
-                damage.TakeDamage(collider.transform.position, elements, Kaqing.GetDamage());
+                if (!damage.IsDead())
+                    damage.TakeDamage(collider.transform.position, elements, Kaqing.GetDamage());
             }
         }
     }

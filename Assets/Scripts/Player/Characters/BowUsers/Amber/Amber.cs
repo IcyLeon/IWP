@@ -25,14 +25,6 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     }
 
-    protected override void FixedUpdate()
-    {
-        if (!GetBurstCamera().gameObject.activeSelf)
-            GetPlayerController().UpdatePhysicsMovement();
-
-        GetPlayerController().UpdateTargetRotation();
-    }
-
     protected override bool ElementalBurstTrigger()
     {
         bool canTrigger = base.ElementalBurstTrigger();
@@ -56,14 +48,16 @@ public class Amber : BowCharacters, ICoordinateAttack
         if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
             return;
 
+        Vector3 pos = GetPlayerController().GetPlayerOffsetPosition().position;
         for (int i = 0; i < SkillsArrows; i++)
         {
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
             eSkillArrows.SetCharacterData(GetCharacterData());
-            eSkillArrows.GetRB().velocity = GetShootDirection(transform.position) * 100f + Vector3.up * 65f;
-            eSkillArrows.SetFocalPointContact(GetContactPoint(transform.position));
+            eSkillArrows.GetRB().velocity = GetShootDirection(pos) * 100f + Vector3.up * 65f;
+            eSkillArrows.SetFocalPointContact(GetContactPoint(pos));
         }
         Animator.SetTrigger("Dodge");
+        SetisAttacking(true);
         GetCharacterData().ResetElementalSkillCooldown();
     }
 
@@ -89,7 +83,7 @@ public class Amber : BowCharacters, ICoordinateAttack
 
             forward = transform.forward;
             forward.y = 0;
-            Vector3 endPos = transform.position + forward * range;
+            Vector3 endPos = pos + forward * range;
             if (Physics.Raycast(endPos, Vector3.down, out RaycastHit hit))
             {
                 endPos = hit.point;

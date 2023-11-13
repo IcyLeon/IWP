@@ -34,7 +34,8 @@ public class BowCharacters : PlayerCharacters
         switch (aimState)
         {
             case AimState.NONE:
-                UpdateInputTargetQuaternion();
+                if (!isAttacking)
+                    UpdateInputTargetQuaternion();
                 break;
             case AimState.AIM:
                 if (CrossHair == null)
@@ -80,6 +81,14 @@ public class BowCharacters : PlayerCharacters
         ChargeElapsed = 0;
     }
 
+    protected override void FixedUpdate()
+    {
+        if (!GetBurstCamera().gameObject.activeSelf)
+            GetPlayerController().UpdatePhysicsMovement();
+
+        GetPlayerController().UpdateTargetRotation();
+    }
+
     private void UpdateAim()
     {
         if (ChargeElapsed < 1)
@@ -110,7 +119,6 @@ public class BowCharacters : PlayerCharacters
         }
         else
         {
-
             Vector3 forward;
             if (NearestEnemy == null)
             {

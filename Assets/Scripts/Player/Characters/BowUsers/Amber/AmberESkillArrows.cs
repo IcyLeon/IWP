@@ -71,7 +71,8 @@ public class AmberESkillArrows : MonoBehaviour
             IDamage damageObject = colliders[i].gameObject.GetComponent<IDamage>();
             if (damageObject != null)
             {
-                damageObject.TakeDamage(transform.position, new Elements(Amber.GetPlayerCharacterSO().Elemental), 10f);
+                if (!damageObject.IsDead())
+                    damageObject.TakeDamage(transform.position, new Elements(Amber.GetPlayerCharacterSO().Elemental), 10f);
             }
         }
 

@@ -16,7 +16,6 @@ public class MovementDisable : StateMachineBehaviour
         PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
         if (playerCharacters.GetPlayerController())
         {
-            PlayerController playerController = playerCharacters.GetPlayerController();
             switch(lockMovement)
             {
                 case LockMovement.Enable:

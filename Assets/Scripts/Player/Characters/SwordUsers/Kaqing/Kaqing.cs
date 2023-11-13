@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Kaqing : SwordCharacters
@@ -14,6 +15,7 @@ public class Kaqing : SwordCharacters
     {
         NONE,
         THROW,
+        TRAVEL,
         SLASH
     }
     private Coroutine ElementalTimerCoroutine;
@@ -26,8 +28,7 @@ public class Kaqing : SwordCharacters
     private float threasHold_Charged;
     private ElementalSKill elementalSKill = ElementalSKill.NONE;
     private ElementalBurst elementalBurst = ElementalBurst.First_Phase;
-    private Coroutine BurstCoroutine, ShootCoroutine;
-
+    private Coroutine BurstCoroutine;
 
     private void Awake()
     {
@@ -79,6 +80,7 @@ public class Kaqing : SwordCharacters
             }
         }
 
+
         Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
         Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
         Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
@@ -107,14 +109,19 @@ public class Kaqing : SwordCharacters
             IDamage damage = collider.GetComponent<IDamage>();
             if (damage != null)
             {
-                damage.TakeDamage(collider.transform.position, new Elements(GetPlayersSO().Elemental), 100f);
+                if (!damage.IsDead())
+                {
+                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, collider.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                    damage.TakeDamage(collider.transform.position, new Elements(GetPlayersSO().Elemental), 100f);
+                }
             }
         }
     }
 
     private IEnumerator SpawnEffects()
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.18f);
         ParticleSystem go = Instantiate(BurstRangeEffectPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Vector3 scale = Vector3.one * Range;
         scale.y = 1f;
@@ -134,7 +141,7 @@ public class Kaqing : SwordCharacters
         float HitElapsed = TimeInBetweenHits;
         int CurrentHits = 0;
 
-        Vector3 pos = GetPlayerController().transform.position;
+        Vector3 pos = GetPlayerController().GetPlayerOffsetPosition().position;
 
         while (CurrentHits < TotalHits) {
             switch (elementalBurst)
@@ -202,7 +209,7 @@ public class Kaqing : SwordCharacters
         if (GetBurstActive())
             return;
 
-        if (ShootCoroutine != null)
+        if (elementalOrb != null)
             return;
 
         switch (elementalSKill)
@@ -214,34 +221,17 @@ public class Kaqing : SwordCharacters
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
                     ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, Range);
-                    LookAtDirection(ElementalHitPos - EmitterPivot.position);
                 }
                 else
                 {
-                    Vector3 forward;
-                    if (NearestEnemy == null)
-                    {
-
-                        forward = transform.forward;
-                        forward.y = 0;
-                        forward.Normalize();
-                        ElementalHitPos = GetRayPosition3D(transform.position, forward, Range);
-                        ElementalHitPos.y = EmitterPivot.position.y;
-                    }
-                    else
-                    {
-                        forward = NearestEnemy.transform.position - transform.position;
-                        forward.Normalize();
-                        ElementalHitPos = GetRayPosition3D(transform.position, forward, Range);
-                        LookAtDirection(ElementalHitPos - EmitterPivot.position);
-                    }
+                    SetEHitPos();
                 }
+                LookAtDirection(ElementalHitPos - EmitterPivot.position);
                 SwordModel.gameObject.SetActive(false);
                 Animator.SetBool("2ndSkillAim", true);
                 threasHold_Charged += Time.deltaTime;
                 break;
         }
-
     }
 
     protected override void EKey_1Down()
@@ -255,8 +245,28 @@ public class Kaqing : SwordCharacters
         switch (elementalSKill)
         {
             case ElementalSKill.NONE:
+                SetEHitPos();
                 elementalSKill = ElementalSKill.THROW;
                 break;
+        }
+    }
+
+    private void SetEHitPos()
+    {
+        Vector3 forward;
+        if (NearestEnemy == null)
+        {
+            forward = transform.forward;
+            forward.y = 0;
+            forward.Normalize();
+            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 2f);
+            ElementalHitPos.y = EmitterPivot.position.y;
+        }
+        else
+        {
+            forward = NearestEnemy.transform.position - GetPlayerController().GetPlayerOffsetPosition().position;
+            forward.Normalize();
+            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 2f);
         }
     }
 
@@ -277,12 +287,19 @@ public class Kaqing : SwordCharacters
         switch (elementalSKill)
         {
             case ElementalSKill.THROW:
-                if (ShootCoroutine == null)
+                if (elementalOrb == null)
                 {
+                    if (targetOrb != null)
+                        Destroy(targetOrb.gameObject);
+
                     Animator.SetBool("2ndSkillAim", false);
-                    ShootCoroutine = StartCoroutine(Shoot());
+                    Animator.SetTrigger("Throw");
+                    elementalSKill = ElementalSKill.TRAVEL;
                 }
                 break;
+            case ElementalSKill.TRAVEL:
+                break;
+
             case ElementalSKill.SLASH:
                 if (elementalOrb.GetEnergyOrbMoving())
                     return;
@@ -299,16 +316,8 @@ public class Kaqing : SwordCharacters
         }
     }
 
-    private IEnumerator Shoot()
+    public void ShootTeleportOrb()
     {
-        if (targetOrb != null)
-            Destroy(targetOrb.gameObject);
-
-        while ((Animator.GetCurrentAnimatorStateInfo(0).IsName("2ndSkillThrow") || Animator.GetCurrentAnimatorStateInfo(0).IsName("AimState")) && Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.45f)
-        {
-            yield return null;
-        }
-
         KaqingTeleporter Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<KaqingTeleporter>();
         Orb.SetElements(new Elements(GetPlayersSO().Elemental));
         Orb.SetCharacterData(GetCharacterData());
@@ -316,7 +325,6 @@ public class Kaqing : SwordCharacters
         StartCoroutine(elementalOrb.MoveToTargetLocation(ElementalHitPos, 50f));
         ResetThresHold();
         elementalSKill = ElementalSKill.SLASH;
-        ShootCoroutine = null;
     }
 
     private void FloatFor(float sec)

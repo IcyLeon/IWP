@@ -58,7 +58,8 @@ public class Arrow : MonoBehaviour
             IDamage damageObject = other.gameObject.GetComponent<IDamage>();
             if (damageObject != null)
             {
-                damageObject.TakeDamage(transform.position, elements, BowCharacters.GetDamage());
+                if (!damageObject.IsDead())
+                    damageObject.TakeDamage(transform.position, elements, BowCharacters.GetDamage());
             }
             if (other.tag != "Player")
             {

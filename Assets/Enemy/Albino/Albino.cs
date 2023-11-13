@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 public class Albino : BaseEnemy
 {
@@ -12,18 +14,26 @@ public class Albino : BaseEnemy
         CHASE,
         HEADBUTT,
         SLAM,
+        PREPARING,
         DEAD
     }
-    [SerializeField] Collider collider;
     private States state;
     private Coroutine PatrolCoroutine, SlamCoroutine;
-    private float LastClickedTime, AttackRate = 0.5f;
+    private bool JumpOnAir;
+    private float DefaultAttackRate = 0.4f, CurrentAttackRate;
+    private float AttackElapsed;
+    private float StrafeElasped;
+    private float StrafeT = 0.2f;
+    private Coroutine StrafeCoroutine;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        DetectionRange = 5f;
+        CurrentAttackRate = DefaultAttackRate;
+        JumpOnAir = false;
+        DetectionRange = 10f;
+        StrafeElasped = AttackElapsed = 0f;
         state = States.PATROL;
     }
 
@@ -32,9 +42,12 @@ public class Albino : BaseEnemy
     {
         base.Update();
         UpdateState();
+    }
 
-        if (Input.GetKeyDown(KeyCode.Return))
-            state = States.SLAM;
+    public override void OnHit()
+    {
+        if (state == States.PATROL)
+            state = States.CHASE;
     }
 
     void UpdateState()
@@ -53,114 +66,225 @@ public class Albino : BaseEnemy
                 }
 
                 if (isInDetectionRange(DetectionRange * 1.5f))
+                {
+                    PatrolCoroutine = null;
                     state = States.CHASE;
+                }
 
                 break;
             case States.CHASE:
                 if (NavMeshAgent.enabled)
-                    NavMeshAgent.SetDestination(GetPlayerLocation());
+                {
+                    if (NavMesh.SamplePosition(NavMeshAgent.transform.position, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
+                        NavMeshAgent.SetDestination(GetPlayerLocation());
+                }
 
                 if (HasReachedTargetLocation(GetPlayerLocation()))
                 {
                     state = States.HEADBUTT;
-                    NavMeshAgent.enabled = false;
                 }
+                NavMeshAgent.enabled = NavMeshAgent.updateRotation = true;
+                break;
+
+            case States.PREPARING:
+                if (StrafeCoroutine == null && !isAttacking) {
+                    if (HasReachedTargetLocation(GetPlayerLocation()))
+                    {
+                        state = States.HEADBUTT;
+                    }
+
+                    if (StrafeElasped > StrafeT && NavMeshAgent.enabled)
+                    {
+                        Vector3 dir = (StrafeDirection() * RandomSign()) * Random.Range(2f, 5f);
+
+                        NavMeshPath navMeshPath = new NavMeshPath();
+                        if (NavMesh.CalculatePath(rb.position, rb.position + dir, NavMesh.AllAreas, navMeshPath))
+                        {
+                            StrafeCoroutine = StartCoroutine(StartStrafe(navMeshPath));
+                            StrafeElasped = 0;
+                        }
+                    }
+                    StrafeElasped += Time.deltaTime;
+                }
+
+                LookAtPlayer();
+                NavMeshAgent.updateRotation = false;
+                NavMeshAgent.enabled = true;
 
                 break;
             case States.HEADBUTT:
-                if (Time.time - LastClickedTime > AttackRate)
+                if (!HasReachedTargetLocation(GetPlayerLocation()) && NavMeshAgent.enabled)
                 {
-                    Animator.SetTrigger("Attack" + Random.Range(1, 3));
-
-                    if (!HasReachedTargetLocation(GetPlayerLocation()))
-                    {
-                        state = States.CHASE;
-                        NavMeshAgent.enabled = true;
-                    }
-
-                    LastClickedTime = Time.time;
+                    state = States.CHASE;
                 }
+
+                if (!isAttacking)
+                {
+                    if (AttackElapsed > CurrentAttackRate)
+                    {
+                        int attackRandom = Random.Range(0, 4);
+                        if (attackRandom == 2)
+                        {
+                            state = States.SLAM;
+                            CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.3f);
+                        }
+
+                        if (HasReachedTargetLocation(GetPlayerLocation()))
+                        {
+                            Animator.SetTrigger("Attack" + Random.Range(1, 3));
+                            CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.3f);
+                        }
+                    }
+                    LookAtPlayer();
+                    NavMeshAgent.updateRotation = false;
+                    NavMeshAgent.enabled = false;
+                    AttackElapsed += Time.deltaTime;
+                }
+                else
+                {
+                    AttackElapsed = 0;
+                }
+
                 break;
 
             case States.SLAM:
-                if (SlamCoroutine == null)
+                if (SlamCoroutine == null && !isAttacking)
+                {
+                    NavMeshAgent.updateRotation = false;
+                    NavMeshAgent.enabled = false;
                     SlamCoroutine = StartCoroutine(StartSlamAttack());
+                }
                 break;
         }
-
         Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
         UpdateDie();
     }
+    private int RandomSign()
+    {
+        return (Random.value < 0.5f) ? -1 : 1;
+    }
 
+    public void ChangeState(States states)
+    {
+        state = states;
+    }
+
+    private IEnumerator StartStrafe(NavMeshPath navMeshPath)
+    {
+        NavMeshAgent.SetDestination(navMeshPath.corners[navMeshPath.corners.Length - 1]);
+
+        while (!HasReachedTargetLocation(NavMeshAgent.destination))
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(Random.Range(0.45f, 1.2f));
+
+        switch (Random.Range(0, 4))
+        {
+            case 1:
+                state = States.SLAM;
+                break;
+            case 2:
+                state = States.CHASE;
+                break;
+        }
+        StrafeCoroutine = null;
+    }
+
+    private Vector3 StrafeDirection()
+    {
+        Vector3 dir = GetPlayerLocation() - rb.position;
+        dir.y = 0;
+        dir.Normalize();
+        Vector3 normal = Vector3.Cross(dir, Vector3.up);
+
+        switch(Random.Range(0, 3))
+        {
+            case 1:
+                normal = dir;
+                break;
+        }
+
+        return normal.normalized;
+    }
     private IEnumerator StartSlamAttack()
     {
         Vector3 SavePosition = GetPlayerLocation();
-        float HeightToSlam = 5f;
-        float MaxHeightToLaunchAttack = 6f;
+        float HeightToSlam = 4f;
+        float MaxHeightToLaunchAttack = 8f;
         float Diff = SavePosition.y - transform.position.y;
 
-        if (Diff > MaxHeightToLaunchAttack)
+        if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack)
         {
+            state = States.CHASE;
             SlamCoroutine = null;
             yield break;
         }
-        NavMeshAgent.enabled = false;
-        yield return new WaitForSeconds(0.3f);
-        collider.isTrigger = true;
         Animator.SetTrigger("Jump");
-        rb.velocity = Vector3.zero;
+        SetisAttacking(true);
 
+        yield return new WaitUntil(() => JumpOnAir);
 
-        float elapsed = 0f;
-        float duration = 1f;
-
+        SavePosition = GetPlayerLocation();
         Vector3 groundPos = SavePosition;
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit))
         {
             groundPos.y = hit.point.y;
         }
 
+        collider.isTrigger = true;
+        float elapsed = 0f;
+        float duration = 0.6f;
+
         Vector3 targetPosition = groundPos + Vector3.up * HeightToSlam;
         while (elapsed < duration)
         {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, elapsed / duration);
+            rb.position = Vector3.Lerp(rb.position, targetPosition, elapsed / duration);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
+        yield return new WaitForSeconds(0.2f);
+
         while (true)
         {
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit GroundHit, 3.0f, ~LayerMask.GetMask("Player")))
+            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 1f, ~LayerMask.GetMask("Player")))
             {
+                SlamAreaDamage();
                 break;
             }
-            rb.AddForce(Vector3.down * 100f);
+            rb.AddForce(Vector3.down * 1000f * Time.deltaTime);
             yield return null;
         }
+
         collider.isTrigger = false;
         Animator.SetTrigger("Slam");
-
-        yield return new WaitForSeconds(0.3f);
+        JumpOnAir = false;
+        yield return new WaitForSeconds(0.25f);
+        ResetAttack();
         state = States.CHASE;
         SlamCoroutine = null;
-        NavMeshAgent.enabled = true;
     }
-    public override void UpdateDie()
+    public void CanJumpOnAir()
     {
-        if (GetHealth() <= 0 && DieCoroutine == null)
-        {
-            state = States.DEAD;
-            Animator.SetTrigger("Dead");
-            NavMeshAgent.enabled = false;
-            DieCoroutine = StartCoroutine(Disappear());
-        }
+        JumpOnAir = true;
     }
 
-    private IEnumerator Disappear()
+    public override bool UpdateDie()
     {
-        yield return new WaitForSeconds(8f);
-        Destroy(healthBarScript.gameObject);
-        Destroy(gameObject);
+        bool isdead = base.UpdateDie();
+        if (isdead) 
+        {
+            DisableAgent();
+            if (DieCoroutine == null)
+            {
+                state = States.DEAD;
+                Animator.SetTrigger("Dead");
+                DieCoroutine = StartCoroutine(Disappear());
+            }
+        }
+        return isdead;
     }
 
     private IEnumerator StartPatrolling()
@@ -170,11 +294,38 @@ public class Albino : BaseEnemy
         SetRandomDestination();
         PatrolCoroutine = null;
     }
-
+    public void DealDamageToPlayer()
+    {
+        Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player"));
+        for (int i = 0; i < Colliders.Length; i++)
+        {
+            PlayerCharacters pc = Colliders[i].GetComponent<PlayerCharacters>();
+            if (pc != null)
+            {
+                if (pc.GetBurstActive())
+                    return;
+                pc.TakeDamage(pc.GetPlayerController().GetPlayerOffsetPosition().position, new Elements(Elemental.NONE), 100f);
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerController().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+                Destroy(hitEffect.gameObject, hitEffect.main.duration);
+            }
+        }
+    }
     public void SlamAreaDamage()
     {
+        Collider[] Colliders = Physics.OverlapSphere(transform.position, 2.5f, LayerMask.GetMask("Player"));
+        for (int i = 0; i < Colliders.Length; i++)
+        {
+            PlayerCharacters pc = Colliders[i].GetComponent<PlayerCharacters>();
+            if (pc != null)
+            {
+                if (pc.GetBurstActive())
+                    return;
+
+                pc.TakeDamage(pc.transform.position, new Elements(Elemental.NONE), 100f);
+                pc.GetPlayerController().GetCharacterRB().AddForce(((pc.GetPlayerController().GetCharacterRB().position - pc.transform.position).normalized + Vector3.up).normalized * 15f, ForceMode.Impulse); ;
+            }
+        }
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(hitEffect.gameObject, hitEffect.main.duration);
-
     }
 }

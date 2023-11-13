@@ -204,6 +204,10 @@ public class PlayerController : MonoBehaviour
         aimCamera.LookAt = playerCamera.LookAt;
     }
 
+    public Transform GetPlayerOffsetPosition()
+    {
+        return CameraLook;
+    }
     private bool IsTouchingTerrain()
     {
         CapsuleCollider CapsuleCollider = rb.GetComponent<CapsuleCollider>();
@@ -323,7 +327,7 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateAim()
     {
-        Speed = WalkSpeed / 2.5f;
+        Speed = WalkSpeed / 1.5f;
         playerCamera.gameObject.SetActive(false);
         aimCamera.gameObject.SetActive(true);
     }

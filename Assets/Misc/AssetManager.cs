@@ -22,6 +22,8 @@ public class AssetManager : MonoBehaviour
     public GameObject CrossHair;
     public GameObject HitEffect;
     public GameObject HitExplosion;
+    [Header("Normal Attack Sword")]
+    public GameObject BasicAttackHitEffect;
 
     [Header("Amber")]
     public GameObject ESkillArrowsPrefab;

@@ -11,6 +11,8 @@ public class PlayerStats
     List<CharacterData> CharactersOwnedList;
     List<Item> InventoryList;
 
+    public event Action OnCoinsChanged;
+
     public void AddCharacterToOwnList(CharacterData characterData)
     {
         if (characterData == null)
@@ -68,5 +70,17 @@ public class PlayerStats
     public List<CharacterData> GetCharactersOwnedList()
     {
         return CharactersOwnedList;
+    }
+
+    public void AddMora(int mora)
+    {
+        this.mora += mora;
+        OnCoinsChanged?.Invoke();
+    }
+
+    public void RemoveMora(int mora)
+    {
+        this.mora -= mora;
+        OnCoinsChanged?.Invoke();
     }
 }

@@ -2,9 +2,9 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
+
 
 public class PlayerCharacters : Characters
 {
@@ -83,20 +83,44 @@ public class PlayerCharacters : Characters
     public Characters GetNearestCharacters(float range)
     {
         Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, range, LayerMask.GetMask("Entity"));
+
         if (colliders.Length == 0)
             return null;
 
-        Collider CurrentCollider = colliders[0];
+        List<Collider> colliderCopy = new List<Collider>(colliders);
 
-        for (int i = 0; i < colliders.Length; i++)
+        Collider nearestCollider = colliderCopy[0];
+
+        for (int i = colliderCopy.Count - 1; i >= 0; i--)
         {
-            Collider collider = colliders[i];
-            float Dist1 = (collider.transform.position - GetPlayerController().transform.position).magnitude;
-            float Dist2 = (collider.transform.position - CurrentCollider.transform.position).magnitude;
-            if (Dist1 < Dist2)
-                CurrentCollider = collider;
+            Characters c = colliderCopy[i].GetComponent<Characters>();
+            if (c != null)
+            {
+                if (c.IsDead())
+                {
+                    colliderCopy.RemoveAt(i);
+                }
+                else
+                {
+                    float dist1 = Vector3.Distance(colliderCopy[i].transform.position, GetPlayerController().transform.position);
+                    float dist2 = Vector3.Distance(nearestCollider.transform.position, GetPlayerController().transform.position);
+
+                    if (dist1 <= dist2)
+                    {
+                        nearestCollider = colliderCopy[i];
+                    }
+                }
+            }
         }
-        return CurrentCollider.GetComponent<Characters>();
+
+        if (colliderCopy.Count == 0)
+            nearestCollider = null;
+
+
+        if (nearestCollider != null)
+            return nearestCollider.GetComponent<Characters>();
+        else
+            return null;
     }
 
     public override int GetLevel()

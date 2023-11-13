@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour {
     private void Awake()
     {
         instance = this;
+        PlayerStats = new PlayerStats();
+        EquipCharactersDatalist = new List<CharacterData>();
     }
 
     public static InventoryManager GetInstance()
@@ -27,9 +29,6 @@ public class InventoryManager : MonoBehaviour {
 
     void Start()
     {   
-        PlayerStats = new PlayerStats();
-        EquipCharactersDatalist = new List<CharacterData>();
-
         for (int i = 0; i < startupSOTest.Length; i++)
         {
             CharacterData characterData = new CharacterData(startupSOTest[i]);
@@ -128,5 +127,29 @@ public class InventoryManager : MonoBehaviour {
     public void SetCurrentEquipCharacter(CharacterData CharacterData)
     {
         currentequipCharacter = CharacterData;
+    }
+
+    public void AddMora(int mora)
+    {
+        if (GetPlayerStats() == null)
+            return;
+
+        GetPlayerStats().AddMora(mora);
+    }
+
+    public void RemoveMora(int mora)
+    {
+        if (GetPlayerStats() == null)
+            return;
+
+        GetPlayerStats().RemoveMora(mora);
+    }
+
+    public int GetCoins()
+    {
+        if (GetPlayerStats() == null)
+            return 0;
+
+        return GetPlayerStats().GetMora();
     }
 }
