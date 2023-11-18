@@ -79,7 +79,7 @@ public class ElementalReaction
         onElementChanged?.Invoke(ExistingElements == null);
     }
 
-    private Elements isElementsAlreadyExisted(Elements e)
+    public Elements isElementsAlreadyExisted(Elements e)
     {
         for (int i = 0; i < ElementsList.Count; i++)
         {
@@ -91,6 +91,20 @@ public class ElementalReaction
         }
         return null;
     }
+
+    public Elements isElementsAlreadyExisted(Elemental e)
+    {
+        for (int i = 0; i < ElementsList.Count; i++)
+        {
+            Elements elements = ElementsList[i];
+            if (elements.GetElements() == e)
+            {
+                return elements;
+            }
+        }
+        return null;
+    }
+
 
     public List<Elements> GetElementList()
     {

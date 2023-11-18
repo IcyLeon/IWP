@@ -20,16 +20,20 @@ public class Spitter : BaseEnemy
     private Coroutine PatrolCoroutine;
     [SerializeField] GameObject FireBallPrefab;
     [SerializeField] Transform FireEmitter;
-    private float DefaultAttackRate = 0.6f, CurrentAttackRate;
+    private float DefaultAttackRate = 2.5f, CurrentAttackRate;
+    private float DefaultBasicAttackRate = 0.8f, CurrentBasicAttackRate;
     private float AttackElapsed;
+    private float BasicAttackElapsed;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        state = States.PATROL;
+        state = States.CHASE;
         DetectionRange = 8f;
         CurrentStrafeT = DefaultStrafeT;
+        CurrentBasicAttackRate = DefaultBasicAttackRate;
+        CurrentAttackRate = DefaultAttackRate;
     }
 
     // Update is called once per frame
@@ -113,20 +117,26 @@ public class Spitter : BaseEnemy
 
                 if (!isAttacking)
                 {
-                    if (HasReachedTargetLocation(GetPlayerLocation()))
+                    if (BasicAttackElapsed > CurrentBasicAttackRate)
                     {
-                        Animator.SetTrigger("Attack" + Random.Range(1, 1));
+                        if (HasReachedTargetLocation(GetPlayerLocation()))
+                        {
+                            Animator.SetTrigger("Attack" + Random.Range(1, 1));
+                            CurrentBasicAttackRate = Random.Range(DefaultBasicAttackRate, DefaultBasicAttackRate + 0.3f);
+                        }
                     }
-                    LookAtPlayer();
+                    LookAtPlayerXZ();
                     NavMeshAgent.updateRotation = false;
                     NavMeshAgent.enabled = false;
+                    BasicAttackElapsed += Time.deltaTime;
                 }
                 break;
         }
         Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
-        UpdateDie();
         UpdateShootFireBall();
     }
+
+
 
     private void UpdateShootFireBall()
     {
@@ -138,9 +148,10 @@ public class Spitter : BaseEnemy
         switch(RandomShoot)
         {
             case 2:
-                if (AttackElapsed > CurrentAttackRate)
+                if (AttackElapsed > CurrentAttackRate && !isAttacking)
                 {
                     Animator.SetTrigger("Fire");
+                    LookAtPlayerXZ();
                     AttackElapsed = 0;
                 }
                 break;
@@ -151,9 +162,10 @@ public class Spitter : BaseEnemy
 
     private void ShootFireBall()
     {
+        Vector3 dir = (GetPlayerLocation() - FireEmitter.position).normalized;
         GameObject FireBall = Instantiate(FireBallPrefab, FireEmitter.position, Quaternion.identity);
-        Rigidbody rb = FireBall.GetComponent<Rigidbody>();
-        rb.velocity = (GetPlayerLocation() - rb.position).normalized * 10f;
+        Rigidbody r = FireBall.GetComponent<Rigidbody>();
+        r.velocity = dir * 10f;
         CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.6f);
     }
 

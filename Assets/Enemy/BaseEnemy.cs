@@ -12,21 +12,26 @@ public class BaseEnemy : Characters
     protected float Ratio;
     private PlayerController Player;
     [SerializeField] protected NavMeshAgent NavMeshAgent;
+    private EnemyManager EM;
     protected Vector3 RamdomDestination;
+
+    protected int Staggering = 1;
+    protected int CurrentStaggering;
 
     // Start is called before the first frame update
     protected override void Start()
     {
+        EM = EnemyManager.GetInstance();
         base.Start();
+        CurrentStaggering = 0;
         CurrentHealth = GetMaxHealth();
         DetectionRange = 1f;
         Level = 1;
-        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
+        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
         Player = CharacterManager.GetInstance().GetPlayerController();
     }
-
 
     // Update is called once per frame
     protected override void Update()
@@ -41,7 +46,20 @@ public class BaseEnemy : Characters
             GetElementalReaction().UpdateElementsList();
     }
 
-    protected void LookAtPlayer()
+    protected void TriggerStaggering(int amt = 1, bool conditionToTrigger = true)
+    {
+        if (!isAttacking)
+        {
+            CurrentStaggering += amt;
+            if (CurrentStaggering >= Staggering && conditionToTrigger)
+            {
+                Animator.SetTrigger("Hit");
+                CurrentStaggering = 0;
+            }
+        }
+    }
+
+    protected void LookAtPlayerXZ()
     {
         Vector3 forward = GetPlayerLocation() - transform.position;
         float angle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
@@ -64,6 +82,9 @@ public class BaseEnemy : Characters
                 Destroy(healthBarScript.gameObject);
             if (elementsIndicator)
                 Destroy(elementsIndicator.gameObject);
+
+            EM.SetCurrentEnemyDefeated(EM.GetCurrentEnemyDefeated() + 1);
+
         }
         return isdead;
     }
@@ -140,8 +161,9 @@ public class BaseEnemy : Characters
         return BaseMaxHealth * (1 + Ratio);
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         OnElementReactionHit -= ElementReactionHit;
     }
 

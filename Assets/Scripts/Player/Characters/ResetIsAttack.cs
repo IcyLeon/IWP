@@ -20,7 +20,8 @@ public class ResetIsAttack : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
-        playerCharacters.ResetAttack();
+        if (playerCharacters != null)
+            playerCharacters.ResetAttack();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

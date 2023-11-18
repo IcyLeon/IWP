@@ -73,8 +73,8 @@ GameObject:
   - component: {fileID: 8466442129360495665}
   - component: {fileID: 804135296878626476}
   - component: {fileID: 6912044472943968364}
-  - component: {fileID: 6930265667632514165}
   - component: {fileID: 5889022338644147868}
+  - component: {fileID: 5113795436203482261}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -114,9 +114,8 @@ MonoBehaviour:
   WalkSpeed: 4
   ZoomMultiplier: 3
   CameraLook: {fileID: 2798339205668980939}
-  playerCamera: {fileID: 0}
-  aimCamera: {fileID: 0}
   PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
+  cameraManager: {fileID: 5113795436203482261}
 --- !u!54 &6912044472943968364
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133,20 +132,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!136 &6930265667632514165
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8466442129360495668}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.3
-  m_Height: 1.76
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.86, z: 0}
 --- !u!114 &5889022338644147868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,3 +145,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CoordinateAttackPivot: {fileID: 6226555689438477991}
+--- !u!114 &5113795436203482261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8466442129360495668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24bacb644fd373c42b05c049a8e6e3b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
+  aimCamera: {fileID: 0}

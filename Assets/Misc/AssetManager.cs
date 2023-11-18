@@ -18,10 +18,11 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject WorldText;
     [SerializeField] GameObject SlashPrefab;
 
-    [Header("Normal Attack Bow")]
+    [Header("Bow")]
     public GameObject CrossHair;
     public GameObject HitEffect;
     public GameObject HitExplosion;
+    public ParticleSystem ChargeUpEmitterPrefab;
     [Header("Normal Attack Sword")]
     public GameObject BasicAttackHitEffect;
 

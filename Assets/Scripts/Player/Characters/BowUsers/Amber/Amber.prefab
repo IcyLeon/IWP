@@ -701,6 +701,7 @@ Transform:
   - {fileID: 7871795990691390933}
   - {fileID: 8584595326455705615}
   - {fileID: 7697776521664048134}
+  - {fileID: 1357641750335799808}
   m_Father: {fileID: 5335233905422212777}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1021,6 +1022,37 @@ Transform:
   m_Father: {fileID: 7372585834613399308}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2125649193327058721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1357641750335799808}
+  m_Layer: 3
+  m_Name: EmitterPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1357641750335799808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125649193327058721}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8566315180538934675}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2165292192698876103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,7 +1167,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2313908216546761985}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.3
   m_Height: 1.75
@@ -1154,12 +1186,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
+  rb: {fileID: 0}
   Animator: {fileID: 2641773154839491820}
-  BurstCamera: {fileID: 1858090414510331355}
   Model: {fileID: 0}
+  BurstCamera: {fileID: 1858090414510331355}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}
-  EmitterPivot: {fileID: 8566315180538934675}
+  EmitterPivot: {fileID: 1357641750335799808}
+  ChargeUpFinishPrefab: {fileID: 3444178974453000335, guid: e684bcb8a60b49b40adc1a1ef3a69682,
+    type: 3}
   AmberAuraBurstPrefab: {fileID: 7648515999253688526, guid: 541f93ef40294a941aa72477bba269db,
     type: 3}
 --- !u!95 &2641773154839491820
@@ -2031,6 +2066,13 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

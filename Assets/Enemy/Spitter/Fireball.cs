@@ -14,6 +14,8 @@ public class Fireball : MonoBehaviour
             {
                 if (!damageObject.IsDead())
                     damageObject.TakeDamage(transform.position, new Elements(Elemental.FIRE), 100f);
+
+                Debug.Log(damageObject);
             }
         }
 

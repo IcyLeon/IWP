@@ -12,11 +12,11 @@ public class AIAttackState : StateMachineBehaviour
         BaseEnemy baseEnemy = animator.GetComponent<BaseEnemy>();
         if (baseEnemy)
         {
+            if (navMesh != null)
+            {
+                navMesh.enabled = false;
+            }
             baseEnemy.SetisAttacking(true);
-        }
-        if (navMesh != null)
-        {
-            navMesh.enabled = false;
         }
     }
 

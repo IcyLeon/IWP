@@ -41,7 +41,7 @@ public class SwordCharacters : PlayerCharacters
 
     public void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(GetPlayerController().GetPlayerOffsetPosition().position + transform.forward * 2f, 2f);
+        //Gizmos.DrawSphere(GetPlayerController().GetPlayerOffsetPosition().position + transform.forward * 2f, 2f);
     }
 
     // Start is called before the first frame update
@@ -83,7 +83,7 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !GetPlayerController().IsInMovingState())
             return;
 
         if (GetBurstActive())

@@ -81,10 +81,6 @@ public class Kaqing : SwordCharacters
         }
 
 
-        Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
-        Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
-        Animator.SetBool("isGrounded", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.IDLE);
-
         if (Animator.GetCurrentAnimatorStateInfo(0).IsName("BurstWait") && Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.8f)
             Animator.SetBool("IsBurstFinish", true);
 
@@ -203,7 +199,7 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
             return;
 
         if (GetBurstActive())
@@ -220,7 +216,7 @@ public class Kaqing : SwordCharacters
                     if (targetOrb == null)
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
-                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, GetVirtualCamera().transform.forward, Range);
+                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, Camera.main.transform.forward, Range);
                 }
                 else
                 {
@@ -236,7 +232,7 @@ public class Kaqing : SwordCharacters
 
     protected override void EKey_1Down()
     {
-        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
             return;
 
         if (GetBurstActive())
@@ -278,7 +274,7 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
             return;
 
         if (GetBurstActive())

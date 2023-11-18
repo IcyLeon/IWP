@@ -34,7 +34,8 @@ public class Albino : BaseEnemy
         JumpOnAir = false;
         DetectionRange = 10f;
         StrafeElasped = AttackElapsed = 0f;
-        state = States.PATROL;
+        Staggering = 2;
+        state = States.CHASE;
     }
 
     // Update is called once per frame
@@ -44,10 +45,13 @@ public class Albino : BaseEnemy
         UpdateState();
     }
 
-    public override void OnHit()
+    protected override void OnHit(Elements e)
     {
         if (state == States.PATROL)
             state = States.CHASE;
+
+        base.OnHit(e);
+        TriggerStaggering(1, state != States.SLAM); // hardcode for now
     }
 
     void UpdateState()
@@ -76,14 +80,19 @@ public class Albino : BaseEnemy
                 if (NavMeshAgent.enabled)
                 {
                     if (NavMesh.SamplePosition(NavMeshAgent.transform.position, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
+                    {
                         NavMeshAgent.SetDestination(GetPlayerLocation());
+                    }
                 }
 
                 if (HasReachedTargetLocation(GetPlayerLocation()))
                 {
                     state = States.HEADBUTT;
                 }
-                NavMeshAgent.enabled = NavMeshAgent.updateRotation = true;
+
+                if (!isAttacking)
+                    NavMeshAgent.enabled = NavMeshAgent.updateRotation = true;
+
                 break;
 
             case States.PREPARING:
@@ -107,7 +116,7 @@ public class Albino : BaseEnemy
                     StrafeElasped += Time.deltaTime;
                 }
 
-                LookAtPlayer();
+                LookAtPlayerXZ();
                 NavMeshAgent.updateRotation = false;
                 NavMeshAgent.enabled = true;
 
@@ -135,7 +144,7 @@ public class Albino : BaseEnemy
                             CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.3f);
                         }
                     }
-                    LookAtPlayer();
+                    LookAtPlayerXZ();
                     NavMeshAgent.updateRotation = false;
                     NavMeshAgent.enabled = false;
                     AttackElapsed += Time.deltaTime;
@@ -157,7 +166,6 @@ public class Albino : BaseEnemy
                 break;
         }
         Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
-        UpdateDie();
     }
     private int RandomSign()
     {
@@ -215,11 +223,13 @@ public class Albino : BaseEnemy
         float MaxHeightToLaunchAttack = 8f;
         float Diff = SavePosition.y - transform.position.y;
 
-        if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack)
+        if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack && isAttacking)
         {
             state = States.CHASE;
+            ResetAttack();
+            collider.isTrigger = false;
+            Animator.SetTrigger("Cancel");
             SlamCoroutine = null;
-            yield break;
         }
         Animator.SetTrigger("Jump");
         SetisAttacking(true);

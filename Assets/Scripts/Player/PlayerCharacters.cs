@@ -59,11 +59,6 @@ public class PlayerCharacters : Characters
         this.characterData = characterData;
     }
 
-    public void Attack()
-    {
-
-    }
-
     public override Elements TakeDamage(Vector3 pos, Elements elements, float amt)
     {
         Elements e = base.TakeDamage(pos, elements, amt);
@@ -236,20 +231,19 @@ public class PlayerCharacters : Characters
                 Destroy(GetElementsIndicator().gameObject);
             }
         }
+
+        if (Animator)
+        {
+            Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
+            Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
+            Animator.SetBool("isGrounded", GetPlayerController().IsInMovingState());
+        }
     }
 
     protected virtual void FixedUpdate()
     {
         GetPlayerController().UpdatePhysicsMovement();
         GetPlayerController().UpdateTargetRotation();
-    }
-
-    public CinemachineVirtualCamera GetVirtualCamera()
-    {
-        if (GetPlayerController() == null)
-            return null;
-
-        return GetPlayerController().GetVirtualCamera();
     }
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
@@ -352,17 +346,18 @@ public class PlayerCharacters : Characters
         GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerController().onPlayerStateChange += OnJump;
+        GetPlayerController().onPlayerStateChange += PlayerStateChange;
         GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         DisableInputs();
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         DisableInputs();
     }
@@ -377,17 +372,30 @@ public class PlayerCharacters : Characters
             GetPlayerController().OnE_1Down -= EKey_1Down;
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
-            GetPlayerController().onPlayerStateChange -= OnJump;
+            GetPlayerController().onPlayerStateChange -= PlayerStateChange;
             GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
         }
     }
 
-    private void OnJump()
+    private void PlayerStateChange()
     {
-        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.JUMP)
-            return;
+        Animator.SetBool("isStopping", false);
+        Animator.SetBool("isDashing", false);
 
-        if (Animator != null)
-            Animator.SetTrigger("Jump");
+        switch (GetPlayerController().GetPlayerActionStatus())
+        {
+            case PlayerActionStatus.JUMP:
+                if (Animator != null)
+                    Animator.SetTrigger("Jump");
+                break;
+            case PlayerActionStatus.DASH:
+                if (Animator != null)
+                    Animator.SetBool("isDashing", true);
+                break;
+            case PlayerActionStatus.STOPPING:
+                if (Animator != null)
+                    Animator.SetBool("isStopping", true);
+                break;
+        }
     }
 }

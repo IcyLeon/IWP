@@ -45,7 +45,7 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.IDLE)
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
             return;
 
         Vector3 pos = GetPlayerController().GetPlayerOffsetPosition().position;

@@ -9,6 +9,10 @@ using UnityEngine;
 public enum PlayerActionStatus
 {
     IDLE,
+    WALK,
+    DASH,
+    SPRINTING,
+    STOPPING,
     JUMP,
     FALL,
     PLUNGE
@@ -31,10 +35,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float WalkSpeed, ZoomMultiplier;
     [SerializeField] Transform CameraLook;
-    [SerializeField] CinemachineVirtualCamera playerCamera, aimCamera;
     [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
+    [SerializeField] CameraManager cameraManager;
+    private CharacterManager characterManager;
 
-    private float Speed;
+    private float Speed, RunningSpeed;
 
     private Rigidbody rb;
     private Vector3 Direction;
@@ -42,11 +47,20 @@ public class PlayerController : MonoBehaviour
     private PlayerActionStatus playerActionStatus;
     private PlayerGroundStatus playerGroundStatus;
 
+
     private Quaternion CurrentTargetRotation, Target_Rotation;
     private float timeToReachTargetRotation;
     private float dampedTargetRotationCurrentVelocity;
     private float dampedTargetRotationPassedTime;
     private LockMovement lockMovement;
+
+
+    private float StartDashTime;
+    private int consecutiveDashesUsed;
+    private int ConsecutiveDashesLimitAmount;
+    private float TimeToBeConsideredConsecutive;
+    private bool CanDash;
+
 
     public event Action OnElementalSkillHold;
     public event Action OnE_1Down;
@@ -65,14 +79,6 @@ public class PlayerController : MonoBehaviour
     public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
     {
         return PlayerCoordinateAttackManager;
-    }
-
-    public CinemachineVirtualCamera GetVirtualCamera()
-    {
-        if (!playerCamera.gameObject.activeSelf)
-            return aimCamera;
-        else
-            return playerCamera;
     }
 
     public void SetLockMovemnt(LockMovement lockMovement)
@@ -94,14 +100,18 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InitData();
-    }
-
-    void InitData()
-    {
         ResetSpeed();
+        CanDash = true;
         timeToReachTargetRotation = 0.14f;
+        consecutiveDashesUsed = 0;
+        ConsecutiveDashesLimitAmount = 2;
+        TimeToBeConsideredConsecutive = 1f;
+        RunningSpeed = WalkSpeed * 2f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        characterManager = CharacterManager.GetInstance();
         rb = GetComponent<Rigidbody>();
+
     }
 
     public void SetTargetRotation(Quaternion quaternion)
@@ -117,9 +127,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 AdjustVelocityToSlope(Vector3 velocity)
     {
-        var ray = new Ray(transform.position, Vector3.down);
+        var ray = new Ray(rb.position, Vector3.down);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 0.35f))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 1f))
         {
             var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
             var adjustedVelocity = slopeRotation * velocity;
@@ -138,9 +148,9 @@ public class PlayerController : MonoBehaviour
         if (rb == null)
             return;
 
+        UpdateSprint();
         GatherInput();
         UpdateControls();
-        UpdateCamera();
         OnFall();
         OnPlunge();
     }
@@ -148,16 +158,21 @@ public class PlayerController : MonoBehaviour
     private void OnFall()
     {
         if (GetPlayerActionStatus() == PlayerActionStatus.JUMP && IsTouchingTerrain())
-            playerActionStatus = PlayerActionStatus.FALL;
+            ChangeState(PlayerActionStatus.FALL);
 
         if (GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
         {
             if (IsMovingDown(0f) && playerGroundStatus == PlayerGroundStatus.AIR)
             {
-                playerActionStatus = PlayerActionStatus.FALL;
-                onPlayerStateChange?.Invoke();
+                ChangeState(PlayerActionStatus.FALL);
             }
         }
+    }
+
+    private void ChangeState(PlayerActionStatus state)
+    {
+        playerActionStatus = state;
+        onPlayerStateChange?.Invoke();
     }
 
     private void OnPlunge()
@@ -171,7 +186,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0) && !Physics.Raycast(rb.position, Vector3.down, PlungeAttackRange))
             {
-                playerActionStatus = PlayerActionStatus.PLUNGE;
+                ChangeState(PlayerActionStatus.PLUNGE);
                 StayAfloatFor(0.45f);
             }
         }
@@ -193,35 +208,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpdateCamera()
-    {
-        if (GetCharacterRB() == null)
-            return;
-
-        playerCamera.Follow = CameraLook;
-        playerCamera.LookAt = CameraLook;
-        aimCamera.Follow = playerCamera.Follow;
-        aimCamera.LookAt = playerCamera.LookAt;
-    }
-
     public Transform GetPlayerOffsetPosition()
     {
         return CameraLook;
     }
     private bool IsTouchingTerrain()
     {
-        CapsuleCollider CapsuleCollider = rb.GetComponent<CapsuleCollider>();
+        CapsuleCollider CapsuleCollider = characterManager.GetCurrentCharacter().GetComponent<CapsuleCollider>();
         return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, CapsuleCollider.radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
     }
 
     public bool IsAiming()
     {
-        return aimCamera.gameObject.activeSelf;
+        return cameraManager.GetAimCamera().activeSelf;
     }
 
     private Vector3 GroundPoint()
     {
-        CapsuleCollider CapsuleCollider = rb.GetComponent<CapsuleCollider>();
+        CapsuleCollider CapsuleCollider = characterManager.GetCurrentCharacter().GetComponent<CapsuleCollider>();
         if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit hit, CapsuleCollider.radius / 1.5f))
         {
             return hit.point;
@@ -242,15 +246,36 @@ public class PlayerController : MonoBehaviour
                     rb.position = groundcheckpos;
                     ResetVelocity();
                 }
-                OnPlungeAttack?.Invoke();
+                ChangeState(PlayerActionStatus.IDLE);
             }
             playerGroundStatus = PlayerGroundStatus.GROUND;
-            playerActionStatus = PlayerActionStatus.IDLE;
-            onPlayerStateChange?.Invoke();
+            if (GetPlayerActionStatus() == PlayerActionStatus.FALL)
+                ChangeState(PlayerActionStatus.IDLE);
         }
         else
         {
             playerGroundStatus = PlayerGroundStatus.AIR;
+        }
+
+        Debug.Log(playerActionStatus);
+    }
+
+    private void UpdateSprint()
+    {
+        switch(GetPlayerActionStatus())
+        {
+            case PlayerActionStatus.SPRINTING:
+                if (IsAiming() || InputDirection == Vector3.zero || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+                {
+                    ResetSpeed();
+                    ChangeState(PlayerActionStatus.STOPPING);
+                    return;
+                }
+                Speed = RunningSpeed;
+                break;
+            case PlayerActionStatus.STOPPING:
+                ChangeState(PlayerActionStatus.IDLE);
+                break;
         }
     }
 
@@ -301,6 +326,9 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+            Dash();
+
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)
@@ -317,19 +345,73 @@ public class PlayerController : MonoBehaviour
             OnChargeTrigger?.Invoke();
     }
 
+    public bool IsInMovingState()
+    {
+        return GetPlayerActionStatus() == PlayerActionStatus.IDLE ||
+            GetPlayerActionStatus() == PlayerActionStatus.WALK ||
+            GetPlayerActionStatus() == PlayerActionStatus.SPRINTING;
+    }
+
+    private IEnumerator PerformDash()
+    {
+        ChangeState(PlayerActionStatus.DASH);
+
+        Vector3 dir = transform.forward;
+
+        if (Time.time - StartDashTime > TimeToBeConsideredConsecutive)
+        {
+            StartDashTime = Time.time;
+            consecutiveDashesUsed = 0;
+        }
+
+        consecutiveDashesUsed++;
+
+        if (Direction != Vector3.zero)
+        {
+            dir = Direction;
+        }
+
+        dir.y = 0;
+        dir.Normalize();
+
+        if (consecutiveDashesUsed == ConsecutiveDashesLimitAmount)
+        {
+            StartCoroutine(DisableDashState(1f));
+            consecutiveDashesUsed = 0;
+        }
+
+        rb.velocity = dir * 35f;
+
+        yield return new WaitForSeconds(0.28f);
+        ChangeState(PlayerActionStatus.SPRINTING);
+    }
+
+    private void Dash()
+    {
+        if (!CanDash || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !IsInMovingState() || IsAiming())
+            return;
+
+        StartCoroutine(PerformDash());
+    }
+
+    private IEnumerator DisableDashState(float sec)
+    {
+        CanDash = false;
+        yield return new WaitForSeconds(sec);
+        CanDash = true;
+    }
+
 
     public void UpdateDefaultPosOffsetAndZoom()
     {
         ResetSpeed();
-        playerCamera.gameObject.SetActive(true);
-        aimCamera.gameObject.SetActive(false);
+        cameraManager.CameraDefault();
     }
 
     public void UpdateAim()
     {
         Speed = WalkSpeed / 1.5f;
-        playerCamera.gameObject.SetActive(false);
-        aimCamera.gameObject.SetActive(true);
+        cameraManager.CameraAim();
     }
 
 
@@ -340,8 +422,9 @@ public class PlayerController : MonoBehaviour
         float MouseInput = Input.GetAxisRaw("Mouse ScrollWheel");
 
         InputDirection = new Vector3(HorizontalInput, 0f, VerticalInput);
+        InputDirection.Normalize();
 
-        Direction = (GetVirtualCamera().transform.forward * VerticalInput) + (GetVirtualCamera().transform.right * HorizontalInput);
+        Direction = (Camera.main.transform.forward * VerticalInput) + (Camera.main.transform.right * HorizontalInput);
         Direction.y = 0;
         Direction.Normalize();
 
@@ -376,6 +459,9 @@ public class PlayerController : MonoBehaviour
         if (rb == null)
             return;
 
+        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
+            return;
+
         float currentYAngle = rb.rotation.eulerAngles.y;
 
         if (currentYAngle == CurrentTargetRotation.eulerAngles.y)
@@ -408,18 +494,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     private void ResetSpeed()
     {
         Speed = WalkSpeed;
     }
     public void UpdatePhysicsMovement()
     {
-        if (Direction == Vector3.zero || lockMovement == LockMovement.Enable)
+        if (GetPlayerActionStatus() != PlayerActionStatus.FALL && GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
+            rb.velocity = AdjustVelocityToSlope(rb.velocity);
+
+        if (lockMovement == LockMovement.Enable || GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
             return;
 
-        rb.AddForce((Direction * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
-
-        rb.velocity = AdjustVelocityToSlope(rb.velocity);
+        if (Direction != Vector3.zero)
+        {
+            if (playerActionStatus != PlayerActionStatus.DASH)
+            {
+                rb.AddForce((Direction * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+                ChangeState(PlayerActionStatus.WALK);
+            }
+        }
+        else
+        {
+            if (GetPlayerActionStatus() == PlayerActionStatus.WALK)
+                ChangeState(PlayerActionStatus.STOPPING);
+        }
     }
 
     private void DecelerateVertically()
@@ -451,11 +552,10 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (GetPlayerActionStatus() != PlayerActionStatus.IDLE || IsAiming() || lockMovement == LockMovement.Enable)
+        if (!IsInMovingState() || IsAiming() || lockMovement == LockMovement.Enable)
             return;
 
-        playerActionStatus = PlayerActionStatus.JUMP;
-        onPlayerStateChange?.Invoke();
+        ChangeState(PlayerActionStatus.JUMP);
         ResetVelocity();
         rb.AddForce(8f * Vector3.up, ForceMode.VelocityChange);
     }

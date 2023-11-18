@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1871728354791102326}
   - component: {fileID: 8947986169262794112}
   - component: {fileID: 4484403746063666375}
-  - component: {fileID: 548540539686565601}
   m_Layer: 0
   m_Name: Misc
   m_TagString: Untagged
@@ -76,6 +75,8 @@ MonoBehaviour:
     type: 3}
   HitExplosion: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473,
     type: 3}
+  ChargeUpEmitterPrefab: {fileID: 198199717081307550, guid: 5c1037723130e1741a93b0425a45fdcb,
+    type: 3}
   BasicAttackHitEffect: {fileID: 6621960582307996560, guid: a7c712b55e8b37445a9fb6eea77308af,
     type: 3}
   ESkillArrowsPrefab: {fileID: 5003447499198803686, guid: 9434ba4b8c65c1b4b9b4ac39b1cebe2f,
@@ -96,7 +97,8 @@ MonoBehaviour:
     type: 3}
   ElementalOrbPrefab: {fileID: 2761850602990719289, guid: d8178b63cbc2dd9489253e2e3cea3ce0,
     type: 3}
-  ElectricEffect: {fileID: 0}
+  ElectricEffect: {fileID: 467047049062790365, guid: 4a717d49788ca7f4d9fa725d95995cf8,
+    type: 3}
 --- !u!114 &1871728354791102326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,15 +153,3 @@ MonoBehaviour:
   - elementals: 0200000003000000
     elementalReactionState: 2
   elementalColorSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}
---- !u!114 &548540539686565601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8915231430309993823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 460cdc8877b0a96438e12d5a70dbbf65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

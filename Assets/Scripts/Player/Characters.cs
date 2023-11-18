@@ -4,10 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Characters;
+
 public interface IDamage {
     bool IsDead();
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
-    void OnHit();
 }
 
 public interface ICoordinateAttack
@@ -34,14 +35,19 @@ public class Characters : MonoBehaviour, IDamage
     [SerializeField] protected GameObject Model;
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
+
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
     public onElementReactionHit OnElementReactionHit;
+    public delegate void onHit(Elements e);
+    public onHit HitInfo;
+
     protected Coroutine DieCoroutine;
     protected bool isAttacking;
     protected virtual void Start()
     {
         BaseMaxHealth = CharactersSO.BaseHP;
         isAttacking = false;
+        HitInfo += OnHit;
     }
     public void ResetAttack()
     {
@@ -141,15 +147,21 @@ public class Characters : MonoBehaviour, IDamage
             StartCoroutine(RemoveDelayElementalReaction());
         }
         SetHealth(GetHealth() - amt);
+        HitInfo?.Invoke(e);
+        UpdateDie();
         AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, amt.ToString());
-        OnHit();
 
         return e;
     }
 
-    public virtual void OnHit()
+    protected virtual void OnHit(Elements e)
     {
+        if (e.GetElements() == Elemental.NONE)
+            return;
 
+        //ElementalParticleEffects EPE = Instantiate(AssetManager.GetInstance().ElectricEffect, transform).GetComponent<ElementalParticleEffects>();
+        //EPE.SetDamagableObj(this);
+        //EPE.SetElemental(e.GetElements());
     }
 
     private IEnumerator RemoveDelayElementalReaction()
@@ -186,5 +198,10 @@ public class Characters : MonoBehaviour, IDamage
     public virtual void SetHealth(float val)
     {
         CurrentHealth = val;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        HitInfo -= OnHit;
     }
 }
