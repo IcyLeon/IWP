@@ -80,6 +80,10 @@ public class Characters : MonoBehaviour, IDamage
             healthBarScript.UpdateHealth(GetHealth());
             healthBarScript.UpdateLevel(GetLevel());
         }
+        if (Animator)
+        {
+            Animator.SetBool("isDead", IsDead());
+        }
     }
 
     private void OnAnimatorMove()

@@ -24,7 +24,7 @@ public class PopupPanel : MonoBehaviour
         RectTransform.sizeDelta = OriginalSize;
     }
 
-    public virtual void SetMessage(string text)
+    public void SetMessage(string text)
     {
         MessageText.text = text;
         ShowPopup();

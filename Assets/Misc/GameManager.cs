@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     private int TotalEnemyInWave;
     private Coroutine WaveSpawnCoroutine;
-
+    private AssetManager assetManager;
+    private bool isCompleted = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -34,20 +35,37 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         EM = EnemyManager.GetInstance();
+        assetManager = AssetManager.GetInstance();
         CurrentEnemySpawnedList = new();
         TotalEnemyInWave = 0;
-        EM.OnEnemyWaveChange += OnWaveComplete;
     }
 
     public void NextWave()
     {
-        if (EM.GetCurrentEnemyDefeated() != TotalEnemyInWave && EM.GetCurrentWave() != 0)
+        if (EM.GetCurrentWave() != 0)
+        {
+            if (EM.GetCurrentEnemyDefeated() != TotalEnemyInWave)
+            {
+                return;
+            }
+            else
+            {
+                if (!isCompleted)
+                {
+                    assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Complete");
+                    isCompleted = true;
+                    return;
+                }
+            }
+        }
+        if (isCompleted)
             return;
 
         EM.SetCurrentWave(EM.GetCurrentWave() + 1);
         if (EM.GetCurrentWave() % 5 == 0)
             SpawnBoss();
 
+        assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Incoming!");
         TotalEnemyInWave = CalculateHowManyToSpawn();
         EM.SetEnemiesCount(TotalEnemyInWave);
         WaveSpawn(EnemyType.ALBINO, 0);
@@ -68,9 +86,24 @@ public class GameManager : MonoBehaviour
         WaveSpawnCoroutine = StartCoroutine(WaveSpawnDelay(enemyType, delay));
     }
 
+    private int GetTotalEnemyAlive()
+    {
+        int Count = 0;
+        for(int i = 0; i < CurrentEnemySpawnedList.Count; i++)
+        {
+            BaseEnemy enemy = CurrentEnemySpawnedList[i];
+            if (enemy != null)
+            {
+                if (!enemy.IsDead())
+                    Count++;
+            }
+        }
+        return Count;
+    }
+
     private IEnumerator WaveSpawnDelay(EnemyType enemyType, float sec)
     {
-        while ((CurrentEnemySpawnedList.Count >= MaxEnemyInScene || CurrentEnemySpawnedList.Count >= TotalEnemyInWave - EM.GetCurrentEnemyDefeated()))
+        while (GetTotalEnemyAlive() >= MaxEnemyInScene || GetTotalEnemyAlive() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
         {
             yield return null;
         }
@@ -122,7 +155,9 @@ public class GameManager : MonoBehaviour
         for (int i = CurrentEnemySpawnedList.Count - 1; i > 0; i--)
         {
             if (CurrentEnemySpawnedList[i] == null)
+            {
                 CurrentEnemySpawnedList.RemoveAt(i);
+            }
         }
     }
 

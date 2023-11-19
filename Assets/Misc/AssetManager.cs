@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
@@ -14,9 +15,13 @@ public class AssetManager : MonoBehaviour
 {
     [SerializeField] MessagePanel InfomationPanel;
     [SerializeField] GameObject PopupPanelPrefab;
+    [SerializeField] GameObject MessageNotificationPrefab;
     [SerializeField] ItemsList itemlisttemplate;
     [SerializeField] GameObject WorldText;
     [SerializeField] GameObject SlashPrefab;
+
+    public GameObject SwitchCharacterParticlesEffect;
+    public GameObject PlungeParticlesEffect;
 
     [Header("Bow")]
     public GameObject CrossHair;
@@ -35,6 +40,7 @@ public class AssetManager : MonoBehaviour
     public GameObject StarPrefab;
     private GameObject DraggingItem;
     private PopupPanel PopupPanel;
+    private MessageNotification MessageNotification;
     public GameObject ItemBorderPrefab;
     public GameObject SlotPrefab;
     public GameObject ElementalContainerPrefab;
@@ -46,6 +52,7 @@ public class AssetManager : MonoBehaviour
     public GameObject ElectricEffect;
 
     private static AssetManager instance;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -85,6 +92,21 @@ public class AssetManager : MonoBehaviour
 
         PopupPanel = Instantiate(PopupPanelPrefab, GetCanvasGO().transform).GetComponent<PopupPanel>();
         PopupPanel.SetMessage(text);
+    }
+
+    public void OpenMessageNotification(string text)
+    {
+        if (MessageNotification != null)
+            Destroy(MessageNotification.gameObject);
+
+        MessageNotification = Instantiate(MessageNotificationPrefab, GetCanvasGO().transform).GetComponent<MessageNotification>();
+        MessageNotification.SetMessage(text);
+    }
+
+    public void SpawnParticlesEffect(Vector3 position, GameObject prefab)
+    {
+        ParticleSystem ps = Instantiate(prefab, position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(ps.gameObject, ps.main.duration);
     }
 
     public Canvas GetCanvasGO()

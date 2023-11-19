@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using static CharacterManager;
 
 [Serializable]
 public class CharacterInfo
@@ -27,7 +28,7 @@ public class CharacterManager : MonoBehaviour
     {
         instance = this;
     }
-
+    
     public void AddPlayerCharactersList(PlayerCharacters pc)
     {
         PlayerCharactersList.Add(pc);
@@ -49,6 +50,7 @@ public class CharacterManager : MonoBehaviour
         if (playerController)
             playerController.OnNumsKeyInput += SwapCharactersControls;
 
+        onCharacterChange += CharacterChange;
         SwapCharacters(0);
     }
 
@@ -64,6 +66,14 @@ public class CharacterManager : MonoBehaviour
             CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
             characterData.Update();
         }
+    }
+
+    private void CharacterChange(CharacterData cd)
+    {
+        if (cd == null)
+            return;
+
+        AssetManager.GetInstance().SpawnParticlesEffect(GetPlayerCharacter(cd.GetPlayerCharacterSO()).transform.position, AssetManager.GetInstance().SwitchCharacterParticlesEffect);
     }
 
     private void SwapCharactersControls(int index)

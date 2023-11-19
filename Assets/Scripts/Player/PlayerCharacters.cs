@@ -183,9 +183,12 @@ public class PlayerCharacters : Characters
         base.Start();
     }
 
-    protected virtual Collider[] PlungeAttackGroundHit()
+    protected virtual Collider[] PlungeAttackGroundHit(Vector3 HitPos)
     {
         Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 5f, LayerMask.GetMask("Entity"));
+
+        AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
+
         return colliders;
     }
 
@@ -237,6 +240,10 @@ public class PlayerCharacters : Characters
             Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
             Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerController().IsInMovingState());
+            Animator.SetBool("isWalking", 
+                GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.WALK ||
+                GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.SPRINTING
+                );
         }
     }
 

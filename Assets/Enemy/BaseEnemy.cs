@@ -44,8 +44,18 @@ public class BaseEnemy : Characters
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
+
+        UpdateOutofBound();
     }
 
+    private void UpdateOutofBound()
+    {
+        if (transform.position.y <= -500f)
+        {
+            SetHealth(0);
+            Destroy(gameObject);
+        }
+    }
     protected void TriggerStaggering(int amt = 1, bool conditionToTrigger = true)
     {
         if (!isAttacking)

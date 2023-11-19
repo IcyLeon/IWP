@@ -51,12 +51,15 @@ public class Albino : BaseEnemy
             state = States.CHASE;
 
         base.OnHit(e);
-        TriggerStaggering(1, state != States.SLAM); // hardcode for now
+        TriggerStaggering(1, state != States.SLAM);
     }
 
     void UpdateState()
     {
         if (NavMeshAgent == null)
+            return;
+
+        if (IsDead())
             return;
 
         switch (state)

@@ -43,11 +43,19 @@ public class Spitter : BaseEnemy
         UpdateState();
     }
 
+    protected override void OnHit(Elements e)
+    {
+        TriggerStaggering(2);
+    }
 
     void UpdateState()
     {
         if (NavMeshAgent == null)
             return;
+
+        if (IsDead())
+            return;
+
 
         switch (state)
         {
@@ -137,7 +145,22 @@ public class Spitter : BaseEnemy
     }
 
 
-
+    public void DealDamageToPlayer()
+    {
+        Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player"));
+        for (int i = 0; i < Colliders.Length; i++)
+        {
+            PlayerCharacters pc = Colliders[i].GetComponent<PlayerCharacters>();
+            if (pc != null)
+            {
+                if (pc.GetBurstActive())
+                    return;
+                pc.TakeDamage(pc.GetPlayerController().GetPlayerOffsetPosition().position, new Elements(Elemental.NONE), 100f);
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerController().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+                Destroy(hitEffect.gameObject, hitEffect.main.duration);
+            }
+        }
+    }
     private void UpdateShootFireBall()
     {
         if (state != States.STRAFE)

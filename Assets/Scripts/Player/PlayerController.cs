@@ -37,9 +37,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform CameraLook;
     [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
     [SerializeField] CameraManager cameraManager;
+    [SerializeField] AnimationCurve SlopeSpeedAngles;
     private CharacterManager characterManager;
 
     private float Speed, RunningSpeed;
+    private float SpeedModifier = 1f;
 
     private Rigidbody rb;
     private Vector3 Direction;
@@ -69,13 +71,14 @@ public class PlayerController : MonoBehaviour
     public event OnElementalBurst OnElementalBurstTrigger;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
-    public delegate Collider[] onPlungeAttack();
+    public delegate Collider[] onPlungeAttack(Vector3 HitGroundPos);
     public event onPlungeAttack OnPlungeAttack;
     public delegate void onNumsKeyInput(int val);
     public onNumsKeyInput OnNumsKeyInput;
     public event Action onPlayerStateChange;
     private Coroutine FloatCoroutine;
 
+    private ResizeableCollider resizeableCollider;
     public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
     {
         return PlayerCoordinateAttackManager;
@@ -106,14 +109,21 @@ public class PlayerController : MonoBehaviour
         consecutiveDashesUsed = 0;
         ConsecutiveDashesLimitAmount = 2;
         TimeToBeConsideredConsecutive = 1f;
-        RunningSpeed = WalkSpeed * 2f;
+        RunningSpeed = WalkSpeed * 1.3f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         characterManager = CharacterManager.GetInstance();
         rb = GetComponent<Rigidbody>();
+        resizeableCollider = GetComponent<ResizeableCollider>();
 
+        characterManager.onCharacterChange += RecalculateSize;
+        RecalculateSize(null);
     }
 
+    private void RecalculateSize(CharacterData characterData)
+    {
+        resizeableCollider.Resize();
+    }
     public void SetTargetRotation(Quaternion quaternion)
     {
         Target_Rotation = quaternion;
@@ -125,23 +135,30 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    //private Vector3 AdjustVelocityToSlope(Vector3 velocity)
+    //{
+    //    var ray = new Ray(rb.position, Vector3.down);
+
+    //    if (Physics.Raycast(ray, out RaycastHit hitInfo, 1f))
+    //    {
+    //        var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+    //        var adjustedVelocity = slopeRotation * velocity;
+
+    //        if (adjustedVelocity.y < 0)
+    //        {
+    //            return adjustedVelocity;
+    //        }
+    //    }
+
+    //    return velocity;
+    //}
+
+    private float SetSlopeSpeedModifierOnAngle(float angle)
     {
-        var ray = new Ray(rb.position, Vector3.down);
-
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 1f))
-        {
-            var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-            var adjustedVelocity = slopeRotation * velocity;
-
-            if (adjustedVelocity.y < 0)
-            {
-                return adjustedVelocity;
-            }
-        }
-
-        return velocity;
+        float slopeSpeedModifier = SlopeSpeedAngles.Evaluate(angle);
+        return slopeSpeedModifier;
     }
+
 
     void Update()
     {
@@ -157,8 +174,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnFall()
     {
-        if (GetPlayerActionStatus() == PlayerActionStatus.JUMP && IsTouchingTerrain())
-            ChangeState(PlayerActionStatus.FALL);
+        //if (GetPlayerActionStatus() == PlayerActionStatus.JUMP && IsTouchingTerrain())
+        //    ChangeState(PlayerActionStatus.FALL);
 
         if (GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
         {
@@ -208,14 +225,62 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Float()
+    {
+        if (resizeableCollider == null)
+            return;
+
+        Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
+
+        Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
+
+        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, resizeableCollider.GetSlopeData().FloatRayDistance))
+        {
+            float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
+
+            float slopeSpeedModifier = SetSlopeSpeedModifierOnAngle(groundAngle);
+
+            if (slopeSpeedModifier == 0f)
+            {
+                SpeedModifier = 1f;
+                return;
+            }
+
+            SpeedModifier = slopeSpeedModifier;
+
+            float distanceToFloatingPoint = resizeableCollider.GetColliderCenterInLocalSpace().y * GetCharacterRB().transform.localScale.y - hit.distance;
+
+            if (distanceToFloatingPoint == 0f)
+            {
+                return;
+            }
+
+            float amountToLift = distanceToFloatingPoint * resizeableCollider.GetSlopeData().StepReachForce - GetVerticalVelocity().y;
+
+            Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
+            if (GetPlayerActionStatus() != PlayerActionStatus.JUMP)
+                rb.AddForce(liftForce, ForceMode.VelocityChange);
+        }
+    }
+
     public Transform GetPlayerOffsetPosition()
     {
         return CameraLook;
     }
     private bool IsTouchingTerrain()
     {
-        CapsuleCollider CapsuleCollider = characterManager.GetCurrentCharacter().GetComponent<CapsuleCollider>();
-        return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, CapsuleCollider.radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
+        return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
+    }
+
+    public CapsuleCollider GetCapsuleCollider()
+    {
+        if (characterManager == null)
+            return null;
+
+        if (characterManager.GetCurrentCharacter() == null)
+            return null;
+
+        return characterManager.GetCurrentCharacter().GetComponent<CapsuleCollider>();
     }
 
     public bool IsAiming()
@@ -225,8 +290,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 GroundPoint()
     {
-        CapsuleCollider CapsuleCollider = characterManager.GetCurrentCharacter().GetComponent<CapsuleCollider>();
-        if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit hit, CapsuleCollider.radius / 1.5f))
+        if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit hit, GetCapsuleCollider().radius / 1.5f))
         {
             return hit.point;
         }
@@ -247,6 +311,7 @@ public class PlayerController : MonoBehaviour
                     ResetVelocity();
                 }
                 ChangeState(PlayerActionStatus.IDLE);
+                OnPlungeAttack?.Invoke(GetCapsuleCollider().bounds.min);
             }
             playerGroundStatus = PlayerGroundStatus.GROUND;
             if (GetPlayerActionStatus() == PlayerActionStatus.FALL)
@@ -257,7 +322,7 @@ public class PlayerController : MonoBehaviour
             playerGroundStatus = PlayerGroundStatus.AIR;
         }
 
-        Debug.Log(playerActionStatus);
+        //Debug.Log(playerActionStatus);
     }
 
     private void UpdateSprint()
@@ -343,6 +408,8 @@ public class PlayerController : MonoBehaviour
             OnChargeHold?.Invoke();
         else if (Input.GetMouseButtonUp(0))
             OnChargeTrigger?.Invoke();
+
+        Debug.Log(playerActionStatus);
     }
 
     public bool IsInMovingState()
@@ -380,7 +447,7 @@ public class PlayerController : MonoBehaviour
             consecutiveDashesUsed = 0;
         }
 
-        rb.velocity = dir * 35f;
+        rb.velocity = dir * 15f;
 
         yield return new WaitForSeconds(0.28f);
         ChangeState(PlayerActionStatus.SPRINTING);
@@ -388,7 +455,8 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (!CanDash || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !IsInMovingState() || IsAiming())
+        if (!CanDash || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !IsInMovingState() || IsAiming() ||
+            lockMovement == LockMovement.Enable)
             return;
 
         StartCoroutine(PerformDash());
@@ -481,9 +549,9 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         UpdateGrounded();
-        LimitFallVelocity();
+        Float();
         UpdatePlungeAttack();
-
+        LimitFallVelocity();
         if (IsMovingUp())
         {
             DecelerateVertically();
@@ -502,18 +570,19 @@ public class PlayerController : MonoBehaviour
     }
     public void UpdatePhysicsMovement()
     {
-        if (GetPlayerActionStatus() != PlayerActionStatus.FALL && GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
-            rb.velocity = AdjustVelocityToSlope(rb.velocity);
+        //if (GetPlayerActionStatus() != PlayerActionStatus.FALL && GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
+        //    rb.velocity = AdjustVelocityToSlope(rb.velocity);
 
         if (lockMovement == LockMovement.Enable || GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
             return;
 
         if (Direction != Vector3.zero)
         {
-            if (playerActionStatus != PlayerActionStatus.DASH)
+            if (GetPlayerActionStatus() != PlayerActionStatus.DASH)
             {
-                rb.AddForce((Direction * Speed) - GetHorizontalVelocity(), ForceMode.VelocityChange);
-                ChangeState(PlayerActionStatus.WALK);
+                rb.AddForce((Direction * Speed * SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+                if (GetPlayerActionStatus() != PlayerActionStatus.SPRINTING && GetPlayerActionStatus() != PlayerActionStatus.JUMP)
+                    ChangeState(PlayerActionStatus.WALK);
             }
         }
         else

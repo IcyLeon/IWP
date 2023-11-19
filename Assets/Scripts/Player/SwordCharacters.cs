@@ -66,9 +66,9 @@ public class SwordCharacters : PlayerCharacters
         BasicAttackPhase = 0;
     }
 
-    protected override Collider[] PlungeAttackGroundHit()
+    protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
     {
-        Collider[] colliders = base.PlungeAttackGroundHit();
+        Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
         foreach (Collider collider in colliders)
         {
             IDamage damageObject = collider.gameObject.GetComponent<IDamage>();

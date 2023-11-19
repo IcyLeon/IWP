@@ -47,7 +47,7 @@ public class BowCharacters : PlayerCharacters
                 break;
         }
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && GetPlayerController().GetPlayerGroundStatus() == PlayerGroundStatus.GROUND)
         {
             UpdateAim();
             isAimHold = true;
@@ -58,7 +58,7 @@ public class BowCharacters : PlayerCharacters
         }
 
         if (Input.GetMouseButtonUp(1))
-            ResetThresHold();
+            ResetThresHold(0);
 
         Animator.SetFloat("AimVelocityX", GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
         Animator.SetFloat("AimVelocityZ", GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
@@ -178,7 +178,7 @@ public class BowCharacters : PlayerCharacters
             return;
 
         if (!isAimHold)
-            ResetThresHold();
+            ResetThresHold(0.8f);
 
         if (Time.time - LastClickedTime > AttackRate)
         {
@@ -188,11 +188,12 @@ public class BowCharacters : PlayerCharacters
         }
     }
 
-    private void ResetThresHold()
+    private void ResetThresHold(float delay)
     {
         threasHold_Charged = 0;
+        ChargeElapsed = 0;
         aimState = AimState.NONE;
-        UpdateDefaultPosOffsetAndZoom(0);
+        UpdateDefaultPosOffsetAndZoom(delay);
         DestroyChargeUpEmitter();
         Animator.SetBool("IsAiming", false);
         isChargedFinish = false;
