@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using static Unity.VisualScripting.Member;
 
 public class MainUI : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class MainUI : MonoBehaviour
 
     [SerializeField] GameObject PlayerHealthBarREF;
     [SerializeField] Transform ElementalDisplayUITransform;
+    private List<ArrowIndicator> ArrowIndicatorList; 
 
     public static MainUI GetInstance()
     {
@@ -24,6 +27,43 @@ public class MainUI : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+        ArrowIndicatorList = new();
+    }
+
+    private void Update()
+    {
+        RemoveNullReferenceForArrowList();
+    }
+
+    private ArrowIndicator isExistInList(GameObject source)
+    {
+        for (int i = 0; i < ArrowIndicatorList.Count; i++)
+        {
+            ArrowIndicator a = ArrowIndicatorList[i];
+            if (a.GetSource() == source)
+                return a;
+        }
+        return null;
+    }
+
+    public void RemoveNullReferenceForArrowList()
+    {
+        for (int i = ArrowIndicatorList.Count - 1; i > 0; i--)
+        {
+            ArrowIndicator a = ArrowIndicatorList[i];
+            if (a.GetSource() == null)
+                ArrowIndicatorList.Remove(a);
+        }
+    }
+
+    public void SpawnArrowIndicator(GameObject source)
+    {
+        AssetManager assetManager = AssetManager.GetInstance();
+        if (isExistInList(source) == null)
+        {
+            ArrowIndicator a = assetManager.SpawnArrowIndicator(source);
+            ArrowIndicatorList.Add(a);
         }
     }
 

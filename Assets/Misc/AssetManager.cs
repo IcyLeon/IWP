@@ -13,6 +13,8 @@ public interface IToggle
 
 public class AssetManager : MonoBehaviour
 {
+    [SerializeField] GameObject ArrowIndicatorPrefab;
+
     [SerializeField] MessagePanel InfomationPanel;
     [SerializeField] GameObject PopupPanelPrefab;
     [SerializeField] GameObject MessageNotificationPrefab;
@@ -107,6 +109,14 @@ public class AssetManager : MonoBehaviour
     {
         ParticleSystem ps = Instantiate(prefab, position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(ps.gameObject, ps.main.duration);
+    }
+
+    public ArrowIndicator SpawnArrowIndicator(GameObject source)
+    {
+        ArrowIndicator go = Instantiate(ArrowIndicatorPrefab, GetCanvasGO().transform).GetComponent<ArrowIndicator>();
+        go.SetSource(source);
+        go.transform.SetAsFirstSibling();
+        return go;
     }
 
     public Canvas GetCanvasGO()

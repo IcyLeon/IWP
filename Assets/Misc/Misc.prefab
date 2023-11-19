@@ -61,6 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5f5a7adb311855448d7e04c2acc6e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ArrowIndicatorPrefab: {fileID: 2323810554564742662, guid: 7221a6e0411a50a4c9f2f6f145be4514,
+    type: 3}
   InfomationPanel: {fileID: 0}
   PopupPanelPrefab: {fileID: 3193795201106008823, guid: 10ed41f61657aee41a51b8f8fe4a1866,
     type: 3}

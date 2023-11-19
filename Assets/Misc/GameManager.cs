@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
         public CharactersSO[] IntroduceEnemySO;
         public int Wave;
     }
-
+    [SerializeField] GameObject TeleporterPrefab;
     [SerializeField] GameSpawnInfo[] GameSpawnInfoList;
     [SerializeField] GameSpawnInfo[] BossSpawnInfoList;
     [SerializeField] Terrain terrain;
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     private Coroutine WaveSpawnCoroutine;
     private AssetManager assetManager;
     private bool isCompleted = false;
+
+    private GameObject Teleporter;
 
     // Start is called before the first frame update
     void Awake()
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
                 if (!isCompleted)
                 {
                     assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Complete");
+                    OnWaveComplete();
                     isCompleted = true;
                     return;
                 }
@@ -73,7 +76,11 @@ public class GameManager : MonoBehaviour
 
     private void OnWaveComplete()
     {
+        if (Teleporter != null)
+            return;
 
+        Teleporter = Instantiate(TeleporterPrefab, SpawnRandomlyWithinTerrain(), Quaternion.identity);
+        MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
     }
 
     private void WaveSpawn(EnemyType enemyType, float delay)
@@ -116,6 +123,14 @@ public class GameManager : MonoBehaviour
 
     private void SpawnGroundUnitsWithinTerrain(EnemyType e)
     {
+        Vector3 spawnPosition = SpawnRandomlyWithinTerrain();
+
+        BaseEnemy enemy = Instantiate(EM.GetEnemyInfo(e).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
+        CurrentEnemySpawnedList.Add(enemy);
+    }
+
+    private Vector3 SpawnRandomlyWithinTerrain()
+    {
         TerrainData terrainData = terrain.terrainData;
         float terrainWidth = terrainData.size.x;
         float terrainLength = terrainData.size.z;
@@ -124,12 +139,12 @@ public class GameManager : MonoBehaviour
         float terrainHeight = terrain.SampleHeight(new Vector3(randomX, 0f, randomZ));
         Vector3 spawnPosition = new Vector3(randomX, terrainHeight, randomZ);
 
-        // Sample the position on the NavMesh
         if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 500.0f, NavMesh.AllAreas))
         {
-            BaseEnemy enemy = Instantiate(EM.GetEnemyInfo(e).EnemyPrefab, hit.position, Quaternion.identity).GetComponent<BaseEnemy>();
-            CurrentEnemySpawnedList.Add(enemy);
+            return hit.position;
         }
+
+        return default(Vector3);
     }
 
     private void SpawnBoss()
