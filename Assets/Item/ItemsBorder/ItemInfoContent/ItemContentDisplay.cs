@@ -25,7 +25,7 @@ public class ItemContentDisplay : MonoBehaviour
     {
         Artifacts artifacts = UpgradableItems as Artifacts;
         ArtifactsSO artifactsSO = itemsSO as ArtifactsSO;
-        ArtifactsInfo artifactsInfo = ArtifactsManager.instance.GetArtifactsInfo(artifactsSO);
+        ArtifactsInfo artifactsInfo = ArtifactsManager.GetInstance().GetArtifactsInfo(artifactsSO);
 
         if (artifactsSO == null || artifactsInfo == null)
             return;

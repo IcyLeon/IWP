@@ -93,7 +93,8 @@ public class BaseEnemy : Characters
             if (elementsIndicator)
                 Destroy(elementsIndicator.gameObject);
 
-            EM.SetCurrentEnemyDefeated(EM.GetCurrentEnemyDefeated() + 1);
+            if (GameManager.GetInstance() != null)
+                EM.SetCurrentEnemyDefeated(EM.GetCurrentEnemyDefeated() + 1);
 
         }
         return isdead;
@@ -180,6 +181,9 @@ public class BaseEnemy : Characters
 
     protected void DisableAgent()
     {
+        if (NavMeshAgent == null)
+            return;
+
         NavMeshAgent.updatePosition = false;
         NavMeshAgent.updateRotation = false;
         NavMeshAgent.velocity = Vector3.zero;
@@ -192,6 +196,9 @@ public class BaseEnemy : Characters
 
     protected void EnableAgent()
     {
+        if (NavMeshAgent == null)
+            return;
+
         NavMeshAgent.enabled = true;
         NavMeshAgent.updatePosition = true;
         NavMeshAgent.updateRotation = true;

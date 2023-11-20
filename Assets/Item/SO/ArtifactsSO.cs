@@ -9,6 +9,6 @@ public class ArtifactsSO : ItemTemplate
 
     public override string GetItemType()
     {
-        return ArtifactsManager.instance.GetArtifactPieceName(artifactType);
+        return ArtifactsManager.GetInstance().GetArtifactPieceName(artifactType);
     }
 }

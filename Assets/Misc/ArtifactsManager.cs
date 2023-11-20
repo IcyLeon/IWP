@@ -6,11 +6,7 @@ using UnityEngine.UI;
 
 public class ArtifactsManager : MonoBehaviour
 {
-    private static ArtifactsManager Singleton;
-    public static ArtifactsManager instance
-    {
-        get { return Singleton; }
-    }
+    private static ArtifactsManager instance;
     [SerializeField] ArtifactsListInfo artifactsListInfo;
 
     public ArtifactsListInfo GetArtifactsListInfo()
@@ -20,9 +16,20 @@ public class ArtifactsManager : MonoBehaviour
 
     private void Awake()
     {
-        Singleton = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-
+    public static ArtifactsManager GetInstance()
+    {
+        return instance;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))

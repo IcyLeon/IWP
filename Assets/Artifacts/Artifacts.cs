@@ -144,9 +144,9 @@ public class Artifacts : UpgradableItems
     public Artifacts(ArtifactType type, ArtifactsSet artifactsSet, Rarity rarity)
     {
         ArtifactsSet = artifactsSet;
-        ArtifactsInfo artifactsinfo = ArtifactsManager.instance.GetArtifactsInfo(ArtifactsSet);
+        ArtifactsInfo artifactsinfo = ArtifactsManager.GetInstance().GetArtifactsInfo(ArtifactsSet);
         locked = false;
-        ItemsSO = ArtifactsManager.instance.GetArtifactSO(type, artifactsinfo);
+        ItemsSO = ArtifactsManager.GetInstance().GetArtifactSO(type, artifactsinfo);
         category = Category.ARTIFACTS;
         this.rarity = rarity;
     }

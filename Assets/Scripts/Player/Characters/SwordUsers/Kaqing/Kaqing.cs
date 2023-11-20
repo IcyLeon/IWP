@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class Kaqing : SwordCharacters
@@ -88,12 +87,19 @@ public class Kaqing : SwordCharacters
         base.Update();
     }
 
+    protected override void Dash()
+    {
+        if (!GetBurstActive() && !GetPlayerController().IsAiming() && GetModel().activeSelf)
+            GetPlayerController().Dash();
+    }
+
     protected override void FixedUpdate()
     {
         if (!GetPlayerController().IsAiming() && !GetBurstCamera().gameObject.activeSelf && GetModel().activeSelf)
             GetPlayerController().UpdatePhysicsMovement();
 
-        GetPlayerController().UpdateTargetRotation();
+        if (!GetBurstActive())
+            GetPlayerController().UpdateTargetRotation();
     }
 
     private void BurstAreaDamage(Vector3 pos)

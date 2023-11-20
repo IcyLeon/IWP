@@ -353,9 +353,16 @@ public class PlayerCharacters : Characters
         GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
+        GetPlayerController().OnDash += Dash;
         GetPlayerController().onPlayerStateChange += PlayerStateChange;
         GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
+    }
+
+    protected virtual void Dash()
+    {
+        if (!GetBurstActive() && !GetPlayerController().IsAiming())
+            GetPlayerController().Dash();
     }
 
     protected override void OnDestroy()
@@ -380,6 +387,7 @@ public class PlayerCharacters : Characters
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
             GetPlayerController().onPlayerStateChange -= PlayerStateChange;
+            GetPlayerController().OnDash -= Dash;
             GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
         }
     }

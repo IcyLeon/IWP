@@ -17,7 +17,16 @@ public class InventoryManager : MonoBehaviour {
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); 
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         PlayerStats = new PlayerStats();
         EquipCharactersDatalist = new List<CharacterData>();
     }
@@ -27,20 +36,26 @@ public class InventoryManager : MonoBehaviour {
         return instance;
     }
 
-    void Start()
+    private void Start()
     {   
         for (int i = 0; i < startupSOTest.Length; i++)
         {
             CharacterData characterData = new CharacterData(startupSOTest[i]);
             AddCharacterDataToOwnList(characterData);
-
-            CharacterInfo characterInfo = CharacterManager.GetInstance().GetCharacterInfo(GetCharactersOwnedList()[i].GetItemSO() as PlayerCharacterSO);
-            PlayerCharacters CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, CharacterManager.GetInstance().GetPlayerController().transform).GetComponent<PlayerCharacters>();
-            CharacterManager.GetInstance().AddPlayerCharactersList(CurrentCharacter);
         }
-
+        SpawnCharacters();
     }
 
+    public void SpawnCharacters()
+    {
+        for (int i = 0; i < GetCharactersOwnedList().Count; i++)
+        {
+            CharacterInfo characterInfo = CharacterManager.GetInstance().GetCharacterInfo(GetCharactersOwnedList()[i].GetItemSO() as PlayerCharacterSO);
+            PlayerCharacters CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, CharacterManager.GetInstance().GetPlayerController().transform).GetComponent<PlayerCharacters>();
+            CurrentCharacter.SetCharacterData(GetCharactersOwnedList()[i]);
+            CharacterManager.GetInstance().AddPlayerCharactersList(CurrentCharacter);
+        }
+    }
 
     public List<CharacterData> GetCharactersOwnedList()
     {

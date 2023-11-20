@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         float terrainHeight = terrain.SampleHeight(new Vector3(randomX, 0f, randomZ));
         Vector3 spawnPosition = new Vector3(randomX, terrainHeight, randomZ);
 
-        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 500.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 200.0f, NavMesh.AllAreas))
         {
             return hit.position;
         }

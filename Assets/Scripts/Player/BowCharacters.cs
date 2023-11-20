@@ -89,7 +89,8 @@ public class BowCharacters : PlayerCharacters
         if (!GetBurstCamera().gameObject.activeSelf)
             GetPlayerController().UpdatePhysicsMovement();
 
-        GetPlayerController().UpdateTargetRotation();
+        if (!GetBurstActive())
+            GetPlayerController().UpdateTargetRotation();
     }
 
     private void UpdateAim()

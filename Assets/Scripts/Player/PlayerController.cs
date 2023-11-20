@@ -69,6 +69,8 @@ public class PlayerController : MonoBehaviour
     public delegate bool OnElementalBurst();
     public event Action OnElementalSkillTrigger;
     public event OnElementalBurst OnElementalBurstTrigger;
+    public event Action OnInteract;
+    public event Action OnDash;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
     public delegate Collider[] onPlungeAttack(Vector3 HitGroundPos);
@@ -134,6 +136,11 @@ public class PlayerController : MonoBehaviour
         return playerActionStatus;
     }
 
+    private void OnDestroy()
+    {
+        if (characterManager)
+            characterManager.onCharacterChange -= RecalculateSize;
+    }
 
     //private Vector3 AdjustVelocityToSlope(Vector3 velocity)
     //{
@@ -174,12 +181,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnFall()
     {
-        //if (GetPlayerActionStatus() == PlayerActionStatus.JUMP && IsTouchingTerrain())
-        //    ChangeState(PlayerActionStatus.FALL);
-
         if (GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
         {
-            if (IsMovingDown(0f) && playerGroundStatus == PlayerGroundStatus.AIR)
+            if (IsMovingDown(0f) && GetPlayerGroundStatus() == PlayerGroundStatus.AIR)
             {
                 ChangeState(PlayerActionStatus.FALL);
             }
@@ -219,6 +223,9 @@ public class PlayerController : MonoBehaviour
 
     private void UpdatePlungeAttack()
     {
+        if (rb == null)
+            return;
+
         if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE && rb.useGravity)
         {
             rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
@@ -227,7 +234,10 @@ public class PlayerController : MonoBehaviour
 
     private void Float()
     {
-        if (resizeableCollider == null)
+        if (rb == null)
+            return;
+
+        if (resizeableCollider == null || GetCapsuleCollider() == null)
             return;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
@@ -269,6 +279,9 @@ public class PlayerController : MonoBehaviour
     }
     private bool IsTouchingTerrain()
     {
+        if (rb == null || GetCapsuleCollider() == null)
+            return false;
+
         return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
     }
 
@@ -299,6 +312,9 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateGrounded()
     {
+        if (rb == null)
+            return;
+
         if (IsTouchingTerrain() && GetPlayerActionStatus() != PlayerActionStatus.JUMP)
         {
             rb.velocity = GetHorizontalVelocity();
@@ -313,9 +329,9 @@ public class PlayerController : MonoBehaviour
                 ChangeState(PlayerActionStatus.IDLE);
                 OnPlungeAttack?.Invoke(GetCapsuleCollider().bounds.min);
             }
-            playerGroundStatus = PlayerGroundStatus.GROUND;
             if (GetPlayerActionStatus() == PlayerActionStatus.FALL)
                 ChangeState(PlayerActionStatus.IDLE);
+            playerGroundStatus = PlayerGroundStatus.GROUND;
         }
         else
         {
@@ -392,7 +408,10 @@ public class PlayerController : MonoBehaviour
             Jump();
 
         if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-            Dash();
+            OnDash?.Invoke();
+
+        if (Input.GetKeyDown(KeyCode.F))
+            OnInteract?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
@@ -409,7 +428,7 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
             OnChargeTrigger?.Invoke();
 
-        Debug.Log(playerActionStatus);
+        //Debug.Log(playerActionStatus);
     }
 
     public bool IsInMovingState()
@@ -453,7 +472,7 @@ public class PlayerController : MonoBehaviour
         ChangeState(PlayerActionStatus.SPRINTING);
     }
 
-    private void Dash()
+    public void Dash()
     {
         if (!CanDash || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !IsInMovingState() || IsAiming() ||
             lockMovement == LockMovement.Enable)
@@ -548,9 +567,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (rb == null)
+            return;
+
         UpdateGrounded();
-        Float();
         UpdatePlungeAttack();
+        Float();
         LimitFallVelocity();
         if (IsMovingUp())
         {
@@ -570,8 +592,8 @@ public class PlayerController : MonoBehaviour
     }
     public void UpdatePhysicsMovement()
     {
-        //if (GetPlayerActionStatus() != PlayerActionStatus.FALL && GetPlayerActionStatus() != PlayerActionStatus.PLUNGE)
-        //    rb.velocity = AdjustVelocityToSlope(rb.velocity);
+        if (rb == null)
+            return;
 
         if (lockMovement == LockMovement.Enable || GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
             return;
@@ -622,6 +644,9 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         if (!IsInMovingState() || IsAiming() || lockMovement == LockMovement.Enable)
+            return;
+
+        if (!IsTouchingTerrain())
             return;
 
         ChangeState(PlayerActionStatus.JUMP);

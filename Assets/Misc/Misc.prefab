@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4243826858220681168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5551277449321089044}
+  - component: {fileID: 3660550571977092391}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5551277449321089044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4243826858220681168}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4319325138202050074}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3660550571977092391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4243826858220681168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933a4ba6bf00f444c9f0f2b74480a1db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyInfoList:
+  - enemyType: 0
+    EnemyPrefab: {fileID: 100720, guid: 8252519d2c6fd014bb5f75765a8c4fda, type: 3}
+  - enemyType: 1
+    EnemyPrefab: {fileID: 170346, guid: 88e480c990c9d6a458b5fc85fe1da2aa, type: 3}
 --- !u!1 &8915231430309993823
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,6 +60,7 @@ GameObject:
   - component: {fileID: 4319325138202050074}
   - component: {fileID: 2514232244059768129}
   - component: {fileID: 2296422559368538025}
+  - component: {fileID: 435113665679426361}
   - component: {fileID: 1871728354791102326}
   - component: {fileID: 8947986169262794112}
   - component: {fileID: 4484403746063666375}
@@ -32,7 +82,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5551277449321089044}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -107,6 +158,18 @@ MonoBehaviour:
     type: 3}
   ElectricEffect: {fileID: 467047049062790365, guid: 4a717d49788ca7f4d9fa725d95995cf8,
     type: 3}
+--- !u!114 &435113665679426361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8915231430309993823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503939b17da87f94791c56bdbc543ae6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1871728354791102326
 MonoBehaviour:
   m_ObjectHideFlags: 0

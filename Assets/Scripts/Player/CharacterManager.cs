@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
-using static CharacterManager;
+
 
 [Serializable]
 public class CharacterInfo
@@ -24,9 +24,20 @@ public class CharacterManager : MonoBehaviour
     private InventoryManager inventoryManager;
     private ElementsIndicator elementsIndicator;
 
+
+    private SceneManager SceneManager;
+
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     
     public void AddPlayerCharactersList(PlayerCharacters pc)
@@ -47,11 +58,31 @@ public class CharacterManager : MonoBehaviour
 
     private void Start()
     {
-        if (playerController)
-            playerController.OnNumsKeyInput += SwapCharactersControls;
-
+        SubscribeToKeyInputs();
+        SceneManager = SceneManager.GetInstance();
+        SceneManager.OnSceneChanged += OnSceneChanged;
         onCharacterChange += CharacterChange;
         SwapCharacters(0);
+    }
+
+    private void SubscribeToKeyInputs()
+    {
+        if (playerController)
+            playerController.OnNumsKeyInput += SwapCharactersControls;
+    }
+
+    private void OnSceneChanged()
+    {
+        PlayerCharactersList.Clear();
+        inventoryManager.SpawnCharacters();
+        SubscribeToKeyInputs();
+        SwapCharacters(0);
+    }
+
+    private void OnDestroy()
+    {
+        if (playerController)
+            playerController.OnNumsKeyInput -= SwapCharactersControls;
     }
 
     private void Update()
