@@ -72,6 +72,17 @@ public class Characters : MonoBehaviour, IDamage
     {
         return Model;
     }
+
+    public static bool ContainsParam(Animator _Anim, string _ParamName)
+    {
+        foreach (AnimatorControllerParameter param in _Anim.parameters)
+        {
+            if (param.name == _ParamName) 
+                return true;
+        }
+        return false;
+    }
+
     protected virtual void Update()
     {
         if (healthBarScript)
@@ -82,7 +93,9 @@ public class Characters : MonoBehaviour, IDamage
         }
         if (Animator)
         {
-            Animator.SetBool("isDead", IsDead());
+            if (ContainsParam(Animator, "isDead")) {
+                Animator.SetBool("isDead", IsDead());
+            }
         }
     }
 

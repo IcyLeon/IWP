@@ -55,7 +55,7 @@ public class SceneManager : MonoBehaviour
         switch (t)
         {
             case SceneEnum.GAME:
-                return "SampleScene";
+                return "GameScene";
             case SceneEnum.SHOP:
                 return "ShopScene";
         }

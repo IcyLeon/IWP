@@ -320,7 +320,10 @@ public class PlayerCharacters : Characters
             if (GetBurstCamera())
             {
                 GetBurstCamera().gameObject.SetActive(true);
-                Animator.SetBool("IsBurst", true);
+                if (ContainsParam(Animator, "IsBurst"))
+                {
+                    Animator.SetBool("IsBurst", true);
+                }
                 Animator.SetTrigger("BurstTrigger");
             }
             return true;

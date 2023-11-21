@@ -10,7 +10,7 @@ public class MainUI : MonoBehaviour
 
     [SerializeField] GameObject PlayerHealthBarREF;
     [SerializeField] Transform ElementalDisplayUITransform;
-    [SerializeField] Transform InteractOptionsPivot;
+    [SerializeField] InteractionContentUI InteractOptionsUI;
     private List<ArrowIndicator> ArrowIndicatorList; 
 
     public static MainUI GetInstance()
@@ -18,9 +18,9 @@ public class MainUI : MonoBehaviour
         return instance;
     }
 
-    public Transform GetInteractOptionsPivot()
+    public InteractionContentUI GetInteractOptionsUI()
     {
-        return InteractOptionsPivot;
+        return InteractOptionsUI;
     }
 
     private void Awake()

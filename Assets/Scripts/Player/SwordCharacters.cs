@@ -7,7 +7,7 @@ public class SwordCharacters : PlayerCharacters
 {
     [SerializeField] protected GameObject SwordModel;
     [SerializeField] protected Transform EmitterPivot;
-    protected int BasicAttackPhase = -1;
+    protected int BasicAttackPhase = 0;
     protected Elemental CurrentElement;
     private float LastClickedTime, AttackRate = 0.3f;
     protected int AttackLayer;
@@ -63,7 +63,7 @@ public class SwordCharacters : PlayerCharacters
     }
     public void ResetBasicAttacks()
     {
-        BasicAttackPhase = 0;
+        BasicAttackPhase = 1;
     }
 
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
@@ -86,7 +86,7 @@ public class SwordCharacters : PlayerCharacters
         if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !GetPlayerController().IsInMovingState())
             return;
 
-        if (GetBurstActive())
+        if (GetBurstActive() || !GetModel().activeSelf)
             return;
 
         if (Time.time - LastClickedTime >= 1.5f)

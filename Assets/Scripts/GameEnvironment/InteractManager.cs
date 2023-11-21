@@ -15,9 +15,10 @@ public class InteractManager : MonoBehaviour
     [SerializeField] GameObject InteractablePrefab;
     private MainUI mainUI;
     private PlayerController playerController;
-    private float TotalPreviousInteract;
     private float InteractRange = 5f;
-    private InteractOptions CurrentInteractOptions;
+    private List<InteractOptions> InteractOptionList;
+    private int CurrentIdx;
+    private GameObject SelectionArrow;
 
     // Start is called before the first frame update
     void Start()
@@ -25,16 +26,54 @@ public class InteractManager : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         playerController.OnInteract += InteractObj;
         playerController.OnScroll += Scroll;
-        TotalPreviousInteract = 0;
+        CurrentIdx = -1;
         mainUI = MainUI.GetInstance();
-
+        InteractOptionList = new();
         StartCoroutine(UpdateInteractObj());
     }
 
     private void Scroll(float val)
     {
-        int value = (int)Mathf.Clamp(val, -1f, 1f);
+        if (val == 0)
+            return;
 
+        if (SelectionArrow == null || InteractOptionList.Count == 0)
+            return;
+
+        int value = (int)Mathf.Clamp(val, -1f, 1f);
+        CurrentIdx -= value;
+
+        UpdateCurrentIdxBound();
+    }
+
+    private void UpdateCurrentIdxBound()
+    {
+        if (CurrentIdx > InteractOptionList.Count - 1)
+            CurrentIdx = 0;
+        if (CurrentIdx < 0)
+            CurrentIdx = InteractOptionList.Count - 1;
+    }
+    private void Update()
+    {
+        UpdateArrowPosition();
+    }
+    private void UpdateArrowPosition()
+    {
+        if (CurrentIdx == -1 || InteractOptionList.Count == 0)
+            return;
+
+        Vector2 position = InteractOptionList[CurrentIdx].GetComponent<RectTransform>().anchoredPosition;
+        SelectionArrow.GetComponent<RectTransform>().anchoredPosition = new Vector2(-35f, position.y);
+    }
+
+    private void OnInteractionListChanged()
+    {
+        CurrentIdx = 0;
+
+        UpdateArrowPosition();
+
+        if (InteractOptionList.Count == 0)
+            CurrentIdx = -1;
     }
 
     private void OnDestroy()
@@ -69,7 +108,20 @@ public class InteractManager : MonoBehaviour
                 {
                     RemoveInteractObject(collider);
                     CurrentInteractList.RemoveAt(i);
+                    OnInteractionListChanged();
                 }
+            }
+
+
+            if (TotalInteractList.Length != 0)
+            {
+                if (SelectionArrow == null)
+                    SelectionArrow = mainUI.GetInteractOptionsUI().SpawnInteractionArrow();
+            }
+            else
+            {
+                if (SelectionArrow != null)
+                    Destroy(SelectionArrow.gameObject);
             }
 
             yield return null;
@@ -78,25 +130,33 @@ public class InteractManager : MonoBehaviour
 
     private void RemoveInteractObject(Collider collider)
     {
-        foreach(Transform t in mainUI.GetInteractOptionsPivot())
+        foreach(Transform t in mainUI.GetInteractOptionsUI().GetInteractOptionsPivot())
         {
             InteractOptions InteractOptions = t.GetComponent<InteractOptions>();
             if (InteractOptions.GetIInferact() == collider.GetComponent<IInteract>())
+            {
+                InteractOptionList.Remove(InteractOptions);
                 Destroy(t.gameObject);
+            }
         }
     }
         
     private void SpawnInteractObj(Collider interactObj)
     {
         IInteract interactable = interactObj.GetComponent<IInteract>();
-        InteractOptions interactOptions = Instantiate(InteractablePrefab, mainUI.GetInteractOptionsPivot().transform).GetComponent<InteractOptions>();
+        InteractOptions interactOptions = Instantiate(InteractablePrefab, mainUI.GetInteractOptionsUI().GetInteractOptionsPivot().transform).GetComponent<InteractOptions>();
         interactOptions.SetIInferact(interactable);
         interactOptions.UpdateText(interactable.InteractMessage());
+        InteractOptionList.Add(interactOptions);
+        UpdateCurrentIdxBound();
     }
 
     private void InteractObj()
     {
-        IInteract interactObj = GetNearestInteractObj();
+        if (CurrentIdx == -1)
+            return;
+
+        IInteract interactObj = InteractOptionList[CurrentIdx].GetIInferact();
         if (interactObj != null)
         {
             interactObj.Interact();
