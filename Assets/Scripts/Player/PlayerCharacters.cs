@@ -394,8 +394,10 @@ public class PlayerCharacters : Characters
 
     private void PlayerStateChange()
     {
-        Animator.SetBool("isStopping", false);
-        Animator.SetBool("isDashing", false);
+        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.STOPPING)
+            Animator.SetBool("isStopping", false);
+        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.DASH)
+            Animator.SetBool("isDashing", false);
 
         switch (GetPlayerController().GetPlayerActionStatus())
         {
@@ -412,5 +414,6 @@ public class PlayerCharacters : Characters
                     Animator.SetBool("isStopping", true);
                 break;
         }
+
     }
 }

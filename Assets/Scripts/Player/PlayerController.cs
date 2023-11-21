@@ -75,8 +75,9 @@ public class PlayerController : MonoBehaviour
     public event Action OnChargeTrigger;
     public delegate Collider[] onPlungeAttack(Vector3 HitGroundPos);
     public event onPlungeAttack OnPlungeAttack;
-    public delegate void onNumsKeyInput(int val);
+    public delegate void onNumsKeyInput(float val);
     public onNumsKeyInput OnNumsKeyInput;
+    public onNumsKeyInput OnScroll;
     public event Action onPlayerStateChange;
     private Coroutine FloatCoroutine;
 
@@ -141,24 +142,6 @@ public class PlayerController : MonoBehaviour
         if (characterManager)
             characterManager.onCharacterChange -= RecalculateSize;
     }
-
-    //private Vector3 AdjustVelocityToSlope(Vector3 velocity)
-    //{
-    //    var ray = new Ray(rb.position, Vector3.down);
-
-    //    if (Physics.Raycast(ray, out RaycastHit hitInfo, 1f))
-    //    {
-    //        var slopeRotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-    //        var adjustedVelocity = slopeRotation * velocity;
-
-    //        if (adjustedVelocity.y < 0)
-    //        {
-    //            return adjustedVelocity;
-    //        }
-    //    }
-
-    //    return velocity;
-    //}
 
     private float SetSlopeSpeedModifierOnAngle(float angle)
     {
@@ -410,10 +393,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
             OnDash?.Invoke();
 
+
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();
-
-        if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E))
             OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)
             OnNumsKeyInput?.Invoke(GetInputNums());
@@ -506,7 +489,6 @@ public class PlayerController : MonoBehaviour
     {
         float HorizontalInput = Input.GetAxisRaw("Horizontal");
         float VerticalInput = Input.GetAxisRaw("Vertical");
-        float MouseInput = Input.GetAxisRaw("Mouse ScrollWheel");
 
         InputDirection = new Vector3(HorizontalInput, 0f, VerticalInput);
         InputDirection.Normalize();
@@ -515,6 +497,7 @@ public class PlayerController : MonoBehaviour
         Direction.y = 0;
         Direction.Normalize();
 
+        OnScroll?.Invoke(Input.mouseScrollDelta.y);
     }
 
 

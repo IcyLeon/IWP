@@ -23,7 +23,7 @@ public class CharacterManager : MonoBehaviour
     public OnCharacterChange onCharacterChange;
     private InventoryManager inventoryManager;
     private ElementsIndicator elementsIndicator;
-
+    private int CurrentSelectionIdx;
 
     private SceneManager SceneManager;
 
@@ -38,6 +38,7 @@ public class CharacterManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        CurrentSelectionIdx = -1;
     }
     
     public void AddPlayerCharactersList(PlayerCharacters pc)
@@ -76,7 +77,7 @@ public class CharacterManager : MonoBehaviour
         PlayerCharactersList.Clear();
         inventoryManager.SpawnCharacters();
         SubscribeToKeyInputs();
-        SwapCharacters(0);
+        SwapCharacters(CurrentSelectionIdx);
     }
 
     private void OnDestroy()
@@ -107,9 +108,9 @@ public class CharacterManager : MonoBehaviour
         AssetManager.GetInstance().SpawnParticlesEffect(GetPlayerCharacter(cd.GetPlayerCharacterSO()).transform.position, AssetManager.GetInstance().SwitchCharacterParticlesEffect);
     }
 
-    private void SwapCharactersControls(int index)
+    private void SwapCharactersControls(float index)
     {
-        SwapCharacters(index - 1);
+        SwapCharacters((int)index - 1);
     }
 
     public void SwapCharacters(int index)
@@ -137,6 +138,7 @@ public class CharacterManager : MonoBehaviour
             {
                 Destroy(GetElementsIndicator().gameObject);
             }
+            CurrentSelectionIdx = index;
             onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData());
         }
 

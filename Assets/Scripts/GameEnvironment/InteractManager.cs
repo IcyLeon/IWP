@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,86 @@ public interface IInteract
 
 public class InteractManager : MonoBehaviour
 {
+    [SerializeField] GameObject InteractablePrefab;
     private MainUI mainUI;
     private PlayerController playerController;
-    private float InteractRange = 8f;
+    private float TotalPreviousInteract;
+    private float InteractRange = 5f;
+    private InteractOptions CurrentInteractOptions;
 
     // Start is called before the first frame update
     void Start()
     {
         playerController = GetComponent<PlayerController>();
         playerController.OnInteract += InteractObj;
+        playerController.OnScroll += Scroll;
+        TotalPreviousInteract = 0;
         mainUI = MainUI.GetInstance();
+
+        StartCoroutine(UpdateInteractObj());
+    }
+
+    private void Scroll(float val)
+    {
+        int value = (int)Mathf.Clamp(val, -1f, 1f);
+
+    }
+
+    private void OnDestroy()
+    {
+        if (playerController)
+        {
+            playerController.OnInteract -= InteractObj;
+            playerController.OnScroll -= Scroll;
+        }
+    }
+    private IEnumerator UpdateInteractObj()
+    {
+        List<Collider> CurrentInteractList = new();
+
+        while (true)
+        {
+            Collider[] TotalInteractList = GetAllNearestInteractObj();
+            for (int i = 0; i < TotalInteractList.Length; i++)
+            {
+                if (!CurrentInteractList.Contains(TotalInteractList[i]))
+                {
+                    CurrentInteractList.Add(TotalInteractList[i]);
+                    SpawnInteractObj(TotalInteractList[i]);
+                }
+
+            }
+
+            for (int i = CurrentInteractList.Count - 1; i >= 0; i--)
+            {
+                Collider collider = CurrentInteractList[i];
+                if (!TotalInteractList.Contains(collider))
+                {
+                    RemoveInteractObject(collider);
+                    CurrentInteractList.RemoveAt(i);
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    private void RemoveInteractObject(Collider collider)
+    {
+        foreach(Transform t in mainUI.GetInteractOptionsPivot())
+        {
+            InteractOptions InteractOptions = t.GetComponent<InteractOptions>();
+            if (InteractOptions.GetIInferact() == collider.GetComponent<IInteract>())
+                Destroy(t.gameObject);
+        }
+    }
+        
+    private void SpawnInteractObj(Collider interactObj)
+    {
+        IInteract interactable = interactObj.GetComponent<IInteract>();
+        InteractOptions interactOptions = Instantiate(InteractablePrefab, mainUI.GetInteractOptionsPivot().transform).GetComponent<InteractOptions>();
+        interactOptions.SetIInferact(interactable);
+        interactOptions.UpdateText(interactable.InteractMessage());
     }
 
     private void InteractObj()
@@ -67,15 +138,10 @@ public class InteractManager : MonoBehaviour
 
             if (interactable != null)
             {
-                //Vector3 dir = (collider.transform.position - playerPosition).normalized;
-                //if (!Physics.Raycast(playerPosition, dir))
-                //{
-                //    InteractableList.Add(collider);
-                //}
+
                 InteractableList.Add(collider);
             }
         }
-
         return InteractableList.ToArray();
     }
 }

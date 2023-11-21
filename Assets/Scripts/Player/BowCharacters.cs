@@ -60,8 +60,11 @@ public class BowCharacters : PlayerCharacters
         if (Input.GetMouseButtonUp(1))
             ResetThresHold(0);
 
-        Animator.SetFloat("AimVelocityX", GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
-        Animator.SetFloat("AimVelocityZ", GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
+        if (Animator)
+        {
+            Animator.SetFloat("AimVelocityX", GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
+            Animator.SetFloat("AimVelocityZ", GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
+        }
 
         base.Update();
     }

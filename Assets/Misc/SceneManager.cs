@@ -44,7 +44,6 @@ public class SceneManager : MonoBehaviour
 
         while (!asyncOperation.isDone)
         {
-            // You can implement loading progress or other intermediate steps here
             yield return null;
         }
 
