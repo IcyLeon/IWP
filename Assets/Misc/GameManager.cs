@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -24,8 +25,7 @@ public class GameManager : MonoBehaviour
     private int TotalEnemyInWave;
     private Coroutine WaveSpawnCoroutine;
     private AssetManager assetManager;
-    private bool isCompleted = false;
-
+    private bool isCompleted;
     private GameObject Teleporter;
 
     // Start is called before the first frame update
@@ -39,20 +39,26 @@ public class GameManager : MonoBehaviour
         EM = EnemyManager.GetInstance();
         assetManager = AssetManager.GetInstance();
         CurrentEnemySpawnedList = new();
+        isCompleted = false;
         TotalEnemyInWave = 0;
+    }
+
+    private void OnDestroy()
+    {
+        EM.ResetCounter();
     }
 
     public void NextWave()
     {
         if (EM.GetCurrentWave() != 0)
         {
-            if (EM.GetCurrentEnemyDefeated() != TotalEnemyInWave)
+            if (EM.GetCurrentEnemyDefeated() < TotalEnemyInWave)
             {
                 return;
             }
             else
             {
-                if (!isCompleted)
+                if (!isCompleted && EM.GetCurrentEnemyDefeated() >= EM.GetEnemiesCount())
                 {
                     assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Complete");
                     OnWaveComplete();
@@ -61,6 +67,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
         if (isCompleted)
             return;
 
@@ -163,6 +170,7 @@ public class GameManager : MonoBehaviour
     {
         RemoveInactive();
         NextWave();
+        Debug.Log(isCompleted);
     }
 
     private void RemoveInactive()

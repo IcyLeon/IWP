@@ -15,6 +15,8 @@ public class Objectives : MonoBehaviour
         EM = EnemyManager.GetInstance();
         EM.OnEnemyDefeatedChange += OnEnemyDefeatedChange;
         EM.OnEnemyWaveChange += OnEnemyWaveChange;
+        OnEnemyDefeatedChange();
+        OnEnemyWaveChange();
     }
 
     void OnEnemyWaveChange()
