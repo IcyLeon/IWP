@@ -14,6 +14,7 @@ public class SceneManager : MonoBehaviour
 {
     private static SceneManager instance;
     public event Action OnSceneChanged;
+    private bool isChangingScene;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class SceneManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        isChangingScene = false;
     }
 
     public static SceneManager GetInstance()
@@ -35,18 +37,19 @@ public class SceneManager : MonoBehaviour
 
     public void ChangeScene(SceneEnum scene)
     {
-        StartCoroutine(LoadSceneAsync(GetSceneName(scene)));
+        if (!isChangingScene)
+            StartCoroutine(LoadSceneAsync(GetSceneName(scene)));
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-
+        isChangingScene = true;
         while (!asyncOperation.isDone)
         {
             yield return null;
         }
-
+        isChangingScene = false;
         OnSceneChanged?.Invoke();
     }
 

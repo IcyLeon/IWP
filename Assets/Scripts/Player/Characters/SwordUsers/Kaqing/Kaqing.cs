@@ -178,20 +178,24 @@ public class Kaqing : SwordCharacters
 
     protected override bool ElementalBurstTrigger()
     {
-        bool canTrigger = base.ElementalBurstTrigger();
-        if (canTrigger)
+        if (!Animator.GetCurrentAnimatorStateInfo(0).IsName("AimState") && !Animator.GetCurrentAnimatorStateInfo(0).IsName("2ndSkillThrow") && elementalSKill != ElementalSKill.THROW)
         {
-            if (BurstCoroutine != null)
+            bool canTrigger = base.ElementalBurstTrigger();
+            if (canTrigger)
             {
-                StopCoroutine(BurstCoroutine);
-                BurstCoroutine = null;
+                if (BurstCoroutine != null)
+                {
+                    StopCoroutine(BurstCoroutine);
+                    BurstCoroutine = null;
+                }
+                isBurstActive = true;
+                elementalBurst = ElementalBurst.First_Phase;
+                BurstCoroutine = StartCoroutine(Burst());
             }
-            isBurstActive = true;
-            elementalBurst = ElementalBurst.First_Phase;
-            BurstCoroutine = StartCoroutine(Burst());
+            return canTrigger;
         }
 
-        return canTrigger;
+        return false;
     }
 
     private void UpdateTargetOrb()
@@ -208,7 +212,7 @@ public class Kaqing : SwordCharacters
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
             return;
 
-        if (GetBurstActive())
+        if (GetBurstActive() || !GetModel().activeSelf)
             return;
 
         if (elementalOrb != null)

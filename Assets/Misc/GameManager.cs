@@ -170,7 +170,6 @@ public class GameManager : MonoBehaviour
     {
         RemoveInactive();
         NextWave();
-        Debug.Log(isCompleted);
     }
 
     private void RemoveInactive()

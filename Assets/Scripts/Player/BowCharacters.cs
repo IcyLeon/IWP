@@ -11,7 +11,7 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
-    private Elemental CurrentElemental;
+    private Elemental CurrentElemental, ShootElement;
     private float BaseFireSpeed = 1500f;
     private float ChargedMaxElapsed = 1.5f; // do not change
     private float ChargeElapsed;
@@ -78,7 +78,7 @@ public class BowCharacters : PlayerCharacters
     {
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
-        ArrowFire.SetElements(new Elements(CurrentElemental));
+        ArrowFire.SetElements(new Elements(ShootElement));
         ArrowFire.SetCharacterData(GetCharacterData());
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
         ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + ChargeElapsed));
@@ -108,10 +108,9 @@ public class BowCharacters : PlayerCharacters
             if (!isChargedFinish)
             {
                 SpawnChargeUpFinish();
+                CurrentElemental = GetPlayersSO().Elemental;
                 isChargedFinish = true;
             }
-
-            CurrentElemental = GetPlayersSO().Elemental;
         }
 
         SpawnChargeEmitter();
@@ -170,6 +169,7 @@ public class BowCharacters : PlayerCharacters
                 LookAtDirection(forward);
             }
         }
+        ShootElement = CurrentElemental;
         threasHold_Charged += Time.deltaTime;
     }
 
