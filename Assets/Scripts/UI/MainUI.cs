@@ -11,6 +11,8 @@ public class MainUI : MonoBehaviour
     [SerializeField] GameObject PlayerHealthBarREF;
     [SerializeField] Transform ElementalDisplayUITransform;
     [SerializeField] InteractionContentUI InteractOptionsUI;
+    [SerializeField] GameObject CombatUI;
+    [SerializeField] GameObject[] MainUIList;
     private List<ArrowIndicator> ArrowIndicatorList; 
 
     public static MainUI GetInstance()
@@ -39,7 +41,18 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
+        CombatUI.SetActive(!isMainUIList());
         RemoveNullReferenceForArrowList();
+    }
+
+    public bool isMainUIList()
+    {
+        for(int i = 0; i < MainUIList.Length; i++)
+        {
+            if (MainUIList[i].activeSelf)
+                return true;
+        }
+        return false;
     }
 
     private ArrowIndicator isExistInList(GameObject source)

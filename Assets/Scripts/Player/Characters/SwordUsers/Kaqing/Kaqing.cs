@@ -23,6 +23,7 @@ public class Kaqing : SwordCharacters
     private GameObject targetOrb;
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
+    private ParticleSystem BurstRangeEffect;
     [SerializeField] GameObject TargetOrbPrefab;
     private float threasHold_Charged;
     private ElementalSKill elementalSKill = ElementalSKill.NONE;
@@ -124,11 +125,12 @@ public class Kaqing : SwordCharacters
     private IEnumerator SpawnEffects()
     {
         yield return new WaitForSeconds(0.18f);
-        ParticleSystem go = Instantiate(BurstRangeEffectPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        BurstRangeEffect = Instantiate(BurstRangeEffectPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Vector3 scale = Vector3.one * Range;
         scale.y = 1f;
-        go.transform.localScale = scale;
-        Destroy(go.gameObject, go.main.duration);
+
+        BurstRangeEffect.transform.localScale = scale;
+        Destroy(BurstRangeEffect.gameObject, BurstRangeEffect.main.duration);
 
     }
     private IEnumerator Burst()
@@ -265,14 +267,14 @@ public class Kaqing : SwordCharacters
             forward = transform.forward;
             forward.y = 0;
             forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 2f);
+            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 1.35f);
             ElementalHitPos.y = EmitterPivot.position.y;
         }
         else
         {
             forward = NearestEnemy.transform.position - GetPlayerController().GetPlayerOffsetPosition().position;
             forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 2f);
+            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 1.35f);
         }
     }
 

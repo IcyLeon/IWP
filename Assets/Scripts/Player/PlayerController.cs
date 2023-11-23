@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
     private Coroutine FloatCoroutine;
 
     private ResizeableCollider resizeableCollider;
+    private MainUI mainUI;
+
     public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
     {
         return PlayerCoordinateAttackManager;
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviour
     {
         lockMovement = LockMovement.Enable;
         CharacterManager.GetInstance().SetPlayerController(this);
+        mainUI = MainUI.GetInstance();
     }
 
     // Start is called before the first frame update
@@ -113,9 +116,8 @@ public class PlayerController : MonoBehaviour
         ConsecutiveDashesLimitAmount = 2;
         TimeToBeConsideredConsecutive = 1f;
         RunningSpeed = WalkSpeed * 1.3f;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
         characterManager = CharacterManager.GetInstance();
+        mainUI = MainUI.GetInstance();
         rb = GetComponent<Rigidbody>();
         resizeableCollider = GetComponent<ResizeableCollider>();
 
@@ -387,12 +389,23 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
+        if (mainUI.isMainUIList() || Input.GetKey(KeyCode.LeftAlt))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
         if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
             OnDash?.Invoke();
-
 
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();

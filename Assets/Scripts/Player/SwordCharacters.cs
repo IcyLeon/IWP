@@ -63,7 +63,7 @@ public class SwordCharacters : PlayerCharacters
     }
     public void ResetBasicAttacks()
     {
-        BasicAttackPhase = 1;
+        BasicAttackPhase = 0;
     }
 
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
@@ -94,7 +94,7 @@ public class SwordCharacters : PlayerCharacters
             ResetBasicAttacks();
         }
 
-        if (Time.time - LastClickedTime > AttackRate && !Animator.GetCurrentAnimatorStateInfo(1).IsName("Attack3"))
+        if (Time.time - LastClickedTime > AttackRate && !Animator.GetCurrentAnimatorStateInfo(1).IsName("Attack4"))
         {
             if (NearestEnemy != null)
             {
