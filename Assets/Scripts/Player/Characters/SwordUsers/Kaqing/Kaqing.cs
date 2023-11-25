@@ -211,7 +211,7 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
             return;
 
         if (GetBurstActive() || !GetModel().activeSelf)
@@ -244,7 +244,7 @@ public class Kaqing : SwordCharacters
 
     protected override void EKey_1Down()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
             return;
 
         if (GetBurstActive())
@@ -286,7 +286,7 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().IsInMovingState())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
             return;
 
         if (GetBurstActive())

@@ -239,11 +239,8 @@ public class PlayerCharacters : Characters
         {
             Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
             Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
-            Animator.SetBool("isGrounded", GetPlayerController().IsInMovingState());
-            Animator.SetBool("isWalking", 
-                GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.WALK ||
-                GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.SPRINTING
-                );
+            Animator.SetBool("isGrounded", GetPlayerController().CanPerformAction());
+            Animator.SetBool("isWalking", GetPlayerController().IsMoving());
         }
     }
 
@@ -356,7 +353,7 @@ public class PlayerCharacters : Characters
         GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerController().OnDash += Dash;
+        GetPlayerController().GetStaminaManager().OnDash += Dash;
         GetPlayerController().onPlayerStateChange += PlayerStateChange;
         GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
@@ -390,7 +387,7 @@ public class PlayerCharacters : Characters
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
             GetPlayerController().onPlayerStateChange -= PlayerStateChange;
-            GetPlayerController().OnDash -= Dash;
+            GetPlayerController().GetStaminaManager().OnDash -= Dash;
             GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
         }
     }

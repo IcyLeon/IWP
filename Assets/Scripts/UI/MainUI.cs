@@ -8,7 +8,8 @@ public class MainUI : MonoBehaviour
 {
     private static MainUI instance;
 
-    [SerializeField] GameObject PlayerHealthBarREF;
+    [SerializeField] HealthBarScript PlayerHealthBarREF;
+    [SerializeField] StaminaScript StaminaBarREF;
     [SerializeField] Transform ElementalDisplayUITransform;
     [SerializeField] InteractionContentUI InteractOptionsUI;
     [SerializeField] GameObject CombatUI;
@@ -93,6 +94,11 @@ public class MainUI : MonoBehaviour
 
     public HealthBarScript GetPlayerHealthBar()
     {
-        return PlayerHealthBarREF.GetComponent<HealthBarScript>();
+        return PlayerHealthBarREF;
+    }
+
+    public StaminaScript GetStaminaBar()
+    {
+        return StaminaBarREF;
     }
 }

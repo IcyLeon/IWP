@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CameraManager cameraManager;
     [SerializeField] AnimationCurve SlopeSpeedAngles;
     private CharacterManager characterManager;
-
+    private StaminaManager staminaManager;
     private float Speed, RunningSpeed;
     private float SpeedModifier = 1f;
 
@@ -70,7 +70,6 @@ public class PlayerController : MonoBehaviour
     public event Action OnElementalSkillTrigger;
     public event OnElementalBurst OnElementalBurstTrigger;
     public event Action OnInteract;
-    public event Action OnDash;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
     public delegate Collider[] onPlungeAttack(Vector3 HitGroundPos);
@@ -80,7 +79,6 @@ public class PlayerController : MonoBehaviour
     public onNumsKeyInput OnScroll;
     public event Action onPlayerStateChange;
     private Coroutine FloatCoroutine;
-
     private ResizeableCollider resizeableCollider;
     private MainUI mainUI;
 
@@ -103,6 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         lockMovement = LockMovement.Enable;
         CharacterManager.GetInstance().SetPlayerController(this);
+        staminaManager = GetComponent<StaminaManager>();
         mainUI = MainUI.GetInstance();
     }
 
@@ -120,7 +119,6 @@ public class PlayerController : MonoBehaviour
         mainUI = MainUI.GetInstance();
         rb = GetComponent<Rigidbody>();
         resizeableCollider = GetComponent<ResizeableCollider>();
-
         characterManager.onCharacterChange += RecalculateSize;
         RecalculateSize(null);
     }
@@ -323,7 +321,7 @@ public class PlayerController : MonoBehaviour
             playerGroundStatus = PlayerGroundStatus.AIR;
         }
 
-        //Debug.Log(playerActionStatus);
+        Debug.Log(playerActionStatus);
     }
 
     private void UpdateSprint()
@@ -331,6 +329,12 @@ public class PlayerController : MonoBehaviour
         switch(GetPlayerActionStatus())
         {
             case PlayerActionStatus.SPRINTING:
+                if (!GetStaminaManager().PerformStaminaAction(Time.deltaTime * GetStaminaManager().GetStaminaSO().SprintCostPerSec))
+                {
+                    ChangeState(PlayerActionStatus.WALK);
+                    return;
+                }
+
                 if (IsAiming() || InputDirection == Vector3.zero || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
                 {
                     ResetSpeed();
@@ -405,7 +409,7 @@ public class PlayerController : MonoBehaviour
             Jump();
 
         if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-            OnDash?.Invoke();
+            staminaManager.PerformDash();
 
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();
@@ -427,14 +431,20 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(playerActionStatus);
     }
 
-    public bool IsInMovingState()
+    public bool IsMoving()
+    {
+        return GetPlayerActionStatus() == PlayerActionStatus.WALK ||
+            GetPlayerActionStatus() == PlayerActionStatus.SPRINTING;
+    }
+
+    public bool CanPerformAction()
     {
         return GetPlayerActionStatus() == PlayerActionStatus.IDLE ||
             GetPlayerActionStatus() == PlayerActionStatus.WALK ||
             GetPlayerActionStatus() == PlayerActionStatus.SPRINTING;
     }
 
-    private IEnumerator PerformDash()
+    private IEnumerator PerformDashConsective()
     {
         ChangeState(PlayerActionStatus.DASH);
 
@@ -468,13 +478,18 @@ public class PlayerController : MonoBehaviour
         ChangeState(PlayerActionStatus.SPRINTING);
     }
 
+    public StaminaManager GetStaminaManager()
+    {
+        return staminaManager;
+    }
+
     public void Dash()
     {
-        if (!CanDash || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !IsInMovingState() || IsAiming() ||
+        if (!CanDash || GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !CanPerformAction() || IsAiming() ||
             lockMovement == LockMovement.Enable)
             return;
 
-        StartCoroutine(PerformDash());
+        StartCoroutine(PerformDashConsective());
     }
 
     private IEnumerator DisableDashState(float sec)
@@ -639,7 +654,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (!IsInMovingState() || IsAiming() || lockMovement == LockMovement.Enable)
+        if (!CanPerformAction() || IsAiming() || lockMovement == LockMovement.Enable)
             return;
 
         if (!IsTouchingTerrain())

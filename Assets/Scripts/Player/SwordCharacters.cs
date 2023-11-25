@@ -83,7 +83,7 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !GetPlayerController().IsInMovingState())
+        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !GetPlayerController().CanPerformAction())
             return;
 
         if (GetBurstActive() || !GetModel().activeSelf)
@@ -109,7 +109,10 @@ public class SwordCharacters : PlayerCharacters
                 ResetBasicAttacks();
             }
             SetisAttacking(true);
-            Animator.SetTrigger("Attack" + BasicAttackPhase);
+
+            string AtkName = "Attack" + BasicAttackPhase;
+            if (ContainsParam(Animator, AtkName))
+                Animator.SetTrigger(AtkName);
             LastClickedTime = Time.time;
         }
     }
