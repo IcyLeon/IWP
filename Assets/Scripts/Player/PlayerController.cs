@@ -100,8 +100,10 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         lockMovement = LockMovement.Enable;
-        CharacterManager.GetInstance().SetPlayerController(this);
-        staminaManager = GetComponent<StaminaManager>();
+
+        characterManager = CharacterManager.GetInstance();
+        characterManager.SetPlayerController(this);
+        staminaManager = StaminaManager.GetInstance();
         mainUI = MainUI.GetInstance();
     }
 
@@ -114,13 +116,17 @@ public class PlayerController : MonoBehaviour
         consecutiveDashesUsed = 0;
         ConsecutiveDashesLimitAmount = 2;
         TimeToBeConsideredConsecutive = 1f;
-        RunningSpeed = WalkSpeed * 1.3f;
-        characterManager = CharacterManager.GetInstance();
+        RunningSpeed = WalkSpeed * 1.5f;
         mainUI = MainUI.GetInstance();
         rb = GetComponent<Rigidbody>();
         resizeableCollider = GetComponent<ResizeableCollider>();
-        characterManager.onCharacterChange += RecalculateSize;
+        GetCharacterManager().onCharacterChange += RecalculateSize;
         RecalculateSize(null);
+    }
+
+    public CharacterManager GetCharacterManager()
+    {
+        return characterManager;
     }
 
     private void RecalculateSize(CharacterData characterData)
@@ -139,8 +145,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (characterManager)
-            characterManager.onCharacterChange -= RecalculateSize;
+        if (GetCharacterManager())
+            GetCharacterManager().onCharacterChange -= RecalculateSize;
     }
 
     private float SetSlopeSpeedModifierOnAngle(float angle)
@@ -270,13 +276,13 @@ public class PlayerController : MonoBehaviour
 
     public CapsuleCollider GetCapsuleCollider()
     {
-        if (characterManager == null)
+        if (GetCharacterManager() == null)
             return null;
 
-        if (characterManager.GetCurrentCharacter() == null)
+        if (GetCharacterManager().GetCurrentCharacter() == null)
             return null;
 
-        return characterManager.GetCurrentCharacter().GetComponent<CapsuleCollider>();
+        return GetCharacterManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
     }
 
     public bool IsAiming()
@@ -320,17 +326,17 @@ public class PlayerController : MonoBehaviour
         {
             playerGroundStatus = PlayerGroundStatus.AIR;
         }
-
-        Debug.Log(playerActionStatus);
     }
 
     private void UpdateSprint()
     {
-        switch(GetPlayerActionStatus())
+        float ActualSprint = Time.deltaTime * GetStaminaManager().GetStaminaSO().SprintCostPerSec;
+        switch (GetPlayerActionStatus())
         {
             case PlayerActionStatus.SPRINTING:
-                if (!GetStaminaManager().PerformStaminaAction(Time.deltaTime * GetStaminaManager().GetStaminaSO().SprintCostPerSec))
+                if (!GetStaminaManager().CanPerformStaminaAction(ActualSprint))
                 {
+                    ResetSpeed();
                     ChangeState(PlayerActionStatus.WALK);
                     return;
                 }
@@ -341,6 +347,7 @@ public class PlayerController : MonoBehaviour
                     ChangeState(PlayerActionStatus.STOPPING);
                     return;
                 }
+                GetStaminaManager().PerformStaminaAction(ActualSprint);
                 Speed = RunningSpeed;
                 break;
             case PlayerActionStatus.STOPPING:

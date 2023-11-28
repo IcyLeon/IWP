@@ -548,7 +548,7 @@ ParticleSystem:
   looping: 0
   prewarm: 0
   playOnAwake: 1
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   startDelay:
     serializedVersion: 2
@@ -6114,7 +6114,7 @@ GameObject:
   - component: {fileID: 2517842422874146121}
   - component: {fileID: 6085093017313840816}
   - component: {fileID: 4687002793545345424}
-  - component: {fileID: 4948295148402341173}
+  - component: {fileID: 126533337888610704}
   m_Layer: 5
   m_Name: OutlineAnimation
   m_TagString: Untagged
@@ -6180,22 +6180,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1.1
---- !u!111 &4948295148402341173
-Animation:
+--- !u!95 &126533337888610704
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6358085403443704985}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 4e531019a9cecd049b33b3ffb5e7084f, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 4e531019a9cecd049b33b3ffb5e7084f, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 55324f22229116244b4f00cc8572ead3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &7204913874783424024
 GameObject:
   m_ObjectHideFlags: 0

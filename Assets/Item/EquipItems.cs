@@ -23,7 +23,7 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        switch(itemREF.GetCategory)
+        switch(itemREF.GetItemSO().GetCategory())
         {
             case Category.ARTIFACTS:
                 Artifacts artifacts = itemREF as Artifacts;
@@ -87,7 +87,7 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
 
         if (itemREF != null)
         {
-            switch (itemREF.GetCategory)
+            switch (itemREF.GetItemSO().GetCategory())
             {
                 case Category.ARTIFACTS:
                     Artifacts artifacts = itemREF as Artifacts;

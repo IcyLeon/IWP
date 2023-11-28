@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 public class ArtifactsManager : MonoBehaviour
@@ -48,20 +49,17 @@ public class ArtifactsManager : MonoBehaviour
 
     }
 
-    //public string GetArtifactName(ArtifactType artifactType, ArtifactsSet artifactsSet)
-    //{
-    //    ArtifactsInfo artifactsinfo = GetArtifactsInfo(artifactsSet);
-    //    ArtifactsManager.instance.GetArtifactPiece(artifactType, artifactsinfo).itemTemplate;
-    //}
-
-
     private Artifacts AddArtifactsToInventory(ArtifactType type, ArtifactsSet artifactSet, Rarity rarity)
     {
         ArtifactsInfo artifactsinfo = GetArtifactsInfo(artifactSet);
 
         if (artifactsinfo != null)
         {
-            Artifacts artifacts = new Artifacts(type, artifactSet, rarity);
+            ArtifactsSO artifactsSO = GetArtifactSO(type, artifactsinfo);
+            Type ItemType = artifactsSO.GetType();
+            object instance = Activator.CreateInstance(ItemType, artifactSet, rarity, artifactsSO, true);
+            Artifacts artifacts = (Artifacts)instance;
+
             artifacts.GenerateArtifactStats();
             InventoryManager.GetInstance().AddItems(artifacts);
             return artifacts;

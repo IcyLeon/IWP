@@ -33,7 +33,7 @@ public abstract class UpgradableItems : Item
     }
 
 
-    public UpgradableItems() : base()
+    public UpgradableItems(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
         MaxLevel = 20;
         Level = 0;

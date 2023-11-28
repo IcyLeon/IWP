@@ -59,7 +59,12 @@ public class Characters : MonoBehaviour, IDamage
         isAttacking = value;
     }
 
-    public bool IsDead()
+    public bool GetisAttacking()
+    {
+        return isAttacking;
+    }
+
+    public virtual bool IsDead()
     {
         return GetHealth() <= 0;
     }

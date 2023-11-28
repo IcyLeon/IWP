@@ -10,22 +10,14 @@ public class HealthBarScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI HealthTextDisplay;
     [SerializeField] TextMeshProUGUI LevelTextDisplay;
 
-    private void Start()
-    {
-        slider.onValueChanged.AddListener(UpdateContent);
-    }
-
-    private void UpdateContent(float val)
-    {
-        if (HealthTextDisplay)
-        {
-            HealthTextDisplay.text = val.ToString() + "/" + slider.maxValue.ToString();
-        }
-    }
-
     public void UpdateHealth(float HealthVal)
     {
         slider.value = HealthVal;
+
+        if (HealthTextDisplay)
+        {
+            HealthTextDisplay.text = slider.value.ToString() + "/" + slider.maxValue.ToString();
+        }
     }
 
     public void UpdateLevel(int Level)

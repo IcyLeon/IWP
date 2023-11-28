@@ -93,9 +93,7 @@ public class BaseEnemy : Characters
             if (elementsIndicator)
                 Destroy(elementsIndicator.gameObject);
 
-            if (GameManager.GetInstance() != null)
-                EM.SetCurrentEnemyDefeated(EM.GetCurrentEnemyDefeated() + 1);
-
+            EM.CallOnEnemyKilled(this);
         }
         return isdead;
     }

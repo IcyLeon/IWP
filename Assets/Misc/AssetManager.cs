@@ -44,11 +44,15 @@ public class AssetManager : MonoBehaviour
     private PopupPanel PopupPanel;
     private MessageNotification MessageNotification;
     public GameObject ItemBorderPrefab;
+    public GameObject ShopInfoPrefab;
     public GameObject SlotPrefab;
     public GameObject ElementalContainerPrefab;
     public GameObject ElementalContainerUIPrefab;
-
     public GameObject ElementalOrbPrefab;
+
+    [Header("Currency")]
+    public Sprite Coins;
+    public Sprite Cash;
 
     [Header("UI")]
     public GameObject ElectricEffect;
@@ -85,6 +89,18 @@ public class AssetManager : MonoBehaviour
     public static AssetManager GetInstance()
     {
         return instance;
+    }
+
+    public Sprite GetCurrencySprite(CurrencyType type)
+    {
+        switch(type)
+        {
+            case CurrencyType.COINS:
+                return Coins;
+            case CurrencyType.CASH:
+                return Cash;
+        }
+        return null;
     }
 
     public void OpenPopupPanel(string text)

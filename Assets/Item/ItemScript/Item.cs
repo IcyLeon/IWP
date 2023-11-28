@@ -12,12 +12,6 @@ public abstract class Item {
         get { return FirstCreate; }
         set { FirstCreate = value; }
     }
-    protected Category category;
-    public Category GetCategory
-    {
-        get { return category; }
-        set { category = value; }
-    }
     protected Rarity rarity;
     protected ItemTemplate ItemsSO;
 
@@ -37,8 +31,15 @@ public abstract class Item {
         return rarity;
     }
 
-    public Item()
+    public void SetRarity(Rarity rarity)
     {
-        FirstCreate = true;
+        this.rarity = rarity;
+    }
+
+    public Item(bool isNew, ItemTemplate itemSO)
+    {
+        SetItemsSO(itemSO);
+        SetRarity(itemSO.Rarity);
+        FirstCreate = isNew;
     }
 }

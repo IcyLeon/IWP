@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public enum Category
 {
     FOOD,
+    COLLECTIBLES,
     ARTIFACTS
 }
 
@@ -16,6 +18,16 @@ public class ItemTemplate : ScriptableObject
     public string ItemDesc;
     public Sprite ItemSprite;
     public Rarity Rarity;
+
+    public virtual Type GetType()
+    {
+        return typeof(Item);
+    }
+
+    public virtual Category GetCategory()
+    {
+        return default(Category);
+    }
 
     public virtual string GetItemType()
     {

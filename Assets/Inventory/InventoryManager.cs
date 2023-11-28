@@ -12,7 +12,6 @@ public class InventoryManager : MonoBehaviour {
     public delegate void OnInventoryListChanged();
     public OnInventoryListChanged onInventoryListChanged;
 
-
     [SerializeField] PlayerCharacterSO[] startupSOTest;
 
     private void Awake()
@@ -40,7 +39,7 @@ public class InventoryManager : MonoBehaviour {
     {   
         for (int i = 0; i < startupSOTest.Length; i++)
         {
-            CharacterData characterData = new CharacterData(startupSOTest[i]);
+            CharacterData characterData = new CharacterData(true, startupSOTest[i]);
             AddCharacterDataToOwnList(characterData);
         }
         SpawnCharacters();
@@ -97,9 +96,10 @@ public class InventoryManager : MonoBehaviour {
         if (PlayerStats == null)
             return;
 
-        if (isConsumableItemExisted(item))
+        Item ExistItem = isConsumableItemExisted(item);
+        if (ExistItem != null)
         {
-            ConsumableItem consumableItem = item as ConsumableItem;
+            ConsumableItem consumableItem = ExistItem as ConsumableItem;
             consumableItem.AddAmount();
             return;
         }
@@ -108,20 +108,22 @@ public class InventoryManager : MonoBehaviour {
         onInventoryListChanged?.Invoke();
     }
 
-    private bool isConsumableItemExisted(Item item)
+    private Item isConsumableItemExisted(Item ExistItemCheck)
     {
-        ConsumableItem consumableItem = item as ConsumableItem;
+        ConsumableItem consumableItem = ExistItemCheck as ConsumableItem;
+        if (consumableItem == null)
+            return null;
+
         foreach (Item inventoryItem in PlayerStats.GetINVList())
         {
-            ConsumableItem inventoryConsumableItem = inventoryItem as ConsumableItem;
-            if (inventoryConsumableItem != null && inventoryConsumableItem.Equals(consumableItem))
+            if (inventoryItem.GetItemSO() == consumableItem.GetItemSO())
             {
-                return true;
+                return inventoryItem;
             }
         }
 
 
-        return false;
+        return null;
     }
 
     public void RemoveItems(Item item)
@@ -144,27 +146,41 @@ public class InventoryManager : MonoBehaviour {
         currentequipCharacter = CharacterData;
     }
 
-    public void AddMora(int mora)
+    public void AddCurrency(CurrencyType type, int amt)
     {
-        if (GetPlayerStats() == null)
-            return;
-
-        GetPlayerStats().AddMora(mora);
+        switch (type)
+        {
+            case CurrencyType.COINS:
+                GetPlayerStats().AddCoins(amt);
+                break;
+            case CurrencyType.CASH:
+                GetPlayerStats().AddCash(amt);
+                break;
+        }
     }
 
-    public void RemoveMora(int mora)
+    public void RemoveCurrency(CurrencyType type, int amt)
     {
-        if (GetPlayerStats() == null)
-            return;
-
-        GetPlayerStats().RemoveMora(mora);
+        switch (type)
+        {
+            case CurrencyType.COINS:
+                GetPlayerStats().RemoveCoins(amt);
+                break;
+            case CurrencyType.CASH:
+                GetPlayerStats().RemoveCash(amt);
+                break;
+        }
     }
 
-    public int GetCoins()
+    public int GetCurrency(CurrencyType type)
     {
-        if (GetPlayerStats() == null)
-            return 0;
-
-        return GetPlayerStats().GetMora();
+        switch(type)
+        {
+            case CurrencyType.COINS:
+                return GetPlayerStats().GetCoins();
+            case CurrencyType.CASH:
+                return GetPlayerStats().GetCash();
+        }
+        return 0;
     }
 }

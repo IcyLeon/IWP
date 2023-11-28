@@ -38,17 +38,24 @@ public class GameManager : MonoBehaviour
     {
         EM = EnemyManager.GetInstance();
         assetManager = AssetManager.GetInstance();
+        EM.OnEnemyKilled += OnEnemyKilled;
         CurrentEnemySpawnedList = new();
         isCompleted = false;
         TotalEnemyInWave = 0;
     }
 
+    private void OnEnemyKilled(BaseEnemy enemy)
+    {
+        EM.SetCurrentEnemyDefeated(EM.GetCurrentEnemyDefeated() + 1);
+    }
+
     private void OnDestroy()
     {
         EM.ResetCounter();
+        EM.OnEnemyKilled -= OnEnemyKilled;
     }
 
-    public void NextWave()
+    public void UpdateWave()
     {
         if (EM.GetCurrentWave() != 0)
         {
@@ -169,7 +176,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         RemoveInactive();
-        NextWave();
+        UpdateWave();
     }
 
     private void RemoveInactive()

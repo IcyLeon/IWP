@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8947986169262794112}
   - component: {fileID: 4484403746063666375}
   - component: {fileID: 2142344314217808489}
+  - component: {fileID: 3147508860641607269}
   m_Layer: 0
   m_Name: Misc
   m_TagString: Untagged
@@ -99,6 +100,8 @@ MonoBehaviour:
     type: 3}
   ItemBorderPrefab: {fileID: 5117009378638399214, guid: eaae2fd93d549274883a11e9ffce66e6,
     type: 3}
+  ShopInfoPrefab: {fileID: 8396864430408299624, guid: 7f916574e4db0084eacdd146806d9e8a,
+    type: 3}
   SlotPrefab: {fileID: 537154594175900035, guid: 04bec387e0da13642a751ac93a6748a2,
     type: 3}
   ElementalContainerPrefab: {fileID: 5926851558734250938, guid: 0bb29b25cfb5fee4c8e8c14654adeb03,
@@ -107,6 +110,8 @@ MonoBehaviour:
     type: 3}
   ElementalOrbPrefab: {fileID: 2761850602990719289, guid: d8178b63cbc2dd9489253e2e3cea3ce0,
     type: 3}
+  Coins: {fileID: 21300000, guid: a9911bb6bad21eb4d837e1a8e0710961, type: 3}
+  Cash: {fileID: 21300000, guid: 44425270f48a0254f8e809705803f802, type: 3}
   ElectricEffect: {fileID: 467047049062790365, guid: 4a717d49788ca7f4d9fa725d95995cf8,
     type: 3}
 --- !u!114 &435113665679426361
@@ -192,3 +197,16 @@ MonoBehaviour:
     EnemyPrefab: {fileID: 100720, guid: 8252519d2c6fd014bb5f75765a8c4fda, type: 3}
   - enemyType: 1
     EnemyPrefab: {fileID: 170346, guid: 88e480c990c9d6a458b5fc85fe1da2aa, type: 3}
+--- !u!114 &3147508860641607269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8915231430309993823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a51cb8ec41b5e52438baabadfd60873f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StaminaSO: {fileID: 11400000, guid: 9561d8c28b23591419e1e9c890aa6520, type: 2}

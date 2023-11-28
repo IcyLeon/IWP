@@ -141,13 +141,10 @@ public class Artifacts : UpgradableItems
         return ArtifactsSet;
     }
 
-    public Artifacts(ArtifactType type, ArtifactsSet artifactsSet, Rarity rarity)
+    public Artifacts(ArtifactsSet artifactsSet, Rarity rarity, ItemTemplate itemsSO, bool isNew) : base(isNew, itemsSO)
     {
         ArtifactsSet = artifactsSet;
-        ArtifactsInfo artifactsinfo = ArtifactsManager.GetInstance().GetArtifactsInfo(ArtifactsSet);
         locked = false;
-        ItemsSO = ArtifactsManager.GetInstance().GetArtifactSO(type, artifactsinfo);
-        category = Category.ARTIFACTS;
         this.rarity = rarity;
     }
 

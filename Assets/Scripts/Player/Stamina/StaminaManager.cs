@@ -5,7 +5,8 @@ using System;
 
 public class StaminaManager : MonoBehaviour
 {
-    private float MaxStamina, CurrentStamina;
+    private static StaminaManager instance;
+    private StaminaData staminaData;
     private float WaitToRegen;
     private float WaitElapsed;
     private StaminaScript staminaScript;
@@ -13,23 +14,53 @@ public class StaminaManager : MonoBehaviour
     private PlayerController PlayerController;
     [SerializeField] StaminaSO StaminaSO;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public static StaminaManager GetInstance()
+    {
+        return instance;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        MaxStamina = 100f;
-        CurrentStamina = 0;
         WaitElapsed = 0f;
         WaitToRegen = 1.5f;
-        staminaScript = MainUI.GetInstance().GetStaminaBar();
-        PlayerController = GetComponent<PlayerController>();
+        staminaData = new StaminaData();
     }
-
 
     private void Update()
     {
+        UpdateController();
         UpdateRegen();
         UpdateStamina();
-        CurrentStamina = Mathf.Clamp(CurrentStamina, 0f, MaxStamina);
+    }
+
+    private void UpdateController()
+    {
+        if (PlayerController != null)
+            return;
+
+        PlayerController = CharacterManager.GetInstance().GetPlayerController();
+        PlayerController.onPlayerStateChange += PlayerStateChange;
+    }
+
+    private void OnDestroy()
+    {
+        if (PlayerController == null)
+            return;
+
+        PlayerController.onPlayerStateChange -= PlayerStateChange;
     }
 
     private void UpdateRegen()
@@ -38,7 +69,9 @@ public class StaminaManager : MonoBehaviour
             return;
 
         if (WaitElapsed > WaitToRegen)
-            CurrentStamina += Time.deltaTime * GetStaminaSO().RegenStaminaPerSec;
+        {
+            staminaData.AddStamina(Time.deltaTime * GetStaminaSO().RegenStaminaPerSec);
+        }
 
         WaitElapsed += Time.deltaTime;
         WaitElapsed = Mathf.Clamp(WaitElapsed, 0f, WaitToRegen + 1f);
@@ -51,26 +84,27 @@ public class StaminaManager : MonoBehaviour
 
     private void UpdateStamina()
     {
-        if (staminaScript == null)
-            return;
+        if (staminaData != null)
+            staminaData.Update();
 
-        staminaScript.UpdateStamina(CurrentStamina / MaxStamina);
+        if (staminaScript == null)
+            staminaScript = MainUI.GetInstance().GetStaminaBar();
+
+        staminaScript.UpdateStamina(staminaData.GetCurrentStamina() / staminaData.GetMaxStamina());
     }
 
-    public bool PerformStaminaAction(float Cost)
+    public void PerformStaminaAction(float Cost)
     {
         if (CanPerformStaminaAction(Cost))
         {
-            CurrentStamina -= Cost;
+            staminaData.ConsumeStamina(Cost);
             ResetCounter();
-            return true;
         }
-        return false;
     }
 
-    private bool CanPerformStaminaAction(float Cost)
+    public bool CanPerformStaminaAction(float Cost)
     {
-        return CurrentStamina > Cost;
+        return staminaData.GetCurrentStamina() > Cost;
     }
 
     public StaminaSO GetStaminaSO()
@@ -83,11 +117,20 @@ public class StaminaManager : MonoBehaviour
         if (GetStaminaSO() == null)
             return;
 
-        float Cost = GetStaminaSO().DashCost;
-        if (PerformStaminaAction(Cost))
+        if (CanPerformStaminaAction(GetStaminaSO().DashCost))
         {
             OnDash?.Invoke();
         }
+    }
 
+    private void PlayerStateChange()
+    {
+        switch(PlayerController.GetPlayerActionStatus())
+        {
+            case PlayerActionStatus.DASH:
+                if (GetStaminaSO() != null)
+                    PerformStaminaAction(GetStaminaSO().DashCost);
+                break;
+        }
     }
 }

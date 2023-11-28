@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public enum EnemyType
 {
@@ -11,6 +12,8 @@ public enum EnemyType
 
 public class EnemyManager : MonoBehaviour
 {
+    public delegate void onEnemyKilled(BaseEnemy enemy);
+    public onEnemyKilled OnEnemyKilled;
     private static EnemyManager instance;
     private int CurrentWave;
     private int CurrentEnemyDefeated;
@@ -26,6 +29,11 @@ public class EnemyManager : MonoBehaviour
     }
 
     [SerializeField] EnemyInfo[] EnemyInfoList;
+
+    public void CallOnEnemyKilled(BaseEnemy enemy)
+    {
+        OnEnemyKilled?.Invoke(enemy);
+    }
 
     public EnemyInfo GetEnemyInfo(EnemyType type)
     {

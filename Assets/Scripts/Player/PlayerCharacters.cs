@@ -75,6 +75,14 @@ public class PlayerCharacters : Characters
         CharacterManager.GetInstance().SetElementsIndicator(ElementsIndicator);
     }
 
+    public override bool IsDead()
+    {
+        if (GetCharacterData() != null)
+            return GetCharacterData().isDead();
+
+        return base.IsDead();
+    }
+
     public Characters GetNearestCharacters(float range)
     {
         Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, range, LayerMask.GetMask("Entity"));

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static Unity.VisualScripting.Member;
 
 public class MainUI : MonoBehaviour
 {
@@ -14,7 +13,8 @@ public class MainUI : MonoBehaviour
     [SerializeField] InteractionContentUI InteractOptionsUI;
     [SerializeField] GameObject CombatUI;
     [SerializeField] GameObject[] MainUIList;
-    private List<ArrowIndicator> ArrowIndicatorList; 
+    private List<ArrowIndicator> ArrowIndicatorList;
+    private GameObject BlueEffectObject;
 
     public static MainUI GetInstance()
     {
@@ -42,8 +42,24 @@ public class MainUI : MonoBehaviour
 
     private void Update()
     {
-        CombatUI.SetActive(!isMainUIList());
+        UpdatePause();
         RemoveNullReferenceForArrowList();
+    }
+
+    private void UpdatePause()
+    {
+        bool PauseUI = isMainUIList();
+        CombatUI.SetActive(!PauseUI);
+
+        //if (BlueEffectObject == null)
+        //    BlueEffectObject = GameObject.FindGameObjectWithTag("BlurEffect");
+        //else
+        //    BlueEffectObject.SetActive(PauseUI);
+
+        if (PauseUI)
+            Time.timeScale = 0;
+        else
+            Time.timeScale = 1;
     }
 
     public bool isMainUIList()

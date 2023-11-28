@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class StaminaScript : MonoBehaviour
 {
     [SerializeField] Slider slider;
+    private float velocity;
 
     public void UpdateStamina(float val)
     {
-        slider.value = Mathf.Lerp(slider.value, val, Time.deltaTime * 3f);
+        slider.value = Mathf.SmoothDamp(slider.value, val, ref velocity, 0.3f);
     }
 }

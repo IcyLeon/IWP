@@ -41,6 +41,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
         InventoryManager.GetInstance().onInventoryListChanged += OnInventoryListChanged;
         OnInventoryListChanged();
         TabGroup.onTabChanged += onTabChangedEvent;
+
         DetailsPanel.SetActive(false);
     }
 
@@ -111,6 +112,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
         else
             SetCurrentBackground(SelectedItemsSO.Rarity);
 
+        SelectedItemImage.sprite = SelectedItemsSO.ItemSprite;
         EquipButton.SetItemREF(SelectedItem);
         LockButton.SetItemREF(SelectedItem);
         ItemContentDisplay.RefreshItemContentDisplay(SelectedItem, SelectedItemsSO);
@@ -138,6 +140,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
         foreach (ItemButton itemButton in itembuttonlist)
         {
             itemButton.onButtonClick -= GetItemSelected;
+            itemButton.onButtonUpdate -= GetItemButtonUpdate;
             Destroy(itemButton.gameObject);
         }
         itembuttonlist.Clear();
@@ -155,7 +158,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
             itemButton.onButtonUpdate += GetItemButtonUpdate;
 
             UpgradableItems UpgradableItemREF = itemButton.GetItemREF() as UpgradableItems;
-            switch (UpgradableItemREF.GetCategory)
+            switch (itemButton.GetItemsSO().GetCategory())
             {
                 case Category.ARTIFACTS:
                     Artifacts artifacts = UpgradableItemREF as Artifacts;
@@ -174,7 +177,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
     {
         if (itemButton.GetItemREF() != null)
         {
-            switch (itemButton.GetItemREF().GetCategory)
+            switch (itemButton.GetItemsSO().GetCategory())
             {
                 case Category.ARTIFACTS:
                     Artifacts artifacts = itemButton.GetItemREF() as Artifacts;
@@ -201,8 +204,6 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
         if (SelectedItemsSO == null)
             return;
-
-        SelectedItemImage.sprite = SelectedItemsSO.ItemSprite;
 
         DisplaySelectedItem();
     }

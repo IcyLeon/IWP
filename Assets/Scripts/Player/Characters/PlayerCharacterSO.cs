@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum Elemental
 {
@@ -25,4 +26,9 @@ public class PlayerCharacterSO : CharactersSO
     public float ElementalSkillsCooldown;
     public float UltiSkillCooldown;
     public float EnergyCost;
+
+    public override Type GetType()
+    {
+        return typeof(CharacterData);
+    }
 }

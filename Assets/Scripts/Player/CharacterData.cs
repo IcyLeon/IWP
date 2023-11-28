@@ -49,7 +49,7 @@ public class CharacterData : UpgradableItems
         return EnergyBurstCost;
     }
 
-    public CharacterData(PlayerCharacterSO playerCharacterSO) : base()
+    public CharacterData(bool isNew, PlayerCharacterSO playerCharacterSO) : base(isNew, playerCharacterSO)
     {
         SetItemsSO(playerCharacterSO);
         BaseMaxHealth = playerCharacterSO.BaseHP;
@@ -66,7 +66,7 @@ public class CharacterData : UpgradableItems
         elementalReaction = new ElementalReaction();
     }
 
-    public CharacterData(PlayerCharacterSO playerCharacterSO, float damage, int level, float currentEnergy)
+    public CharacterData(bool isNew, PlayerCharacterSO playerCharacterSO, float damage, int level, float currentEnergy) : base(isNew, playerCharacterSO)
     {
         SetItemsSO(playerCharacterSO);
         BaseMaxHealth = playerCharacterSO.BaseHP;
@@ -145,6 +145,10 @@ public class CharacterData : UpgradableItems
         return CurrentHealth;
     }
 
+    public bool isDead()
+    {
+        return CurrentHealth <= 0;
+    }
     public void SetHealth(float Hp)
     {
         CurrentHealth = Hp;

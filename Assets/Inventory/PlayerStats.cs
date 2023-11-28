@@ -7,11 +7,13 @@ public class PlayerStats
 {
     private int Load;
     private int MaxLoad;
-    private int mora;
+    private int coins;
+    private int cash;
     List<CharacterData> CharactersOwnedList;
     List<Item> InventoryList;
-
-    public event Action OnCoinsChanged;
+    public delegate void onPlayerCurrencyChanged();
+    public onPlayerCurrencyChanged OnCoinsChanged;
+    public onPlayerCurrencyChanged OnCashChanged;
 
     public void AddCharacterToOwnList(CharacterData characterData)
     {
@@ -35,9 +37,14 @@ public class PlayerStats
         return null;
     }
 
-    public int GetMora()
+    public int GetCoins()
     {
-        return mora;
+        return coins;
+    }
+
+    public int GetCash()
+    {
+        return cash;
     }
 
     public List<Item> GetINVList()
@@ -62,7 +69,7 @@ public class PlayerStats
     {
         Load = 0;
         MaxLoad = 10000;
-        mora = 0;
+        coins = 0;
         InventoryList = new List<Item>();
         CharactersOwnedList = new List<CharacterData>();
     }
@@ -72,15 +79,27 @@ public class PlayerStats
         return CharactersOwnedList;
     }
 
-    public void AddMora(int mora)
+    public void AddCoins(int val)
     {
-        this.mora += mora;
+        coins += val;
         OnCoinsChanged?.Invoke();
     }
 
-    public void RemoveMora(int mora)
+    public void RemoveCoins(int val)
     {
-        this.mora -= mora;
+        coins -= val;
         OnCoinsChanged?.Invoke();
+    }
+
+    public void AddCash(int val)
+    {
+        cash += val;
+        OnCashChanged?.Invoke();
+    }
+
+    public void RemoveCash(int val)
+    {
+        cash -= val;
+        OnCashChanged?.Invoke();
     }
 }

@@ -25,7 +25,7 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        BaseEnemy BaseEnemy = other.transform.GetComponent<BaseEnemy>();
+        BaseEnemy BaseEnemy = other.GetComponent<BaseEnemy>();
 
         if (BaseEnemy == null)
         {

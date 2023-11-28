@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -8,8 +9,9 @@ public class SwordCharacters : PlayerCharacters
     [SerializeField] protected GameObject SwordModel;
     [SerializeField] protected Transform EmitterPivot;
     protected int BasicAttackPhase = 0;
+    private int MaxAttackPhase;
     protected Elemental CurrentElement;
-    private float LastClickedTime, AttackRate = 0.3f;
+    private float LastClickedTime, AttackRate = 0.2f;
     protected int AttackLayer;
 
     public void SpawnSlash()
@@ -39,15 +41,12 @@ public class SwordCharacters : PlayerCharacters
 
     }
 
-    public void OnDrawGizmos()
-    {
-        //Gizmos.DrawSphere(GetPlayerController().GetPlayerOffsetPosition().position + transform.forward * 2f, 2f);
-    }
-
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        AttackLayer = Animator.GetLayerIndex("Attack Layer");
+        MaxAttackPhase = 4;
         ResetBasicAttacks();
     }
 
@@ -64,6 +63,13 @@ public class SwordCharacters : PlayerCharacters
     public void ResetBasicAttacks()
     {
         BasicAttackPhase = 0;
+
+        for (int i = 1; i <= MaxAttackPhase; i++)
+        {
+            string AtkName = "Attack" + BasicAttackPhase;
+            if (ContainsParam(Animator, AtkName))
+                Animator.ResetTrigger(AtkName);
+        }
     }
 
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
@@ -94,7 +100,7 @@ public class SwordCharacters : PlayerCharacters
             ResetBasicAttacks();
         }
 
-        if (Time.time - LastClickedTime > AttackRate && !Animator.GetCurrentAnimatorStateInfo(1).IsName("Attack4"))
+        if (Time.time - LastClickedTime > AttackRate && !Animator.GetCurrentAnimatorStateInfo(AttackLayer).IsName("Attack4"))
         {
             if (NearestEnemy != null)
             {
@@ -104,7 +110,7 @@ public class SwordCharacters : PlayerCharacters
             }
 
             BasicAttackPhase++;
-            if (BasicAttackPhase > 4)
+            if (BasicAttackPhase > MaxAttackPhase)
             {
                 ResetBasicAttacks();
             }
@@ -113,6 +119,7 @@ public class SwordCharacters : PlayerCharacters
             string AtkName = "Attack" + BasicAttackPhase;
             if (ContainsParam(Animator, AtkName))
                 Animator.SetTrigger(AtkName);
+
             LastClickedTime = Time.time;
         }
     }

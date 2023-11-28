@@ -8,11 +8,16 @@ public class ItemContentManager : MonoBehaviour
 {
     [SerializeField] Image ItemSprite;
     [SerializeField] Image ItemCardImage;
-    [SerializeField] GameObject[] ItemContent;
     [SerializeField] ItemContentDisplay ItemContentDisplay;
     [SerializeField] LockItem LockButton;
     private Item ItemREF;
     private ItemTemplate ItemsSO;
+
+    private void Start()
+    {
+        if (ItemREF == null && ItemsSO == null)
+            TogglePopup(false);
+    }
 
     public void SetItemREF(Item item, ItemTemplate itemsSO)
     {
@@ -33,16 +38,9 @@ public class ItemContentManager : MonoBehaviour
     }
     private void DisplayContent()
     {
-        foreach (GameObject go in ItemContent)
-            go.SetActive(false);
-
         if (ItemREF != null)
         {
             ItemCardImage.sprite = AssetManager.GetInstance().GetItemListTemplate().raritylist[(int)ItemREF.GetRarity()].ItemCardImage;
-            if (ItemREF is UpgradableItems)
-                ItemContent[0].SetActive(true);
-            else if (ItemREF is ConsumableItem)
-                ItemContent[1].SetActive(true);
         }
         else
         {
@@ -52,6 +50,8 @@ public class ItemContentManager : MonoBehaviour
         ItemSprite.sprite = ItemsSO.ItemSprite;
         ItemContentDisplay.RefreshItemContentDisplay(ItemREF, ItemsSO);
         LockButton.SetItemREF(ItemREF);
+
+        TogglePopup(ItemREF != null || ItemsSO != null);
     }
     public void TogglePopup(bool active)
     {

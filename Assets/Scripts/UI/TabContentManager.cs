@@ -20,9 +20,12 @@ public class TabContentManager : MonoBehaviour
         TabToggleGroupList = TabToggleGroup.GetComponentsInChildren<Toggle>();
         foreach (var tabToggle in TabToggleGroupList)
         {
+            ResetToggle(tabToggle);
+
             int index = ArrayUtility.IndexOf(TabToggleGroupList, tabToggle);
             tabToggle.onValueChanged.AddListener(value => ToggleDetails(index));
         }
+
     }
     private void Start()
     {
@@ -30,12 +33,18 @@ public class TabContentManager : MonoBehaviour
     }
     void ToggleDetails(int idx)
     {
+        if (idx >= TabContent.Length)
+            return;
+
         TabContent[idx].gameObject.SetActive(TabToggleGroupList[idx].isOn);
         Toggle(TabToggleGroupList[idx]);
     }
 
     void Toggle(Toggle toggle)
     {
+        if (toggle == null)
+            return;
+
         if (toggle.isOn)
         {
             toggle.transform.localScale = new Vector3(1.3f, 1.3f, 1);
@@ -43,8 +52,13 @@ public class TabContentManager : MonoBehaviour
         }
         else
         {
-            toggle.transform.localScale = Vector3.one;
-            toggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = DefaultColor;
+            ResetToggle(toggle);
         }
+    }
+
+    void ResetToggle(Toggle toggle)
+    {
+        toggle.transform.localScale = Vector3.one;
+        toggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = DefaultColor;
     }
 }

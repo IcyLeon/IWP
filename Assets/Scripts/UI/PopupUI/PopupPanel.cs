@@ -57,7 +57,7 @@ public class PopupPanel : MonoBehaviour
             RectTransform.sizeDelta = Vector2.Lerp(startSize, endSize, t);
             canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, t);
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 
@@ -66,7 +66,15 @@ public class PopupPanel : MonoBehaviour
             Destroy(gameObject);
         }
 
-        yield return new WaitForSeconds(2.5f);
+        float timer = 0f;
+        float waitTime = 2.5f;
+
+        while (timer < waitTime)
+        {
+            timer += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
         StartCoroutine(AnimatePopup(false));
     }
 }

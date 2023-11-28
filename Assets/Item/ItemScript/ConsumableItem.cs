@@ -11,13 +11,13 @@ public abstract class ConsumableItem : Item
 
     public virtual void Use(int Useamount)
     {
+        amount = amount - Useamount;
         if (amount <= 0)
         {
             InventoryManager.GetInstance().RemoveItems(this);
             return;
         }
 
-        amount = amount - Useamount;
         OverflowManager();
     }
     public int GetAmount()
@@ -36,7 +36,8 @@ public abstract class ConsumableItem : Item
         onValueChanged?.Invoke();
     }
 
-    public ConsumableItem() : base()
+
+    public ConsumableItem(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
         amount = 1;
     }

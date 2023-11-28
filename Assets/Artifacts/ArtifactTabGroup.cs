@@ -111,7 +111,7 @@ public class ArtifactTabGroup : MonoBehaviour
         while (!Mathf.Approximately(slider.value, targetValue))
         {
             slider.value = Mathf.Lerp(slider.value, targetValue, elapsedTime / animationDuration);
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
     }

@@ -144,6 +144,17 @@ public class CharacterManager : MonoBehaviour
 
     }
 
+    public bool CheckIfAllAreDead()
+    {
+        for (int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
+        {
+            CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
+            if (!characterData.isDead())
+                return false;
+        }
+        return true;
+    }
+
     public void SetCurrentCharacter(PlayerCharacters character)
     {
         CurrentCharacter = character;

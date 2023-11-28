@@ -7,15 +7,19 @@ using UnityEngine.UI;
 
 public class ItemContentDisplay : MonoBehaviour
 {
-    [Header("Artifacts Content")]
+    [Header("Common Content")]
     [SerializeField] TextMeshProUGUI ItemNameText;
-    [SerializeField] TextMeshProUGUI ItemTypeText;
+    [SerializeField] TextMeshProUGUI ItemTypeText;    
+    [SerializeField] TextMeshProUGUI ItemDescText;
+    [Header("Upgradable Content")]
+    [SerializeField] GameObject LevelBackground;
+    [SerializeField] TextMeshProUGUI UpgradableLevelText;
+    [Header("Artifacts Content")]
     [SerializeField] TextMeshProUGUI ArtifactSetText;
-    [SerializeField] TextMeshProUGUI ArtifactLevelText;
-    [SerializeField] TextMeshProUGUI ArtifactDescText;
     [SerializeField] TextMeshProUGUI Artifact2PieceText;
     [SerializeField] TextMeshProUGUI Artifact4PieceText;
     [SerializeField] GameObject[] ArtifactsStatsContainer;
+    [SerializeField] GameObject ArtifactSetInfo;
 
     [Header("Common Item Info Content")]
     [SerializeField] Transform StarsTransformParent;
@@ -26,22 +30,6 @@ public class ItemContentDisplay : MonoBehaviour
         Artifacts artifacts = UpgradableItems as Artifacts;
         ArtifactsSO artifactsSO = itemsSO as ArtifactsSO;
         ArtifactsInfo artifactsInfo = ArtifactsManager.GetInstance().GetArtifactsInfo(artifactsSO);
-
-        if (artifactsSO == null || artifactsInfo == null)
-            return;
-
-        if (ItemNameText)
-            ItemNameText.text = artifactsSO.ItemName;
-        if (ArtifactDescText)
-            ArtifactDescText.text = artifactsSO.ItemDesc;
-        if (ItemTypeText)
-            ItemTypeText.text = artifactsSO.GetItemType();
-        if (ArtifactSetText)
-            ArtifactSetText.text = artifactsInfo.ArtifactsSetName + ":";
-        if (Artifact2PieceText)
-            Artifact2PieceText.text = "2-Piece Set: " + artifactsInfo.TwoPieceDesc;
-        if (Artifact4PieceText)
-            Artifact4PieceText.text = "4-Piece Set: " + artifactsInfo.FourPieceDesc;
 
         for (int i = 0; i < ArtifactsStatsContainer.Length; i++)
         {
@@ -62,16 +50,45 @@ public class ItemContentDisplay : MonoBehaviour
                 }
             }
         }
-        if (ArtifactLevelText)
+
+        ArtifactSetInfo.SetActive(artifactsSO != null && artifactsInfo != null);
+
+        if (artifactsSO == null || artifactsInfo == null)
+            return;
+
+        if (ArtifactSetText)
+            ArtifactSetText.text = artifactsInfo.ArtifactsSetName + ":";
+        if (Artifact2PieceText)
+            Artifact2PieceText.text = "2-Piece Set: " + artifactsInfo.TwoPieceDesc;
+        if (Artifact4PieceText)
+            Artifact4PieceText.text = "4-Piece Set: " + artifactsInfo.FourPieceDesc;
+    }
+
+    private void ShowCommonItemContent(ItemTemplate itemsSO)
+    {
+        if (ItemNameText)
+            ItemNameText.text = itemsSO.ItemName;
+        if (ItemTypeText)
+            ItemTypeText.text = itemsSO.GetItemType();
+        if (ItemDescText)
+            ItemDescText.text = itemsSO.ItemDesc;
+    }
+
+    private void ShowUpgradableItemContent(UpgradableItems UpgradableItems)
+    {
+        if (UpgradableLevelText)
         {
-            ArtifactLevelText.gameObject.SetActive(artifacts != null);
-            if (artifacts != null)
-                ArtifactLevelText.text = "+" + artifacts.GetLevel().ToString();
+            LevelBackground.SetActive(UpgradableItems != null);
+            if (UpgradableItems != null)
+                UpgradableLevelText.text = "+" + UpgradableItems.GetLevel().ToString();
         }
     }
+
     public void RefreshItemContentDisplay(Item SelectedItem, ItemTemplate itemsSO)
     {
         UpgradableItems UpgradableItemREF = SelectedItem as UpgradableItems;
+        ShowCommonItemContent(itemsSO);
+        ShowUpgradableItemContent(UpgradableItemREF);
         ShowArtifactsItemContent(UpgradableItemREF, itemsSO);
 
         if (StarsTransformParent)

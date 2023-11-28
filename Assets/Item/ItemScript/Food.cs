@@ -10,9 +10,9 @@ public class Food : ConsumableItem
     {
         base.Use(Useamount);
     }
-    public Food(FoodData fd) : base()
+    public Food(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
-        category = Category.FOOD;
+        FoodData fd = GetItemSO() as FoodData;
         Heal = fd.Heal;
     }
 }

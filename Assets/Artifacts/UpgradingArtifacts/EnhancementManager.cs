@@ -398,7 +398,7 @@ public class EnhancementManager : MonoBehaviour
             else
                 break;
 
-            UpgradeElasped += Time.deltaTime;
+            UpgradeElasped += Time.unscaledDeltaTime;
             yield return null;
         }
         ButtonMask.SetActive(false);
@@ -520,7 +520,7 @@ public class EnhancementManager : MonoBehaviour
         {
             Item item = itemsList[i];
 
-            if (item.GetCategory != GetItemREF().GetCategory || (int)item.GetRarity() > RaritySelection)
+            if (item.GetItemSO().GetType() != GetItemREF().GetItemSO().GetType() || (int)item.GetRarity() > RaritySelection)
             {
                 itemsList.Remove(item);
                 i--;
