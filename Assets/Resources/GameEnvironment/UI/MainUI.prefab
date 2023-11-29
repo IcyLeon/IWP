@@ -764,6 +764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemContentManager: {fileID: 4592940396618518068}
+  ItemContent: {fileID: 7261193649175942271}
   UseItem: {fileID: 6195620847906728309}
   TabGroup: {fileID: 4104967626724351877}
   ScrollRect: {fileID: 1443280358248000907}

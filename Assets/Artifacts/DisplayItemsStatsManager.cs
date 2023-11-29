@@ -133,15 +133,22 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
         return null;
     }
-
+    private void OnDestroy()
+    {
+        InventoryManager.GetInstance().onInventoryListChanged -= OnInventoryListChanged;
+        TabGroup.onTabChanged -= onTabChangedEvent;
+    }
     private void OnInventoryListChanged()
     {
 
         foreach (ItemButton itemButton in itembuttonlist)
         {
-            itemButton.onButtonClick -= GetItemSelected;
-            itemButton.onButtonUpdate -= GetItemButtonUpdate;
-            Destroy(itemButton.gameObject);
+            if (itemButton != null)
+            {
+                itemButton.onButtonClick -= GetItemSelected;
+                itemButton.onButtonUpdate -= GetItemButtonUpdate;
+                Destroy(itemButton.gameObject);
+            }
         }
         itembuttonlist.Clear();
 
@@ -151,13 +158,16 @@ public class DisplayItemsStatsManager : MonoBehaviour
             if (item is not UpgradableItems)
                 continue;
 
-            GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab);
-            ItemButton itemButton = go.GetComponent<ItemButton>();
+            ItemButton itemButton = Instantiate(AssetManager.GetInstance().ItemBorderPrefab).GetComponent<ItemButton>();
             itemButton.SetItemsSO(item.GetItemSO());
             itemButton.SetItemREF(item);
             itemButton.onButtonUpdate += GetItemButtonUpdate;
 
             UpgradableItems UpgradableItemREF = itemButton.GetItemREF() as UpgradableItems;
+            if (UpgradableItemREF != null)
+            {
+                UpgradableItemREF.onLevelChanged += onItemUpgrade;
+            }
             switch (itemButton.GetItemsSO().GetCategory())
             {
                 case Category.ARTIFACTS:
@@ -166,7 +176,6 @@ public class DisplayItemsStatsManager : MonoBehaviour
                     break;
             }
             itemButton.onButtonClick += GetItemSelected;
-            UpgradableItemREF.onLevelChanged += onItemUpgrade;
             itembuttonlist.Add(itemButton);
         }
 

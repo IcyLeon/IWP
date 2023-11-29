@@ -10,11 +10,13 @@ using static UnityEditor.Progress;
 public class InventoryUIManager : MonoBehaviour
 {
     [SerializeField] ItemContentManager ItemContentManager;
+    [SerializeField] GameObject ItemContent;
     [SerializeField] UseItem UseItem;
     [SerializeField] InvTabGroup TabGroup;
     [SerializeField] ScrollRect ScrollRect;
     private InventoryManager InventoryManager;
     private List<ItemButton> itembuttonlist;
+    private ItemButton SelectedItemButton;
     private Item selectedItem;
 
     // Start is called before the first frame update
@@ -28,20 +30,27 @@ public class InventoryUIManager : MonoBehaviour
         OnItemChanged();
     }
 
+    private void OnDestroy()
+    {
+        InventoryManager.onInventoryListChanged -= OnItemChanged;
+        TabGroup.onTabChanged -= onTabChangedEvent;
+    }
 
     private void onTabChangedEvent(object sender, EventArgs e)
     {
         ScrollRect.content = TabGroup.GetCurrentTabPanel().TabPanel.GetComponent<RectTransform>();
     }
 
-
     void OnItemChanged()
     {
         foreach (ItemButton itemButton in itembuttonlist)
         {
-            itemButton.onButtonClick -= GetItemSelected;
-            itemButton.onButtonUpdate -= GetItemButtonUpdate;
-            Destroy(itemButton.gameObject);
+            if (itemButton != null)
+            {
+                itemButton.onButtonClick -= GetItemSelected;
+                itemButton.onButtonUpdate -= GetItemButtonUpdate;
+                Destroy(itemButton.gameObject);
+            }
         }
         itembuttonlist.Clear();
 
@@ -88,7 +97,30 @@ public class InventoryUIManager : MonoBehaviour
         if (itemButton == null)
             return;
         selectedItem = itemButton.GetItemREF();
-        UseItem.SetItemREF(itemButton.GetItemREF());
         ItemContentManager.SetItemREF(selectedItem, itemButton.GetItemsSO());
+        UpdateOutlineSelection();
+    }
+
+    private ItemButton GetItemButton(Item item)
+    {
+        foreach (ItemButton itemButton in itembuttonlist)
+        {
+            if (itemButton.GetItemREF() == item)
+                return itemButton;
+        }
+
+        return null;
+    }
+
+    private void UpdateOutlineSelection()
+    {
+        foreach (ItemButton itemButton in itembuttonlist)
+        {
+            AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);
+        }
+        SelectedItemButton = GetItemButton(selectedItem);
+        UseItem.SetItemREF(SelectedItemButton);
+        ItemContent.SetActive(SelectedItemButton != null);
+        AssetManager.GetInstance().UpdateCurrentSelectionOutline(null, SelectedItemButton);
     }
 }

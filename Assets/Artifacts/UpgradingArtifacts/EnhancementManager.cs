@@ -111,6 +111,10 @@ public class EnhancementManager : MonoBehaviour
                         i--;
                     }
                 }
+                else
+                {
+                    upgradeCanvas.SlotPopup.HideItem(itemButton.GetItemREF());
+                }
             }
         }
     }

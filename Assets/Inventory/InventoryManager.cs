@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static InventoryManager;
 
 public class InventoryManager : MonoBehaviour {
     private static InventoryManager instance;
@@ -91,21 +92,22 @@ public class InventoryManager : MonoBehaviour {
 
         return PlayerStats.GetINVList();
     }
-    public void AddItems(Item item)
+    public Item AddItems(Item item)
     {
         if (PlayerStats == null)
-            return;
+            return null;
 
         Item ExistItem = isConsumableItemExisted(item);
         if (ExistItem != null)
         {
             ConsumableItem consumableItem = ExistItem as ConsumableItem;
             consumableItem.AddAmount();
-            return;
+            return consumableItem;
         }
 
         PlayerStats.AddItems(item);
         onInventoryListChanged?.Invoke();
+        return item;
     }
 
     private Item isConsumableItemExisted(Item ExistItemCheck)

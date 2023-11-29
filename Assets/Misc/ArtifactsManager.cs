@@ -49,7 +49,7 @@ public class ArtifactsManager : MonoBehaviour
 
     }
 
-    private Artifacts AddArtifactsToInventory(ArtifactType type, ArtifactsSet artifactSet, Rarity rarity)
+    public Artifacts AddArtifactsToInventory(ArtifactType type, ArtifactsSet artifactSet, Rarity rarity)
     {
         ArtifactsInfo artifactsinfo = GetArtifactsInfo(artifactSet);
 

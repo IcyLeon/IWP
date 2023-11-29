@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 
 public class UseItem : MonoBehaviour, IPointerClickHandler
 {
-    private Item ItemREF;
+    private ItemButton ItemButtonREF;
 
-    public void SetItemREF(Item ItemREF)
+    public void SetItemREF(ItemButton ItemButtonREF)
     {
-        this.ItemREF = ItemREF;
+        this.ItemButtonREF = ItemButtonREF;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -19,7 +19,10 @@ public class UseItem : MonoBehaviour, IPointerClickHandler
 
     private void Use()
     {
-        ConsumableItem consumableItem = ItemREF as ConsumableItem;
+        if (ItemButtonREF == null)
+            return;
+
+        ConsumableItem consumableItem = ItemButtonREF.GetItemREF() as ConsumableItem;
         if (consumableItem == null)
             return;
 

@@ -564,7 +564,7 @@ public class PlayerController : MonoBehaviour
         if (rb == null)
             return;
 
-        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
+        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE || GetPlayerActionStatus() == PlayerActionStatus.DASH)
             return;
 
         float currentYAngle = rb.rotation.eulerAngles.y;
