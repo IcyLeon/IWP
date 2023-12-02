@@ -400,7 +400,7 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
-        if (mainUI.isMainUIList() || Input.GetKey(KeyCode.LeftAlt))
+        if (mainUI.isPaused() || Input.GetKey(KeyCode.LeftAlt))
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -525,9 +525,12 @@ public class PlayerController : MonoBehaviour
         float HorizontalInput = Input.GetAxisRaw("Horizontal");
         float VerticalInput = Input.GetAxisRaw("Vertical");
 
-        InputDirection = new Vector3(HorizontalInput, 0f, VerticalInput);
-        InputDirection.Normalize();
 
+        if (GetPlayerActionStatus() != PlayerActionStatus.DASH)
+        {
+            InputDirection = new Vector3(HorizontalInput, 0f, VerticalInput);
+            InputDirection.Normalize();
+        }
         Direction = (Camera.main.transform.forward * VerticalInput) + (Camera.main.transform.right * HorizontalInput);
         Direction.y = 0;
         Direction.Normalize();
@@ -564,13 +567,14 @@ public class PlayerController : MonoBehaviour
         if (rb == null)
             return;
 
-        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE || GetPlayerActionStatus() == PlayerActionStatus.DASH)
+        if (GetPlayerActionStatus() == PlayerActionStatus.PLUNGE)
             return;
 
         float currentYAngle = rb.rotation.eulerAngles.y;
 
         if (currentYAngle == CurrentTargetRotation.eulerAngles.y)
         {
+            dampedTargetRotationPassedTime = 0;
             return;
         }
 

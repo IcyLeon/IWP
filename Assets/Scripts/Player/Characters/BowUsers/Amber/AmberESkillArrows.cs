@@ -35,7 +35,7 @@ public class AmberESkillArrows : MonoBehaviour
         float maxTurnRate = 360f;
         float maxVelocity = 10f; 
 
-        while (true)
+        while ((FocalPointPos - rb.position).magnitude > 1.5f)
         {
             Vector3 targetDirection = (FocalPointPos - rb.position).normalized;
 

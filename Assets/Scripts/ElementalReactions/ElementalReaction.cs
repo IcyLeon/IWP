@@ -42,7 +42,7 @@ public class ElementalReaction
 
     public ElementalReactionsTrigger GetElementalReactionsTrigger(Vector3 position)
     {
-        ElementalReactionsInfo ElementalReactionsInfo = GetElementalReactionsInfo(ElementsList);
+        ElementalReactionsInfo ElementalReactionsInfo = GetElementalReactionsInfo(GetElementList());
         if (ElementalReactionsInfo == null)
             return null;
 
@@ -50,6 +50,7 @@ public class ElementalReaction
         trigger.SetERState(ElementalReactionsInfo.elementalReactionState);
 
         AssetManager.GetInstance().SpawnWorldText_ElementalReaction(position, trigger.GetERState(), ElementalReactionsManager.GetInstance().GetElementalReactionText(trigger.GetERState()));
+        GetElementList().Clear();
 
         return trigger;
     }

@@ -8,7 +8,7 @@ public class ArtifactStrongBoxesSO : ItemTemplate
 {
     public ArtifactsInfo ArtifactsInfo;
 
-    public override Type GetType()
+    public override Type GetTypeREF()
     {
         return typeof(ArtifactStrongBoxes);
     }

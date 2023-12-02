@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Amber : BowCharacters, ICoordinateAttack
 {
+    [SerializeField] Transform CoordinateAttackPivot;
     private float CoodinateTimerElapsed;
     private float CoordinateTimer = 8f;
     private int SkillsArrows = 4;
@@ -11,11 +14,13 @@ public class Amber : BowCharacters, ICoordinateAttack
     [SerializeField] GameObject AmberAuraBurstPrefab;
     private ParticleSystem BurstAura;
 
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         CoodinateTimerElapsed = 0;
+        PlayerCoordinateAttackManager.OnCoordinateAttack += BasicAtkTrigger;
     }
 
     // Update is called once per frame
@@ -53,7 +58,7 @@ public class Amber : BowCharacters, ICoordinateAttack
         {
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
             eSkillArrows.SetCharacterData(GetCharacterData());
-            eSkillArrows.GetRB().velocity = GetShootDirection(pos) * 100f + Vector3.up * 65f;
+            eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
             eSkillArrows.SetFocalPointContact(GetContactPoint(pos));
         }
         Animator.SetTrigger("Dodge");
@@ -61,17 +66,24 @@ public class Amber : BowCharacters, ICoordinateAttack
         GetCharacterData().ResetElementalSkillCooldown();
     }
 
-    private Vector3 GetShootDirection(Vector3 pos)
+    private Vector3 GetShootPositionAndDirection(int i)
     {
-        Vector3 dir = AssetManager.RandomVectorInCone(GetDirection(pos), 75f);
-        dir.y = Mathf.Abs(dir.y);
-        return dir;
+        float speed = 35f;
+        float angle = 45f;
+        float UpOffset = 0.7f;
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+
+        Vector3 dir = Quaternion.Euler(0, ((-angle / 2) * (SkillsArrows - 1)) + (i * angle), 0) * forward;
+        dir.y = 0;
+        dir.Normalize();
+
+        Vector3 direction = dir + Vector3.up * UpOffset;
+        direction.Normalize();
+
+        return direction * speed;
     }
 
-    private Vector3 GetDirection(Vector3 pos)
-    {
-        return (GetContactPoint(pos) - GetEmitterPivot().position).normalized;
-    }
 
     private Vector3 GetContactPoint(Vector3 pos)
     {
@@ -126,5 +138,21 @@ public class Amber : BowCharacters, ICoordinateAttack
             return true;
         }
         return false;
+    }
+
+
+    private void BasicAtkTrigger()
+    {
+        if (!CoordinateCanShoot() || CoordinateAttackEnded())
+            return;
+
+        int RandomValue = Random.Range(1, 4);
+        for (int j = 0; j < RandomValue; j++)
+        {
+            CoordinateAttack ca = Instantiate(AssetManager.GetInstance().CoordinateAttackPrefab, CoordinateAttackPivot.position, Quaternion.identity).GetComponent<CoordinateAttack>();
+            Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
+            ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
+            ca.SetCharacterData(GetCharacterData());
+        }
     }
 }

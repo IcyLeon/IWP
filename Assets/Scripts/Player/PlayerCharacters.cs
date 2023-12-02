@@ -347,11 +347,6 @@ public class PlayerCharacters : Characters
 
     }
 
-    public virtual void CoordinateAttackTrigger()
-    {
-
-    }
-
     private void OnEnable()
     {
         playerController = CharacterManager.GetInstance().GetPlayerController();
@@ -365,6 +360,11 @@ public class PlayerCharacters : Characters
         GetPlayerController().onPlayerStateChange += PlayerStateChange;
         GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
+    }
+
+    protected void BasicAttackTrigger()
+    {
+        PlayerCoordinateAttackManager.CallCoordinateAttack();
     }
 
     protected virtual void Dash()

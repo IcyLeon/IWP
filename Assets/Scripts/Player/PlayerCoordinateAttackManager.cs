@@ -1,20 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCoordinateAttackManager : MonoBehaviour
 {
-    [SerializeField] Transform CoordinateAttackPivot;
     private List<PlayerCharacters> PlayerCharactersList;
+    public static event Action OnCoordinateAttack;
+
+    public static void CallCoordinateAttack()
+    {
+        OnCoordinateAttack?.Invoke();
+    }
 
     private void Awake()
     {
         PlayerCharactersList = new();
     }
-    private void Start()
-    {
-        CharacterManager.GetInstance().GetPlayerController().OnChargeTrigger += OnCoordinateAttack;
-    }
+
     public void Subscribe(PlayerCharacters c)
     {
         if (c == null)
@@ -46,35 +49,6 @@ public class PlayerCoordinateAttackManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void OnCoordinateAttack()
-    {
-        for (int i = 0; i < PlayerCharactersList.Count; i++)
-        {
-            switch(PlayerCharactersList[i])
-            {
-                case Amber amber when amber != null:
-                    if (amber.CoordinateCanShoot())
-                    {
-                        int RandomValue = Random.Range(1, 4);
-                        for (int j = 0; j < RandomValue; j++)
-                        {
-                            CoordinateAttack ca = Instantiate(AssetManager.GetInstance().CoordinateAttackPrefab, GetCoordinateAttackPivot()).GetComponent<CoordinateAttack>();
-                            Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
-                            ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
-                            ca.SetCharacterData(amber.GetCharacterData());
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-
-    public Transform GetCoordinateAttackPivot()
-    {
-        return CoordinateAttackPivot;
     }
 
     private PlayerCharacters IsExisted(PlayerCharacters characters)

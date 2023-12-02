@@ -13,4 +13,9 @@ public class TestInteract : MonoBehaviour, IInteract
     {
         return "Test";
     }
+
+    public bool CanInteract()
+    {
+        return true;
+    }
 }

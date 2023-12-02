@@ -9,22 +9,28 @@ public class ElementsIndicator : MonoBehaviour
     [SerializeField] GameObject ElementImagePrefab;
     [SerializeField] CanvasGroup CanvasGroup;
     private Characters Characters;
+    private Coroutine FadeOutCoroutine;
 
     private void Update()
     {
         if (Characters == null)
         {
-            StartCoroutine(FadeOutAnimation());
+            FadeOut();
         }
         else
         {
             if (Characters.GetElementalReaction().GetElementList().Count == 0)
             {
-                StartCoroutine(FadeOutAnimation());
+                FadeOut();
             }
         }
     }
 
+    private void FadeOut()
+    {
+        if (FadeOutCoroutine == null)
+            FadeOutCoroutine = StartCoroutine(FadeOutAnimation());
+    }
     private IEnumerator FadeOutAnimation()
     {
         CanvasGroup.alpha = 1f;
@@ -63,6 +69,12 @@ public class ElementsIndicator : MonoBehaviour
     private void OnElementChanged(bool isChanged)
     {
         if (Characters != null && isChanged) {
+            if (FadeOutCoroutine != null)
+            {
+                StopCoroutine(FadeOutCoroutine);
+                FadeOutCoroutine = null;
+            }
+
             foreach(RectTransform GO in ElementParent)
                 Destroy(GO.gameObject);
 

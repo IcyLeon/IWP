@@ -1156,6 +1156,7 @@ Transform:
   - {fileID: 7423943344262129455}
   - {fileID: 7257877197979770523}
   - {fileID: 4130853731241408000}
+  - {fileID: 1648127688757362118}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1195,6 +1196,7 @@ MonoBehaviour:
   EmitterPivot: {fileID: 1357641750335799808}
   ChargeUpFinishPrefab: {fileID: 3444178974453000335, guid: e684bcb8a60b49b40adc1a1ef3a69682,
     type: 3}
+  CoordinateAttackPivot: {fileID: 1648127688757362118}
   AmberAuraBurstPrefab: {fileID: 7648515999253688526, guid: 541f93ef40294a941aa72477bba269db,
     type: 3}
 --- !u!95 &2641773154839491820
@@ -1719,6 +1721,37 @@ Transform:
   - {fileID: 1102977820986824184}
   m_Father: {fileID: 5683932284734839245}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3422610634453618334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1648127688757362118}
+  m_Layer: 3
+  m_Name: CoordinateAttackPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1648127688757362118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422610634453618334}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: -0.559}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3123096739021637563}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3543197735305943396
 GameObject:

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class BaseEnemy : Characters
 {
-    [SerializeField] protected Collider collider;
+    [SerializeField] protected Collider col;
     protected float DetectionRange;
     private ElementsIndicator elementsIndicator;
     protected float Ratio;
@@ -40,7 +40,7 @@ public class BaseEnemy : Characters
         UpdateHealthBar();
 
         if (elementsIndicator)
-            elementsIndicator.transform.position = GetModel().transform.position + Vector3.up * 2.1f;
+            elementsIndicator.transform.localPosition = Vector3.up * 3f;
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
@@ -102,7 +102,7 @@ public class BaseEnemy : Characters
     {
         if (healthBarScript)
         {
-            healthBarScript.transform.position = GetModel().transform.position + Vector3.up * 1.5f;
+            healthBarScript.transform.localPosition = Vector3.up * 2f;
             healthBarScript.SliderInvsibleOnlyFullHealth();
         }
     }
@@ -113,7 +113,7 @@ public class BaseEnemy : Characters
 
         if (elementsIndicator == null)
         {
-            elementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab).GetComponent<ElementsIndicator>();
+            elementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, transform).GetComponent<ElementsIndicator>();
             elementsIndicator.SetCharacters(this);
         }
 

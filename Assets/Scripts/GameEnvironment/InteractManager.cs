@@ -6,6 +6,7 @@ using UnityEngine;
 
 public interface IInteract
 {
+    bool CanInteract();
     void Interact();
     string InteractMessage();
 }
@@ -198,8 +199,8 @@ public class InteractManager : MonoBehaviour
 
             if (interactable != null)
             {
-
-                InteractableList.Add(collider);
+                if (interactable.CanInteract())
+                    InteractableList.Add(collider);
             }
         }
         return InteractableList.ToArray();

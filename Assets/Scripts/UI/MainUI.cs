@@ -15,7 +15,7 @@ public class MainUI : MonoBehaviour
     [SerializeField] GameObject[] MainUIList;
     private List<ArrowIndicator> ArrowIndicatorList;
     private GameObject BlueEffectObject;
-
+    private bool Paused;
     public static MainUI GetInstance()
     {
         return instance;
@@ -28,15 +28,7 @@ public class MainUI : MonoBehaviour
 
     private void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        instance = this;
         ArrowIndicatorList = new();
     }
 
@@ -46,23 +38,33 @@ public class MainUI : MonoBehaviour
         RemoveNullReferenceForArrowList();
     }
 
+    public bool isCursorVisible()
+    {
+        return Cursor.visible;
+    }
+
     private void UpdatePause()
     {
-        bool PauseUI = isMainUIList();
-        CombatUI.SetActive(!PauseUI);
+        Paused = isMainUIList();
+        CombatUI.SetActive(!isPaused());
 
         //if (BlueEffectObject == null)
         //    BlueEffectObject = GameObject.FindGameObjectWithTag("BlurEffect");
         //else
         //    BlueEffectObject.SetActive(PauseUI);
 
-        if (PauseUI)
+        if (isPaused())
             Time.timeScale = 0;
         else
             Time.timeScale = 1;
     }
 
-    public bool isMainUIList()
+    public bool isPaused()
+    {
+        return Paused;
+    }
+
+    private bool isMainUIList()
     {
         for(int i = 0; i < MainUIList.Length; i++)
         {

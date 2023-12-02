@@ -38,7 +38,7 @@ public class Purchase : MonoBehaviour, IPointerClickHandler
 
     private void AddItem(ItemTemplate itemsSO)
     {
-        Type ItemType = itemsSO.GetType();
+        Type ItemType = itemsSO.GetTypeREF();
         object instance = Activator.CreateInstance(ItemType, true, itemsSO);
         Item item = (Item)instance;
         inventoryManager.AddItems(item);

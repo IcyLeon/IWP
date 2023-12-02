@@ -85,6 +85,8 @@ public class BowCharacters : PlayerCharacters
         DestroyChargeUpEmitter();
         ChargeElapsed = 0;
         isChargedFinish = false;
+
+        BasicAttackTrigger();
     }
 
     protected override void FixedUpdate()

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2ccb86897e519544593d062a18b4813f
+guid: a40378ea51f6cd84d8cc2afd3fb2d7cd
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -7,18 +7,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: turret_base1
-    second: {fileID: 2100000, guid: 5d0ac13035a14b94d982d8a18a49dec8, type: 2}
+      name: dark
+    second: {fileID: 2100000, guid: 062b6d4b37c84e24999de94a7c1b0be9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: turret_head1
-    second: {fileID: 2100000, guid: c884cb66be18086478c11c55db9db2c2, type: 2}
+      name: metal
+    second: {fileID: 2100000, guid: 6d78105f49efeae4c8be5c943c26118c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: turret_mount1
-    second: {fileID: 2100000, guid: 75d39453be98da741bd2869936845a20, type: 2}
+      name: metalDark
+    second: {fileID: 2100000, guid: 9eefb78771c065247881319b53a2fe23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metalRed
+    second: {fileID: 2100000, guid: e409c327da61d0143ba93db31851e2bf, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -50,7 +55,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 1.5
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -103,7 +108,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.14999999
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

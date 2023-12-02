@@ -8,7 +8,7 @@ public class FoodData : ItemTemplate
 {
     public float Heal;
 
-    public override Type GetType()
+    public override Type GetTypeREF()
     {
         return typeof(Food);
     }

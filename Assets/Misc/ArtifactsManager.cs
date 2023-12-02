@@ -56,7 +56,7 @@ public class ArtifactsManager : MonoBehaviour
         if (artifactsinfo != null)
         {
             ArtifactsSO artifactsSO = GetArtifactSO(type, artifactsinfo);
-            Type ItemType = artifactsSO.GetType();
+            Type ItemType = artifactsSO.GetTypeREF();
             object instance = Activator.CreateInstance(ItemType, artifactSet, rarity, artifactsSO, true);
             Artifacts artifacts = (Artifacts)instance;
 

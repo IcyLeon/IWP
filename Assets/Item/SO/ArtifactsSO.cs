@@ -8,7 +8,7 @@ public class ArtifactsSO : ItemTemplate
 {
     public ArtifactType artifactType;
 
-    public override Type GetType()
+    public override Type GetTypeREF()
     {
         return typeof(Artifacts);
     }

@@ -27,7 +27,7 @@ public class PlayerCharacterSO : CharactersSO
     public float UltiSkillCooldown;
     public float EnergyCost;
 
-    public override Type GetType()
+    public override Type GetTypeREF()
     {
         return typeof(CharacterData);
     }

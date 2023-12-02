@@ -11,7 +11,7 @@ public class CharactersSO : ItemTemplate
     public float BaseATK;
     public float BaseDEF;
 
-    public override Type GetType()
+    public override Type GetTypeREF()
     {
         return typeof(Characters);
     }

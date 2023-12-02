@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static Characters;
 
 public interface IDamage {
     bool IsDead();
@@ -140,6 +139,9 @@ public class Characters : MonoBehaviour, IDamage
     }
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt)
     {
+        if (IsDead())
+            return null;
+
         Elemental elemental;
         if (elementsREF != null)
         {
@@ -166,7 +168,6 @@ public class Characters : MonoBehaviour, IDamage
                     break;
             }
             OnElementReactionHit?.Invoke(ElementalReactionsTrigger);
-            StartCoroutine(RemoveDelayElementalReaction());
         }
         SetHealth(GetHealth() - amt);
         HitInfo?.Invoke(e);
@@ -186,11 +187,6 @@ public class Characters : MonoBehaviour, IDamage
         //EPE.SetElemental(e.GetElements());
     }
 
-    private IEnumerator RemoveDelayElementalReaction()
-    {
-        yield return new WaitForSeconds(0.3f);
-        GetElementalReaction().GetElementList().Clear();
-    }
 
     public virtual float GetHealth()
     {

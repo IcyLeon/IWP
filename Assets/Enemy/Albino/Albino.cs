@@ -103,6 +103,7 @@ public class Albino : BaseEnemy
                     if (HasReachedTargetLocation(GetPlayerLocation()))
                     {
                         state = States.HEADBUTT;
+                        StrafeElasped = 0;
                     }
 
                     if (StrafeElasped > StrafeT && NavMeshAgent.enabled)
@@ -113,7 +114,6 @@ public class Albino : BaseEnemy
                         if (NavMesh.CalculatePath(rb.position, rb.position + dir, NavMesh.AllAreas, navMeshPath))
                         {
                             StrafeCoroutine = StartCoroutine(StartStrafe(navMeshPath));
-                            StrafeElasped = 0;
                         }
                     }
                     StrafeElasped += Time.deltaTime;
@@ -125,13 +125,14 @@ public class Albino : BaseEnemy
 
                 break;
             case States.HEADBUTT:
-                if (!HasReachedTargetLocation(GetPlayerLocation()) && NavMeshAgent.enabled)
+                if (!isAttacking && state != States.SLAM)
                 {
-                    state = States.CHASE;
-                }
+                    if (!HasReachedTargetLocation(GetPlayerLocation()) && NavMeshAgent.enabled)
+                    {
+                        state = States.CHASE;
+                    }
 
-                if (!isAttacking)
-                {
+
                     if (AttackElapsed > CurrentAttackRate)
                     {
                         int attackRandom = Random.Range(0, 4);
@@ -141,11 +142,12 @@ public class Albino : BaseEnemy
                             CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.3f);
                         }
 
-                        if (HasReachedTargetLocation(GetPlayerLocation()))
+                        if (HasReachedTargetLocation(GetPlayerLocation()) && state != States.SLAM)
                         {
                             Animator.SetTrigger("Attack" + Random.Range(1, 3));
                             CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.3f);
                         }
+                        AttackElapsed = 0;
                     }
                     LookAtPlayerXZ();
                     NavMeshAgent.updateRotation = false;
@@ -160,6 +162,11 @@ public class Albino : BaseEnemy
                 break;
 
             case States.SLAM:
+                if (StrafeCoroutine != null)
+                {
+                    StopCoroutine(StrafeCoroutine);
+                    StrafeCoroutine = null;
+                }
                 if (SlamCoroutine == null && !isAttacking)
                 {
                     NavMeshAgent.updateRotation = false;
@@ -200,6 +207,7 @@ public class Albino : BaseEnemy
                 state = States.CHASE;
                 break;
         }
+        StrafeElasped = 0;
         StrafeCoroutine = null;
     }
 
@@ -226,11 +234,10 @@ public class Albino : BaseEnemy
         float MaxHeightToLaunchAttack = 8f;
         float Diff = SavePosition.y - transform.position.y;
 
-        if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack && isAttacking)
+        if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack)
         {
             state = States.CHASE;
-            ResetAttack();
-            collider.isTrigger = false;
+            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), false);
             Animator.SetTrigger("Cancel");
             SlamCoroutine = null;
         }
@@ -246,7 +253,7 @@ public class Albino : BaseEnemy
             groundPos.y = hit.point.y;
         }
 
-        collider.isTrigger = true;
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), true);
         float elapsed = 0f;
         float duration = 0.6f;
 
@@ -271,7 +278,8 @@ public class Albino : BaseEnemy
             yield return null;
         }
 
-        collider.isTrigger = false;
+        //GetComponent<Collider>().isTrigger = false;
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), false);
         Animator.SetTrigger("Slam");
         JumpOnAir = false;
         yield return new WaitForSeconds(0.25f);

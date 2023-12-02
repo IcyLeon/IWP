@@ -24,4 +24,9 @@ public class Teleporter : MonoBehaviour, IInteract
     {
         return "Enter Teleporter";
     }
+
+    public bool CanInteract()
+    {
+        return true;
+    }
 }

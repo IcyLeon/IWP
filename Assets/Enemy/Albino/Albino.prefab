@@ -95,7 +95,7 @@ MonoBehaviour:
   rb: {fileID: 2741243841039659890}
   Animator: {fileID: 9545436}
   Model: {fileID: 189936}
-  collider: {fileID: 5074914678337411487}
+  col: {fileID: 5074914678337411487}
   NavMeshAgent: {fileID: 7081428479805541896}
 --- !u!54 &2741243841039659890
 Rigidbody:

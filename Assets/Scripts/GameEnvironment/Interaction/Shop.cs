@@ -14,4 +14,9 @@ public class Shop : MonoBehaviour, IInteract
     {
         return "Shop";
     }
+
+    public bool CanInteract()
+    {
+        return true;
+    }
 }

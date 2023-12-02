@@ -14,16 +14,28 @@ public class CameraManager : MonoBehaviour
         return aimCamera.gameObject;
     }
 
+    private void LockWhenPaused()
+    {
+        if (MainUI.GetInstance().isCursorVisible())
+        {
+            CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
+            CinemachinePOV aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
+            playerPOV.m_VerticalAxis.m_InputAxisValue = 0;
+            playerPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+            aimPOV.m_VerticalAxis.m_InputAxisValue = 0;
+            aimPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+        }
+        //playerCamera.enabled = aimCamera.enabled = !MainUI.GetInstance().isCursorVisible();
+    }
+
     private void UpdateCamera()
     {
         if (playerController.GetCharacterRB() == null)
             return;
 
         playerCamera.Follow = playerController.GetPlayerOffsetPosition();
-        //playerCamera.LookAt = playerController.GetPlayerOffsetPosition();
         aimCamera.Follow = playerCamera.Follow;
-        //aimCamera.LookAt = playerCamera.LookAt;
-
+        LockWhenPaused();
         //Vector3 d = testCamera.LookAt.position - (playerController.GetPlayerOffsetPosition().position);
         //d.Normalize();
         //testCamera.m_XAxis.Value = Mathf.Atan2(d.x, d.z) * Mathf.Rad2Deg - 15f;

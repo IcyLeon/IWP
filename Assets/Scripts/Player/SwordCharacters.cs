@@ -16,6 +16,7 @@ public class SwordCharacters : PlayerCharacters
 
     public void SpawnSlash()
     {
+        BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(GetEmitterPivot());
         Collider[] Colliders = Physics.OverlapSphere(GetPlayerController().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity"));
         foreach (Collider other in Colliders)
@@ -38,7 +39,6 @@ public class SwordCharacters : PlayerCharacters
                 }
             }
         }
-
     }
 
     // Start is called before the first frame update

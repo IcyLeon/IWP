@@ -19,7 +19,7 @@ public class ItemTemplate : ScriptableObject
     public Sprite ItemSprite;
     public Rarity Rarity;
 
-    public virtual Type GetType()
+    public virtual Type GetTypeREF()
     {
         return typeof(Item);
     }
