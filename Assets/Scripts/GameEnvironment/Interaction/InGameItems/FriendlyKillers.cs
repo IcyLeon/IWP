@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
-using static Characters;
-using static UnityEditor.PlayerSettings;
 
 public interface IGamePurchase : IInteract
 {
@@ -18,16 +16,18 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     private float MaxHealth;
     protected HealthBarScript healthBarScript;
     public event Action OnDead;
-    protected ElementalReaction elementalReaction;
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
     public onElementReactionHit OnElementReactionHit;
+    private bool canBuy;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        elementalReaction = new ElementalReaction();
+        canBuy = true;
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
+        healthBarScript.transform.localPosition = GetWorldTxtLocalPosition();
+        healthBarScript.Init(false, true);
         MaxHealth = GetFriendlyKillerSO().BaseMaxHealth;
         CurrentHealth = MaxHealth;
     }
@@ -38,6 +38,17 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         return friendlyKillerSO;
     }
 
+    public override bool CanInteract()
+    {
+        return canBuy;
+    }
+
+    protected override void PurchaseAction()
+    {
+        if (canBuy)
+            canBuy = false;
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
@@ -45,6 +56,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         {
             healthBarScript.SetupMinAndMax(0, GetMaxHealth());
             healthBarScript.UpdateHealth(GetHealth());
+            healthBarScript.gameObject.SetActive(!canBuy);
         }
     }
 
@@ -60,18 +72,12 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     public virtual bool IsDead()
     {
-        return CurrentHealth <= 0;
+        return CurrentHealth <= 0 && !canBuy;
     }
-
-    public virtual ElementalReaction GetElementalReaction()
-    {
-        return elementalReaction;
-    }
-
 
     public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
     {
-        if (IsDead())
+        if (IsDead() || canBuy)
             return null;
 
         Elemental elemental;

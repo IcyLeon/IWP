@@ -10,6 +10,9 @@ public class HealthBarScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI HealthTextDisplay;
     [SerializeField] TextMeshProUGUI LevelTextDisplay;
 
+    [SerializeField] Color32 enemyColor;
+    [SerializeField] Color32 allyColor;
+
     public void UpdateHealth(float HealthVal)
     {
         slider.value = HealthVal;
@@ -20,6 +23,14 @@ public class HealthBarScript : MonoBehaviour
         }
     }
 
+    public void Init(bool showLevel, bool isAlly)
+    {
+        LevelTextDisplay.gameObject.SetActive(showLevel);
+        slider.fillRect.GetComponent<Image>().color = enemyColor;
+        if (isAlly)
+            slider.fillRect.GetComponent<Image>().color = allyColor;
+    }
+
     public void UpdateLevel(int Level)
     {
         if (LevelTextDisplay)
@@ -27,6 +38,7 @@ public class HealthBarScript : MonoBehaviour
             LevelTextDisplay.text = "Lv." + Level.ToString();
         }
     }
+
 
     public void SetupMinAndMax(float min, float max)
     {

@@ -196,6 +196,12 @@ MonoBehaviour:
   slider: {fileID: 141044739271589526}
   HealthTextDisplay: {fileID: 3760169895901590198}
   LevelTextDisplay: {fileID: 8192743065705864376}
+  enemyColor:
+    serializedVersion: 2
+    rgba: 4284046079
+  allyColor:
+    serializedVersion: 2
+    rgba: 4280539031
 --- !u!114 &9148484241235453908
 MonoBehaviour:
   m_ObjectHideFlags: 0

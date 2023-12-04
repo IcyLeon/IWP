@@ -35,7 +35,7 @@ public class AmberESkillArrows : MonoBehaviour
         float maxTurnRate = 360f;
         float maxVelocity = 10f; 
 
-        while ((FocalPointPos - rb.position).magnitude > 1.5f)
+        while ((FocalPointPos - rb.position).magnitude > 1f)
         {
             Vector3 targetDirection = (FocalPointPos - rb.position).normalized;
 
@@ -86,11 +86,11 @@ public class AmberESkillArrows : MonoBehaviour
 
         if (player == null && other.GetComponent<AmberESkillArrows>() == null)
         {
-            if (other.tag != "Player")
-            {
-                Explode();
-                Destroy(gameObject);
-            }
+            if (other.isTrigger)
+                return;
+
+            Explode();
+            Destroy(gameObject);
         }
     }
 }

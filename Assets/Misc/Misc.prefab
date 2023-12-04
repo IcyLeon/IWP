@@ -72,7 +72,9 @@ MonoBehaviour:
   MessageNotificationPrefab: {fileID: 6404873394866577276, guid: 43f193ab9a840114e85666e41ce68b21,
     type: 3}
   itemlisttemplate: {fileID: 11400000, guid: fc5ef0a01831d8c42ae8b7b2e7075098, type: 2}
-  WorldText: {fileID: 6137207957608146381, guid: 6659fe4fdc95f994e8d8d8982a109955,
+  DamageText: {fileID: 6137207957608146381, guid: 6659fe4fdc95f994e8d8d8982a109955,
+    type: 3}
+  WorldText: {fileID: 4866210895031179492, guid: 687921908f38bfd4fb9a4dfd2212c685,
     type: 3}
   SlashPrefab: {fileID: 3850188118278125534, guid: 7e7f04c10d088b44ca6d0c6ef88359db,
     type: 3}

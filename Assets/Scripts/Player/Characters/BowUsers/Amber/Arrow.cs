@@ -51,22 +51,23 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerCharacters player = other.transform.GetComponent<PlayerCharacters>();
+        PlayerCharacters player = other.GetComponent<PlayerCharacters>();
     
         if (player == null)
         {
             IDamage damageObject = other.gameObject.GetComponent<IDamage>();
-            if (damageObject != null)
+            if (other.gameObject.layer != LayerMask.NameToLayer("Player"))
             {
-                if (!damageObject.IsDead())
-                    damageObject.TakeDamage(transform.position, elements, BowCharacters.GetDamage());
+                if (damageObject != null)
+                {
+                    if (!damageObject.IsDead())
+                        damageObject.TakeDamage(transform.position, elements, BowCharacters.GetDamage());
+                }
             }
-            if (other.tag != "Player")
-            {
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-                Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                Destroy(gameObject);
-            }
+
+            ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+            Destroy(hitEffect.gameObject, hitEffect.main.duration);
+            Destroy(gameObject);
         }
     }
 

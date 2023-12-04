@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aab473a5e159d9419e68588a755dc21, type: 3}
   m_Name: Turret 1
   m_EditorClassIdentifier: 
-  BasePrice: 500
+  BasePrice: 0
   BaseMaxHealth: 1000
   BaseDamage: 30

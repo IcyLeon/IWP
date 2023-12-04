@@ -2,25 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PurchaseableObjects : MonoBehaviour, IGamePurchase
+public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
 {
+    [SerializeField] CurrencyType PurchaseableType;
+    private WorldText worldText;
+    [SerializeField] protected Transform WorldTextPivotTransform;
     [SerializeField] protected PurchaseableObjectSO PurchaseableObjectSO;
-    private bool isBought;
+    private AssetManager assetManager;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        isBought = false;
+        assetManager = AssetManager.GetInstance();
+        worldText = assetManager.SpawnWorldText(GetCost().ToString(), transform);
+        worldText.transform.localPosition = new Vector3(0, WorldTextPivotTransform.transform.localPosition.y, 0);
+        worldText.gameObject.SetActive(false);
     }
 
+    protected Vector3 GetWorldTxtLocalPosition()
+    {
+        return worldText.transform.localPosition;
+    }
     protected virtual void Update()
     {
     }
 
     public virtual bool CanInteract()
     {
-        return isBought;
+        return true;
     }
+
     public virtual int GetCost()
     {
         if (GetPurchaseableObjectSO() == null)
@@ -34,10 +45,24 @@ public class PurchaseableObjects : MonoBehaviour, IGamePurchase
         return PurchaseableObjectSO;
     }
 
-
-    public virtual void Interact()
+    protected virtual void PurchaseAction()
     {
+
     }
+
+    public void Interact()
+    {
+        if (isPurchaseable())
+            PurchaseAction();
+        else
+            assetManager.OpenMessageNotification("Insufficient " + AssetManager.CurrencyText(PurchaseableType) + "!");
+    }
+
+    private bool isPurchaseable()
+    {
+        int Cost = GetCost();
+        return (Cost <= InventoryManager.GetInstance().GetCurrency(PurchaseableType));
+    } 
 
     public virtual string InteractMessage()
     {
@@ -47,5 +72,14 @@ public class PurchaseableObjects : MonoBehaviour, IGamePurchase
     public void ShowCost()
     {
 
+    }
+
+    public virtual void OnInteractUpdate(IInteract interactComponent)
+    {
+        worldText.gameObject.SetActive(true);
+    }
+    public virtual void OnInteractExit(IInteract interactComponent)
+    {
+        worldText.gameObject.SetActive(false);
     }
 }

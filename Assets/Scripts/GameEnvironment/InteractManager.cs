@@ -9,6 +9,8 @@ public interface IInteract
     bool CanInteract();
     void Interact();
     string InteractMessage();
+    void OnInteractUpdate(IInteract interactComponent);
+    void OnInteractExit(IInteract interactComponent);
 }
 
 public class InteractManager : MonoBehaviour
@@ -16,7 +18,7 @@ public class InteractManager : MonoBehaviour
     [SerializeField] GameObject InteractablePrefab;
     private MainUI mainUI;
     private PlayerController playerController;
-    private float InteractRange = 5f;
+    private float InteractRange = 3f;
     private List<InteractOptions> InteractOptionList;
     private int CurrentIdx;
     private GameObject SelectionArrow;
@@ -87,27 +89,28 @@ public class InteractManager : MonoBehaviour
     }
     private IEnumerator UpdateInteractObj()
     {
-        List<Collider> CurrentInteractList = new();
+        List<IInteract> CurrentInteractList = new();
 
         while (true)
         {
-            Collider[] TotalInteractList = GetAllNearestInteractObj();
+            IInteract[] TotalInteractList = GetAllNearestInteractObj();
             for (int i = 0; i < TotalInteractList.Length; i++)
             {
                 if (!CurrentInteractList.Contains(TotalInteractList[i]))
                 {
+                    TotalInteractList[i].OnInteractUpdate(TotalInteractList[i]);
                     CurrentInteractList.Add(TotalInteractList[i]);
                     SpawnInteractObj(TotalInteractList[i]);
                 }
-
             }
 
             for (int i = CurrentInteractList.Count - 1; i >= 0; i--)
             {
-                Collider collider = CurrentInteractList[i];
-                if (!TotalInteractList.Contains(collider))
+                IInteract interactObj = CurrentInteractList[i];
+                if (!TotalInteractList.Contains(interactObj))
                 {
-                    RemoveInteractObject(collider);
+                    interactObj.OnInteractExit(interactObj);
+                    RemoveInteractObject(interactObj);
                     CurrentInteractList.RemoveAt(i);
                     OnInteractionListChanged();
                 }
@@ -129,12 +132,12 @@ public class InteractManager : MonoBehaviour
         }
     }
 
-    private void RemoveInteractObject(Collider collider)
+    private void RemoveInteractObject(IInteract interactObj)
     {
         foreach(Transform t in mainUI.GetInteractOptionsUI().GetInteractOptionsPivot())
         {
             InteractOptions InteractOptions = t.GetComponent<InteractOptions>();
-            if (InteractOptions.GetIInferact() == collider.GetComponent<IInteract>())
+            if (InteractOptions.GetIInferact() == interactObj)
             {
                 InteractOptionList.Remove(InteractOptions);
                 Destroy(t.gameObject);
@@ -142,9 +145,8 @@ public class InteractManager : MonoBehaviour
         }
     }
         
-    private void SpawnInteractObj(Collider interactObj)
+    private void SpawnInteractObj(IInteract interactable)
     {
-        IInteract interactable = interactObj.GetComponent<IInteract>();
         InteractOptions interactOptions = Instantiate(InteractablePrefab, mainUI.GetInteractOptionsUI().GetInteractOptionsPivot().transform).GetComponent<InteractOptions>();
         interactOptions.SetIInferact(interactable);
         interactOptions.UpdateText(interactable.InteractMessage());
@@ -167,7 +169,7 @@ public class InteractManager : MonoBehaviour
     private IInteract GetNearestInteractObj()
     {
         Vector3 playerPosition = playerController.GetPlayerOffsetPosition().position;
-        Collider[] interactList = GetAllNearestInteractObj();
+        Collider[] interactList = GetAllNearestInteractObj() as Collider[];
         IInteract nearestInteractable = null;
         float closestDistance = float.MaxValue;
 
@@ -187,11 +189,11 @@ public class InteractManager : MonoBehaviour
         return nearestInteractable;
     }
 
-    private Collider[] GetAllNearestInteractObj()
+    private IInteract[] GetAllNearestInteractObj()
     {
         Vector3 playerPosition = playerController.GetPlayerOffsetPosition().position;
         Collider[] colliders = Physics.OverlapSphere(playerPosition, InteractRange);
-        List<Collider> InteractableList = new();
+        List<IInteract> InteractableList = new();
 
         foreach (Collider collider in colliders)
         {
@@ -200,7 +202,7 @@ public class InteractManager : MonoBehaviour
             if (interactable != null)
             {
                 if (interactable.CanInteract())
-                    InteractableList.Add(collider);
+                    InteractableList.Add(interactable);
             }
         }
         return InteractableList.ToArray();

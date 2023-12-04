@@ -19,6 +19,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject PopupPanelPrefab;
     [SerializeField] GameObject MessageNotificationPrefab;
     [SerializeField] ItemsList itemlisttemplate;
+    [SerializeField] GameObject DamageText;
     [SerializeField] GameObject WorldText;
     [SerializeField] GameObject SlashPrefab;
 
@@ -42,7 +43,6 @@ public class AssetManager : MonoBehaviour
     public GameObject StarPrefab;
     private GameObject DraggingItem;
     private PopupPanel PopupPanel;
-    private MessageNotification MessageNotification;
     public GameObject ItemBorderPrefab;
     public GameObject ShopInfoPrefab;
     public GameObject SlotPrefab;
@@ -58,6 +58,18 @@ public class AssetManager : MonoBehaviour
     public GameObject ElectricEffect;
 
     private static AssetManager instance;
+
+    public static string CurrencyText(CurrencyType type)
+    {
+        switch (type)
+        {
+            case CurrencyType.COINS:
+                return "Coins";
+            case CurrencyType.CASH:
+                return "Cash";
+        }
+        return "???";
+    }
 
     // Start is called before the first frame update
     void Awake()
@@ -114,11 +126,8 @@ public class AssetManager : MonoBehaviour
 
     public void OpenMessageNotification(string text)
     {
-        if (MessageNotification != null)
-            Destroy(MessageNotification.gameObject);
-
-        MessageNotification = Instantiate(MessageNotificationPrefab, GetCanvasGO().transform).GetComponent<MessageNotification>();
-        MessageNotification.SetMessage(text);
+        MessageNotification m = Instantiate(MessageNotificationPrefab, GetCanvasGO().transform).GetComponent<MessageNotification>();
+        m.SetMessage(text);
     }
 
     public void SpawnParticlesEffect(Vector3 position, GameObject prefab)
@@ -127,6 +136,12 @@ public class AssetManager : MonoBehaviour
         Destroy(ps.gameObject, ps.main.duration);
     }
 
+    public WorldText SpawnWorldText(string val, Transform Parent)
+    {
+        WorldText wt = Instantiate(WorldText, Parent).GetComponent<WorldText>();
+        wt.UpdateContent(val);
+        return wt;
+    }
     public ArrowIndicator SpawnArrowIndicator(GameObject source)
     {
         ArrowIndicator go = Instantiate(ArrowIndicatorPrefab, GetCanvasGO().transform).GetComponent<ArrowIndicator>();
@@ -175,13 +190,13 @@ public class AssetManager : MonoBehaviour
 
     public void SpawnWorldText_Elemental(Vector3 position, Elemental element, string text)
     {
-        DamageText dt = Instantiate(WorldText, GetCanvasGO().transform).GetComponent<DamageText>();
+        DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
         dt.SpawnText(position, element, text);
     }
 
     public void SpawnWorldText_ElementalReaction(Vector3 position, ElementalReactionState element, string text)
     {
-        DamageText dt = Instantiate(WorldText, GetCanvasGO().transform).GetComponent<DamageText>();
+        DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
         dt.SpawnText(position, element, text);
     }
 

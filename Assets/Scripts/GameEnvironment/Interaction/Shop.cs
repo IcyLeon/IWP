@@ -19,4 +19,11 @@ public class Shop : MonoBehaviour, IInteract
     {
         return true;
     }
+
+    public void OnInteractUpdate(IInteract interactComponent)
+    {
+    }
+    public void OnInteractExit(IInteract interactComponent)
+    {
+    }
 }

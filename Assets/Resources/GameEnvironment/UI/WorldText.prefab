@@ -95,8 +95,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -164,8 +164,9 @@ GameObject:
   - component: {fileID: 5012270279636797088}
   - component: {fileID: 2059746637669711256}
   - component: {fileID: 1432321189826738098}
+  - component: {fileID: 5611018317895842006}
   m_Layer: 3
-  m_Name: CostCanvas
+  m_Name: WorldText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -265,3 +266,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e852512afa95f0b49a4b1fbcfc45bf81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5611018317895842006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4866210895031179492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a19515c6cf13a43afc64cc6a0b0a3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorldTextREF: {fileID: 4525579221728154856}

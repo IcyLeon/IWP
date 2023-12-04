@@ -271,7 +271,8 @@ public class PlayerController : MonoBehaviour
         if (rb == null || GetCapsuleCollider() == null)
             return false;
 
-        return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore);
+        int layerMask = Physics.DefaultRaycastLayers;
+        return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
     }
 
     public CapsuleCollider GetCapsuleCollider()

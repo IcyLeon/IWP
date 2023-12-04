@@ -127,6 +127,12 @@ MonoBehaviour:
   slider: {fileID: 239222296142593932}
   HealthTextDisplay: {fileID: 0}
   LevelTextDisplay: {fileID: 6969361332126365596}
+  enemyColor:
+    serializedVersion: 2
+    rgba: 0
+  allyColor:
+    serializedVersion: 2
+    rgba: 0
 --- !u!1 &2021677431974705905
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +337,7 @@ GameObject:
   - component: {fileID: 7236369181237699203}
   - component: {fileID: 7044075676779004091}
   m_Layer: 0
-  m_Name: EnemyHealthBar
+  m_Name: WorldHealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -401,7 +407,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &7200612809027885833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,6 +440,12 @@ MonoBehaviour:
   slider: {fileID: 239222296142593932}
   HealthTextDisplay: {fileID: 0}
   LevelTextDisplay: {fileID: 6969361332126365596}
+  enemyColor:
+    serializedVersion: 2
+    rgba: 4284046079
+  allyColor:
+    serializedVersion: 2
+    rgba: 4280539031
 --- !u!114 &7044075676779004091
 MonoBehaviour:
   m_ObjectHideFlags: 0

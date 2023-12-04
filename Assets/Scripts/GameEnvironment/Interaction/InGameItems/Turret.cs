@@ -15,15 +15,6 @@ public class Turret : FriendlyKillers
         return turretSO;
     }
 
-    public override bool CanInteract()
-    {
-        return base.CanInteract();
-    }
-
-    public override void Interact()
-    {
-    }
-
     public override string InteractMessage()
     {
         return "Technician Turret";
@@ -31,29 +22,25 @@ public class Turret : FriendlyKillers
 
     public override bool IsDead()
     {
-        return false;
+        return base.IsDead();
     }
 
-    public override int GetCost()
-    {
-        return 0;
-    }
 
     public override Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
     {
-        base.TakeDamage(position, elements, damageAmt);
-        return null;
+        Elements e = base.TakeDamage(position, elements, damageAmt);
+        return e;
     }
 
     // Start is called before the first frame update
     protected override void Start()
     {
-
+        base.Start();
     }
 
     // Update is called once per frame
     protected override void Update()
     {
-
+        base.Update();
     }
 }
