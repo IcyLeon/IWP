@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class MovementDisable : StateMachineBehaviour
 {
-    public enum LockMovement
+    public enum Lock
     {
         Enable,
         Disable
     }
-    [SerializeField] LockMovement lockMovement;
+    [SerializeField] Lock lockMovement;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -18,11 +18,11 @@ public class MovementDisable : StateMachineBehaviour
         {
             switch(lockMovement)
             {
-                case LockMovement.Enable:
-                    playerCharacters.GetPlayerController().SetLockMovemnt(PlayerController.LockMovement.Enable);
+                case Lock.Enable:
+                    playerCharacters.GetPlayerController().SetLockMovemnt(LockMovement.Enable);
                     break;
-                case LockMovement.Disable:
-                    playerCharacters.GetPlayerController().SetLockMovemnt(PlayerController.LockMovement.Disable);
+                case Lock.Disable:
+                    playerCharacters.GetPlayerController().SetLockMovemnt(LockMovement.Disable);
                     break;
             }
         }

@@ -38,8 +38,8 @@ public class BowCharacters : PlayerCharacters
         switch (aimState)
         {
             case AimState.NONE:
-                if (!isAttacking)
-                    UpdateInputTargetQuaternion();
+                //if (!isAttacking)
+                //    UpdateInputTargetQuaternion();
                 break;
             case AimState.AIM:
                 if (CrossHair == null)
@@ -47,7 +47,16 @@ public class BowCharacters : PlayerCharacters
                 break;
         }
 
-        if (Input.GetMouseButton(1) && GetPlayerController().GetPlayerGroundStatus() == PlayerGroundStatus.GROUND)
+        //if (Input.GetMouseButton(1) && GetPlayerController().GetPlayerGroundStatus() == PlayerGroundStatus.GROUND)
+        //{
+        //    UpdateAim();
+        //    isAimHold = true;
+        //}
+        //else
+        //{
+        //    isAimHold = false;
+        //}
+        if (Input.GetMouseButton(1) && GetPlayerController().CanPerformAction())
         {
             UpdateAim();
             isAimHold = true;
@@ -87,15 +96,6 @@ public class BowCharacters : PlayerCharacters
         isChargedFinish = false;
 
         BasicAttackTrigger();
-    }
-
-    protected override void FixedUpdate()
-    {
-        if (!GetBurstCamera().gameObject.activeSelf)
-            GetPlayerController().UpdatePhysicsMovement();
-
-        if (!GetBurstActive())
-            GetPlayerController().UpdateTargetRotation();
     }
 
     private void UpdateAim()
@@ -145,7 +145,10 @@ public class BowCharacters : PlayerCharacters
     }
     protected override void ChargeHold()
     {
-        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+        //if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+        //    return;
+
+        if (!GetPlayerController().CanPerformAction())
             return;
 
         if (threasHold_Charged > 0.25f)
@@ -177,7 +180,9 @@ public class BowCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+        //if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+        //    return;
+        if (!GetPlayerController().CanPerformAction())
             return;
 
         if (GetBurstActive())

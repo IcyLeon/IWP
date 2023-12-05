@@ -110,6 +110,9 @@ public class CharacterManager : MonoBehaviour
 
     private void SwapCharactersControls(float index)
     {
+        if (playerController.isBurstState())
+            return;
+
         SwapCharacters((int)index - 1);
     }
 

@@ -2,29 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : PlayerGroundState
+public class PlayerRunState : PlayerMovingState
 {
-    public PlayerIdleState(PlayerState playerState) : base(playerState)
+    public PlayerRunState(PlayerState playerState) : base(playerState)
     {
     }
 
+    // Start is called before the first frame update
     public override void Enter()
     {
         base.Enter();
         ResetSpeedModifier();
-        playerStateEnum = PlayerStateEnum.IDLE;
+        playerStateEnum = PlayerStateEnum.WALK;
     }
 
     // Update is called once per frame
     public override void Update()
     {
         base.Update();
-
-        if (GetInputDirection() != Vector3.zero)
-        {
-            GetPlayerState().ChangeState(GetPlayerState().playerRunState);
-            return;
-        }
     }
 
     public override void FixedUpdate()

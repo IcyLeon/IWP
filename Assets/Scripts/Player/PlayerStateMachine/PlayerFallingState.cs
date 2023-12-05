@@ -2,17 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerFallingState : MonoBehaviour
+public class PlayerFallingState : PlayerAirborneState
 {
-    // Start is called before the first frame update
-    void Start()
+    public PlayerFallingState(PlayerState playerState) : base(playerState)
     {
-        
+    }
+
+    // Start is called before the first frame update
+    public override void Enter()
+    {
+        base.Enter();
+        playerStateEnum = PlayerStateEnum.FALL;
+        ResetVerticalVelocity();
+    }
+    public override void Exit()
+    {
+        base.Exit();
+    }
+    public override void FixedUpdate()
+    {
+        LimitFallVelocity();
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        
+        base.Update();
+        if (IsTouchingTerrain())
+        {
+            GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+        }
     }
+
 }

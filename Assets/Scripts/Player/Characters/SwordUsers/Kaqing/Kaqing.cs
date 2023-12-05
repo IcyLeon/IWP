@@ -69,8 +69,8 @@ public class Kaqing : SwordCharacters
             elementalSKill = ElementalSKill.NONE;
         }
 
-        if (elementalSKill != ElementalSKill.THROW)
-            UpdateInputTargetQuaternion();
+        //if (elementalSKill != ElementalSKill.THROW)
+        //    UpdateInputTargetQuaternion();
 
         if (elementalOrb != null)
         {
@@ -88,20 +88,6 @@ public class Kaqing : SwordCharacters
         base.Update();
     }
 
-    protected override void Dash()
-    {
-        if (!GetBurstActive() && !GetPlayerController().IsAiming() && GetModel().activeSelf)
-            GetPlayerController().Dash();
-    }
-
-    protected override void FixedUpdate()
-    {
-        if (!GetPlayerController().IsAiming() && !GetBurstCamera().gameObject.activeSelf && GetModel().activeSelf)
-            GetPlayerController().UpdatePhysicsMovement();
-
-        if (!GetBurstActive())
-            GetPlayerController().UpdateTargetRotation();
-    }
 
     private void BurstAreaDamage(Vector3 pos)
     {
@@ -337,6 +323,6 @@ public class Kaqing : SwordCharacters
 
     private void FloatFor(float sec)
     {
-        GetPlayerController().StayAfloatFor(sec);
+        //GetPlayerController().StayAfloatFor(sec);
     }
 }

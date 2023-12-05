@@ -89,7 +89,7 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND || !GetPlayerController().CanPerformAction())
+        if (!GetPlayerController().CanPerformAction())
             return;
 
         if (GetBurstActive() || !GetModel().activeSelf)

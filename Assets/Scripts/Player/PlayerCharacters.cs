@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 public class PlayerCharacters : Characters
 {
     protected float AimSpeed = 20f;
@@ -181,7 +180,7 @@ public class PlayerCharacters : Characters
 
     protected override void Start()
     {
-        isBurstActive = false;
+        SetBurstActive(false);
 
         healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
 
@@ -225,6 +224,7 @@ public class PlayerCharacters : Characters
     protected override void Update()
     {
         NearestEnemy = GetNearestCharacters(Range);
+
         base.Update();
 
         if (GetElementalReaction().GetElementList().Count != 0)
@@ -245,17 +245,12 @@ public class PlayerCharacters : Characters
 
         if (Animator)
         {
-            Animator.SetBool("isFalling", GetPlayerController().GetPlayerActionStatus() == PlayerActionStatus.FALL);
+            Animator.SetBool("isFalling", GetPlayerController().GetPlayerMovementState() is PlayerFallingState);
+
             Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerController().CanPerformAction());
             Animator.SetBool("isWalking", GetPlayerController().IsMoving());
         }
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        GetPlayerController().UpdatePhysicsMovement();
-        GetPlayerController().UpdateTargetRotation();
     }
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
@@ -266,20 +261,13 @@ public class PlayerCharacters : Characters
         return GetPlayerController().GetRayPosition3D(origin, direction, maxdistance);
     }
 
-    protected void UpdateInputTargetQuaternion()
+
+    private void SetTargetRotation(Quaternion quaternion)
     {
         if (GetPlayerController() == null)
             return;
 
-        GetPlayerController().UpdateInputTargetQuaternion();
-    }
-
-    protected void SetTargetRotation(Quaternion quaternion)
-    {
-        if (GetPlayerController() == null)
-            return;
-
-        GetPlayerController().SetTargetRotation(quaternion);
+        GetPlayerController().GetPlayerState().GetPlayerMovementState().UpdateTargetRotation_Instant(quaternion);
     }
 
     protected void LookAtDirection(Vector3 dir)
@@ -316,7 +304,7 @@ public class PlayerCharacters : Characters
     }
     protected virtual bool ElementalBurstTrigger()
     {
-        if (characterData == null || GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
+        if (characterData == null || !GetPlayerController().CanPerformAction())
             return false;
 
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
@@ -356,8 +344,7 @@ public class PlayerCharacters : Characters
         GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerController().GetStaminaManager().OnDash += Dash;
-        GetPlayerController().onPlayerStateChange += PlayerStateChange;
+        GetPlayerController().GetPlayerState().OnPlayerStateChange += PlayerStateChange;
         GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
     }
@@ -365,12 +352,6 @@ public class PlayerCharacters : Characters
     protected void BasicAttackTrigger()
     {
         PlayerCoordinateAttackManager.CallCoordinateAttack();
-    }
-
-    protected virtual void Dash()
-    {
-        if (!GetBurstActive() && !GetPlayerController().IsAiming())
-            GetPlayerController().Dash();
     }
 
     protected override void OnDestroy()
@@ -394,34 +375,57 @@ public class PlayerCharacters : Characters
             GetPlayerController().OnE_1Down -= EKey_1Down;
             GetPlayerController().OnChargeHold -= ChargeHold;
             GetPlayerController().OnChargeTrigger -= ChargeTrigger;
-            GetPlayerController().onPlayerStateChange -= PlayerStateChange;
-            GetPlayerController().GetStaminaManager().OnDash -= Dash;
+            GetPlayerController().GetPlayerState().OnPlayerStateChange -= PlayerStateChange;
             GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
         }
     }
 
-    private void PlayerStateChange()
+    private void PlayerStateChange(PlayerState state)
     {
-        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.STOPPING)
+        if (state.GetPlayerMovementState() is not PlayerStoppingState)
             Animator.SetBool("isStopping", false);
-        if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.DASH)
+        if (state.GetPlayerMovementState() is not PlayerDashState)
             Animator.SetBool("isDashing", false);
 
-        switch (GetPlayerController().GetPlayerActionStatus())
+        switch (GetPlayerController().GetPlayerMovementState().GetPlayerStateEnum())
         {
-            case PlayerActionStatus.JUMP:
+            case PlayerMovementState.PlayerStateEnum.JUMP:
                 if (Animator != null)
                     Animator.SetTrigger("Jump");
                 break;
-            case PlayerActionStatus.DASH:
+            case PlayerMovementState.PlayerStateEnum.DASH:
                 if (Animator != null)
                     Animator.SetBool("isDashing", true);
                 break;
-            case PlayerActionStatus.STOPPING:
+            case PlayerMovementState.PlayerStateEnum.STOPPING:
                 if (Animator != null)
                     Animator.SetBool("isStopping", true);
                 break;
         }
-
     }
+
+    //private void PlayerStateChange()
+    //{
+    //    if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.STOPPING)
+    //        Animator.SetBool("isStopping", false);
+    //    if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.DASH)
+    //        Animator.SetBool("isDashing", false);
+
+    //    switch (GetPlayerController().GetPlayerActionStatus())
+    //    {
+    //        case PlayerActionStatus.JUMP:
+    //            if (Animator != null)
+    //                Animator.SetTrigger("Jump");
+    //            break;
+    //        case PlayerActionStatus.DASH:
+    //            if (Animator != null)
+    //                Animator.SetBool("isDashing", true);
+    //            break;
+    //        case PlayerActionStatus.STOPPING:
+    //            if (Animator != null)
+    //                Animator.SetBool("isStopping", true);
+    //            break;
+    //    }
+
+    //}
 }

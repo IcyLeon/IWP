@@ -10,7 +10,6 @@ public class StaminaManager : MonoBehaviour
     private float WaitToRegen;
     private float WaitElapsed;
     private StaminaScript staminaScript;
-    public event Action OnDash;
     private PlayerController PlayerController;
     [SerializeField] StaminaSO StaminaSO;
 
@@ -52,15 +51,27 @@ public class StaminaManager : MonoBehaviour
             return;
 
         PlayerController = CharacterManager.GetInstance().GetPlayerController();
-        PlayerController.onPlayerStateChange += PlayerStateChange;
+        //PlayerController.onPlayerStateChange += PlayerStateChange;
+        PlayerController.GetPlayerState().OnPlayerStateChange += PlayerStateChange;
     }
 
+    private void PlayerStateChange(PlayerState state)
+    {
+        switch (PlayerController.GetPlayerMovementState().GetPlayerStateEnum())
+        {
+            case PlayerMovementState.PlayerStateEnum.DASH:
+                if (GetStaminaSO() != null)
+                    PerformStaminaAction(GetStaminaSO().DashCost);                
+                break;
+        }
+    }
     private void OnDestroy()
     {
         if (PlayerController == null)
             return;
 
-        PlayerController.onPlayerStateChange -= PlayerStateChange;
+        //PlayerController.onPlayerStateChange -= PlayerStateChange;
+        PlayerController.GetPlayerState().OnPlayerStateChange -= PlayerStateChange;
     }
 
     private void UpdateRegen()
@@ -112,25 +123,22 @@ public class StaminaManager : MonoBehaviour
         return StaminaSO;
     }
 
-    public void PerformDash()
+    public bool CanPerformDash()
     {
         if (GetStaminaSO() == null)
-            return;
+            return false;
 
-        if (CanPerformStaminaAction(GetStaminaSO().DashCost))
-        {
-            OnDash?.Invoke();
-        }
+        return CanPerformStaminaAction(GetStaminaSO().DashCost);
     }
 
-    private void PlayerStateChange()
-    {
-        switch(PlayerController.GetPlayerActionStatus())
-        {
-            case PlayerActionStatus.DASH:
-                if (GetStaminaSO() != null)
-                    PerformStaminaAction(GetStaminaSO().DashCost);
-                break;
-        }
-    }
+    //private void PlayerStateChange()
+    //{
+    //    switch(PlayerController.GetPlayerActionStatus())
+    //    {
+    //        case PlayerActionStatus.DASH:
+    //            if (GetStaminaSO() != null)
+    //                PerformStaminaAction(GetStaminaSO().DashCost);
+    //            break;
+    //    }
+    //}
 }

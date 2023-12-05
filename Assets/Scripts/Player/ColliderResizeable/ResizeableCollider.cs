@@ -33,7 +33,12 @@ public class ResizeableCollider : MonoBehaviour
     [SerializeField] PlayerController pc;
     [SerializeField] DefaultColliderData DefaultColliderData;
     [SerializeField] SlopeData SlopeData;
+    [SerializeField] AnimationCurve SlopeSpeedAngles;
 
+    public AnimationCurve GetSlopeSpeedAngles()
+    {
+        return SlopeSpeedAngles;
+    }
     private void Awake()
     {
         Resize();
