@@ -97,6 +97,7 @@ MonoBehaviour:
   Model: {fileID: 189936}
   col: {fileID: 5074914678337411487}
   NavMeshAgent: {fileID: 7081428479805541896}
+  EnemyValueDropSO: {fileID: 11400000, guid: f8b3150eea4f0364296d3ee81f3ead30, type: 2}
 --- !u!54 &2741243841039659890
 Rigidbody:
   m_ObjectHideFlags: 0

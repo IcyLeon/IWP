@@ -62,7 +62,6 @@ public class Amber : BowCharacters, ICoordinateAttack
             eSkillArrows.SetFocalPointContact(GetContactPoint(pos));
         }
         Animator.SetTrigger("Dodge");
-        SetisAttacking(true);
         GetCharacterData().ResetElementalSkillCooldown();
     }
 
@@ -127,6 +126,9 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     public bool CoordinateAttackEnded()
     {
+        if (GetPlayerController().isDeadState() && IsDead())
+            return true;
+
         return CoodinateTimerElapsed <= 0f;
     }
 

@@ -16,7 +16,7 @@ public class PlayerDashState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
-        DashTimer = 0.3f;
+        DashTimer = 0.25f;
         DashElasped = 0f;
 
         playerStateEnum = PlayerStateEnum.DASH;

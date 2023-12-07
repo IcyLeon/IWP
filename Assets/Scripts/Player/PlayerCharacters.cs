@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerCharacters : Characters
@@ -77,14 +78,42 @@ public class PlayerCharacters : Characters
     public override bool IsDead()
     {
         if (GetCharacterData() != null)
-            return GetCharacterData().isDead();
+            return GetCharacterData().IsDead();
 
         return base.IsDead();
     }
 
-    public Characters GetNearestCharacters(float range)
+    private Collider[] GetAllNearestCharacters(float range)
     {
         Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, range, LayerMask.GetMask("Entity"));
+        List<Collider> colliderCopy = new List<Collider>(colliders);
+        for (int i = colliderCopy.Count - 1; i >= 0; i--)
+        {
+            Characters c = colliderCopy[i].GetComponent<Characters>();
+            if (c != null)
+            {
+                Vector3 dir = GetPlayerController().GetPlayerOffsetPosition().position - c.transform.position;
+                if (Physics.Raycast(c.transform.position, dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.collider.GetComponent<PlayerCharacters>() == null)
+                    {
+                        colliderCopy.RemoveAt(i);
+                    }
+                }
+
+                if (c.IsDead())
+                {
+                    colliderCopy.RemoveAt(i);
+                }
+
+            }
+        }
+        return colliderCopy.ToArray();
+    }
+
+    public Characters GetNearestCharacters(float range)
+    {
+        Collider[] colliders = GetAllNearestCharacters(range);
 
         if (colliders.Length == 0)
             return null;
@@ -98,31 +127,17 @@ public class PlayerCharacters : Characters
             Characters c = colliderCopy[i].GetComponent<Characters>();
             if (c != null)
             {
-                if (c.IsDead())
-                {
-                    colliderCopy.RemoveAt(i);
-                }
-                else
-                {
-                    float dist1 = Vector3.Distance(colliderCopy[i].transform.position, GetPlayerController().transform.position);
-                    float dist2 = Vector3.Distance(nearestCollider.transform.position, GetPlayerController().transform.position);
+                float dist1 = Vector3.Distance(colliderCopy[i].transform.position, GetPlayerController().transform.position);
+                float dist2 = Vector3.Distance(nearestCollider.transform.position, GetPlayerController().transform.position);
 
-                    if (dist1 <= dist2)
-                    {
-                        nearestCollider = colliderCopy[i];
-                    }
+                if (dist1 <= dist2)
+                {
+                    nearestCollider = colliderCopy[i];
                 }
             }
         }
 
-        if (colliderCopy.Count == 0)
-            nearestCollider = null;
-
-
-        if (nearestCollider != null)
-            return nearestCollider.GetComponent<Characters>();
-        else
-            return null;
+        return nearestCollider.GetComponent<Characters>();
     }
 
     public override int GetLevel()
@@ -223,9 +238,12 @@ public class PlayerCharacters : Characters
     // Update is called once per frame
     protected override void Update()
     {
-        NearestEnemy = GetNearestCharacters(Range);
-
         base.Update();
+
+        if (GetPlayerController().isDeadState())
+            return;
+
+        NearestEnemy = GetNearestCharacters(Range);
 
         if (GetElementalReaction().GetElementList().Count != 0)
         {
@@ -246,8 +264,7 @@ public class PlayerCharacters : Characters
         if (Animator)
         {
             Animator.SetBool("isFalling", GetPlayerController().GetPlayerMovementState() is PlayerFallingState);
-
-            Animator.SetFloat("Velocity", GetPlayerController().GetInputDirection().magnitude, 0.15f, Time.deltaTime);
+            Animator.SetFloat("Velocity", GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerController().CanPerformAction());
             Animator.SetBool("isWalking", GetPlayerController().IsMoving());
         }
@@ -290,6 +307,14 @@ public class PlayerCharacters : Characters
         GetPlayerController().UpdateAim();
     }
 
+    public override bool UpdateDie()
+    {
+        if (characterData.GetHealth() <= 0)
+            return true;
+
+        return false;
+    }
+
     protected virtual void ElementalSkillTrigger()
     {
     }
@@ -304,7 +329,7 @@ public class PlayerCharacters : Characters
     }
     protected virtual bool ElementalBurstTrigger()
     {
-        if (characterData == null || !GetPlayerController().CanPerformAction())
+        if (characterData == null || !GetPlayerController().CanAttack())
             return false;
 
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
@@ -401,31 +426,10 @@ public class PlayerCharacters : Characters
                 if (Animator != null)
                     Animator.SetBool("isStopping", true);
                 break;
+            case PlayerMovementState.PlayerStateEnum.DEAD:
+                if (Animator != null)
+                    Animator.SetTrigger("Dead");
+                break;
         }
     }
-
-    //private void PlayerStateChange()
-    //{
-    //    if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.STOPPING)
-    //        Animator.SetBool("isStopping", false);
-    //    if (GetPlayerController().GetPlayerActionStatus() != PlayerActionStatus.DASH)
-    //        Animator.SetBool("isDashing", false);
-
-    //    switch (GetPlayerController().GetPlayerActionStatus())
-    //    {
-    //        case PlayerActionStatus.JUMP:
-    //            if (Animator != null)
-    //                Animator.SetTrigger("Jump");
-    //            break;
-    //        case PlayerActionStatus.DASH:
-    //            if (Animator != null)
-    //                Animator.SetBool("isDashing", true);
-    //            break;
-    //        case PlayerActionStatus.STOPPING:
-    //            if (Animator != null)
-    //                Animator.SetBool("isStopping", true);
-    //            break;
-    //    }
-
-    //}
 }

@@ -25,7 +25,8 @@ public class HealthBarScript : MonoBehaviour
 
     public void Init(bool showLevel, bool isAlly)
     {
-        LevelTextDisplay.gameObject.SetActive(showLevel);
+        if (LevelTextDisplay)
+            LevelTextDisplay.gameObject.SetActive(showLevel);
         slider.fillRect.GetComponent<Image>().color = enemyColor;
         if (isAlly)
             slider.fillRect.GetComponent<Image>().color = allyColor;

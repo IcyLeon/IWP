@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class MainUI : MonoBehaviour
 {
@@ -12,10 +11,12 @@ public class MainUI : MonoBehaviour
     [SerializeField] Transform ElementalDisplayUITransform;
     [SerializeField] InteractionContentUI InteractOptionsUI;
     [SerializeField] GameObject CombatUI;
+    [SerializeField] GameObject FallenUI;
     [SerializeField] GameObject[] MainUIList;
     private List<ArrowIndicator> ArrowIndicatorList;
-    private GameObject BlueEffectObject;
+    [SerializeField] GameObject BlueEffectObject;
     private bool Paused;
+
     public static MainUI GetInstance()
     {
         return instance;
@@ -24,6 +25,19 @@ public class MainUI : MonoBehaviour
     public InteractionContentUI GetInteractOptionsUI()
     {
         return InteractOptionsUI;
+    }
+
+    public void OpenFallenPanel()
+    {
+        if (!FallenPanelIsOpen())
+        {
+            FallenUI.gameObject.SetActive(true);
+        }
+    }
+
+    public bool FallenPanelIsOpen()
+    {
+        return FallenUI.gameObject.activeSelf;
     }
 
     private void Awake()
@@ -48,15 +62,13 @@ public class MainUI : MonoBehaviour
         Paused = isMainUIList();
         CombatUI.SetActive(!isPaused());
 
-        //if (BlueEffectObject == null)
-        //    BlueEffectObject = GameObject.FindGameObjectWithTag("BlurEffect");
-        //else
-        //    BlueEffectObject.SetActive(PauseUI);
-
-        if (isPaused())
+        if (isPaused() || FallenPanelIsOpen())
             Time.timeScale = 0;
         else
             Time.timeScale = 1;
+
+        if (BlueEffectObject)
+            BlueEffectObject.SetActive(isPaused());
     }
 
     public bool isPaused()

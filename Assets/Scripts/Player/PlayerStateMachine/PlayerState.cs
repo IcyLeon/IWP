@@ -27,7 +27,7 @@ public class PlayerState
     public PlayerSprintState playerSprintState { get; }
     public PlayerAimState playerAimState { get; }
     public PlayerBurstState playerBurstState { get; }
-
+    public PlayerDeadState playerDeadState { get; }
     public PlayerAttackState playerAttackState { get; }
     public delegate void PlayerStateChange(PlayerState state);
     public PlayerStateChange OnPlayerStateChange;
@@ -78,6 +78,7 @@ public class PlayerState
         playerAimState = new PlayerAimState(this);
         playerBurstState = new PlayerBurstState(this);
         playerAttackState = new PlayerAttackState(this);
+        playerDeadState = new PlayerDeadState(this);
         PlayerController = playerController;
 
         ChangeState(playerIdleState);

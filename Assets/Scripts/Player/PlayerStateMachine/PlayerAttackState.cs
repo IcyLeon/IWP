@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerMovementState
 {
-    private bool IsAttacking;
     public PlayerAttackState(PlayerState playerState) : base(playerState)
     {
     }
@@ -15,19 +15,34 @@ public class PlayerAttackState : PlayerMovementState
 
     public override void FixedUpdate()
     {
+        Float();
         if (IsMovingHorizontally())
         {
             DecelerateHorizontal();
         }
     }
 
+
     public override void Update()
     {
         base.Update();
-        if (!IsAttacking)
+
+        if (IsAiming())
         {
-            GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
-        } 
+            GetPlayerState().ChangeState(GetPlayerState().playerAimState);
+            return;
+        }
+
+        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
+        if (playerCharacter != null)
+        {
+            if (!playerCharacter.GetisAttacking())
+            {
+                GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+                return;
+            }
+        }
+
     }
 
     public override void Exit()

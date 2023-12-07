@@ -45,6 +45,7 @@ public class SwordCharacters : PlayerCharacters
     protected override void Start()
     {
         base.Start();
+        Range = 5f;
         AttackLayer = Animator.GetLayerIndex("Attack Layer");
         MaxAttackPhase = 4;
         ResetBasicAttacks();
@@ -89,10 +90,10 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (!GetPlayerController().CanPerformAction())
+        if (!GetPlayerController().CanAttack())
             return;
 
-        if (GetBurstActive() || !GetModel().activeSelf)
+        if (!GetModel().activeSelf)
             return;
 
         if (Time.time - LastClickedTime >= 1.5f)
@@ -114,7 +115,6 @@ public class SwordCharacters : PlayerCharacters
             {
                 ResetBasicAttacks();
             }
-            SetisAttacking(true);
 
             string AtkName = "Attack" + BasicAttackPhase;
             if (ContainsParam(Animator, AtkName))

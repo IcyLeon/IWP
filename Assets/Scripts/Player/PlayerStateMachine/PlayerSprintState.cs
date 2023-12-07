@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class PlayerSprintState : PlayerMovingState
 {
+    private float RunSpeed;
     public PlayerSprintState(PlayerState playerState) : base(playerState)
     {
+        RunSpeed = GetWalkSpeed() * 1.6f;
     }
 
     public override void Enter()
     {
         base.Enter();
         playerStateEnum = PlayerStateEnum.SPRINTING;
-        SetSpeedModifier(2f);
+        SetSpeed(RunSpeed);
+    }
+
+    public override float GetAnimationSpeed()
+    {
+        return 1f;
     }
 
     public override void Exit()
     {
         base.Exit();
-        ResetSpeedModifier();
+        ResetSpeed();
     }
 
     public override void Update()

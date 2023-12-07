@@ -14,11 +14,12 @@ public class PlayerMovementState : IState
         STOPPING,
         JUMP,
         FALL,
-        PLUNGE
+        PLUNGE,
+        DEAD
     }
 
     private PlayerState PlayerState;
-
+    private float WalkSpeed;
     private float Speed;
     protected Rigidbody rb;
 
@@ -32,10 +33,19 @@ public class PlayerMovementState : IState
     {
         GetPlayerState().PlayerData.SpeedModifier = sp;
     }
-
-    protected void ResetSpeedModifier()
+    protected void SetSpeed(float sp)
     {
-        GetPlayerState().PlayerData.SpeedModifier = 0;
+        Speed = sp;
+    }
+
+    protected void ResetSpeed()
+    {
+        Speed = WalkSpeed;
+    }
+
+    protected float GetWalkSpeed()
+    {
+        return WalkSpeed;
     }
 
     public Vector3 GetInputDirection()
@@ -51,7 +61,7 @@ public class PlayerMovementState : IState
     public PlayerMovementState(PlayerState playerState)
     {
         PlayerState = playerState;
-        Speed = 4f;
+        WalkSpeed = 5f;
         GetPlayerState().PlayerData.dampedTargetRotationPassedTime = 0;
     }
 
@@ -71,11 +81,6 @@ public class PlayerMovementState : IState
 
     public virtual void Exit()
     {
-    }
-
-    public float GetSpeed()
-    {
-        return Mathf.Pow(GetHorizontalVelocity().magnitude, 0.5f);
     }
 
     public virtual void FixedUpdate()
@@ -101,11 +106,37 @@ public class PlayerMovementState : IState
         PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if (playerCharacter.GetisAttacking())
+            if (GetPlayerState().GetPlayerMovementState() is not PlayerDeadState)
             {
-                GetPlayerState().ChangeState(GetPlayerState().playerAttackState);
+                if (playerCharacter.GetisAttacking()) {
+                    GetPlayerState().ChangeState(GetPlayerState().playerAttackState);
+                    return;
+                }
+                if (playerCharacter.IsDead())
+                {
+                    GetPlayerState().ChangeState(GetPlayerState().playerDeadState);
+                    return;
+                }
             }
         }
+    }
+
+    protected void LimitFallVelocity()
+    {
+        float FallSpeedLimit = 35f;
+        Vector3 velocity = GetVerticalVelocity();
+        if (velocity.y >= -FallSpeedLimit)
+        {
+            return;
+        }
+
+        Vector3 limitVel = new Vector3(0f, -FallSpeedLimit - velocity.y, 0f);
+        rb.AddForce(limitVel, ForceMode.VelocityChange);
+
+    }
+    public virtual float GetAnimationSpeed()
+    {
+        return 0;
     }
 
     private void UpdateDash()
@@ -141,7 +172,7 @@ public class PlayerMovementState : IState
 
             if (slopeSpeedModifier == 0f)
             {
-                ResetSpeedModifier();
+                SetSpeedModifier(1f);
                 return;
             }
 
@@ -166,6 +197,9 @@ public class PlayerMovementState : IState
         if (rb == null)
             return;
 
+        if (this is PlayerDeadState)
+            return;
+
         if (this is not PlayerAimState)
         {
             UpdateTargetRotation();
@@ -186,8 +220,12 @@ public class PlayerMovementState : IState
         if (rb == null || GetCapsuleCollider() == null)
             return false;
 
+
         int layerMask = Physics.DefaultRaycastLayers;
-        return Physics.CheckSphere(rb.position + Vector3.up * 0.13f, GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
+        Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
+        Collider[] colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.up * GetCapsuleCollider().radius * 4f + Vector3.down * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, GetCapsuleCollider().radius, layerMask, QueryTriggerInteraction.Ignore);
+
+        return colliders.Length > 1 || Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance - 0.1f, layerMask, QueryTriggerInteraction.Ignore);
     }
 
     protected CapsuleCollider GetCapsuleCollider()
@@ -199,6 +237,11 @@ public class PlayerMovementState : IState
             return null;
 
         return GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
+    }
+
+    private ResizeableCollider GetResizeableCollider()
+    {
+        return GetPlayerState().GetPlayerController().GetResizeableCollider();
     }
 
     public void UpdateInputTargetQuaternion()

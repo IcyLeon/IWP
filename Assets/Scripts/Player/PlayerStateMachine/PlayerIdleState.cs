@@ -11,7 +11,7 @@ public class PlayerIdleState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
-        ResetSpeedModifier();
+        ResetSpeed();
         playerStateEnum = PlayerStateEnum.IDLE;
     }
 

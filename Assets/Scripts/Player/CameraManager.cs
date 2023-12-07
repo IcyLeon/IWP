@@ -16,14 +16,21 @@ public class CameraManager : MonoBehaviour
 
     private void LockWhenPaused()
     {
+        CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
+        CinemachinePOV aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
+
         if (MainUI.GetInstance().isCursorVisible())
         {
-            CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
-            CinemachinePOV aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
-            playerPOV.m_VerticalAxis.m_InputAxisValue = 0;
-            playerPOV.m_HorizontalAxis.m_InputAxisValue = 0;
-            aimPOV.m_VerticalAxis.m_InputAxisValue = 0;
-            aimPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+            if (playerPOV != null)
+            {
+                playerPOV.m_VerticalAxis.m_InputAxisValue = 0;
+                playerPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+            }
+            if (aimPOV != null)
+            {
+                aimPOV.m_VerticalAxis.m_InputAxisValue = 0;
+                aimPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+            }
         }
         //playerCamera.enabled = aimCamera.enabled = !MainUI.GetInstance().isCursorVisible();
     }

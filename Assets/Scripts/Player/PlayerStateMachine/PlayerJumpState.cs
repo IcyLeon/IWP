@@ -13,7 +13,8 @@ public class PlayerJumpState : PlayerAirborneState
         base.Enter();
         playerStateEnum = PlayerStateEnum.JUMP;
         StartFalling = false;
-        ResetVelocity();
+        ResetVerticalVelocity();
+        ResetSpeed();
         rb.AddForce(8f * Vector3.up, ForceMode.VelocityChange);
     }
 
@@ -25,16 +26,12 @@ public class PlayerJumpState : PlayerAirborneState
         {
             DecelerateVertically();
         }
-        if (IsMovingHorizontally())
-        {
-            DecelerateHorizontal();
-        }
     }
 
     public override void Update()
     {
         base.Update();
-        if (!StartFalling && IsMovingUp(0f))
+        if (!StartFalling && IsMovingDown(0f))
         {
             StartFalling = true;
         }

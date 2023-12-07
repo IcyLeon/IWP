@@ -278,7 +278,6 @@ public class Albino : BaseEnemy
             yield return null;
         }
 
-        //GetComponent<Collider>().isTrigger = false;
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), false);
         Animator.SetTrigger("Slam");
         JumpOnAir = false;

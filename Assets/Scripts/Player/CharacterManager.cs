@@ -17,13 +17,13 @@ public class CharacterManager : MonoBehaviour
     private static CharacterManager instance;
     private PlayerController playerController;
     [SerializeField] List<CharacterInfo> charactersInfo = new();
-    List<PlayerCharacters> PlayerCharactersList = new();
+    private List<PlayerCharacters> PlayerCharactersList = new();
     private PlayerCharacters CurrentCharacter;
     public delegate void OnCharacterChange(CharacterData characterData);
     public OnCharacterChange onCharacterChange;
     private InventoryManager inventoryManager;
     private ElementsIndicator elementsIndicator;
-    private int CurrentSelectionIdx;
+    private CharacterData CurrentSelectionCharacterData;
 
     private SceneManager SceneManager;
 
@@ -38,7 +38,6 @@ public class CharacterManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        CurrentSelectionIdx = -1;
     }
     
     public void AddPlayerCharactersList(PlayerCharacters pc)
@@ -51,6 +50,41 @@ public class CharacterManager : MonoBehaviour
         return elementsIndicator;
     }
 
+    public void HealAllCharacters(float amt)
+    {
+        for (int i = 0; i < GetCharactersOwnedList().Count; i++)
+        {
+            PlayerCharactersList[i].SetHealth(PlayerCharactersList[i].GetHealth() + amt);
+        }
+    }
+
+    public void HealCharacter(CharacterData c, float amt)
+    {
+        if (c == null)
+            return;
+
+        float actualamt = amt;
+        if (actualamt < 1f)
+            actualamt = 1f;
+
+        c.SetHealth(c.GetHealth() + (int)actualamt);
+    }
+    public CharacterData GetAliveCharacters()
+    {
+        List<PlayerCharacters> PlayerCharacerListCopy = new(PlayerCharactersList);
+        for (int i = PlayerCharacerListCopy.Count - 1; i >= 0; i--)
+        {
+            if (PlayerCharacerListCopy[i].IsDead())
+            {
+                PlayerCharacerListCopy.RemoveAt(i);
+            }
+        }
+
+        if (PlayerCharacerListCopy.Count > 0)
+            return PlayerCharacerListCopy[0].GetCharacterData();
+
+        return null;
+    }
     public void SetElementsIndicator(ElementsIndicator ElementsIndicator)
     {
         elementsIndicator = ElementsIndicator;
@@ -77,7 +111,7 @@ public class CharacterManager : MonoBehaviour
         PlayerCharactersList.Clear();
         inventoryManager.SpawnCharacters();
         SubscribeToKeyInputs();
-        SwapCharacters(CurrentSelectionIdx);
+        SwapCharacters(CurrentSelectionCharacterData);
     }
 
     private void OnDestroy()
@@ -88,10 +122,10 @@ public class CharacterManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateCooldown();
+        UpdateCharacterData();
     }
 
-    private void UpdateCooldown()
+    private void UpdateCharacterData()
     {
         for (int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
         {
@@ -113,7 +147,16 @@ public class CharacterManager : MonoBehaviour
         if (playerController.isBurstState())
             return;
 
+        if (GetPlayerController().GetPlayerState().GetPlayerMovementState() is PlayerDeadState || GetPlayerController().IsAiming())
+            return;
+
         SwapCharacters((int)index - 1);
+    }
+
+    public void SwapCharacters(CharacterData characterData)
+    {
+        PlayerCharacters playerCharacters = GetPlayerCharacter(characterData.GetPlayerCharacterSO());
+        ChangeCharacter(playerCharacters, characterData);
     }
 
     public void SwapCharacters(int index)
@@ -122,17 +165,26 @@ public class CharacterManager : MonoBehaviour
         if (index >= inventoryManager.GetCharactersOwnedList().Count)
             return;
 
-        PlayerCharacters playerCharacters = GetPlayerCharacter(inventoryManager.GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
-        CharacterData characterData = inventoryManager.GetOwnedCharacterData(inventoryManager.GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
+        PlayerCharacters playerCharacters = GetPlayerCharacter(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
+        CharacterData characterData = inventoryManager.GetOwnedCharacterData(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
 
+        ChangeCharacter(playerCharacters, characterData);
+    }
+
+    private void ChangeCharacter(PlayerCharacters playerCharacters, CharacterData characterData)
+    {
         if (characterData != null && playerCharacters != null)
         {
+            if (playerCharacters.IsDead())
+                return;
+
             for (int i = 0; i < PlayerCharactersList.Count; i++)
             {
                 PlayerCharactersList[i].gameObject.SetActive(false);
             }
 
             playerCharacters.SetCharacterData(characterData);
+            playerCharacters.SetisAttacking(false);
             inventoryManager.SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(playerCharacters);
             playerCharacters.gameObject.SetActive(true);
@@ -141,21 +193,9 @@ public class CharacterManager : MonoBehaviour
             {
                 Destroy(GetElementsIndicator().gameObject);
             }
-            CurrentSelectionIdx = index;
+            CurrentSelectionCharacterData = characterData;
             onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData());
         }
-
-    }
-
-    public bool CheckIfAllAreDead()
-    {
-        for (int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
-        {
-            CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
-            if (!characterData.isDead())
-                return false;
-        }
-        return true;
     }
 
     public void SetCurrentCharacter(PlayerCharacters character)
@@ -181,6 +221,10 @@ public class CharacterManager : MonoBehaviour
                 return PlayerCharactersList[i];
         }
         return null;
+    }
+    public List<PlayerCharacters> GetPlayerCharactersList()
+    {
+        return PlayerCharactersList;
     }
 
     public CharacterInfo GetCharacterInfo(PlayerCharacterSO playersSO)

@@ -8,4 +8,5 @@ public class FriendlyKillerSO : PurchaseableObjectSO
 {
     public float BaseMaxHealth;
     public float BaseDamage;
+    public float DetectionRange;
 }

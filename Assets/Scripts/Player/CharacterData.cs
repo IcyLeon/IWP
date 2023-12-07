@@ -104,6 +104,11 @@ public class CharacterData : UpgradableItems
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
+
+        if (IsDead())
+        {
+            CurrentEnergyBurstCost = 0f;
+        }
     }
 
     public void ResetElementalSkillCooldown()
@@ -145,13 +150,14 @@ public class CharacterData : UpgradableItems
         return CurrentHealth;
     }
 
-    public bool isDead()
+    public bool IsDead()
     {
         return CurrentHealth <= 0;
     }
     public void SetHealth(float Hp)
     {
         CurrentHealth = Hp;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
     }
 
     public override void Upgrade()

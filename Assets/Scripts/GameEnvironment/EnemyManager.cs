@@ -18,6 +18,7 @@ public class EnemyManager : MonoBehaviour
     private int CurrentWave;
     private int CurrentEnemyDefeated;
     private int TotalEnemies;
+    private int TotalEnemiesDefeated;
     public event Action OnEnemyDefeatedChange;
     public event Action OnEnemyWaveChange;
 
@@ -32,6 +33,8 @@ public class EnemyManager : MonoBehaviour
 
     public void CallOnEnemyKilled(BaseEnemy enemy)
     {
+        TotalEnemiesDefeated++;
+        InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(enemy.GetDropValue()));
         OnEnemyKilled?.Invoke(enemy);
     }
 
@@ -75,6 +78,7 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
+        ResetTotalEnemiesDefeated();
         SetCurrentWave(0);
     }
 
@@ -100,6 +104,17 @@ public class EnemyManager : MonoBehaviour
         CurrentEnemyDefeated = value;
         OnEnemyDefeatedChange?.Invoke();
     }
+
+    public void ResetTotalEnemiesDefeated()
+    {
+        TotalEnemiesDefeated = 0;
+    }
+
+    public int GetTotalEnemyDefeated()
+    {
+        return TotalEnemiesDefeated;
+    }
+
 
     public void ResetCounter()
     {

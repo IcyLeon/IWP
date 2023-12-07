@@ -58,9 +58,9 @@ public class PlayerController : MonoBehaviour
     {
         return lockMovement;
     }
-    public float GetSpeed()
+    public float GetAnimationSpeed()
     {
-        return playerState.GetPlayerMovementState().GetSpeed();
+        return playerState.GetPlayerMovementState().GetAnimationSpeed();
     }
 
     public bool isBurstActive()
@@ -90,6 +90,11 @@ public class PlayerController : MonoBehaviour
         resizeableCollider = GetComponent<ResizeableCollider>();
         GetCharacterManager().onCharacterChange += RecalculateSize;
         RecalculateSize(null);
+    }
+
+    public MainUI GetMainUI()
+    {
+        return mainUI;
     }
 
     public CharacterManager GetCharacterManager()
@@ -179,7 +184,7 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
-        if (mainUI.isPaused() || Input.GetKey(KeyCode.LeftAlt))
+        if (mainUI.isPaused() || Input.GetKey(KeyCode.LeftAlt) || mainUI.FallenPanelIsOpen())
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -192,6 +197,9 @@ public class PlayerController : MonoBehaviour
         }
 
         OnScroll?.Invoke(Input.mouseScrollDelta.y);
+
+        if (GetCharacterManager().GetAliveCharacters() == null)
+            return;
 
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();
@@ -222,6 +230,16 @@ public class PlayerController : MonoBehaviour
         return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAimState) && 
             GetPlayerMovementState() is not PlayerDashState &&
             !isBurstState();
+    }
+
+
+    public bool CanAttack()
+    {
+        return CanPerformAction() || GetPlayerMovementState() is PlayerAttackState;
+    }
+    public bool isDeadState()
+    {
+        return GetPlayerMovementState() is PlayerDeadState;
     }
 
     public bool isBurstState()

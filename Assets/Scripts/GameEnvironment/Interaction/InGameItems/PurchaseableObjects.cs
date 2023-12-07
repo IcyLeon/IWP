@@ -64,9 +64,9 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
         return (Cost <= InventoryManager.GetInstance().GetCurrency(PurchaseableType));
     } 
 
-    public virtual string InteractMessage()
+    public string InteractMessage()
     {
-        return "??? Object";
+        return GetPurchaseableObjectSO().PurchaseableObjectName;
     }
 
     public void ShowCost()

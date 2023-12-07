@@ -29,11 +29,14 @@ public class Kaqing : SwordCharacters
     private ElementalSKill elementalSKill = ElementalSKill.NONE;
     private ElementalBurst elementalBurst = ElementalBurst.First_Phase;
     private Coroutine BurstCoroutine;
+    private float UltiRange;
+    private float ESkillRange;
 
     private void Awake()
     {
         threasHold_Charged = 0;
-        Range = 8f;
+        UltiRange = 8f;
+        ESkillRange = 6.5f;
     }
 
     // Start is called before the first frame update
@@ -69,9 +72,6 @@ public class Kaqing : SwordCharacters
             elementalSKill = ElementalSKill.NONE;
         }
 
-        //if (elementalSKill != ElementalSKill.THROW)
-        //    UpdateInputTargetQuaternion();
-
         if (elementalOrb != null)
         {
             if (elementalOrb.GetEnergyOrbMoving())
@@ -91,7 +91,7 @@ public class Kaqing : SwordCharacters
 
     private void BurstAreaDamage(Vector3 pos)
     {
-        Collider[] colliders = Physics.OverlapSphere(pos, Range, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(pos, UltiRange, LayerMask.GetMask("Entity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             Collider collider = colliders[i];
@@ -112,7 +112,7 @@ public class Kaqing : SwordCharacters
     {
         yield return new WaitForSeconds(0.18f);
         BurstRangeEffect = Instantiate(BurstRangeEffectPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Vector3 scale = Vector3.one * Range;
+        Vector3 scale = Vector3.one * UltiRange;
         scale.y = 1f;
 
         BurstRangeEffect.transform.localScale = scale;
@@ -137,9 +137,9 @@ public class Kaqing : SwordCharacters
             switch (elementalBurst)
             {
                 case ElementalBurst.First_Phase:
-                    bool Visible = CurrentHits >= TotalHits / 1.15f;
+                    bool Visible = CurrentHits >= TotalHits / 2f;
                     GetModel().SetActive(Visible);
-                    isBurstActive = Visible;
+                    isBurstActive = !Visible;
                     Animator.SetBool("IsBurstFinish", Visible);
 
                     if (CurrentHits >= TotalHits - 1)
@@ -166,7 +166,7 @@ public class Kaqing : SwordCharacters
 
     protected override bool ElementalBurstTrigger()
     {
-        if (!Animator.GetCurrentAnimatorStateInfo(0).IsName("AimState") && !Animator.GetCurrentAnimatorStateInfo(0).IsName("2ndSkillThrow") && elementalSKill != ElementalSKill.THROW)
+        if (GetPlayerController().CanPerformAction() && GetPlayerController().GetPlayerMovementState() is not PlayerAimState)
         {
             bool canTrigger = base.ElementalBurstTrigger();
             if (canTrigger)
@@ -197,10 +197,10 @@ public class Kaqing : SwordCharacters
 
     protected override void ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanAttack())
             return;
 
-        if (GetBurstActive() || !GetModel().activeSelf)
+        if (!GetModel().activeSelf)
             return;
 
         if (elementalOrb != null)
@@ -214,7 +214,7 @@ public class Kaqing : SwordCharacters
                     if (targetOrb == null)
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
-                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, Camera.main.transform.forward, Range);
+                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, Camera.main.transform.forward, ESkillRange);
                 }
                 else
                 {
@@ -253,14 +253,14 @@ public class Kaqing : SwordCharacters
             forward = transform.forward;
             forward.y = 0;
             forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 1.35f);
+            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, ESkillRange);
             ElementalHitPos.y = EmitterPivot.position.y;
         }
         else
         {
             forward = NearestEnemy.transform.position - GetPlayerController().GetPlayerOffsetPosition().position;
             forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, Range / 1.35f);
+            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, ESkillRange);
         }
     }
 

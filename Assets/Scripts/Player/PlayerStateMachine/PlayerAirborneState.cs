@@ -36,11 +36,6 @@ public class PlayerAirborneState : PlayerMovementState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-
-        if (IsMovingHorizontally())
-        {
-            DecelerateHorizontal();
-        }
     }
 
     public override void Update()
@@ -77,20 +72,6 @@ public class PlayerAirborneState : PlayerMovementState
                 GetPlayerState().ChangeState(GetPlayerState().playerPlungeState);
             }
         }
-    }
-
-    protected void LimitFallVelocity()
-    {
-        float FallSpeedLimit = 35f;
-        Vector3 velocity = GetVerticalVelocity();
-        if (velocity.y >= -FallSpeedLimit)
-        {
-            return;
-        }
-
-        Vector3 limitVel = new Vector3(0f, -FallSpeedLimit - velocity.y, 0f);
-        rb.AddForce(limitVel, ForceMode.VelocityChange);
-
     }
 
     public override void Exit()

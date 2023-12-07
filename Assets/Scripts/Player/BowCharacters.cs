@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BowCharacters : PlayerCharacters
 {
-    private enum AimState { NONE, AIM }
-    
     [SerializeField] GameObject ArrowPrefab;
     [SerializeField] Transform EmitterPivot;
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
@@ -16,7 +14,6 @@ public class BowCharacters : PlayerCharacters
     private float ChargedMaxElapsed = 1.5f; // do not change
     private float ChargeElapsed;
     private Vector3 Direction, ShootDirection;
-    private AimState aimState = AimState.NONE;
     private bool isChargedFinish;
     private float threasHold_Charged;
     private bool isAimHold;
@@ -35,28 +32,11 @@ public class BowCharacters : PlayerCharacters
     }
     protected override void Update()
     {
-        switch (aimState)
-        {
-            case AimState.NONE:
-                //if (!isAttacking)
-                //    UpdateInputTargetQuaternion();
-                break;
-            case AimState.AIM:
-                if (CrossHair == null)
-                    CrossHair = Instantiate(AssetManager.GetInstance().GetCrossHair(), AssetManager.GetInstance().GetCanvasGO().transform);
-                break;
-        }
+        base.Update();
+        if (GetPlayerController().isDeadState())
+            return;
 
-        //if (Input.GetMouseButton(1) && GetPlayerController().GetPlayerGroundStatus() == PlayerGroundStatus.GROUND)
-        //{
-        //    UpdateAim();
-        //    isAimHold = true;
-        //}
-        //else
-        //{
-        //    isAimHold = false;
-        //}
-        if (Input.GetMouseButton(1) && GetPlayerController().CanPerformAction())
+        if (Input.GetMouseButton(1) && GetPlayerController().CanAttack())
         {
             UpdateAim();
             isAimHold = true;
@@ -74,8 +54,6 @@ public class BowCharacters : PlayerCharacters
             Animator.SetFloat("AimVelocityX", GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
             Animator.SetFloat("AimVelocityZ", GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
         }
-
-        base.Update();
     }
 
     protected virtual void Fire(Vector3 direction)
@@ -100,6 +78,9 @@ public class BowCharacters : PlayerCharacters
 
     private void UpdateAim()
     {
+        if (CrossHair == null)
+            CrossHair = Instantiate(AssetManager.GetInstance().GetCrossHair(), AssetManager.GetInstance().GetCanvasGO().transform);
+
         if (ChargeElapsed < ChargedMaxElapsed)
         {
             ChargeElapsed += Time.deltaTime;
@@ -119,7 +100,6 @@ public class BowCharacters : PlayerCharacters
 
         UpdateCameraAim();
         Animator.SetBool("IsAiming", true);
-        aimState = AimState.AIM;
         Direction = (GetRayPosition3D(Camera.main.transform.position, Camera.main.transform.forward, 100f) - GetEmitterPivot().transform.position).normalized;
         LookAtDirection(Camera.main.transform.forward);
     }
@@ -145,10 +125,7 @@ public class BowCharacters : PlayerCharacters
     }
     protected override void ChargeHold()
     {
-        //if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
-        //    return;
-
-        if (!GetPlayerController().CanPerformAction())
+        if (!GetPlayerController().CanAttack())
             return;
 
         if (threasHold_Charged > 0.25f)
@@ -180,9 +157,7 @@ public class BowCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        //if (GetPlayerController().GetPlayerGroundStatus() != PlayerGroundStatus.GROUND)
-        //    return;
-        if (!GetPlayerController().CanPerformAction())
+        if (!GetPlayerController().CanAttack())
             return;
 
         if (GetBurstActive())
@@ -203,7 +178,6 @@ public class BowCharacters : PlayerCharacters
     {
         threasHold_Charged = 0;
         ChargeElapsed = 0;
-        aimState = AimState.NONE;
         UpdateDefaultPosOffsetAndZoom(delay);
         DestroyChargeUpEmitter();
         Animator.SetBool("IsAiming", false);

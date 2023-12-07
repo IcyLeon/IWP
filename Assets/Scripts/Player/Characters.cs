@@ -137,6 +137,7 @@ public class Characters : MonoBehaviour, IDamage
 
         return false;
     }
+
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt)
     {
         if (IsDead())

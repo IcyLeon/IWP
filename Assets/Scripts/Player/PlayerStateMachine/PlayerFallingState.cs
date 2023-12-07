@@ -13,7 +13,6 @@ public class PlayerFallingState : PlayerAirborneState
     {
         base.Enter();
         playerStateEnum = PlayerStateEnum.FALL;
-        ResetVerticalVelocity();
     }
     public override void Exit()
     {
@@ -21,6 +20,7 @@ public class PlayerFallingState : PlayerAirborneState
     }
     public override void FixedUpdate()
     {
+        UpdateTargetRotation();
         LimitFallVelocity();
     }
 
@@ -28,6 +28,7 @@ public class PlayerFallingState : PlayerAirborneState
     public override void Update()
     {
         base.Update();
+
         if (IsTouchingTerrain())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);

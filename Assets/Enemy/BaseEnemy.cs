@@ -14,6 +14,7 @@ public class BaseEnemy : Characters
     [SerializeField] protected NavMeshAgent NavMeshAgent;
     private EnemyManager EM;
     protected Vector3 RamdomDestination;
+    [SerializeField] EnemyValue EnemyValueDropSO;
 
     protected int Staggering = 1;
     protected int CurrentStaggering;
@@ -33,6 +34,14 @@ public class BaseEnemy : Characters
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
         Player = CharacterManager.GetInstance().GetPlayerController();
+    }
+
+    public float GetDropValue()
+    {
+        if (EnemyValueDropSO == null)
+            return 1;
+
+        return EnemyValueDropSO.BaseDropValue * (GetLevel() - 1) + EnemyValueDropSO.BaseDropValue * (Random.Range(0.5f, 1.5f));
     }
 
     // Update is called once per frame

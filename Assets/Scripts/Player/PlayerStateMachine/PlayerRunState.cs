@@ -12,9 +12,15 @@ public class PlayerRunState : PlayerMovingState
     public override void Enter()
     {
         base.Enter();
-        ResetSpeedModifier();
+        ResetSpeed();
         playerStateEnum = PlayerStateEnum.WALK;
     }
+
+    public override float GetAnimationSpeed()
+    {
+        return 0.6f;
+    }
+
 
     // Update is called once per frame
     public override void Update()
@@ -30,5 +36,6 @@ public class PlayerRunState : PlayerMovingState
     public override void Exit()
     {
         base.Exit();
+        ResetSpeed();
     }
 }

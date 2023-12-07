@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aab473a5e159d9419e68588a755dc21, type: 3}
   m_Name: Turret 1
   m_EditorClassIdentifier: 
+  PurchaseableObjectName: Technician Turret
+  PurchaseableObjectSprite: {fileID: 21300000, guid: 613a28c60c86e944f8e6b9ec2ffaa604,
+    type: 3}
   BasePrice: 0
   BaseMaxHealth: 1000
-  BaseDamage: 30
+  BaseDamage: 10
+  DetectionRange: 5
+  FireRate: 5

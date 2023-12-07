@@ -12,8 +12,8 @@ public interface IGamePurchase : IInteract
 
 public class FriendlyKillers : PurchaseableObjects, IDamage
 {
-    private float CurrentHealth;
-    private float MaxHealth;
+    [SerializeField] protected Animator animator;
+    private FriendlyKillerData friendlyKillerData;
     protected HealthBarScript healthBarScript;
     public event Action OnDead;
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
@@ -28,8 +28,16 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
         healthBarScript.transform.localPosition = GetWorldTxtLocalPosition();
         healthBarScript.Init(false, true);
-        MaxHealth = GetFriendlyKillerSO().BaseMaxHealth;
-        CurrentHealth = MaxHealth;
+
+        friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO());
+    }
+
+    protected float GetDetectionRange()
+    {
+        if (friendlyKillerData == null)
+            return 0;
+
+        return friendlyKillerData.GetDetectionRange();
     }
 
     public FriendlyKillerSO GetFriendlyKillerSO()
@@ -46,7 +54,17 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     protected override void PurchaseAction()
     {
         if (canBuy)
+        {
+            if (animator != null)
+            {
+                if (Characters.ContainsParam(animator, "Activated"))
+                {
+                    animator.SetTrigger("Activated");
+                }
+                FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
+            }
             canBuy = false;
+        }
     }
 
     // Update is called once per frame
@@ -54,25 +72,16 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     {
         if (healthBarScript)
         {
-            healthBarScript.SetupMinAndMax(0, GetMaxHealth());
-            healthBarScript.UpdateHealth(GetHealth());
+            healthBarScript.SetupMinAndMax(0, friendlyKillerData.GetMaxHealth());
+            healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth());
             healthBarScript.gameObject.SetActive(!canBuy);
         }
     }
 
-    public virtual float GetHealth()
-    {
-        return CurrentHealth;
-    }
-
-    public virtual float GetMaxHealth()
-    {
-        return MaxHealth;
-    }
 
     public virtual bool IsDead()
     {
-        return CurrentHealth <= 0 && !canBuy;
+        return friendlyKillerData.GetCurrentHealth() <= 0 && !canBuy;
     }
 
     public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
@@ -91,15 +100,10 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         }
         Elements e = new Elements(elemental);
 
-        SetHealth(GetHealth() - damageAmt);
+        friendlyKillerData.SetCurrentHealth(friendlyKillerData.GetCurrentHealth() - damageAmt);
         AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, damageAmt.ToString());
 
         return e;
-    }
-
-    public virtual void SetHealth(float val)
-    {
-        CurrentHealth = val;
     }
 
 }

@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerAimState : PlayerMovementState
 {
+    private float AimSpeed;
     public PlayerAimState(PlayerState playerState) : base(playerState)
     {
+        AimSpeed = GetWalkSpeed() / 2f;
     }
     public override void Enter()
     {
         base.Enter();
-        SetSpeedModifier(0.5f);
+        SetSpeed(AimSpeed);
     }
 
     public override void FixedUpdate()
@@ -43,7 +45,7 @@ public class PlayerAimState : PlayerMovementState
     public override void Exit()
     {
         base.Exit();
-        ResetSpeedModifier();
+        ResetSpeed();
     }
 
 }

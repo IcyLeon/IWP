@@ -45,29 +45,29 @@ public class PlayerGroundState : PlayerMovementState
         base.Update();
 
         if (IsBurstActive())
+        {
             GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
+        }
+        else
+        {
+            OnJumpInput();
+            OnDashInput();
+            OnAimInput();
 
-        OnJumpInput();
-        OnDashInput();
-        OnAimInput();
-        if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState && !IsBurstActive())
-            OnFall();
+            if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState 
+                && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)
+                OnFall();
+        }
     }
     
     private void OnJumpInput()
     {
-        if (IsBurstActive())
-            return;
-
         if (Input.GetKeyDown(KeyCode.Space))
             OnJump();
     }
 
     private void OnDashInput()
     {
-        if (IsBurstActive())
-            return;
-
         if (!GetPlayerState().GetPlayerController().GetStaminaManager().CanPerformDash() || !CanDash())
             return;
 
@@ -77,9 +77,6 @@ public class PlayerGroundState : PlayerMovementState
 
     private void OnAimInput()
     {
-        if (IsBurstActive())
-            return;
-
         if (IsAiming())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerAimState);

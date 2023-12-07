@@ -15,7 +15,6 @@ public class PlayerBurstState : PlayerGroundState
 
     public override void FixedUpdate()
     {
-        //base.FixedUpdate();
         Float();
         if (IsMovingHorizontally())
         {
@@ -25,10 +24,11 @@ public class PlayerBurstState : PlayerGroundState
 
     public override void Update()
     {
-        base.Update();
+        //base.Update();
         if (!IsBurstActive())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+            return;
         }
     }
 

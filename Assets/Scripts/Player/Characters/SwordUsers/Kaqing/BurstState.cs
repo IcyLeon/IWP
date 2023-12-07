@@ -30,7 +30,6 @@ public class BurstState : StateMachineBehaviour
             {
                 pc.GetBurstCamera().gameObject.SetActive(false);
             }
-            //pc.SetBurstActive(false);
         }
         if (Characters.ContainsParam(animator, "IsBurstFinish"))
             animator.SetBool("IsBurstFinish", false);

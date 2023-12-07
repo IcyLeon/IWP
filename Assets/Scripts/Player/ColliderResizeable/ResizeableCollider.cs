@@ -49,6 +49,17 @@ public class ResizeableCollider : MonoBehaviour
         Resize();
     }
 
+    public float GetDefaultColliderData_height()
+    {
+        return DefaultColliderData.Height;
+    }
+
+    public float GetDefaultColliderData_CenterY()
+    {
+        return DefaultColliderData.CenterY;
+    }
+
+
     public Vector3 GetColliderCenterInLocalSpace()
     {
         return ColliderCenterInLocalSpace;
@@ -99,7 +110,7 @@ public class ResizeableCollider : MonoBehaviour
     {
         SetCapsuleColliderRadius(DefaultColliderData.Radius);
 
-        SetCapsuleColliderHeight(DefaultColliderData.Height * (1f - GetSlopeData().StepHeightPercentage));
+        SetCapsuleColliderHeight(GetDefaultColliderData_height() * (1f - GetSlopeData().StepHeightPercentage));
 
         RecalculateCapsuleColliderCenter();
 
@@ -129,9 +140,9 @@ public class ResizeableCollider : MonoBehaviour
         if (pc.GetCapsuleCollider() == null)
             return;
 
-        float colliderHeightDifference = DefaultColliderData.Height - pc.GetCapsuleCollider().height;
+        float colliderHeightDifference = GetDefaultColliderData_height() - pc.GetCapsuleCollider().height;
 
-        Vector3 newColliderCenter = new Vector3(0f, DefaultColliderData.CenterY + (colliderHeightDifference / 2f), 0f);
+        Vector3 newColliderCenter = new Vector3(0f, GetDefaultColliderData_CenterY() + (colliderHeightDifference / 2f), 0f);
 
         pc.GetCapsuleCollider().center = newColliderCenter;
     }
