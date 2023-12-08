@@ -53,9 +53,9 @@ public class SceneManager : MonoBehaviour
         OnSceneChanged?.Invoke();
     }
 
-    public string GetSceneName(SceneEnum t)
+    private string GetSceneName(SceneEnum SceneEnum)
     {
-        switch (t)
+        switch (SceneEnum)
         {
             case SceneEnum.GAME:
                 return "GameScene";

@@ -33,6 +33,11 @@ public class PlayerGroundState : PlayerMovementState
     {
         base.FixedUpdate();
         Float();
+
+        if (IsMovingHorizontally())
+        {
+            DecelerateHorizontal();
+        }
     }
 
     public void OnFall()
@@ -47,6 +52,7 @@ public class PlayerGroundState : PlayerMovementState
         if (IsBurstActive())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
+            return;
         }
         else
         {
@@ -54,9 +60,12 @@ public class PlayerGroundState : PlayerMovementState
             OnDashInput();
             OnAimInput();
 
-            if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState 
+            if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState
                 && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)
+            {
                 OnFall();
+                return;
+            }
         }
     }
     
@@ -80,7 +89,6 @@ public class PlayerGroundState : PlayerMovementState
         if (IsAiming())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerAimState);
-            return;
         }
     }
 

@@ -19,17 +19,34 @@ public class CameraManager : MonoBehaviour
         CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
         CinemachinePOV aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
 
-        if (MainUI.GetInstance().isCursorVisible())
+        if (!MainUI.GetInstance().isCursorVisible())
         {
             if (playerPOV != null)
             {
-                playerPOV.m_VerticalAxis.m_InputAxisValue = 0;
-                playerPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+                playerPOV.m_HorizontalAxis.m_InputAxisName = "Mouse X";
+                playerPOV.m_VerticalAxis.m_InputAxisName = "Mouse Y";
             }
             if (aimPOV != null)
             {
-                aimPOV.m_VerticalAxis.m_InputAxisValue = 0;
-                aimPOV.m_HorizontalAxis.m_InputAxisValue = 0;
+                aimPOV.m_HorizontalAxis.m_InputAxisName = "Mouse X";
+                aimPOV.m_VerticalAxis.m_InputAxisName = "Mouse Y";
+            }
+        }
+        else
+        {
+            if (playerPOV != null)
+            {
+                playerPOV.m_HorizontalAxis.m_InputAxisName = "";
+                playerPOV.m_VerticalAxis.m_InputAxisName = "";
+                playerPOV.m_HorizontalAxis.m_InputAxisValue = 0f;
+                playerPOV.m_VerticalAxis.m_InputAxisValue = 0f;
+            }
+            if (aimPOV != null)
+            {
+                aimPOV.m_HorizontalAxis.m_InputAxisName = "";
+                aimPOV.m_VerticalAxis.m_InputAxisName = "";
+                aimPOV.m_HorizontalAxis.m_InputAxisValue = 0f;
+                aimPOV.m_VerticalAxis.m_InputAxisValue = 0f;
             }
         }
         //playerCamera.enabled = aimCamera.enabled = !MainUI.GetInstance().isCursorVisible();

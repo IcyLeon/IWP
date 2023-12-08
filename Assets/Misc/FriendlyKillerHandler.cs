@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FriendlyKillerHandler : MonoBehaviour
 {
+    private int MaxKillers = 3;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
     public OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
@@ -28,6 +29,11 @@ public class FriendlyKillerHandler : MonoBehaviour
     public List<FriendlyKillerData> GetFriendlyKillerDataList()
     {
         return FriendlyKillerDataList;
+    }
+
+    public bool HasReachedLimitKillers()
+    {
+        return FriendlyKillerDataList.Count >= MaxKillers;
     }
 
     public static FriendlyKillerHandler GetInstance()

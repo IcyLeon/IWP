@@ -57,6 +57,9 @@ public class AssetManager : MonoBehaviour
     [Header("UI")]
     public GameObject ElectricEffect;
 
+    [Header("FriendlyKillers")]
+    public GameObject TurretPrefab;
+
     private static AssetManager instance;
 
     public static string CurrencyText(CurrencyType type)

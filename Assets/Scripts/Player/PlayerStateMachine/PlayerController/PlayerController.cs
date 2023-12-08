@@ -196,10 +196,11 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        OnScroll?.Invoke(Input.mouseScrollDelta.y);
-
         if (GetCharacterManager().GetAliveCharacters() == null)
             return;
+
+
+        OnScroll?.Invoke(Input.mouseScrollDelta.y);
 
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();
@@ -245,10 +246,6 @@ public class PlayerController : MonoBehaviour
     public bool isBurstState()
     {
         return GetPlayerMovementState() is PlayerBurstState;
-    }
-    public void ResetVelocity()
-    {
-        playerState.GetPlayerMovementState().ResetVelocity();
     }
 
     public StaminaManager GetStaminaManager()

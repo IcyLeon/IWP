@@ -105,16 +105,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   threshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.8
   intensity:
     m_OverrideState: 1
-    m_Value: 0.59
+    m_Value: 1
   scatter:
     m_OverrideState: 1
-    m_Value: 0.8
+    m_Value: 0.7
   clamp:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 65472
   tint:
     m_OverrideState: 1
@@ -123,14 +123,14 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   skipIterations:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   dirtTexture:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {fileID: 0}
     dimension: 1
   dirtIntensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &3562451679502023022
 MonoBehaviour:
@@ -146,13 +146,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   lift:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 0.95164514, y: 0.990885, z: 1, w: -0.0000000012638133}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 1, y: 1, z: 1, w: -0.033444818}
   gain:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 0.8238369, y: 0.8294269, z: 1, w: 0.029379943}
 --- !u!114 &7739644171059363912
 MonoBehaviour:

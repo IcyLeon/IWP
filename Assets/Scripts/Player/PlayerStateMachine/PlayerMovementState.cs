@@ -25,6 +25,7 @@ public class PlayerMovementState : IState
 
     protected PlayerStateEnum playerStateEnum;
 
+    private float HitDistance;
     public PlayerStateEnum GetPlayerStateEnum()
     {
         return playerStateEnum;
@@ -86,10 +87,6 @@ public class PlayerMovementState : IState
     public virtual void FixedUpdate()
     {
         UpdatePhysicsMovement();
-        if (IsMovingHorizontally())
-        {
-            DecelerateHorizontal();
-        }
     }
 
     protected bool IsAiming()
@@ -178,6 +175,7 @@ public class PlayerMovementState : IState
 
             SetSpeedModifier(slopeSpeedModifier);
 
+            HitDistance = hit.distance;
             float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - hit.distance;
 
             if (distanceToFloatingPoint == 0f)
@@ -190,6 +188,22 @@ public class PlayerMovementState : IState
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
             rb.AddForce(liftForce, ForceMode.VelocityChange);
         }
+        else
+        {
+            if (!IsTouchingTerrain())
+                return;
+
+            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - GetHitDistance();
+            float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
+
+            Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
+            rb.AddForce(liftForce, ForceMode.VelocityChange);
+        }
+    }
+
+    public float GetHitDistance()
+    {
+        return HitDistance;
     }
 
     private void UpdatePhysicsMovement()
@@ -212,7 +226,11 @@ public class PlayerMovementState : IState
         if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable || GetPlayerState().PlayerData.SpeedModifier == 0)
             return;
 
-        rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+        float friction = 0.25f;
+        Vector3 desiredVelocity = (GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier);
+        Vector3 horizontalVelocity = GetHorizontalVelocity();
+        Vector3 frictionForce = -horizontalVelocity * friction;
+        rb.AddForce(desiredVelocity - horizontalVelocity + frictionForce, ForceMode.VelocityChange);
     }
 
     protected bool IsTouchingTerrain()
@@ -277,6 +295,11 @@ public class PlayerMovementState : IState
     protected void SetTargetRotation(Quaternion quaternion)
     {
         GetPlayerState().PlayerData.Target_Rotation = quaternion;
+    }
+
+    protected Vector3 GetTargetRotationDirection(float targetRotationAngle)
+    {
+        return Quaternion.Euler(0f, targetRotationAngle, 0f) * Vector3.forward;
     }
 
     protected void RotateTowardsTargetRotation()

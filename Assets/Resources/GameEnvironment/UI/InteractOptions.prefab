@@ -90,10 +90,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 45
-  m_MinHeight: 45
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 48
+  m_PreferredHeight: 48
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011e9b77220164540b38b6ea88674193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InteractIcons: {fileID: 4185870871290430556}
   ContentText: {fileID: 2604147914256919756}
 --- !u!1 &7391226270944790664
 GameObject:

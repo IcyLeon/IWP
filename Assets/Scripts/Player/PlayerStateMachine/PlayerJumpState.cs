@@ -4,24 +4,45 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerAirborneState
 {
-    private bool StartFalling;
+    private bool shouldKeepRotating;
+    private float JumpForce;
+
     public PlayerJumpState(PlayerState playerState) : base(playerState)
     {
+        JumpForce = 8f;
     }
     public override void Enter()
     {
         base.Enter();
-        playerStateEnum = PlayerStateEnum.JUMP;
-        StartFalling = false;
-        ResetVerticalVelocity();
         ResetSpeed();
-        rb.AddForce(8f * Vector3.up, ForceMode.VelocityChange);
+        SetSpeedModifier(0f);
+        playerStateEnum = PlayerStateEnum.JUMP;
+
+        ResetVelocity();
+        shouldKeepRotating = GetInputDirection() != Vector3.zero;
+        Jump();
+    }
+
+    private void Jump()
+    {
+        Vector3 direction = GetTargetRotationDirection(GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y);
+        Debug.Log(direction);
+        if (shouldKeepRotating)
+        {
+            UpdateInputTargetQuaternion();
+        }
+
+        Vector3 JumpForceDir = GetPlayerState().PlayerData.CurrentJumpForceXZ * direction.normalized;
+        JumpForceDir.y = JumpForce;
+        rb.AddForce(JumpForceDir, ForceMode.VelocityChange);
     }
 
     public override void FixedUpdate()
     {
-        base.FixedUpdate();
-
+        if (shouldKeepRotating)
+        {
+            UpdateTargetRotation();
+        }
         if (IsMovingUp())
         {
             DecelerateVertically();
@@ -31,12 +52,8 @@ public class PlayerJumpState : PlayerAirborneState
     public override void Update()
     {
         base.Update();
-        if (!StartFalling && IsMovingDown(0f))
-        {
-            StartFalling = true;
-        }
 
-        if (!StartFalling || IsMovingUp(0f))
+        if (!IsMovingDown(0f))
         {
             return;
         }
@@ -47,7 +64,5 @@ public class PlayerJumpState : PlayerAirborneState
     public override void Exit()
     {
         base.Exit();
-
-        StartFalling = false;
     }
 }

@@ -28,8 +28,14 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
         healthBarScript.transform.localPosition = GetWorldTxtLocalPosition();
         healthBarScript.Init(false, true);
+    }
 
-        friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO());
+    public void SetKillerData(FriendlyKillerData f){
+        friendlyKillerData = f;
+        if (friendlyKillerData != null)
+        {
+            PurchaseAction();
+        }
     }
 
     protected float GetDetectionRange()
@@ -61,7 +67,11 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                 {
                     animator.SetTrigger("Activated");
                 }
-                FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
+                if (friendlyKillerData == null)
+                {
+                    friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO());
+                    FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
+                }
             }
             canBuy = false;
         }
@@ -72,8 +82,11 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     {
         if (healthBarScript)
         {
-            healthBarScript.SetupMinAndMax(0, friendlyKillerData.GetMaxHealth());
-            healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth());
+            if (friendlyKillerData != null)
+            {
+                healthBarScript.SetupMinAndMax(0, friendlyKillerData.GetMaxHealth());
+                healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth());
+            }
             healthBarScript.gameObject.SetActive(!canBuy);
         }
     }
@@ -81,6 +94,9 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     public virtual bool IsDead()
     {
+        if (friendlyKillerData == null)
+            return true;
+
         return friendlyKillerData.GetCurrentHealth() <= 0 && !canBuy;
     }
 

@@ -292,12 +292,6 @@ public class PlayerCharacters : Characters
         Quaternion quaternion = Quaternion.LookRotation(dir);
         SetTargetRotation(quaternion);
     }
-    protected void ResetVelocity()
-    {
-        if (GetPlayerController() == null)
-            return;
-        GetPlayerController().ResetVelocity();
-    }
 
     protected void UpdateCameraAim()
     {

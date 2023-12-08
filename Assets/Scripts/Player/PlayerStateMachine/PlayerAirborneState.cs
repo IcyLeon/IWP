@@ -67,7 +67,7 @@ public class PlayerAirborneState : PlayerMovementState
 
         if (!Physics.Raycast(rb.position, Vector3.down, PlungeAttackRange, layerMask, QueryTriggerInteraction.Ignore))
         {
-            if (Input.GetMouseButtonDown(0) && rb.useGravity)
+            if (Input.GetMouseButtonDown(0))
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerPlungeState);
             }

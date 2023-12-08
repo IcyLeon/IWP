@@ -19,8 +19,9 @@ public class FallenUI : MonoBehaviour
         if (characterManager.GetAliveCharacters() != null)
             return;
 
-        ReviveAllCharacters();
         SceneManager.GetInstance().ChangeScene(SceneEnum.SHOP);
+        ReviveAllCharacters();
+        EnemyManager.GetInstance().ResetEverything();
     }
 
     void ReviveAllCharacters()

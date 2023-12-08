@@ -120,4 +120,11 @@ public class EnemyManager : MonoBehaviour
     {
         SetCurrentEnemyDefeated(0);
     }
+
+    public void ResetEverything()
+    {
+        ResetTotalEnemiesDefeated();
+        SetEnemiesCount(0);
+        SetCurrentWave(0);
+    }
 }

@@ -13,6 +13,7 @@ public class PlayerRunState : PlayerMovingState
     {
         base.Enter();
         ResetSpeed();
+        GetPlayerState().PlayerData.CurrentJumpForceXZ = 3.5f;
         playerStateEnum = PlayerStateEnum.WALK;
     }
 

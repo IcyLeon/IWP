@@ -12,6 +12,7 @@ public class PlayerIdleState : PlayerGroundState
     {
         base.Enter();
         ResetSpeed();
+        GetPlayerState().PlayerData.CurrentJumpForceXZ = 0f;
         playerStateEnum = PlayerStateEnum.IDLE;
     }
 
@@ -20,7 +21,7 @@ public class PlayerIdleState : PlayerGroundState
     {
         base.Update();
 
-        if (GetInputDirection() != Vector3.zero)
+        if (GetInputDirection() != Vector3.zero && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)
         {
             GetPlayerState().ChangeState(GetPlayerState().playerRunState);
             return;

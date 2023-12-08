@@ -23,7 +23,7 @@ public class PlayerMovingState : PlayerGroundState
     {
         base.Update();
 
-        if (GetInputDirection() == Vector3.zero)
+        if (GetInputDirection() == Vector3.zero && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
             return;

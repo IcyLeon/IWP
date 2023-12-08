@@ -32,6 +32,14 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
         return true;
     }
 
+    public Sprite GetInteractionSprite()
+    {
+        if (GetPurchaseableObjectSO() == null)
+            return null;
+
+        return GetPurchaseableObjectSO().PurchaseableObjectSprite;
+    }
+
     public virtual int GetCost()
     {
         if (GetPurchaseableObjectSO() == null)

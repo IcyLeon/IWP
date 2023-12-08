@@ -42,6 +42,25 @@ public class GameManager : MonoBehaviour
         CurrentEnemySpawnedList = new();
         isCompleted = false;
         TotalEnemyInWave = 0;
+        LoadKillersAroundTerrain();
+    }
+
+    private void LoadKillersAroundTerrain()
+    {
+        FriendlyKillerHandler friendlyKillerHandler = FriendlyKillerHandler.GetInstance();
+        foreach(FriendlyKillerData f in friendlyKillerHandler.GetFriendlyKillerDataList())
+        {
+            Vector3 pos = SpawnRandomlyWithinTerrain();
+            FriendlyKillers friendlyKillers = null;
+            switch(f.GetFriendlyKillerSO())
+            {
+                case TurretSO t:
+                    friendlyKillers = Instantiate(AssetManager.GetInstance().TurretPrefab, pos, Quaternion.identity).GetComponent<Turret>();
+                    break;
+            }
+            if (friendlyKillers != null)
+                friendlyKillers.SetKillerData(f);
+        }
     }
 
     private void OnEnemyKilled(BaseEnemy enemy)
@@ -57,6 +76,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateWave()
     {
+        if (Time.timeScale == 0)
+            return;
+
         if (EM.GetCurrentWave() != 0)
         {
             if (EM.GetCurrentEnemyDefeated() < TotalEnemyInWave)

@@ -36,4 +36,9 @@ public class Teleporter : MonoBehaviour, IInteract
     public void OnInteractExit(IInteract interactComponent)
     {
     }
+
+    public Sprite GetInteractionSprite()
+    {
+        return null;
+    }
 }

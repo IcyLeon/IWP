@@ -11,6 +11,7 @@ public interface IInteract
     string InteractMessage();
     void OnInteractUpdate(IInteract interactComponent);
     void OnInteractExit(IInteract interactComponent);
+    Sprite GetInteractionSprite();
 }
 
 public class InteractManager : MonoBehaviour
@@ -55,6 +56,7 @@ public class InteractManager : MonoBehaviour
             CurrentIdx = 0;
         if (CurrentIdx < 0)
             CurrentIdx = InteractOptionList.Count - 1;
+
     }
     private void Update()
     {
@@ -87,6 +89,7 @@ public class InteractManager : MonoBehaviour
             playerController.OnScroll -= Scroll;
         }
     }
+
     private IEnumerator UpdateInteractObj()
     {
         List<IInteract> CurrentInteractList = new();

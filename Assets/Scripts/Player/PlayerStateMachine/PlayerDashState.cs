@@ -18,7 +18,7 @@ public class PlayerDashState : PlayerGroundState
         base.Enter();
         DashTimer = 0.25f;
         DashElasped = 0f;
-
+        GetPlayerState().PlayerData.CurrentJumpForceXZ = 5f;
         playerStateEnum = PlayerStateEnum.DASH;
         DashDirection = GetPlayerState().GetPlayerController().transform.forward;
         Dash();

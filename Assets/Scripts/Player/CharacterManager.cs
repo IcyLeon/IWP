@@ -155,6 +155,9 @@ public class CharacterManager : MonoBehaviour
 
     public void SwapCharacters(CharacterData characterData)
     {
+        if (characterData == null)
+            return;
+
         PlayerCharacters playerCharacters = GetPlayerCharacter(characterData.GetPlayerCharacterSO());
         ChangeCharacter(playerCharacters, characterData);
     }
