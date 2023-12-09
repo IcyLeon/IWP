@@ -72,7 +72,7 @@ public class AmberESkillArrows : MonoBehaviour
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(transform.position, new Elements(Amber.GetPlayerCharacterSO().Elemental), 10f);
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Amber.GetPlayerCharacterSO().Elemental), 10f);
             }
         }
 

@@ -110,10 +110,6 @@ public class Amber : BowCharacters, ICoordinateAttack
         }
     }
 
-    public float GetCoordinateAttackTimer()
-    {
-        return CoordinateTimer;
-    }
 
     public void UpdateCoordinateAttack()
     {

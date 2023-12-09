@@ -61,7 +61,7 @@ public class Arrow : MonoBehaviour
                 if (damageObject != null)
                 {
                     if (!damageObject.IsDead())
-                        damageObject.TakeDamage(transform.position, elements, BowCharacters.GetDamage());
+                        damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharacters.GetDamage());
                 }
             }
 

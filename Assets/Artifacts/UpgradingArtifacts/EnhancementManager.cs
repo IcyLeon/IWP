@@ -34,6 +34,7 @@ public class EnhancementManager : MonoBehaviour
     private int[] CostList;
     private float PreviewUpgradeEXP;
     private bool UpgradinginProgress = false;
+    private InventoryManager InventoryManager;
 
     [Header("Artifacts Stats")]
     [SerializeField] GameObject[] ArtifactsStatsContainer;
@@ -41,8 +42,8 @@ public class EnhancementManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InventoryManager.GetInstance().onInventoryListChanged += OnInventoryListChanged;
-        OnInventoryListChanged();
+        InventoryManager = InventoryManager.GetInstance();
+        InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
 
         LoadEmptySlots();
         AutoAddBtn.onClick.AddListener(AutoAdd);
@@ -97,18 +98,17 @@ public class EnhancementManager : MonoBehaviour
     {
         upgradeCanvas.SlotPopup.HideItem(GetItemREF());
 
-        if (upgradeCanvas.SlotPopup.GetItemButtonList() != null)
+        if (upgradeCanvas.SlotPopup.GetItemButton_Dictionary() != null)
         {
-            for (int i = 0; i < upgradeCanvas.SlotPopup.GetItemButtonList().Count; i++)
+            foreach(var go in upgradeCanvas.SlotPopup.GetItemButton_Dictionary().Keys)
             {
-                ItemButton itemButton = upgradeCanvas.SlotPopup.GetItemButtonList()[i];
+                ItemButton itemButton = upgradeCanvas.SlotPopup.GetItemButton_Dictionary()[go];
                 if (itemButton.GetItemREF() is Artifacts)
                 {
                     Artifacts artifacts = itemButton.GetItemREF() as Artifacts;
                     if (artifacts.GetCharacterEquipped() != null)
                     {
                         upgradeCanvas.SlotPopup.HideItem(artifacts);
-                        i--;
                     }
                 }
                 else
@@ -296,16 +296,14 @@ public class EnhancementManager : MonoBehaviour
             if (!sendslotInfo.itemButtonREF)
                 return;
 
-            ItemButton SlotPopupitemButton = upgradeCanvas.SlotPopup.GetItemButton(sendslotInfo.itemButtonREF.GetItemREF());
-
-            if (!SlotPopupitemButton)
-                return;
-
-            SlotPopupitemButton.ToggleRemoveItemImage(item != null);
+            if (upgradeCanvas.SlotPopup.GetItemButton_Dictionary().TryGetValue(sendslotInfo.itemButtonREF.GetItemREF(), out ItemButton SlotPopupitemButton))
+            {
+                SlotPopupitemButton.ToggleRemoveItemImage(item != null);
+            }
         }
     }
 
-    private void OnInventoryListChanged()
+    private void OnInventoryItemRemove(Item item)
     {
         ClearAll();
     }

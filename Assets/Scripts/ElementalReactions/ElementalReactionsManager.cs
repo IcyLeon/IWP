@@ -10,6 +10,11 @@ public enum ElementalReactionState
     STUN
 }
 
+public enum OthersState
+{
+    HEAL
+}
+
 [Serializable]
 public class ElementalReactionsInfo
 {

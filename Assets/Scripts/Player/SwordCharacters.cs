@@ -35,7 +35,7 @@ public class SwordCharacters : PlayerCharacters
 
                     ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
                     Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                    damageObj.TakeDamage(hitPosition, new Elements(GetCurrentSwordElemental()), 100f);
+                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), 100f);
                 }
             }
         }

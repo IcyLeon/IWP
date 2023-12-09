@@ -1,20 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UseItem : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField] TextMeshProUGUI ButtonText;
     private ItemButton ItemButtonREF;
 
     public void SetItemREF(ItemButton ItemButtonREF)
     {
         this.ItemButtonREF = ItemButtonREF;
+
+        switch(ItemButtonREF.GetItemREF())
+        {
+            case ConsumableItem c:
+                ButtonText.text = "Use";
+                break;
+            case UpgradableItems u:
+                ButtonText.text = "Details";
+                break;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         Use();
+        DetailsPage();
+    }
+
+    private void DetailsPage()
+    {
+
     }
 
     private void Use()

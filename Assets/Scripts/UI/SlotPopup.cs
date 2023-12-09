@@ -21,47 +21,70 @@ public class SlotPopup : MonoBehaviour
     public event EventHandler<SendSlotInfo> onSlotSend, onSlotItemRemove;
     [SerializeField] bool AllowDragnDrop;
     private Slot SlotREF;
-    private List<ItemButton> itembuttonlist = new();
+    private InventoryManager InventoryManager;
+    private Dictionary<Item, ItemButton> itembutton_Dictionary;
+
     // Update is called once per frame
     void Start()
     {
-        InventoryManager.GetInstance().onInventoryListChanged += OnInventoryListChanged;
-        OnInventoryListChanged();
+        itembutton_Dictionary = new();
+        InventoryManager = InventoryManager.GetInstance();
+        InventoryManager.OnInventoryItemAdd += OnInventoryItemAdd;
+        InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
+        Init();
     }
 
-    public List<ItemButton> GetItemButtonList()
+    public Dictionary<Item, ItemButton> GetItemButton_Dictionary()
     {
-        return itembuttonlist;
+        return itembutton_Dictionary;
     }
 
-    public void OnInventoryListChanged()
+    void Init()
     {
-        HideItem(null, true);
-
-        for (int i = 0; i < InventoryManager.GetInstance().GetINVList().Count; i++)
+        for (int i = 0; i < InventoryManager.GetINVList().Count; i++)
         {
-            Item item = InventoryManager.GetInstance().GetINVList()[i];
-
-            GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab, scrollRect.content);
-            ItemButton itemButton = go.GetComponent<ItemButton>();
-            itemButton.SetItemsSO(item.GetItemSO());
-            itemButton.SetItemREF(item);
-
-            itemButton.onButtonSpawn += OnItemSpawned;
-            itemButton.onButtonClick += GetItemSelected;
-            itemButton.onButtonRemoveClick += OnItemRemove;
-
-            if (AllowDragnDrop)
-            {
-                DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
-                dragnDrop.parentTransform = transform;
-                dragnDrop.onBeginDragEvent += OnBeginDrag;
-                dragnDrop.onDragEvent += OnDrag;
-                dragnDrop.onEndDragEvent += OnEndDrag;
-            }
-            itembuttonlist.Add(itemButton);
+            Item item = InventoryManager.GetINVList()[i];
+            OnInventoryItemAdd(item);
         }
     }
+
+    private void OnInventoryItemAdd(Item item)
+    {
+        GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab, scrollRect.content);
+        ItemButton itemButton = go.GetComponent<ItemButton>();
+        itemButton.SetItemsSO(item.GetItemSO());
+        itemButton.SetItemREF(item);
+        itemButton.onButtonSpawn += OnItemSpawned;
+        itemButton.onButtonRemoveClick += OnItemRemove;
+        itemButton.onButtonClick += GetItemSelected;
+        if (AllowDragnDrop)
+        {
+            DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
+            dragnDrop.parentTransform = transform;
+            dragnDrop.onBeginDragEvent += OnBeginDrag;
+            dragnDrop.onDragEvent += OnDrag;
+            dragnDrop.onEndDragEvent += OnEndDrag;
+        }
+        itembutton_Dictionary.Add(item, itemButton);
+    }
+
+    private void OnInventoryItemRemove(Item item)
+    {
+        ItemButton itemButton = itembutton_Dictionary[item];
+        itemButton.onButtonSpawn -= OnItemSpawned;
+        itemButton.onButtonRemoveClick -= OnItemRemove;
+        itemButton.onButtonClick -= GetItemSelected;
+        if (AllowDragnDrop)
+        {
+            DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
+            dragnDrop.onBeginDragEvent -= OnBeginDrag;
+            dragnDrop.onDragEvent -= OnDrag;
+            dragnDrop.onEndDragEvent -= OnEndDrag;
+        }
+        Destroy(itemButton.gameObject);
+        itembutton_Dictionary.Remove(item);
+    }
+
     private void OnItemSpawned(ItemButton itemButton)
     {
         itemButton.DisableNewImage();
@@ -91,42 +114,15 @@ public class SlotPopup : MonoBehaviour
         itemButton.OnEndDrag(eventData);
     }
 
-    public void HideItem(Item item, bool hideall = false)
+    public void HideItem(Item item)
     {
-        foreach (RectTransform rt in scrollRect.content)
+        foreach (var rt in itembutton_Dictionary.Keys)
         {
-            ItemButton itemButton = rt.GetComponent<ItemButton>();
-            DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
-            if (itemButton.GetItemREF() == item || hideall)
-            {
-                itemButton.onButtonClick -= GetItemSelected;
-                itemButton.onButtonSpawn -= OnItemSpawned;
-                itemButton.onButtonRemoveClick -= OnItemRemove;
-
-                if (AllowDragnDrop)
-                {
-                    dragnDrop.onBeginDragEvent -= OnBeginDrag;
-                    dragnDrop.onDragEvent -= OnDrag;
-                    dragnDrop.onEndDragEvent -= OnEndDrag;
-                }
-                itembuttonlist.Remove(itemButton);
-                Destroy(itemButton.gameObject);
-            }
+            ItemButton itemButton = itembutton_Dictionary[rt].GetComponent<ItemButton>();
+            itemButton.gameObject.SetActive(itemButton.GetItemREF() != item);
         }
     }
 
-    public ItemButton GetItemButton(Item item)
-    {
-        foreach (RectTransform rt in scrollRect.content)
-        {
-            ItemButton itemButton = rt.GetComponent<ItemButton>();
-            if (itemButton.GetItemREF() == item)
-            {
-                return itemButton;
-            }
-        }
-        return null;
-    }
 
     private void OnItemRemove(ItemButton itemButton)
     {
@@ -167,7 +163,7 @@ public class SlotPopup : MonoBehaviour
         if (SlotREF.GetItemButton())
         {
             ItemInfoContent.SetItemREF(SlotREF.GetItemButton().GetItemREF(), SlotREF.GetItemButton().GetItemREF().GetItemSO());
-            UpdateOutlineSelection(GetItemButton(SlotREF.GetItemButton().GetItemREF()));
+            UpdateOutlineSelection(itembutton_Dictionary[SlotREF.GetItemButton().GetItemREF()]);
             ItemInfoContent.TogglePopup(true);
         }
         TogglePopup(true);
@@ -175,7 +171,7 @@ public class SlotPopup : MonoBehaviour
 
     private void UpdateOutlineSelection(ItemButton selecteditemButton)
     {
-        foreach (ItemButton itemButton in itembuttonlist)
+        foreach (ItemButton itemButton in itembutton_Dictionary.Values)
         {
             AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);
         }

@@ -9,7 +9,7 @@ public class PlayerJumpState : PlayerAirborneState
 
     public PlayerJumpState(PlayerState playerState) : base(playerState)
     {
-        JumpForce = 8f;
+        JumpForce = 6.5f;
     }
     public override void Enter()
     {
@@ -26,7 +26,7 @@ public class PlayerJumpState : PlayerAirborneState
     private void Jump()
     {
         Vector3 direction = GetTargetRotationDirection(GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y);
-        Debug.Log(direction);
+
         if (shouldKeepRotating)
         {
             UpdateInputTargetQuaternion();

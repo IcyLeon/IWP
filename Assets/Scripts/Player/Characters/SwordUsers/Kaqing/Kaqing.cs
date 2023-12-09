@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kaqing : SwordCharacters
+public class Kaqing : SwordCharacters, ICoordinateAttack
 {
     private enum ElementalBurst
     {
@@ -178,7 +178,7 @@ public class Kaqing : SwordCharacters
                 }
                 isBurstActive = true;
                 elementalBurst = ElementalBurst.First_Phase;
-                BurstCoroutine = StartCoroutine(Burst());
+                GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
             }
             return canTrigger;
         }
@@ -198,9 +198,6 @@ public class Kaqing : SwordCharacters
     protected override void ElementalSkillHold()
     {
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanAttack())
-            return;
-
-        if (!GetModel().activeSelf)
             return;
 
         if (elementalOrb != null)
@@ -231,9 +228,6 @@ public class Kaqing : SwordCharacters
     protected override void EKey_1Down()
     {
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
-            return;
-
-        if (GetBurstActive())
             return;
 
         switch (elementalSKill)
@@ -273,9 +267,6 @@ public class Kaqing : SwordCharacters
     protected override void ElementalSkillTrigger()
     {
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
-            return;
-
-        if (GetBurstActive())
             return;
 
         switch (elementalSKill)
@@ -324,5 +315,24 @@ public class Kaqing : SwordCharacters
     private void FloatFor(float sec)
     {
         //GetPlayerController().StayAfloatFor(sec);
+    }
+
+
+    public void UpdateCoordinateAttack()
+    {
+        if (BurstCoroutine == null && isBurstActive)
+        {
+            BurstCoroutine = StartCoroutine(Burst());
+        }
+    }
+
+    public bool CoordinateAttackEnded()
+    {
+        return GetPlayerController().GetPlayerState().GetPlayerMovementState() is not PlayerBurstState;
+    }
+
+    public bool CoordinateCanShoot()
+    {
+        return false;
     }
 }

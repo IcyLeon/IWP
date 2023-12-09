@@ -15,24 +15,26 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] InvTabGroup TabGroup;
     [SerializeField] ScrollRect ScrollRect;
     private InventoryManager InventoryManager;
-    private List<ItemButton> itembuttonlist;
+    private Dictionary<Item, ItemButton> itembutton_Dictionary;
     private ItemButton SelectedItemButton;
     private Item selectedItem;
 
     // Start is called before the first frame update
     void Start()
     {
-        itembuttonlist = new();
+        itembutton_Dictionary = new();
         InventoryManager = InventoryManager.GetInstance();
-        InventoryManager.onInventoryListChanged += OnItemChanged;
+        InventoryManager.OnInventoryItemAdd += OnInventoryItemAdd;
+        InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
         TabGroup.onTabChanged += onTabChangedEvent;
 
-        OnItemChanged();
+        Init();
     }
 
     private void OnDestroy()
     {
-        InventoryManager.onInventoryListChanged -= OnItemChanged;
+        InventoryManager.OnInventoryItemAdd -= OnInventoryItemAdd;
+        InventoryManager.OnInventoryItemRemove -= OnInventoryItemRemove;
         TabGroup.onTabChanged -= onTabChangedEvent;
     }
 
@@ -41,35 +43,40 @@ public class InventoryUIManager : MonoBehaviour
         ScrollRect.content = TabGroup.GetCurrentTabPanel().TabPanel.GetComponent<RectTransform>();
     }
 
-    void OnItemChanged()
+    private void OnInventoryItemAdd(Item item)
     {
-        foreach (ItemButton itemButton in itembuttonlist)
+        GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab);
+        ItemButton itemButton = go.GetComponent<ItemButton>();
+        itemButton.SetItemsSO(item.GetItemSO());
+        itemButton.SetItemREF(item);
+        itemButton.onButtonUpdate += GetItemButtonUpdate;
+        itemButton.onButtonClick += GetItemSelected;
+        itemButton.transform.SetParent(TabGroup.GetTabMenuList()[TabGroup.GetTabPanelIdx(itemButton.GetItemsSO().GetCategory())].TabPanel.transform);
+        itembutton_Dictionary.Add(item, itemButton);
+    }
+
+    private void OnInventoryItemRemove(Item item)
+    {
+        ItemButton itemButton = itembutton_Dictionary[item];
+        itemButton.onButtonClick -= GetItemSelected;
+        itemButton.onButtonUpdate -= GetItemButtonUpdate;
+        Destroy(itemButton.gameObject);
+        itembutton_Dictionary.Remove(item);
+    }
+
+
+    void Init()
+    {
+        for (int i = 0; i < InventoryManager.GetINVList().Count; i++)
         {
-            if (itemButton != null)
-            {
-                itemButton.onButtonClick -= GetItemSelected;
-                itemButton.onButtonUpdate -= GetItemButtonUpdate;
-                Destroy(itemButton.gameObject);
-            }
+            Item item = InventoryManager.GetINVList()[i];
+            OnInventoryItemAdd(item);
         }
-        itembuttonlist.Clear();
+    }
 
-        for (int i = 0; i < InventoryManager.GetInstance().GetINVList().Count; i++)
-        {
-            Item item = InventoryManager.GetInstance().GetINVList()[i];
-
-            GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab);
-            ItemButton itemButton = go.GetComponent<ItemButton>();
-            itemButton.SetItemsSO(item.GetItemSO());
-            itemButton.SetItemREF(item);
-            itemButton.onButtonUpdate += GetItemButtonUpdate;
-
-
-            itemButton.transform.SetParent(TabGroup.GetTabMenuList()[TabGroup.GetTabPanelIdx(itemButton.GetItemsSO().GetCategory())].TabPanel.transform);
-
-            itemButton.onButtonClick += GetItemSelected;
-            itembuttonlist.Add(itemButton);
-        }
+    private void Update()
+    {
+        ItemContent.SetActive(SelectedItemButton != null);
     }
 
     private void GetItemButtonUpdate(ItemButton itemButton)
@@ -101,26 +108,16 @@ public class InventoryUIManager : MonoBehaviour
         UpdateOutlineSelection();
     }
 
-    private ItemButton GetItemButton(Item item)
-    {
-        foreach (ItemButton itemButton in itembuttonlist)
-        {
-            if (itemButton.GetItemREF() == item)
-                return itemButton;
-        }
-
-        return null;
-    }
 
     private void UpdateOutlineSelection()
     {
-        foreach (ItemButton itemButton in itembuttonlist)
+        foreach (ItemButton itemButton in itembutton_Dictionary.Values)
         {
             AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);
         }
-        SelectedItemButton = GetItemButton(selectedItem);
-        UseItem.SetItemREF(SelectedItemButton);
+        SelectedItemButton = itembutton_Dictionary[selectedItem];
         ItemContent.SetActive(SelectedItemButton != null);
+        UseItem.SetItemREF(SelectedItemButton);
         AssetManager.GetInstance().UpdateCurrentSelectionOutline(null, SelectedItemButton);
     }
 }

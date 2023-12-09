@@ -13,7 +13,7 @@ public class Fireball : MonoBehaviour
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(transform.position, new Elements(Elemental.FIRE), 100f);
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.FIRE), 100f);
 
                 //Debug.Log(damageObject);
             }

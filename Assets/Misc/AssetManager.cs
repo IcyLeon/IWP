@@ -59,6 +59,7 @@ public class AssetManager : MonoBehaviour
 
     [Header("FriendlyKillers")]
     public GameObject TurretPrefab;
+    public GameObject FirePrefab;
 
     private static AssetManager instance;
 

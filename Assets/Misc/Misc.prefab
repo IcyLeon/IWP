@@ -119,6 +119,7 @@ MonoBehaviour:
     type: 3}
   TurretPrefab: {fileID: 3808838606348096962, guid: 74a43f7e3bec0474e95d4c374af08f10,
     type: 3}
+  FirePrefab: {fileID: 1725317912486240, guid: e55149ba6f4d00741984987e258c3378, type: 3}
 --- !u!114 &435113665679426361
 MonoBehaviour:
   m_ObjectHideFlags: 0

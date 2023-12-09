@@ -10,8 +10,9 @@ public class InventoryManager : MonoBehaviour {
     private List<CharacterData> EquipCharactersDatalist;
     private CharacterData currentequipCharacter;
 
-    public delegate void OnInventoryListChanged();
-    public OnInventoryListChanged onInventoryListChanged;
+    public delegate void OnInventoryListChange(Item item);
+    public OnInventoryListChange OnInventoryItemAdd;
+    public OnInventoryListChange OnInventoryItemRemove;
 
     [SerializeField] PlayerCharacterSO[] startupSOTest;
 
@@ -106,7 +107,7 @@ public class InventoryManager : MonoBehaviour {
         }
 
         PlayerStats.AddItems(item);
-        onInventoryListChanged?.Invoke();
+        OnInventoryItemAdd?.Invoke(item);
         return item;
     }
 
@@ -130,8 +131,10 @@ public class InventoryManager : MonoBehaviour {
 
     public void RemoveItems(Item item)
     {
-        PlayerStats.RemoveItems(item);
-        onInventoryListChanged?.Invoke();
+        if (PlayerStats.RemoveItems(item))
+        {
+            OnInventoryItemRemove?.Invoke(item);
+        }
     }
     public List<CharacterData> GetEquipCharactersDataList()
     {

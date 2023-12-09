@@ -22,8 +22,28 @@ public class ElementalColorSO : ScriptableObject
         public Color32 color;
     }
 
+    [Serializable]
+    public class OthersInfo
+    {
+        public OthersState OtherState;
+        public Color32 color;
+    }
     [SerializeField] ElementalInfo[] ElementalInfoList;
     [SerializeField] ElementalReactionInfo[] ElementalReactionInfoList;
+    [SerializeField] OthersInfo[] OthersInfoList;
+
+    public OthersInfo GetOthersInfo(OthersState OthersState)
+    {
+        for (int i = 0; i < ElementalInfoList.Length; i++)
+        {
+            OthersInfo e = OthersInfoList[i];
+            if (e.OtherState == OthersState)
+            {
+                return e;
+            }
+        }
+        return null;
+    }
 
     public ElementalInfo GetElementalInfo(Elemental elemental)
     {

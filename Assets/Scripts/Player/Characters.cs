@@ -6,13 +6,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public interface IDamage {
+    Vector3 GetPointOfContact();
     bool IsDead();
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
 }
 
 public interface ICoordinateAttack
 {
-    float GetCoordinateAttackTimer();
     void UpdateCoordinateAttack();
     bool CoordinateAttackEnded();
 
@@ -222,5 +222,10 @@ public class Characters : MonoBehaviour, IDamage
     protected virtual void OnDestroy()
     {
         HitInfo -= OnHit;
+    }
+
+    public virtual Vector3 GetPointOfContact()
+    {
+        return default(Vector3);
     }
 }

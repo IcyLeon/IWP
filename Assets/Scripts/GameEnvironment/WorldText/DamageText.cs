@@ -16,22 +16,34 @@ public class DamageText : MonoBehaviour
     private void Awake()
     {
         RT = GetComponent<RectTransform>();
-        Offset = Vector3.one * 0.2f;
+        Offset = Vector3.one * 0.5f;
+        canvasGroup.alpha = 0f;
     }
     // Start is called before the first frame update
     public void SpawnText(Vector3 pos, Elemental elemental, string text)
     {
         DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(elemental).color;
         Init(pos, text);
-        StartCoroutine(WorldTextAnim(1.55f, 1.75f));
+        StartCoroutine(FadeInAnimation());
+        StartCoroutine(WorldTextAnim(1.25f));
     }
 
     public void SpawnText(Vector3 pos, ElementalReactionState elementalReaction, string text)
     {
         DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalReactionInfo(elementalReaction).color;
         Init(pos, text);
-        StartCoroutine(WorldTextAnim(0.8f, 1.2f));
+        StartCoroutine(FadeInAnimation());
+        StartCoroutine(WorldTextAnim(0.7f));
     }
+
+    public void SpawnHealText(Vector3 pos, OthersState othersState, string text)
+    {
+        DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetOthersInfo(othersState).color; ;
+        Init(pos, text);
+        StartCoroutine(FadeInAnimation());
+        StartCoroutine(WorldTextAnim(0.7f));
+    }
+
 
     private void Init(Vector3 pos, string text)
     {
@@ -51,12 +63,12 @@ public class DamageText : MonoBehaviour
         Vector3 pos = Camera.main.WorldToScreenPoint(position);
         RT.anchoredPosition = new Vector2(pos.x, pos.y);
     }
-    private IEnumerator WorldTextAnim(float Min, float Max)
+    private IEnumerator WorldTextAnim(float targetSize)
     {
         float AnimationTime = 0.2f;
         float ElaspedTime = 0f;
-        transform.localScale = Vector3.one * 7.5f;
-        Vector3 target = Vector3.one * Random.Range(Min, Max);
+        transform.localScale = Vector3.one * Random.Range(3, 5f);
+        Vector3 target = Vector3.one * targetSize;
 
         while (transform.localScale != target)
         {
@@ -68,11 +80,24 @@ public class DamageText : MonoBehaviour
     }
 
 
+    private IEnumerator FadeInAnimation()
+    {
+        float ElaspedTime = 0f;
+        float AnimationTime = 0.15f;
+        while (canvasGroup.alpha < 1)
+        {
+            canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 1f, ElaspedTime / AnimationTime);
+            ElaspedTime += Time.deltaTime;
+            yield return null;
+        }
+        canvasGroup.alpha = 1f;
+    }
+
     private IEnumerator FadeOutAnimation()
     {
-        canvasGroup.alpha = 1f;
         float ElaspedTime = 0f;
-        float AnimationTime = 0.7f;
+        float AnimationTime = 0.75f;
+        canvasGroup.alpha = 1f;
         yield return new WaitForSeconds(0.25f);
         while (canvasGroup.alpha > 0)
         {

@@ -56,6 +56,11 @@ public class BaseEnemy : Characters
         UpdateOutofBound();
     }
 
+    public override Vector3 GetPointOfContact()
+    {
+        return col.bounds.center;
+    }
+
     private void UpdateOutofBound()
     {
         if (transform.position.y <= -500f)

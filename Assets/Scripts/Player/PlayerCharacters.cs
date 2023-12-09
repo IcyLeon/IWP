@@ -35,6 +35,11 @@ public class PlayerCharacters : Characters
         return characterData;
     }
 
+    public override Vector3 GetPointOfContact()
+    {
+        return GetPlayerController().GetPlayerOffsetPosition().position;
+    }
+
     public override ElementalReaction GetElementalReaction()
     {
         if (characterData == null)
@@ -101,7 +106,7 @@ public class PlayerCharacters : Characters
                     }
                 }
 
-                if (c.IsDead())
+                if (c.IsDead() && i < colliderCopy.Count)
                 {
                     colliderCopy.RemoveAt(i);
                 }

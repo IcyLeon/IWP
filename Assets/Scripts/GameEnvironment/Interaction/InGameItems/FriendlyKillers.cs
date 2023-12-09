@@ -20,11 +20,14 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     public onElementReactionHit OnElementReactionHit;
     private bool canBuy;
 
+    private void Awake()
+    {
+        canBuy = true;
+    }
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        canBuy = true;
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
         healthBarScript.transform.localPosition = GetWorldTxtLocalPosition();
         healthBarScript.Init(false, true);
@@ -32,18 +35,22 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     public void SetKillerData(FriendlyKillerData f){
         friendlyKillerData = f;
-        if (friendlyKillerData != null)
+        if (GetFriendlyKillerData() != null)
         {
             PurchaseAction();
         }
     }
 
+    public FriendlyKillerData GetFriendlyKillerData()
+    {
+        return friendlyKillerData;
+    }
     protected float GetDetectionRange()
     {
-        if (friendlyKillerData == null)
+        if (GetFriendlyKillerData() == null)
             return 0;
 
-        return friendlyKillerData.GetDetectionRange();
+        return GetFriendlyKillerData().GetDetectionRange();
     }
 
     public FriendlyKillerSO GetFriendlyKillerSO()
@@ -67,11 +74,11 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                 {
                     animator.SetTrigger("Activated");
                 }
-                if (friendlyKillerData == null)
-                {
-                    friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO());
-                    FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
-                }
+            }
+            if (GetFriendlyKillerData() == null)
+            {
+                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO());
+                FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
             }
             canBuy = false;
         }
@@ -87,17 +94,33 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                 healthBarScript.SetupMinAndMax(0, friendlyKillerData.GetMaxHealth());
                 healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth());
             }
-            healthBarScript.gameObject.SetActive(!canBuy);
+            healthBarScript.gameObject.SetActive(!canBuy && !IsDead());
         }
     }
 
+    private void UpdateDead()
+    {
+        if (IsDead())
+        {
+            FriendlyKillerHandler.GetInstance().RemoveKillerToList(friendlyKillerData);
+            friendlyKillerData = null;
+            if (animator != null)
+            {
+                if (Characters.ContainsParam(animator, "Deactivated"))
+                {
+                    animator.SetTrigger("Deactivated");
+                }
+            }
+            GameObject go = Instantiate(AssetManager.GetInstance().FirePrefab, transform.position, Quaternion.identity);
+        }
+    }
 
     public virtual bool IsDead()
     {
-        if (friendlyKillerData == null)
+        if (GetFriendlyKillerData() == null)
             return true;
 
-        return friendlyKillerData.GetCurrentHealth() <= 0 && !canBuy;
+        return GetFriendlyKillerData().GetCurrentHealth() <= 0 && !canBuy;
     }
 
     public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
@@ -116,10 +139,15 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         }
         Elements e = new Elements(elemental);
 
-        friendlyKillerData.SetCurrentHealth(friendlyKillerData.GetCurrentHealth() - damageAmt);
+        GetFriendlyKillerData().SetCurrentHealth(GetFriendlyKillerData().GetCurrentHealth() - damageAmt);
         AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, damageAmt.ToString());
+        UpdateDead();
 
         return e;
     }
 
+    public virtual Vector3 GetPointOfContact()
+    {
+        return transform.position;
+    }
 }

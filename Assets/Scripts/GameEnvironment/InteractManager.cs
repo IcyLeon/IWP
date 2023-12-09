@@ -200,7 +200,16 @@ public class InteractManager : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            IInteract interactable = collider.GetComponent<IInteract>();
+            IInteract interactable = null;
+            GetRootParent r = collider.GetComponent<GetRootParent>();
+            if (r != null)
+            {
+                interactable = r.GetOwner().GetComponent<IInteract>();
+            }
+            else
+            {
+                interactable = collider.GetComponent<IInteract>();
+            }
 
             if (interactable != null)
             {

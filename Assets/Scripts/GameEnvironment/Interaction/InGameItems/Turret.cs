@@ -34,7 +34,12 @@ public class Turret : FriendlyKillers
     private void Fire()
     {
         IDamage targetIDamage = Target.GetComponent<IDamage>();
-        targetIDamage.TakeDamage(Target.transform.position, new Elements(Elemental.NONE), GetDamage());
+        targetIDamage.TakeDamage(targetIDamage.GetPointOfContact(), new Elements(Elemental.NONE), GetDamage());
+    }
+
+    public override Vector3 GetPointOfContact()
+    {
+        return TurretRotationPivot.position;
     }
 
     private Collider GetNearestIDamage(float range)
@@ -88,7 +93,16 @@ public class Turret : FriendlyKillers
             IDamage c = colliderCopy[i].GetComponent<IDamage>();
             if (c != null)
             {
-                if (c.IsDead())
+                Vector3 dir = GetPointOfContact() - c.GetPointOfContact();
+                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.collider.GetComponent<IDamage>() == null)
+                    {
+                        colliderCopy.RemoveAt(i);
+                    }
+                }
+
+                if (c.IsDead() && i < colliderCopy.Count)
                 {
                     colliderCopy.RemoveAt(i);
                 }
@@ -139,7 +153,7 @@ public class Turret : FriendlyKillers
     }
     private void UpdateTurret()
     {
-        if (CanInteract() || !ActivatedCompleted())
+        if (CanInteract() || !ActivatedCompleted() || IsDead())
             return;
 
         if (!TargetStillInRange(Target))

@@ -42,6 +42,7 @@ public class PlayerPlungeState : PlayerAirborneState
         if (IsTouchingTerrain())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+            return;
         }
     }
 

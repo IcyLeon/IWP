@@ -60,9 +60,9 @@ public class PlayerStats
         InventoryList.Add(item);
     }
 
-    public void RemoveItems(Item item)
+    public bool RemoveItems(Item item)
     {
-        InventoryList.Remove(item);
+        return InventoryList.Remove(item);
     }
 
     public PlayerStats()

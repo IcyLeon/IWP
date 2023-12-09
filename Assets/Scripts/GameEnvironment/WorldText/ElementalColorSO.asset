@@ -53,3 +53,8 @@ MonoBehaviour:
     color:
       serializedVersion: 2
       rgba: 4289921279
+  OthersInfoList:
+  - OtherState: 0
+    color:
+      serializedVersion: 2
+      rgba: 4284675522

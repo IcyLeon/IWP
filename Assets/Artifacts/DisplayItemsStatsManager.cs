@@ -33,16 +33,63 @@ public class DisplayItemsStatsManager : MonoBehaviour
     private Item SelectedItem, PreviousSelectedItem;
     private ItemTemplate SelectedItemsSO;
     private ItemButton SelectedItemButton;
-    private List<ItemButton> itembuttonlist = new();
+    private InventoryManager InventoryManager;
+    private Dictionary<Item, ItemButton> itembutton_Dictionary;
 
     // Start is called before the first frame update
     void Start()
     {
-        InventoryManager.GetInstance().onInventoryListChanged += OnInventoryListChanged;
-        OnInventoryListChanged();
+        itembutton_Dictionary = new();
+        InventoryManager = InventoryManager.GetInstance();
+        InventoryManager.OnInventoryItemAdd += OnInventoryItemAdd;
+        InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
         TabGroup.onTabChanged += onTabChangedEvent;
 
         DetailsPanel.SetActive(false);
+        Init();
+    }
+
+    private void OnInventoryItemAdd(Item item)
+    {
+        GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab);
+        ItemButton itemButton = go.GetComponent<ItemButton>();
+        itemButton.SetItemsSO(item.GetItemSO());
+        itemButton.SetItemREF(item);
+        itemButton.onButtonUpdate += GetItemButtonUpdate;
+        itemButton.onButtonClick += GetItemSelected;
+
+        UpgradableItems UpgradableItemREF = itemButton.GetItemREF() as UpgradableItems;
+        if (UpgradableItemREF != null)
+        {
+            UpgradableItemREF.onLevelChanged += onItemUpgrade;
+        }
+        switch (itemButton.GetItemsSO().GetCategory())
+        {
+            case Category.ARTIFACTS:
+                Artifacts artifacts = UpgradableItemREF as Artifacts;
+                itemButton.gameObject.transform.SetParent(TabGroup.GetTabMenuList()[TabGroup.GetTabPanelIdx(artifacts.GetArtifactType())].TabPanel.transform);
+                break;
+        }
+
+        itembutton_Dictionary.Add(item, itemButton);
+    }
+
+    private void OnInventoryItemRemove(Item item)
+    {
+        ItemButton itemButton = itembutton_Dictionary[item];
+        itemButton.onButtonClick -= GetItemSelected;
+        itemButton.onButtonUpdate -= GetItemButtonUpdate;
+        Destroy(itemButton.gameObject);
+        itembutton_Dictionary.Remove(item);
+    }
+
+    void Init()
+    {
+        for (int i = 0; i < InventoryManager.GetINVList().Count; i++)
+        {
+            Item item = InventoryManager.GetINVList()[i];
+            OnInventoryItemAdd(item);
+        }
     }
 
     private void Update()
@@ -123,63 +170,11 @@ public class DisplayItemsStatsManager : MonoBehaviour
         ScrollRect.content = TabGroup.GetCurrentTabPanel().TabPanel.GetComponent<RectTransform>();
     }
 
-    private ItemButton GetItemButton(Item item)
-    {
-        foreach(ItemButton itemButton in itembuttonlist)
-        {
-            if (itemButton.GetItemREF() == item)
-                return itemButton;
-        }
-
-        return null;
-    }
     private void OnDestroy()
     {
-        InventoryManager.GetInstance().onInventoryListChanged -= OnInventoryListChanged;
+        InventoryManager.OnInventoryItemAdd -= OnInventoryItemAdd;
+        InventoryManager.OnInventoryItemRemove -= OnInventoryItemRemove;
         TabGroup.onTabChanged -= onTabChangedEvent;
-    }
-    private void OnInventoryListChanged()
-    {
-
-        foreach (ItemButton itemButton in itembuttonlist)
-        {
-            if (itemButton != null)
-            {
-                itemButton.onButtonClick -= GetItemSelected;
-                itemButton.onButtonUpdate -= GetItemButtonUpdate;
-                Destroy(itemButton.gameObject);
-            }
-        }
-        itembuttonlist.Clear();
-
-        for (int i = 0; i < InventoryManager.GetInstance().GetINVList().Count; i++)
-        {
-            Item item = InventoryManager.GetInstance().GetINVList()[i];
-            if (item is not UpgradableItems)
-                continue;
-
-            ItemButton itemButton = Instantiate(AssetManager.GetInstance().ItemBorderPrefab).GetComponent<ItemButton>();
-            itemButton.SetItemsSO(item.GetItemSO());
-            itemButton.SetItemREF(item);
-            itemButton.onButtonUpdate += GetItemButtonUpdate;
-
-            UpgradableItems UpgradableItemREF = itemButton.GetItemREF() as UpgradableItems;
-            if (UpgradableItemREF != null)
-            {
-                UpgradableItemREF.onLevelChanged += onItemUpgrade;
-            }
-            switch (itemButton.GetItemsSO().GetCategory())
-            {
-                case Category.ARTIFACTS:
-                    Artifacts artifacts = UpgradableItemREF as Artifacts;
-                    itemButton.gameObject.transform.SetParent(TabGroup.GetTabMenuList()[TabGroup.GetTabPanelIdx(artifacts.GetArtifactType())].TabPanel.transform);
-                    break;
-            }
-            itemButton.onButtonClick += GetItemSelected;
-            itembuttonlist.Add(itemButton);
-        }
-
-        UpdateOutlineSelection();
     }
 
     private void GetItemButtonUpdate(ItemButton itemButton)
@@ -215,6 +210,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
             return;
 
         DisplaySelectedItem();
+        UpdateOutlineSelection();
     }
 
     private void onItemUpgrade()
@@ -228,12 +224,12 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
     private void UpdateOutlineSelection()
     {
-        foreach (ItemButton itemButton in itembuttonlist)
+        foreach (ItemButton itemButton in itembutton_Dictionary.Values)
         {
             AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);
         }
-        SelectedItemButton = GetItemButton(SelectedItem);
-        UpgradeButton.GetComponent<UpgradeCanvasTransition>().SetItemREF(SelectedItem);
+        SelectedItemButton = itembutton_Dictionary[GetItemCurrentSelected()];
+        UpgradeButton.GetComponent<UpgradeCanvasTransition>().SetItemREF(GetItemCurrentSelected());
         AssetManager.GetInstance().UpdateCurrentSelectionOutline(null, SelectedItemButton);
     }
 }
