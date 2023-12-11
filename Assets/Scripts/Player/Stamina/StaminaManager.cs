@@ -52,7 +52,8 @@ public class StaminaManager : MonoBehaviour
 
         PlayerController = CharacterManager.GetInstance().GetPlayerController();
         //PlayerController.onPlayerStateChange += PlayerStateChange;
-        PlayerController.GetPlayerState().OnPlayerStateChange += PlayerStateChange;
+        if (PlayerController == null)
+            PlayerController.GetPlayerState().OnPlayerStateChange += PlayerStateChange;
     }
 
     private void PlayerStateChange(PlayerState state)

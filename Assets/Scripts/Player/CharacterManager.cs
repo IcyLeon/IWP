@@ -184,7 +184,7 @@ public class CharacterManager : MonoBehaviour
         if (playerController.isBurstState())
             return;
 
-        if (GetPlayerController().GetPlayerState().GetPlayerMovementState() is PlayerDeadState || GetPlayerController().IsAiming())
+        if (GetPlayerController().GetPlayerState().GetPlayerMovementState() is PlayerDeadState || GetPlayerController().IsAiming() || GetPlayerController().GetPlayerState().GetPlayerMovementState() is PlayerAttackState)
             return;
 
         SwapCharacters((int)index - 1);

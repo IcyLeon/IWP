@@ -45,7 +45,6 @@ public class Turret : FriendlyKillers
     private bool TargetStillInRange(Collider target)
     {
         Collider[] AllTargetsAvailable = GetAllNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity"));
-        Debug.Log(AllTargetsAvailable.Length);
 
         if (AllTargetsAvailable.Length == 0)
             return false;

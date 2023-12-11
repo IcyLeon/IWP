@@ -15,7 +15,7 @@ MonoBehaviour:
   PurchaseableObjectName: Healing Drone
   PurchaseableObjectSprite: {fileID: 21300000, guid: 613a28c60c86e944f8e6b9ec2ffaa604,
     type: 3}
-  BasePrice: 0
+  BasePrice: 10
   BaseMaxHealth: 300
   BaseDamage: 10
   DetectionRange: 5

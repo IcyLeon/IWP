@@ -9,7 +9,7 @@ public class PlayerJumpState : PlayerAirborneState
 
     public PlayerJumpState(PlayerState playerState) : base(playerState)
     {
-        JumpForce = 6.5f;
+        JumpForce = 10f;
     }
     public override void Enter()
     {

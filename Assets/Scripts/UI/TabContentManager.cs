@@ -22,7 +22,7 @@ public class TabContentManager : MonoBehaviour
         {
             ResetToggle(tabToggle);
 
-            int index = ArrayUtility.IndexOf(TabToggleGroupList, tabToggle);
+            int index = TabToggleGroupList.ToList().IndexOf(tabToggle);
             tabToggle.onValueChanged.AddListener(value => ToggleDetails(index));
         }
 

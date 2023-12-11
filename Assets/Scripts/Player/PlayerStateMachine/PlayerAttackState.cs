@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerMovementState
 {
+    private PlayerCharacters playerCharacter;
     public PlayerAttackState(PlayerState playerState) : base(playerState)
     {
     }
@@ -33,7 +34,7 @@ public class PlayerAttackState : PlayerMovementState
             return;
         }
 
-        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
+        playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
             if (!playerCharacter.GetisAttacking())
@@ -48,6 +49,12 @@ public class PlayerAttackState : PlayerMovementState
     public override void Exit()
     {
         base.Exit();
+
+        if (playerCharacter != null)
+        {
+            if (playerCharacter.GetisAttacking())
+                playerCharacter.ResetAttack();
+        }
     }
 
 }

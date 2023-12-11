@@ -66,6 +66,7 @@ public class PlayerState
     }
     public PlayerState(PlayerController playerController)
     {
+        PlayerController = playerController;
         PlayerData = new PlayerData();
         playerStoppingState = new PlayerStoppingState(this);
         playerFallingState = new PlayerFallingState(this);
@@ -79,8 +80,6 @@ public class PlayerState
         playerBurstState = new PlayerBurstState(this);
         playerAttackState = new PlayerAttackState(this);
         playerDeadState = new PlayerDeadState(this);
-        PlayerController = playerController;
-
         ChangeState(playerIdleState);
     }
 }

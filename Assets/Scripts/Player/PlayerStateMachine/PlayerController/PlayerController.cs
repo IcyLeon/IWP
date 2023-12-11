@@ -73,23 +73,24 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         lockMovement = LockMovement.Enable;
-
-        characterManager = CharacterManager.GetInstance();
-        characterManager.SetPlayerController(this);
-        staminaManager = StaminaManager.GetInstance();
         mainUI = MainUI.GetInstance();
-
         playerState = new PlayerState(this);
     }
 
+    private void OnEnable()
+    {
+        characterManager = CharacterManager.GetInstance();
+        characterManager.SetPlayerController(this);
+    }
     // Start is called before the first frame update
     void Start()
     {
         mainUI = MainUI.GetInstance();
         rb = GetComponent<Rigidbody>();
         resizeableCollider = GetComponent<ResizeableCollider>();
-        GetCharacterManager().onCharacterChange += RecalculateSize;
+        staminaManager = StaminaManager.GetInstance();
         RecalculateSize(null);
+        GetCharacterManager().onCharacterChange += RecalculateSize;
     }
 
     public MainUI GetMainUI()

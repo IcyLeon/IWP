@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public interface IGamePurchase : IInteract
@@ -66,6 +65,8 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     protected override void PurchaseAction()
     {
+        base.PurchaseAction();
+
         if (canBuy)
         {
             if (animator != null)

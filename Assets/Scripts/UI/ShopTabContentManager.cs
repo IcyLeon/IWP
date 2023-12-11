@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class ShopTabContentManager : MonoBehaviour
         {
             ResetToggle(tabToggle);
 
-            int index = ArrayUtility.IndexOf(TabToggleGroupList, tabToggle);
+            int index = TabToggleGroupList.ToList().IndexOf(tabToggle);
             tabToggle.onValueChanged.AddListener(value => ToggleDetails(index));
         }
 

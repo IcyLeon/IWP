@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -104,7 +103,7 @@ public class ArtifactTabGroup : MonoBehaviour
 
     IEnumerator MoveScrollBar()
     {
-        float targetValue = ((float)ArrayUtility.IndexOf(tabs.ToArray(), selectedtab) / (tabs.Count - 1));
+        float targetValue = ((float)tabs.IndexOf(selectedtab) / (tabs.Count - 1));
         float elapsedTime = 0f;
         float animationDuration = 0.15f;
 

@@ -55,21 +55,22 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
 
     protected virtual void PurchaseAction()
     {
-
     }
 
     public void Interact()
     {
         if (isPurchaseable())
+        {
             PurchaseAction();
+            InventoryManager.GetInstance().RemoveCurrency(PurchaseableType, GetCost());
+        }
         else
             assetManager.OpenMessageNotification("Insufficient " + AssetManager.CurrencyText(PurchaseableType) + "!");
     }
 
     private bool isPurchaseable()
     {
-        int Cost = GetCost();
-        return (Cost <= InventoryManager.GetInstance().GetCurrency(PurchaseableType));
+        return (GetCost() <= InventoryManager.GetInstance().GetCurrency(PurchaseableType));
     } 
 
     public string InteractMessage()

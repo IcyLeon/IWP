@@ -32,7 +32,6 @@ public class BaseEnemy : Characters
 
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
-        Player = CharacterManager.GetInstance().GetPlayerController();
     }
 
     public float GetDropValue()
@@ -46,6 +45,9 @@ public class BaseEnemy : Characters
     // Update is called once per frame
     protected override void Update()
     {
+        if (Player == null)
+            Player = CharacterManager.GetInstance().GetPlayerController();
+
         base.Update();
         UpdateHealthBar();
 
@@ -175,6 +177,9 @@ public class BaseEnemy : Characters
 
     protected Vector3 GetPlayerLocation()
     {
+        if (Player == null)
+            return default(Vector3);
+
         return Player.GetPlayerOffsetPosition().position;
     }
 
