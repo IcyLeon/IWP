@@ -53,16 +53,13 @@ public class Arrow : MonoBehaviour
     {
         PlayerCharacters player = other.GetComponent<PlayerCharacters>();
     
-        if (player == null)
+        if (player == null && !other.isTrigger)
         {
             IDamage damageObject = other.gameObject.GetComponent<IDamage>();
-            if (other.gameObject.layer != LayerMask.NameToLayer("Player"))
+            if (damageObject != null)
             {
-                if (damageObject != null)
-                {
-                    if (!damageObject.IsDead())
-                        damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharacters.GetDamage());
-                }
+                if (!damageObject.IsDead())
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharacters.GetDamage());
             }
 
             ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();

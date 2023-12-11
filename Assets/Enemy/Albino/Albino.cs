@@ -34,7 +34,7 @@ public class Albino : BaseEnemy
         JumpOnAir = false;
         DetectionRange = 10f;
         StrafeElasped = AttackElapsed = 0f;
-        Staggering = 2;
+        Staggering = 8;
         state = States.CHASE;
     }
 

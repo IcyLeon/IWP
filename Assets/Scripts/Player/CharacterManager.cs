@@ -50,15 +50,15 @@ public class CharacterManager : MonoBehaviour
         return elementsIndicator;
     }
 
-    public void HealAllCharacters(float amt)
+    public void AddAllCharactersPercentage(float percentage)
     {
         for (int i = 0; i < GetCharactersOwnedList().Count; i++)
         {
-            PlayerCharactersList[i].SetHealth(PlayerCharactersList[i].GetHealth() + amt);
+            PlayerCharactersList[i].SetHealth(PlayerCharactersList[i].GetHealth() + PlayerCharactersList[i].GetMaxHealth() * percentage);
         }
     }
 
-    public void HealCharacter(CharacterData c, float amt)
+    public void HealCharacterBruteForce(CharacterData c, float amt)
     {
         if (c == null)
             return;
@@ -68,7 +68,35 @@ public class CharacterManager : MonoBehaviour
             actualamt = 1f;
 
         c.SetHealth(c.GetHealth() + (int)actualamt);
+        if (c.GetHealth() < c.GetMaxHealth())
+            AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerController().GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
     }
+
+    public void HealCharacter(CharacterData c, float amt)
+    {
+        if (c == null)
+            return;
+
+        if (c.IsDead())
+            return;
+
+            float actualamt = amt;
+        if (actualamt < 1f)
+            actualamt = 1f;
+
+        c.SetHealth(c.GetHealth() + (int)actualamt);
+        if (c.GetHealth() < c.GetMaxHealth())
+        {
+            AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerController().GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
+            if (c == CurrentSelectionCharacterData)
+            {
+                ParticleSystem healEffect = Instantiate(AssetManager.GetInstance().HealEffect, GetPlayerController().transform).GetComponent<ParticleSystem>();
+                Destroy(healEffect.gameObject, healEffect.main.duration);
+            }
+        }
+
+    }
+
     public CharacterData GetAliveCharacters()
     {
         List<PlayerCharacters> PlayerCharacerListCopy = new(PlayerCharactersList);
@@ -85,6 +113,15 @@ public class CharacterManager : MonoBehaviour
 
         return null;
     }
+
+    public void ResetAllEnergy()
+    {
+        for (int i = 0; i < PlayerCharactersList.Count; i++)
+        {
+            PlayerCharactersList[i].GetCharacterData().ResetEnergyCost();
+        }
+    }
+
     public void SetElementsIndicator(ElementsIndicator ElementsIndicator)
     {
         elementsIndicator = ElementsIndicator;

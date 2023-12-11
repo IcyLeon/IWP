@@ -1611,6 +1611,7 @@ MonoBehaviour:
   rb: {fileID: 4265174039889011372}
   Animator: {fileID: 9520220}
   Model: {fileID: 117494}
+  HealthBarPivotParent: {fileID: 455850}
   col: {fileID: 8797749101720193783}
   NavMeshAgent: {fileID: 1131295460005988015}
   EnemyValueDropSO: {fileID: 0}

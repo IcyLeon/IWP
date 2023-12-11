@@ -130,9 +130,22 @@ public class PlayerController : MonoBehaviour
             return;
 
         UpdateControls();
+        UpdateOutofBound();
         playerState.Update();
     }
 
+    private void UpdateOutofBound()
+    {
+        if (rb == null)
+            return;
+
+        if (rb.position.y <= -100f)
+        {
+            characterManager.ResetAllEnergy();
+            characterManager.AddAllCharactersPercentage(-0.15f);
+            rb.position = GetPlayerState().PlayerData.PreviousPosition;
+        }
+    }
 
     public Transform GetPlayerOffsetPosition()
     {
@@ -164,7 +177,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
-        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, ~LayerMask.GetMask("Player")))
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             return hit.point;
         }
@@ -271,9 +284,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (rb == null)
-            return;
-
         playerState.FixedUpdate();
     }
 

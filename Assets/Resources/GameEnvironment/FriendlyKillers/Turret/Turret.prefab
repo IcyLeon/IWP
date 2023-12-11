@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1140759046059243656}
   - component: {fileID: 5860864602334975098}
   - component: {fileID: 1623839402785325973}
+  - component: {fileID: 6690135039124098502}
   m_Layer: 3
   m_Name: Turret
   m_TagString: Untagged
@@ -47,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a932b2939403748a57378cf9146513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PurchaseableType: 0
+  PurchaseableType: 1
   WorldTextPivotTransform: {fileID: 3138205973929679851}
   PurchaseableObjectSO: {fileID: 11400000, guid: 48886e8e24efd7a4582dbe5fb713355a,
     type: 2}
@@ -87,6 +88,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &6690135039124098502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3808838606348096962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8e239b85eceba47b425ce11b8640ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7070018119321386717
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class FallenUI : MonoBehaviour
         for (int i = 0; i < characterManager.GetCharactersOwnedList().Count; i++)
         {
             CharacterData pc = characterManager.GetCharactersOwnedList()[i];
-            characterManager.HealCharacter(pc, pc.GetMaxHealth());
+            characterManager.HealCharacterBruteForce(pc, pc.GetMaxHealth());
         }
     }
 

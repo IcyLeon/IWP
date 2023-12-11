@@ -98,7 +98,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         }
     }
 
-    private void UpdateDead()
+    protected virtual void UpdateDead()
     {
         if (IsDead())
         {
@@ -150,4 +150,76 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     {
         return transform.position;
     }
+
+    protected Collider[] GetAllNearestIDamage(Vector3 EmittorPos, float range, int OverlapMask, int RayCastMask = Physics.DefaultRaycastLayers)
+    {
+        Collider[] colliders = Physics.OverlapSphere(EmittorPos, range, OverlapMask);
+        List<Collider> colliderCopy = new List<Collider>(colliders);
+        for (int i = colliderCopy.Count - 1; i >= 0; i--)
+        {
+            IDamage c = colliderCopy[i].GetComponent<IDamage>();
+            if (c != null)
+            {
+                Vector3 dir = c.GetPointOfContact() - GetPointOfContact();
+
+                if (Physics.Raycast(GetPointOfContact(), dir.normalized, out RaycastHit hit, range, RayCastMask, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.collider.GetComponent<IDamage>() == null)
+                    {
+                        colliderCopy.Remove(colliderCopy[i]);
+                    }
+                    else
+                    {
+                        if (hit.collider.GetComponent<GetRootParent>() != null)
+                            if (hit.collider.GetComponent<GetRootParent>().GetOwner().GetComponent<IDamage>() == null)
+                                colliderCopy.Remove(colliderCopy[i]);
+                    }
+                }
+
+                if (c.IsDead() && i < colliderCopy.Count)
+                {
+                    colliderCopy.RemoveAt(i);
+                }
+
+            }
+            else
+            {
+                if (i < colliderCopy.Count)
+                    colliderCopy.RemoveAt(i);
+            }
+        }
+
+        return colliderCopy.ToArray();
+    }
+
+
+    protected Collider GetNearestIDamage(Vector3 EmittorPos, float range, int OverlapMask, int RayCastMask = Physics.DefaultRaycastLayers)
+    {
+        Collider[] colliders = GetAllNearestIDamage(EmittorPos, range, OverlapMask, RayCastMask);
+
+        if (colliders.Length == 0)
+            return null;
+
+        List<Collider> colliderCopy = new List<Collider>(colliders);
+
+        Collider nearestCollider = colliderCopy[0];
+
+        for (int i = colliderCopy.Count - 1; i >= 0; i--)
+        {
+            IDamage c = colliderCopy[i].GetComponent<IDamage>();
+            if (c != null)
+            {
+                float dist1 = Vector3.Distance(colliderCopy[i].transform.position, transform.position);
+                float dist2 = Vector3.Distance(nearestCollider.transform.position, transform.position);
+
+                if (dist1 <= dist2)
+                {
+                    nearestCollider = colliderCopy[i];
+                }
+            }
+        }
+
+        return nearestCollider;
+    }
+
 }

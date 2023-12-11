@@ -55,7 +55,7 @@ public class CharacterData : UpgradableItems
         BaseMaxHealth = playerCharacterSO.BaseHP;
         CurrentHealth = BaseMaxHealth;
         BaseATK = playerCharacterSO.BaseATK;
-        CurrentEnergyBurstCost = 0;
+        ResetEnergyCost();
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
         CurrentElementalSkillCooldown = 0;
@@ -107,7 +107,7 @@ public class CharacterData : UpgradableItems
 
         if (IsDead())
         {
-            CurrentEnergyBurstCost = 0f;
+            ResetEnergyCost();
         }
     }
 
@@ -119,7 +119,12 @@ public class CharacterData : UpgradableItems
     public void ResetElementalBurstCooldown()
     {
         CurrentElementalBurstEnergyCooldown = ElementalBurstEnergyCooldown;
-        CurrentEnergyBurstCost = 0;
+        ResetEnergyCost();
+    }
+
+    public void ResetEnergyCost()
+    {
+        CurrentEnergyBurstCost = 0f;
     }
 
     public bool CanTriggerESKill()
@@ -156,7 +161,7 @@ public class CharacterData : UpgradableItems
     }
     public void SetHealth(float Hp)
     {
-        CurrentHealth = Hp;
+        CurrentHealth = (int)Hp;
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
     }
 

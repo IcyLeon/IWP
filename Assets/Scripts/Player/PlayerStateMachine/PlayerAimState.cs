@@ -40,6 +40,8 @@ public class PlayerAimState : PlayerMovementState
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
             return;
         }
+        if (CheckIfisAboutToFall())
+            ResetVelocity();
     }
 
     public override void Exit()

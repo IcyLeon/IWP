@@ -55,7 +55,10 @@ public class PlayerCharacters : Characters
 
     public override void AnimatorMove(Vector3 deltaPosition, Quaternion rootRotation)
     {
-        GetPlayerController().GetCharacterRB().MovePosition(GetPlayerController().GetCharacterRB().position + deltaPosition);
+        if (!GetPlayerController().GetPlayerMovementState().CheckIfisAboutToFall())
+        {
+            GetPlayerController().GetCharacterRB().MovePosition(GetPlayerController().GetCharacterRB().position + deltaPosition);
+        }
         GetPlayerController().GetCharacterRB().transform.rotation = rootRotation;
     }
 

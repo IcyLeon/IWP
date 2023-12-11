@@ -42,81 +42,16 @@ public class Turret : FriendlyKillers
         return TurretRotationPivot.position;
     }
 
-    private Collider GetNearestIDamage(float range)
-    {
-        Collider[] colliders = GetAllNearestIDamage(range);
-
-        if (colliders.Length == 0)
-            return null;
-
-        List<Collider> colliderCopy = new List<Collider>(colliders);
-
-        Collider nearestCollider = colliderCopy[0];
-
-        for (int i = colliderCopy.Count - 1; i >= 0; i--)
-        {
-            IDamage c = colliderCopy[i].GetComponent<IDamage>();
-            if (c != null)
-            {
-                float dist1 = Vector3.Distance(colliderCopy[i].transform.position, transform.position);
-                float dist2 = Vector3.Distance(nearestCollider.transform.position, transform.position);
-
-                if (dist1 <= dist2)
-                {
-                    nearestCollider = colliderCopy[i];
-                }
-            }
-        }
-
-        return nearestCollider;
-    }
-
     private bool TargetStillInRange(Collider target)
     {
-        if (target == null)
-            return false;
+        Collider[] AllTargetsAvailable = GetAllNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity"));
+        Debug.Log(AllTargetsAvailable.Length);
 
-        Collider[] AllTargetsAvailable = GetAllNearestIDamage(GetDetectionRange());
-
-        if (AllTargetsAvailable == null)
+        if (AllTargetsAvailable.Length == 0)
             return false;
 
         return AllTargetsAvailable.Contains(target);
     }
-
-    private Collider[] GetAllNearestIDamage(float range)
-    {
-        Collider[] colliders = Physics.OverlapSphere(TurretRotationPivot.position, range, LayerMask.GetMask("Entity"));
-        List<Collider> colliderCopy = new List<Collider>(colliders);
-        for (int i = colliderCopy.Count - 1; i >= 0; i--)
-        {
-            IDamage c = colliderCopy[i].GetComponent<IDamage>();
-            if (c != null)
-            {
-                Vector3 dir = GetPointOfContact() - c.GetPointOfContact();
-                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-                {
-                    if (hit.collider.GetComponent<IDamage>() == null)
-                    {
-                        colliderCopy.RemoveAt(i);
-                    }
-                }
-
-                if (c.IsDead() && i < colliderCopy.Count)
-                {
-                    colliderCopy.RemoveAt(i);
-                }
-
-            }
-            else
-            {
-                colliderCopy.RemoveAt(i);
-            }
-        }
-
-        return colliderCopy.ToArray();
-    }
-
 
     public override Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
     {
@@ -158,7 +93,7 @@ public class Turret : FriendlyKillers
 
         if (!TargetStillInRange(Target))
         {
-            Target = GetNearestIDamage(GetDetectionRange());
+            Target = GetNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity"));
         }
 
         if (Target == null)

@@ -32,6 +32,7 @@ public class Characters : MonoBehaviour, IDamage
     [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Animator Animator;
     [SerializeField] protected GameObject Model;
+    [SerializeField] protected Transform HealthBarPivotParent;
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
 

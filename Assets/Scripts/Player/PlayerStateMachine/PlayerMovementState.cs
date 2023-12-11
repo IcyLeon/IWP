@@ -24,8 +24,8 @@ public class PlayerMovementState : IState
     protected Rigidbody rb;
 
     protected PlayerStateEnum playerStateEnum;
-
     private float HitDistance;
+
     public PlayerStateEnum GetPlayerStateEnum()
     {
         return playerStateEnum;
@@ -99,6 +99,7 @@ public class PlayerMovementState : IState
         rb = GetPlayerState().GetPlayerController().GetCharacterRB();
         GatherInput();
         UpdateDash();
+        UpdatePreviousPosition();
 
         PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
         if (playerCharacter != null)
@@ -198,6 +199,50 @@ public class PlayerMovementState : IState
 
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
             rb.AddForce(liftForce, ForceMode.VelocityChange);
+        }
+    }
+
+    public bool CheckIfisAboutToFall()
+    {
+        if (rb == null)
+            return false;
+
+        float horizontalDisCheck = 1f;
+        float verticalDisCheck = 1.5f;
+        Vector3 dir = rb.velocity;
+        if (dir == Vector3.zero)
+            dir = GetPlayerState().GetPlayerController().transform.forward;
+        dir.y = 0f;
+        dir.Normalize();
+
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        {
+            return false;
+        }
+        else
+        {
+            Vector3 hitpos = GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position + dir * horizontalDisCheck;
+            return !Physics.Raycast(hitpos, Vector3.down, verticalDisCheck, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        }
+
+    }
+
+
+    private void UpdatePreviousPosition()
+    {
+        if (rb == null)
+            return;
+
+        if (this is not PlayerGroundState)
+            return;
+
+        if (CheckIfisAboutToFall())
+            return;
+
+
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        {
+            GetPlayerState().PlayerData.PreviousPosition = hit.point;
         }
     }
 

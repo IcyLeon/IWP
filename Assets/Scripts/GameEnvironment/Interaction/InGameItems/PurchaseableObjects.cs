@@ -14,7 +14,7 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
     protected virtual void Start()
     {
         assetManager = AssetManager.GetInstance();
-        worldText = assetManager.SpawnWorldText(GetCost().ToString(), transform);
+        worldText = assetManager.SpawnWorldText(assetManager.GetCurrencySprite(PurchaseableType), GetCost().ToString(), transform);
         worldText.transform.localPosition = new Vector3(0, WorldTextPivotTransform.transform.localPosition.y, 0);
         worldText.gameObject.SetActive(false);
     }

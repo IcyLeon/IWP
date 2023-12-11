@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorldText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI WorldTextREF;
-
-    public void UpdateContent(string val)
+    [SerializeField] Image Icon;
+    public void UpdateContent(Sprite icon, string val)
     {
+        Icon.sprite = icon;
         WorldTextREF.text = val;
     }
 }

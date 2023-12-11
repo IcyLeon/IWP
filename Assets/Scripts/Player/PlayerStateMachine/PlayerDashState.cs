@@ -25,6 +25,10 @@ public class PlayerDashState : PlayerGroundState
         StartDashTime = Time.time;
     }
 
+    //private void SpawnDash()
+    //{
+    //    AssetManager.GetInstance().SpawnDash(GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position, GetPlayerState().GetPlayerController().transform.rotation);
+    //}
     private void Dash()
     {
         if (Time.time - StartDashTime > GetPlayerState().PlayerData.TimeToBeConsideredConsecutive)
@@ -42,7 +46,8 @@ public class PlayerDashState : PlayerGroundState
         DashDirection.Normalize();
         SetTargetRotation(Quaternion.LookRotation(DashDirection));
 
-        rb.velocity = DashDirection * 10f;
+        if (!CheckIfisAboutToFall())
+            rb.velocity = DashDirection * 10f;
 
         if (GetPlayerState().PlayerData.consecutiveDashesUsed == GetPlayerState().PlayerData.ConsecutiveDashesLimitAmount)
         {
@@ -55,12 +60,16 @@ public class PlayerDashState : PlayerGroundState
     public override void Exit()
     {
         base.Exit();
+
         DashElasped = 0;
     }
 
     public override void Update()
     {
         base.Update();
+
+        if (CheckIfisAboutToFall())
+            ResetVelocity();
 
         if (DashElasped > DashTimer)
         {

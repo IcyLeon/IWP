@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.VFX;
@@ -54,12 +55,16 @@ public class AssetManager : MonoBehaviour
     public Sprite Coins;
     public Sprite Cash;
 
-    [Header("UI")]
+    [Header("Effects")]
     public GameObject ElectricEffect;
+    public GameObject HealEffect;
 
     [Header("FriendlyKillers")]
-    public GameObject TurretPrefab;
     public GameObject FirePrefab;
+
+    [Header("Dash")]
+    [SerializeField] GameObject DashPrefab;
+
 
     private static AssetManager instance;
 
@@ -107,6 +112,11 @@ public class AssetManager : MonoBehaviour
         return instance;
     }
 
+    public void SpawnDash(Vector3 pos, Quaternion rot)
+    {
+        ParticleSystem go = Instantiate(DashPrefab, pos, rot).GetComponent<ParticleSystem>();
+        Destroy(go, go.main.duration);
+    }
     public Sprite GetCurrencySprite(CurrencyType type)
     {
         switch(type)
@@ -140,10 +150,10 @@ public class AssetManager : MonoBehaviour
         Destroy(ps.gameObject, ps.main.duration);
     }
 
-    public WorldText SpawnWorldText(string val, Transform Parent)
+    public WorldText SpawnWorldText(Sprite sprite, string val, Transform Parent)
     {
         WorldText wt = Instantiate(WorldText, Parent).GetComponent<WorldText>();
-        wt.UpdateContent(val);
+        wt.UpdateContent(sprite, val);
         return wt;
     }
     public ArrowIndicator SpawnArrowIndicator(GameObject source)
@@ -196,6 +206,12 @@ public class AssetManager : MonoBehaviour
     {
         DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
         dt.SpawnText(position, element, text);
+    }
+
+    public void SpawnWorldText_Other(Vector3 position, OthersState OthersState, string text)
+    {
+        DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
+        dt.SpawnText(position, OthersState, text);
     }
 
     public void SpawnWorldText_ElementalReaction(Vector3 position, ElementalReactionState element, string text)

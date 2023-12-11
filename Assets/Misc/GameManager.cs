@@ -51,13 +51,7 @@ public class GameManager : MonoBehaviour
         foreach(FriendlyKillerData f in friendlyKillerHandler.GetFriendlyKillerDataList())
         {
             Vector3 pos = SpawnRandomlyWithinTerrain();
-            FriendlyKillers friendlyKillers = null;
-            switch(f.GetFriendlyKillerSO())
-            {
-                case TurretSO t:
-                    friendlyKillers = Instantiate(AssetManager.GetInstance().TurretPrefab, pos, Quaternion.identity).GetComponent<Turret>();
-                    break;
-            }
+            FriendlyKillers friendlyKillers = Instantiate(friendlyKillerHandler.GetFriendlyKillerInfo(f.GetFriendlyKillerSO()).FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>(); ;
             if (friendlyKillers != null)
                 friendlyKillers.SetKillerData(f);
         }

@@ -33,6 +33,7 @@ public class Spitter : BaseEnemy
         DetectionRange = 8f;
         CurrentStrafeT = DefaultStrafeT;
         CurrentBasicAttackRate = DefaultBasicAttackRate;
+        Staggering = 5;
         CurrentAttackRate = DefaultAttackRate;
     }
 
@@ -90,7 +91,8 @@ public class Spitter : BaseEnemy
                     state = States.STRAFE;
                 }
 
-                NavMeshAgent.enabled = NavMeshAgent.updateRotation = true;
+                if (!isAttacking)
+                    NavMeshAgent.enabled = NavMeshAgent.updateRotation = true;
 
                 break;
             case States.STRAFE:

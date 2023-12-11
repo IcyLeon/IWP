@@ -1,9 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FriendlyKillerHandler : MonoBehaviour
 {
+    [Serializable]
+    public class FriendlyKillerInfo
+    {
+        public GameObject FriendlyKillerPrefab;
+        public FriendlyKillerSO FriendlyKillerSO;
+    }
+    [SerializeField] FriendlyKillerInfo[] FriendlyKillerInfoList;
     private int MaxKillers = 3;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
@@ -24,6 +32,16 @@ public class FriendlyKillerHandler : MonoBehaviour
         }
 
         FriendlyKillerDataList = new();
+    }
+
+    public FriendlyKillerInfo GetFriendlyKillerInfo(FriendlyKillerSO fSO)
+    {
+        for (int i = 0; i < FriendlyKillerInfoList.Length; i++)
+        {
+            if (FriendlyKillerInfoList[i].FriendlyKillerSO == fSO)
+                return FriendlyKillerInfoList[i];
+        }
+        return null;
     }
 
     public List<FriendlyKillerData> GetFriendlyKillerDataList()

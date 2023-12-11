@@ -18,4 +18,5 @@ public class PlayerData
     public float DashLimitReachedElasped;
 
     public float CurrentJumpForceXZ;
+    public Vector3 PreviousPosition;
 }

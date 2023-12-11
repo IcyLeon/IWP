@@ -29,7 +29,6 @@ public class BaseEnemy : Characters
         DetectionRange = 1f;
         Level = 1;
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
-        healthBarScript.transform.localPosition = new Vector3(0, GetModel().transform.localPosition.y, 0);
 
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
@@ -63,9 +62,10 @@ public class BaseEnemy : Characters
 
     private void UpdateOutofBound()
     {
-        if (transform.position.y <= -500f)
+        if (transform.position.y <= -100f)
         {
             SetHealth(0);
+            UpdateDie();
             Destroy(gameObject);
         }
     }
@@ -115,7 +115,12 @@ public class BaseEnemy : Characters
     {
         if (healthBarScript)
         {
+            healthBarScript.transform.position = HealthBarPivotParent.position + Vector3.up;
             healthBarScript.SliderInvsibleOnlyFullHealth();
+        }
+        if (elementsIndicator)
+        {
+            elementsIndicator.transform.position = HealthBarPivotParent.position + Vector3.up * 2f;
         }
     }
 
@@ -126,7 +131,6 @@ public class BaseEnemy : Characters
         if (elementsIndicator == null)
         {
             elementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, transform).GetComponent<ElementsIndicator>();
-            elementsIndicator.transform.localPosition = Vector3.up * 3f;
             elementsIndicator.SetCharacters(this);
         }
 

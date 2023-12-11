@@ -84,7 +84,7 @@ public class AmberESkillArrows : MonoBehaviour
     {
         PlayerCharacters player = other.transform.GetComponent<PlayerCharacters>();
 
-        if (player == null && other.GetComponent<AmberESkillArrows>() == null)
+        if (player == null)
         {
             if (other.isTrigger)
                 return;
