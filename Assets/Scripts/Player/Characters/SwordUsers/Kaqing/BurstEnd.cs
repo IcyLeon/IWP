@@ -11,6 +11,10 @@ public class BurstEnd : StateMachineBehaviour
         if (playerCharacters != null)
         {
             playerCharacters.SetBurstActive(false);
+            if (playerCharacters.GetBurstCamera())
+            {
+                playerCharacters.GetBurstCamera().gameObject.SetActive(false);
+            }
             animator.SetBool("IsBurstFinish", false);
         }
     }

@@ -253,7 +253,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
         }
         else
         {
-            forward = NearestEnemy.transform.position - GetPlayerController().GetPlayerOffsetPosition().position;
+            forward = NearestEnemy.GetPointOfContact() - GetPlayerController().GetPlayerOffsetPosition().position;
             forward.Normalize();
             ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, ESkillRange);
         }

@@ -390,7 +390,7 @@ public class PlayerMovementState : IState
     protected void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 3f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * 4.5f, ForceMode.Acceleration);
     }
     protected void DecelerateHorizontal()
     {

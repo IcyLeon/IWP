@@ -483,11 +483,11 @@ MonoBehaviour:
   m_LookaheadIgnoreY: 0
   m_XDamping: 0.2
   m_YDamping: 0.4
-  m_ZDamping: 0
+  m_ZDamping: 0.8
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 4
+  m_CameraDistance: 3.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -5457,7 +5457,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.3
   m_ScreenY: 0.5
-  m_CameraDistance: 1.25
+  m_CameraDistance: 1.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -5501,7 +5501,7 @@ MonoBehaviour:
     m_InputAxisValue: 0
     m_InvertInput: 1
     m_MinValue: -45
-    m_MaxValue: 20
+    m_MaxValue: 45
     m_Wrap: 0
     m_Recentering:
       m_enabled: 0

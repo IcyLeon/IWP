@@ -9,7 +9,7 @@ public class PlayerJumpState : PlayerAirborneState
 
     public PlayerJumpState(PlayerState playerState) : base(playerState)
     {
-        JumpForce = 10f;
+        JumpForce = 8f;
     }
     public override void Enter()
     {
@@ -17,7 +17,6 @@ public class PlayerJumpState : PlayerAirborneState
         ResetSpeed();
         SetSpeedModifier(0f);
         playerStateEnum = PlayerStateEnum.JUMP;
-
         ResetVelocity();
         shouldKeepRotating = GetInputDirection() != Vector3.zero;
         Jump();
@@ -34,7 +33,7 @@ public class PlayerJumpState : PlayerAirborneState
 
         Vector3 JumpForceDir = GetPlayerState().PlayerData.CurrentJumpForceXZ * direction.normalized;
         JumpForceDir.y = JumpForce;
-        rb.AddForce(JumpForceDir, ForceMode.VelocityChange);
+        rb.AddForce(JumpForceDir, ForceMode.Impulse);
     }
 
     public override void FixedUpdate()

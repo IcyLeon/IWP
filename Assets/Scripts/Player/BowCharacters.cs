@@ -141,13 +141,13 @@ public class BowCharacters : PlayerCharacters
                 forward = transform.forward;
                 forward.y = 0;
                 forward.Normalize();
-                Direction = ((transform.position + forward * Range) - GetEmitterPivot().position).normalized;
+                Direction = ((GetPointOfContact() + forward * Range) - GetEmitterPivot().position).normalized;
             }
             else
             {
                 forward = NearestEnemy.transform.position - transform.position;
                 forward.Normalize();
-                Direction = (NearestEnemy.transform.position - GetEmitterPivot().position).normalized;
+                Direction = (NearestEnemy.GetPointOfContact() - GetEmitterPivot().position).normalized;
                 LookAtDirection(forward);
             }
         }

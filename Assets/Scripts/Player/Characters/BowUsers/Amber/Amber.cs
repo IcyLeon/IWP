@@ -106,7 +106,7 @@ public class Amber : BowCharacters, ICoordinateAttack
             forward = NearestEnemy.transform.position - pos;
             forward.Normalize();
             LookAtDirection(forward);
-            return NearestEnemy.transform.position;
+            return NearestEnemy.GetPointOfContact();
         }
     }
 

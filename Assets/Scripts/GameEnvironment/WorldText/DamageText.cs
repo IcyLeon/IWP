@@ -18,7 +18,7 @@ public class DamageText : MonoBehaviour
     {
         RT = GetComponent<RectTransform>();
         vel = Vector2.zero;
-        Offset = Vector3.one * 0.5f;
+        Offset = Vector3.one * 0.35f;
         canvasGroup.alpha = 0f;
     }
     // Start is called before the first frame update
