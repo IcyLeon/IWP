@@ -15,10 +15,8 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] GameObject MaxLevelContent;
     [SerializeField] GameObject EnhancementContent;
     [SerializeField] GameObject ButtonMask;
-
     [Header("Enhancement Infomation")]
     [SerializeField] int EnhancementItemToSell;
-    [SerializeField] UpgradeCanvas upgradeCanvas;
     [SerializeField] Image selectedItemImage;
     [SerializeField] TextMeshProUGUI LevelDisplay, ExpAmountDisplay, IncreaseAmountExpDisplay, IncreaseLevelDisplay;
     [SerializeField] Button AutoAddBtn;
@@ -35,6 +33,7 @@ public class EnhancementManager : MonoBehaviour
     private float PreviewUpgradeEXP;
     private bool UpgradinginProgress = false;
     private InventoryManager InventoryManager;
+    private UpgradeCanvas upgradeCanvas;
 
     [Header("Artifacts Stats")]
     [SerializeField] GameObject[] ArtifactsStatsContainer;
@@ -44,7 +43,6 @@ public class EnhancementManager : MonoBehaviour
     {
         InventoryManager = InventoryManager.GetInstance();
         InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
-
         LoadEmptySlots();
         AutoAddBtn.onClick.AddListener(AutoAdd);
         UpgradeBtn.onClick.AddListener(UpgradeItem);
@@ -54,9 +52,14 @@ public class EnhancementManager : MonoBehaviour
             RaritySelection = AutoAddSelection.value;
         }
         );
-
+        Init();
     }
 
+    public void Init()
+    {
+        if (upgradeCanvas == null)
+            upgradeCanvas = MainUI.GetInstance().GetUpgradeCanvas();
+    }
     public void SetExpDisplay()
     {
         UpgradableItems UpgradableItemREF = GetItemREF() as UpgradableItems;

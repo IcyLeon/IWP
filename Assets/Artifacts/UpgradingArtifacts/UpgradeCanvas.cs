@@ -35,6 +35,7 @@ public class UpgradeCanvas : MonoBehaviour
             return;
 
         gameObject.SetActive(true);
+        EnhancementManager.Init();
         EnhancementManager.SetExpDisplay();
         UpgradeItemsType.text = GetItemREF().GetItemSO().GetItemType() + " / " + GetItemREF().GetItemSO().ItemName;
         ItemContentManager.SetItemREF(GetItemREF(), GetItemREF().GetItemSO());

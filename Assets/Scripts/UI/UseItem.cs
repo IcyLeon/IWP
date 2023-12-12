@@ -32,6 +32,9 @@ public class UseItem : MonoBehaviour, IPointerClickHandler
 
     private void DetailsPage()
     {
+        UpgradableItems UpgradableItems = ItemButtonREF.GetItemREF() as UpgradableItems;
+        if (UpgradableItems == null)
+            return;
 
     }
 

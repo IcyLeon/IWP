@@ -13,6 +13,7 @@ public class MainUI : MonoBehaviour
     [SerializeField] GameObject CombatUI;
     [SerializeField] GameObject FallenUI;
     [SerializeField] GameObject[] MainUIList;
+    [SerializeField] UpgradeCanvas upgradeCanvas;
     private List<ArrowIndicator> ArrowIndicatorList;
     [SerializeField] GameObject BlueEffectObject;
     private bool Paused;
@@ -20,6 +21,11 @@ public class MainUI : MonoBehaviour
     public static MainUI GetInstance()
     {
         return instance;
+    }
+
+    public UpgradeCanvas GetUpgradeCanvas()
+    {
+        return upgradeCanvas;
     }
 
     public InteractionContentUI GetInteractOptionsUI()

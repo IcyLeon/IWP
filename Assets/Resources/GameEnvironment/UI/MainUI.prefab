@@ -2261,6 +2261,7 @@ MonoBehaviour:
   - {fileID: 9177896083575042483}
   - {fileID: 8286152234635053833}
   - {fileID: 1541753885258959176}
+  upgradeCanvas: {fileID: 3388497493186910145}
   BlueEffectObject: {fileID: 7019526746640661794}
 --- !u!1 &4549896843295635505
 GameObject:
@@ -15430,6 +15431,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ef20bfadb4d0a24f96e71acc256cd13, type: 3}
+--- !u!114 &3388497493186910145 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1162535181412237601, guid: 3ef20bfadb4d0a24f96e71acc256cd13,
+    type: 3}
+  m_PrefabInstance: {fileID: 4549896844369303264}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe79ae31e3777b42924c8e4ea37f9eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &9177896083575042480 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4646048841986860880, guid: 3ef20bfadb4d0a24f96e71acc256cd13,

@@ -211,7 +211,8 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
                     if (targetOrb == null)
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
-                    ElementalHitPos = GetRayPosition3D(Camera.main.transform.position, Camera.main.transform.forward, ESkillRange);
+                    Vector3 hitPos = (Camera.main.transform.position + Camera.main.transform.forward * ESkillRange) - GetPlayerController().GetPlayerOffsetPosition().position;
+                    ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, hitPos, ESkillRange);
                 }
                 else
                 {
