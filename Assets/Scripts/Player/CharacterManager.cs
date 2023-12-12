@@ -134,9 +134,14 @@ public class CharacterManager : MonoBehaviour
         SceneManager = SceneManager.GetInstance();
         SceneManager.OnSceneChanged += OnSceneChanged;
         onCharacterChange += CharacterChange;
-        SwapCharacters(0);
+        StartCoroutine(ShortDelay());
     }
 
+    private IEnumerator ShortDelay()
+    {
+        yield return null;
+        SwapCharacters(0);
+    }
     private void SubscribeToKeyInputs()
     {
         if (playerController)

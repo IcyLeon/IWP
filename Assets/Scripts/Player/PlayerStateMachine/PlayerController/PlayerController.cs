@@ -73,7 +73,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         lockMovement = LockMovement.Enable;
-        mainUI = MainUI.GetInstance();
         playerState = new PlayerState(this);
     }
 

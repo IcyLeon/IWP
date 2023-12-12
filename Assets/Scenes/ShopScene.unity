@@ -527,7 +527,7 @@ MonoBehaviour:
     m_MaxSpeed: 5
     m_AccelTime: 0.8
     m_DecelTime: 0.005
-    m_InputAxisName: Mouse Y
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 1
     m_MinValue: -45
@@ -551,7 +551,7 @@ MonoBehaviour:
     m_MaxSpeed: 3.5
     m_AccelTime: 0.8
     m_DecelTime: 0.25
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -5497,7 +5497,7 @@ MonoBehaviour:
     m_MaxSpeed: 5
     m_AccelTime: 0.8
     m_DecelTime: 0.005
-    m_InputAxisName: Mouse Y
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 1
     m_MinValue: -45
@@ -5521,7 +5521,7 @@ MonoBehaviour:
     m_MaxSpeed: 3.5
     m_AccelTime: 0.8
     m_DecelTime: 0.25
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
