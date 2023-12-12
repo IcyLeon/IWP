@@ -1930,6 +1930,7 @@ MonoBehaviour:
   PreviewCostTxt: {fileID: 484985689}
   CostCurrencyImage: {fileID: 1232202416}
   ItemContentManager: {fileID: 2130242138}
+  ItemContent: {fileID: 1413475138}
   tabContentManager: {fileID: 1169699156}
   PurchaseItem: {fileID: 238168117}
 --- !u!1 &666705144

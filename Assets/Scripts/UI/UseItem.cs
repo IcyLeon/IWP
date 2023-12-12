@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class UseItem : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField] UpgradeCanvasTransition upgradeCanvasTransition;
     [SerializeField] TextMeshProUGUI ButtonText;
     private ItemButton ItemButtonREF;
 
@@ -22,6 +23,7 @@ public class UseItem : MonoBehaviour, IPointerClickHandler
                 ButtonText.text = "Details";
                 break;
         }
+        gameObject.SetActive(true);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -32,10 +34,10 @@ public class UseItem : MonoBehaviour, IPointerClickHandler
 
     private void DetailsPage()
     {
-        UpgradableItems UpgradableItems = ItemButtonREF.GetItemREF() as UpgradableItems;
-        if (UpgradableItems == null)
+        if (ItemButtonREF == null)
             return;
 
+        upgradeCanvasTransition.SetItemREF(ItemButtonREF.GetItemREF());
     }
 
     private void Use()

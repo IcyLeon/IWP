@@ -11,6 +11,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI PreviewCostTxt;
     [SerializeField] Image CostCurrencyImage;
     [SerializeField] ItemContentManager ItemContentManager;
+    [SerializeField] GameObject ItemContent;
     [SerializeField] ShopTabContentManager tabContentManager;
     [SerializeField] Purchase PurchaseItem;
     private ShopInfo selectedShopInfo;
@@ -36,6 +37,7 @@ public class ShopManager : MonoBehaviour
             si.OnShopButtonClick += SelectedColor_Consumable;
             ShopInfoList.Add(si);
         }
+        ItemContent.SetActive(false);
     }
 
     private void SelectedColor_Buff(ShopInfo s)
@@ -67,8 +69,12 @@ public class ShopManager : MonoBehaviour
     {
         selectedShopInfo = shopInfo;
         if (selectedShopInfo == null)
+        {
+            ItemContent.SetActive(false);
             return;
+        }
 
+        ItemContent.SetActive(true);
         CostCurrencyImage.sprite = AssetManager.GetInstance().GetCurrencySprite(selectedShopInfo.GetShopItemSO().CurrencyType);
         PurchaseItem.SetShopItemREF(shopInfo.GetShopItemSO());
         ItemContentManager.SetItemREF(null, shopInfo.GetShopItemSO().ItemsSO);

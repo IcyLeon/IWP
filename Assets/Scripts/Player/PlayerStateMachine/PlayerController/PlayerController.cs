@@ -76,14 +76,12 @@ public class PlayerController : MonoBehaviour
         playerState = new PlayerState(this);
     }
 
-    private void OnEnable()
-    {
-        characterManager = CharacterManager.GetInstance();
-        characterManager.SetPlayerController(this);
-    }
     // Start is called before the first frame update
     void Start()
     {
+        characterManager = CharacterManager.GetInstance();
+        characterManager.SetPlayerController(this);
+
         mainUI = MainUI.GetInstance();
         rb = GetComponent<Rigidbody>();
         resizeableCollider = GetComponent<ResizeableCollider>();

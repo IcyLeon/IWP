@@ -169,6 +169,9 @@ public class CharacterManager : MonoBehaviour
 
     private void UpdateCharacterData()
     {
+        if (inventoryManager == null)
+            return;
+
         for (int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
         {
             CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
