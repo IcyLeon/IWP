@@ -34,9 +34,9 @@ public class MainUI : MonoBehaviour
         return InteractOptionsUI;
     }
 
-    public GameObject GetItemBag()
+    public void OpenItemBag()
     {
-        return ItemBag;
+        ItemBag.SetActive(true);
     }
 
 

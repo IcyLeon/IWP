@@ -34,7 +34,7 @@ public class UpgradeCanvas : MonoBehaviour
         else if (GetItemREF() is not UpgradableItems)
             return;
 
-        MainUI.GetInstance().GetItemBag().SetActive(true);
+        MainUI.GetInstance().OpenItemBag();
         gameObject.SetActive(true);
         EnhancementManager.Init();
         EnhancementManager.SetExpDisplay();

@@ -10,7 +10,7 @@ public class BowCharacters : PlayerCharacters
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
     private Elemental CurrentElemental, ShootElement;
-    private float BaseFireSpeed = 1500f;
+    private float BaseFireSpeed = 800f;
     private float ChargedMaxElapsed = 1.5f; // do not change
     private float ChargeElapsed;
     private Vector3 Direction, ShootDirection;
