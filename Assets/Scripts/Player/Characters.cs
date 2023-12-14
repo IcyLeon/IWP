@@ -106,7 +106,10 @@ public class Characters : MonoBehaviour, IDamage
 
     private void OnAnimatorMove()
     {
-        if (!Animator) { return; }
+        if (Animator == null) 
+        { 
+            return; 
+        }
 
         AnimatorMove(Animator.deltaPosition, Animator.rootRotation);
     }
@@ -126,7 +129,8 @@ public class Characters : MonoBehaviour, IDamage
     {
         if (this is PlayerCharacters)
         {
-            return CharacterManager.GetInstance().GetPlayerController().GetCharacterRB();
+            PlayerCharacters pc = (PlayerCharacters)this;
+            return pc.GetPlayerManager().GetCharacterRB();
         }
         return transform.GetComponent<Rigidbody>();
     }

@@ -32,7 +32,7 @@ public class ArrowIndicator : MonoBehaviour
         if (source == null)
             return;
 
-        Vector3 direction = (source.transform.position - characterManager.GetPlayerController().transform.position);
+        Vector3 direction = (source.transform.position - characterManager.GetPlayerManager().transform.position);
         direction.Normalize();
         Quaternion sourceRot = Quaternion.LookRotation(direction);
         sourceRot.z = -sourceRot.y;

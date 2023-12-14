@@ -751,7 +751,7 @@ GameObject:
   - component: {fileID: 4020335968690510227}
   m_Layer: 3
   m_Name: Kaqing
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -789,6 +789,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   Animator: {fileID: 41062414002266592}
   Model: {fileID: 2025528108361651698}
+  HealthBarPivotParent: {fileID: 0}
   BurstCamera: {fileID: 5768029138009864271}
   SwordModel: {fileID: 3228397461706563601}
   EmitterPivot: {fileID: 5913488171116269540}

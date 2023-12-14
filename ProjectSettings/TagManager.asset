@@ -6,6 +6,7 @@ TagManager:
   tags:
   - AimCamera
   - PlayerCamera
+  - BlurEffect
   layers:
   - Default
   - TransparentFX

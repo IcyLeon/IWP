@@ -2,15 +2,13 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerCharacters : Characters
 {
     protected float AimSpeed = 20f;
     private CharacterData characterData;
-    private PlayerController playerController;
+    private PlayerManager PlayerManager;
     protected bool isBurstActive;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
@@ -37,7 +35,7 @@ public class PlayerCharacters : Characters
 
     public override Vector3 GetPointOfContact()
     {
-        return GetPlayerController().GetPlayerOffsetPosition().position;
+        return GetPlayerManager().GetPlayerOffsetPosition().position;
     }
 
     public override ElementalReaction GetElementalReaction()
@@ -55,11 +53,14 @@ public class PlayerCharacters : Characters
 
     public override void AnimatorMove(Vector3 deltaPosition, Quaternion rootRotation)
     {
-        if (!GetPlayerController().GetPlayerMovementState().CheckIfisAboutToFall())
+        if (GetPlayerManager() == null)
+            return;
+
+        if (!GetPlayerManager().GetPlayerMovementState().CheckIfisAboutToFall())
         {
-            GetPlayerController().GetCharacterRB().MovePosition(GetPlayerController().GetCharacterRB().position + deltaPosition);
+            GetPlayerManager().GetCharacterRB().MovePosition(GetPlayerManager().GetCharacterRB().position + deltaPosition);
         }
-        GetPlayerController().GetCharacterRB().transform.rotation = rootRotation;
+        GetPlayerManager().GetCharacterRB().transform.rotation = rootRotation;
     }
 
     public void SetCharacterData(CharacterData characterData)
@@ -75,12 +76,12 @@ public class PlayerCharacters : Characters
 
     private ElementsIndicator GetElementsIndicator()
     {
-        return CharacterManager.GetInstance().GetElementsIndicator();
+        return PlayerManager.GetElementsIndicator();
     }
 
     private void SetElementsIndicator(ElementsIndicator ElementsIndicator)
     {
-        CharacterManager.GetInstance().SetElementsIndicator(ElementsIndicator);
+        PlayerManager.SetElementsIndicator(ElementsIndicator);
     }
 
     public override bool IsDead()
@@ -93,14 +94,14 @@ public class PlayerCharacters : Characters
 
     private Collider[] GetAllNearestCharacters(float range)
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, range, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().transform.position, range, LayerMask.GetMask("Entity"));
         List<Collider> colliderCopy = new List<Collider>(colliders);
         for (int i = colliderCopy.Count - 1; i >= 0; i--)
         {
             Characters c = colliderCopy[i].GetComponent<Characters>();
             if (c != null)
             {
-                Vector3 dir = GetPlayerController().GetPlayerOffsetPosition().position - c.transform.position;
+                Vector3 dir = GetPlayerManager().GetPlayerOffsetPosition().position - c.transform.position;
                 if (Physics.Raycast(c.transform.position, dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
                 {
                     if (hit.collider.GetComponent<PlayerCharacters>() == null)
@@ -135,8 +136,8 @@ public class PlayerCharacters : Characters
             Characters c = colliderCopy[i].GetComponent<Characters>();
             if (c != null)
             {
-                float dist1 = Vector3.Distance(colliderCopy[i].transform.position, GetPlayerController().transform.position);
-                float dist2 = Vector3.Distance(nearestCollider.transform.position, GetPlayerController().transform.position);
+                float dist1 = Vector3.Distance(colliderCopy[i].transform.position, GetPlayerManager().transform.position);
+                float dist2 = Vector3.Distance(nearestCollider.transform.position, GetPlayerManager().transform.position);
 
                 if (dist1 <= dist2)
                 {
@@ -196,11 +197,10 @@ public class PlayerCharacters : Characters
         return characterData.GetDEF();
     }
 
-    public PlayerController GetPlayerController()
+    public PlayerManager GetPlayerManager()
     {
-        return playerController;
+        return PlayerManager;
     }
-
     protected override void Start()
     {
         SetBurstActive(false);
@@ -215,7 +215,7 @@ public class PlayerCharacters : Characters
 
     protected virtual Collider[] PlungeAttackGroundHit(Vector3 HitPos)
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerController().transform.position, 5f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().transform.position, 5f, LayerMask.GetMask("Entity"));
 
         AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
 
@@ -224,11 +224,11 @@ public class PlayerCharacters : Characters
 
     private IEnumerator UpdateDefaultPosOffsetAndZoomAnim(float delay)
     {
-        if (GetPlayerController() == null)
+        if (GetPlayerManager() == null)
             yield break;
 
         yield return new WaitForSeconds(delay);
-        GetPlayerController().UpdateDefaultPosOffsetAndZoom();
+        GetPlayerManager().GetPlayerController().UpdateDefaultPosOffsetAndZoom();
         yield return null;
     }
 
@@ -248,7 +248,10 @@ public class PlayerCharacters : Characters
     {
         base.Update();
 
-        if (GetPlayerController().isDeadState())
+        if (GetPlayerManager() == null)
+            return;
+
+        if (GetPlayerManager().isDeadState())
             return;
 
         NearestEnemy = GetNearestCharacters(Range);
@@ -271,28 +274,28 @@ public class PlayerCharacters : Characters
 
         if (Animator)
         {
-            Animator.SetBool("isFalling", GetPlayerController().GetPlayerMovementState() is PlayerFallingState);
-            Animator.SetFloat("Velocity", GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
-            Animator.SetBool("isGrounded", GetPlayerController().CanPerformAction());
-            Animator.SetBool("isWalking", GetPlayerController().IsMoving());
+            Animator.SetBool("isFalling", GetPlayerManager().GetPlayerMovementState() is PlayerFallingState);
+            Animator.SetFloat("Velocity", GetPlayerManager().GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
+            Animator.SetBool("isGrounded", GetPlayerManager().CanPerformAction());
+            Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
         }
     }
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
-        if (GetPlayerController() == null)
+        if (GetPlayerManager() == null)
             return Vector3.zero;
 
-        return GetPlayerController().GetRayPosition3D(origin, direction, maxdistance);
+        return GetPlayerManager().GetPlayerController().GetRayPosition3D(origin, direction, maxdistance);
     }
 
 
     private void SetTargetRotation(Quaternion quaternion)
     {
-        if (GetPlayerController() == null)
+        if (GetPlayerManager() == null)
             return;
 
-        GetPlayerController().GetPlayerState().GetPlayerMovementState().UpdateTargetRotation_Instant(quaternion);
+        GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState().UpdateTargetRotation_Instant(quaternion);
     }
 
     protected void LookAtDirection(Vector3 dir)
@@ -303,10 +306,10 @@ public class PlayerCharacters : Characters
 
     protected void UpdateCameraAim()
     {
-        if (GetPlayerController() == null)
+        if (GetPlayerManager() == null)
             return;
 
-        GetPlayerController().UpdateAim();
+        GetPlayerManager().GetPlayerController().UpdateAim();
     }
 
     public override bool UpdateDie()
@@ -331,7 +334,7 @@ public class PlayerCharacters : Characters
     }
     protected virtual bool ElementalBurstTrigger()
     {
-        if (characterData == null || !GetPlayerController().CanAttack())
+        if (characterData == null || !GetPlayerManager().CanAttack())
             return false;
 
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
@@ -364,15 +367,15 @@ public class PlayerCharacters : Characters
 
     private void OnEnable()
     {
-        playerController = CharacterManager.GetInstance().GetPlayerController();
-        GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
-        GetPlayerController().OnElementalBurstTrigger += ElementalBurstTrigger;
-        GetPlayerController().OnElementalSkillTrigger += ElementalSkillTrigger;
-        GetPlayerController().OnE_1Down += EKey_1Down;
-        GetPlayerController().OnChargeHold += ChargeHold;
-        GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerController().GetPlayerState().OnPlayerStateChange += PlayerStateChange;
-        GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
+        PlayerManager = transform.root.GetComponent<PlayerManager>();
+        GetPlayerManager().GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
+        GetPlayerManager().GetPlayerController().OnElementalBurstTrigger += ElementalBurstTrigger;
+        GetPlayerManager().GetPlayerController().OnElementalSkillTrigger += ElementalSkillTrigger;
+        GetPlayerManager().GetPlayerController().OnE_1Down += EKey_1Down;
+        GetPlayerManager().GetPlayerController().OnChargeHold += ChargeHold;
+        GetPlayerManager().GetPlayerController().OnChargeTrigger += ChargeTrigger;
+        GetPlayerManager().GetPlayerController().GetPlayerState().OnPlayerStateChange += PlayerStateChange;
+        GetPlayerManager().GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
     }
 
@@ -394,17 +397,17 @@ public class PlayerCharacters : Characters
 
     private void DisableInputs()
     {
-        if (GetPlayerController() != null)
-        {
-            GetPlayerController().OnElementalSkillHold -= ElementalSkillHold;
-            GetPlayerController().OnElementalBurstTrigger -= ElementalBurstTrigger;
-            GetPlayerController().OnElementalSkillTrigger -= ElementalSkillTrigger;
-            GetPlayerController().OnE_1Down -= EKey_1Down;
-            GetPlayerController().OnChargeHold -= ChargeHold;
-            GetPlayerController().OnChargeTrigger -= ChargeTrigger;
-            GetPlayerController().GetPlayerState().OnPlayerStateChange -= PlayerStateChange;
-            GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
-        }
+        if (GetPlayerManager() == null)
+            return;
+
+        GetPlayerManager().GetPlayerController().OnElementalSkillHold -= ElementalSkillHold;
+        GetPlayerManager().GetPlayerController().OnElementalBurstTrigger -= ElementalBurstTrigger;
+        GetPlayerManager().GetPlayerController().OnElementalSkillTrigger -= ElementalSkillTrigger;
+        GetPlayerManager().GetPlayerController().OnE_1Down -= EKey_1Down;
+        GetPlayerManager().GetPlayerController().OnChargeHold -= ChargeHold;
+        GetPlayerManager().GetPlayerController().OnChargeTrigger -= ChargeTrigger;
+        GetPlayerManager().GetPlayerController().GetPlayerState().OnPlayerStateChange -= PlayerStateChange;
+        GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;        
     }
 
     private void PlayerStateChange(PlayerState state)
@@ -414,7 +417,7 @@ public class PlayerCharacters : Characters
         if (state.GetPlayerMovementState() is not PlayerDashState)
             Animator.SetBool("isDashing", false);
 
-        switch (GetPlayerController().GetPlayerMovementState().GetPlayerStateEnum())
+        switch (GetPlayerManager().GetPlayerMovementState().GetPlayerStateEnum())
         {
             case PlayerMovementState.PlayerStateEnum.JUMP:
                 if (Animator != null)

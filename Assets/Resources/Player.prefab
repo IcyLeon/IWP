@@ -46,9 +46,10 @@ GameObject:
   - component: {fileID: 5113795436203482261}
   - component: {fileID: 7182423578951183842}
   - component: {fileID: 4563240697774977713}
+  - component: {fileID: 6677480311715409904}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64be746642b6dcd4799935d023c5d34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraLook: {fileID: 2798339205668980939}
   PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
   cameraManager: {fileID: 5113795436203482261}
 --- !u!114 &5889022338644147868
@@ -212,3 +212,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractablePrefab: {fileID: 5043170893641108380, guid: 3c20a2eddd15c1d46ba3921734cb3346,
     type: 3}
+--- !u!114 &6677480311715409904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8466442129360495668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5a53470f0e1ed4cb6d4ebdd40432dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraLook: {fileID: 2798339205668980939}

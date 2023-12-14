@@ -68,7 +68,7 @@ public class PlayerMovementState : IState
 
     protected bool IsBurstActive()
     {
-        return GetPlayerState().GetPlayerController().isBurstActive();
+        return GetPlayerState().GetPlayerController().GetPlayerManager().isBurstActive();
     }
 
     public PlayerState GetPlayerState()
@@ -77,7 +77,7 @@ public class PlayerMovementState : IState
     }
     public virtual void Enter()
     {
-        rb = GetPlayerState().GetPlayerController().GetCharacterRB();
+        rb = GetPlayerState().GetPlayerController().GetPlayerManager().GetCharacterRB();
     }
 
     public virtual void Exit()
@@ -96,12 +96,12 @@ public class PlayerMovementState : IState
 
     public virtual void Update()
     {
-        rb = GetPlayerState().GetPlayerController().GetCharacterRB();
+        rb = GetPlayerState().GetPlayerController().GetPlayerManager().GetCharacterRB();
         GatherInput();
         UpdateDash();
         UpdatePreviousPosition();
 
-        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
+        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
             if (GetPlayerState().GetPlayerMovementState() is not PlayerDeadState)
@@ -215,13 +215,13 @@ public class PlayerMovementState : IState
         dir.y = 0f;
         dir.Normalize();
 
-        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             return false;
         }
         else
         {
-            Vector3 hitpos = GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position + dir * horizontalDisCheck;
+            Vector3 hitpos = GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position + dir * horizontalDisCheck;
             return !Physics.Raycast(hitpos, Vector3.down, verticalDisCheck, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         }
 
@@ -240,7 +240,7 @@ public class PlayerMovementState : IState
             return;
 
 
-        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             GetPlayerState().PlayerData.PreviousPosition = hit.point;
         }
@@ -293,13 +293,13 @@ public class PlayerMovementState : IState
 
     protected CapsuleCollider GetCapsuleCollider()
     {
-        if (GetPlayerState().GetPlayerController().GetCharacterManager() == null)
+        if (GetPlayerState().GetPlayerController().GetPlayerManager() == null)
             return null;
 
-        if (GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter() == null)
+        if (GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter() == null)
             return null;
 
-        return GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
+        return GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
     }
 
     private ResizeableCollider GetResizeableCollider()

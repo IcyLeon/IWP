@@ -24,7 +24,7 @@ public class PlayerAimState : PlayerMovementState
             DecelerateHorizontal();
         }
 
-        if (GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter() is Kaqing)
+        if (GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter() is Kaqing)
         {
             return;
         }

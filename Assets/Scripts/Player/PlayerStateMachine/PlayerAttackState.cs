@@ -34,7 +34,7 @@ public class PlayerAttackState : PlayerMovementState
             return;
         }
 
-        playerCharacter = GetPlayerState().GetPlayerController().GetCharacterManager().GetCurrentCharacter();
+        playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
             if (!playerCharacter.GetisAttacking())

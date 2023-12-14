@@ -9,11 +9,9 @@ public class HealingDrone : FriendlyKillers
     private GameObject HealPS;
     private float FireInBetweenShots;
     private float StartFireRate;
-    private CharacterManager cM;
     // Start is called before the first frame update
     protected override void Start()
     {
-        cM = CharacterManager.GetInstance();
         base.Start();
         FireInBetweenShots = 1f / GetFireRate();
         StartFireRate = Time.time;
@@ -61,7 +59,7 @@ public class HealingDrone : FriendlyKillers
             PlayerCharacters pc = colliders[i].GetComponent<PlayerCharacters>();
             if (pc != null)
             {
-                cM.HealCharacter(pc.GetCharacterData(), GetTurretSO().BaseDamage);
+                pc.GetPlayerManager().HealCharacter(pc.GetCharacterData(), GetTurretSO().BaseDamage);
             }
         }
     }

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static InventoryManager;
 
 public class InventoryManager : MonoBehaviour {
     private static InventoryManager instance;
@@ -44,18 +43,10 @@ public class InventoryManager : MonoBehaviour {
             CharacterData characterData = new CharacterData(true, startupSOTest[i]);
             AddCharacterDataToOwnList(characterData);
         }
-        SpawnCharacters();
-    }
+        SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
 
-    public void SpawnCharacters()
-    {
-        for (int i = 0; i < GetCharactersOwnedList().Count; i++)
-        {
-            CharacterInfo characterInfo = CharacterManager.GetInstance().GetCharacterInfo(GetCharactersOwnedList()[i].GetItemSO() as PlayerCharacterSO);
-            PlayerCharacters CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, CharacterManager.GetInstance().GetPlayerController().transform).GetComponent<PlayerCharacters>();
-            CurrentCharacter.SetCharacterData(GetCharactersOwnedList()[i]);
-            CharacterManager.GetInstance().AddPlayerCharactersList(CurrentCharacter);
-        }
+        CharacterManager.GetInstance().SpawnCharacters(GetCharactersOwnedList());
+
     }
 
     public List<CharacterData> GetCharactersOwnedList()

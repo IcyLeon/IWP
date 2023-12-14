@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -45,6 +44,30 @@ public class SlotPopup : MonoBehaviour
         {
             Item item = InventoryManager.GetINVList()[i];
             OnInventoryItemAdd(item);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        for (int i = itembutton_Dictionary.Count - 1; i > 0; i--)
+        {
+            KeyValuePair<Item, ItemButton> itemPair = itembutton_Dictionary.ElementAt(i);
+            if (itembutton_Dictionary.TryGetValue(itemPair.Key, out ItemButton itemButton))
+            {
+                DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
+
+                itemButton.onButtonSpawn -= OnItemSpawned;
+                itemButton.onButtonRemoveClick -= OnItemRemove;
+                itemButton.onButtonClick -= GetItemSelected;
+                if (AllowDragnDrop)
+                {
+                    dragnDrop.onBeginDragEvent -= OnBeginDrag;
+                    dragnDrop.onDragEvent -= OnDrag;
+                    dragnDrop.onEndDragEvent -= OnEndDrag;
+                }
+                Destroy(itemButton.gameObject);
+                itembutton_Dictionary.Remove(itemPair.Key);
+            }
         }
     }
 

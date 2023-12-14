@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor.Experimental;
 using UnityEngine;
@@ -58,15 +59,10 @@ public class DisplayItemsStatsManager : MonoBehaviour
         itemButton.onButtonUpdate += GetItemButtonUpdate;
         itemButton.onButtonClick += GetItemSelected;
 
-        UpgradableItems UpgradableItemREF = itemButton.GetItemREF() as UpgradableItems;
-        if (UpgradableItemREF != null)
-        {
-            UpgradableItemREF.onLevelChanged += onItemUpgrade;
-        }
         switch (itemButton.GetItemsSO().GetCategory())
         {
             case Category.ARTIFACTS:
-                Artifacts artifacts = UpgradableItemREF as Artifacts;
+                Artifacts artifacts = itemButton.GetItemREF() as Artifacts;
                 itemButton.gameObject.transform.SetParent(TabGroup.GetTabMenuList()[TabGroup.GetTabPanelIdx(artifacts.GetArtifactType())].TabPanel.transform);
                 break;
         }
@@ -172,6 +168,18 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        for (int i = itembutton_Dictionary.Count - 1; i > 0; i--)
+        {
+            KeyValuePair<Item, ItemButton> itemPair = itembutton_Dictionary.ElementAt(i);
+            if (itembutton_Dictionary.TryGetValue(itemPair.Key, out ItemButton itemButton))
+            {
+                itemButton.onButtonClick -= GetItemSelected;
+                itemButton.onButtonUpdate -= GetItemButtonUpdate;
+                Destroy(itemButton.gameObject);
+                itembutton_Dictionary.Remove(itemPair.Key);
+            }
+        }
+
         InventoryManager.OnInventoryItemAdd -= OnInventoryItemAdd;
         InventoryManager.OnInventoryItemRemove -= OnInventoryItemRemove;
         TabGroup.onTabChanged -= onTabChangedEvent;

@@ -65,6 +65,7 @@ public class DamageText : MonoBehaviour
     {
         Vector3 pos = Camera.main.WorldToScreenPoint(position);
         RT.anchoredPosition = new Vector2(pos.x, pos.y) + vel;
+        DamageTextTMP.gameObject.SetActive(CameraManager.CheckIfInCameraView(position));
     }
     private IEnumerator WorldTextAnim(float targetSize)
     {

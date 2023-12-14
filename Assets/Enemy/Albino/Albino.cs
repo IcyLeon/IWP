@@ -325,7 +325,7 @@ public class Albino : BaseEnemy
                 if (pc.GetBurstActive())
                     return;
                 pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f);
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerController().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
                 Destroy(hitEffect.gameObject, hitEffect.main.duration);
             }
         }
@@ -342,7 +342,7 @@ public class Albino : BaseEnemy
                     return;
 
                 pc.TakeDamage(pc.transform.position, new Elements(Elemental.NONE), 100f);
-                pc.GetPlayerController().GetCharacterRB().AddForce(((pc.GetPlayerController().GetCharacterRB().position - pc.transform.position).normalized + Vector3.up).normalized * 15f, ForceMode.Impulse); ;
+                pc.GetPlayerManager().GetCharacterRB().AddForce(((pc.GetPlayerManager().GetCharacterRB().position - pc.transform.position).normalized + Vector3.up).normalized * 15f, ForceMode.Impulse); ;
             }
         }
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();

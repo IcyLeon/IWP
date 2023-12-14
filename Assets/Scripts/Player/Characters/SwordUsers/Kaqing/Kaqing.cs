@@ -131,7 +131,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
         float HitElapsed = TimeInBetweenHits;
         int CurrentHits = 0;
 
-        Vector3 pos = GetPlayerController().GetPlayerOffsetPosition().position;
+        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
 
         while (CurrentHits < TotalHits) {
             switch (elementalBurst)
@@ -166,7 +166,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     protected override bool ElementalBurstTrigger()
     {
-        if (GetPlayerController().CanPerformAction() && GetPlayerController().GetPlayerMovementState() is not PlayerAimState)
+        if (GetPlayerManager().CanPerformAction() && GetPlayerManager().GetPlayerMovementState() is not PlayerAimState)
         {
             bool canTrigger = base.ElementalBurstTrigger();
             if (canTrigger)
@@ -178,7 +178,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
                 }
                 isBurstActive = true;
                 elementalBurst = ElementalBurst.First_Phase;
-                GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
+                GetPlayerManager().GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
             }
             return canTrigger;
         }
@@ -197,7 +197,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     protected override void ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanAttack())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
             return;
 
         if (elementalOrb != null)
@@ -211,8 +211,8 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
                     if (targetOrb == null)
                         targetOrb = Instantiate(TargetOrbPrefab);
                     UpdateCameraAim();
-                    Vector3 hitPos = (Camera.main.transform.position + Camera.main.transform.forward * ESkillRange) - GetPlayerController().GetPlayerOffsetPosition().position;
-                    ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, hitPos, ESkillRange);
+                    Vector3 hitPos = (Camera.main.transform.position + Camera.main.transform.forward * ESkillRange) - GetPlayerManager().GetPlayerOffsetPosition().position;
+                    ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitPos, ESkillRange);
                 }
                 else
                 {
@@ -228,7 +228,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     protected override void EKey_1Down()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
             return;
 
         switch (elementalSKill)
@@ -248,14 +248,14 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
             forward = transform.forward;
             forward.y = 0;
             forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, ESkillRange);
+            ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, forward, ESkillRange);
             ElementalHitPos.y = EmitterPivot.position.y;
         }
         else
         {
-            forward = NearestEnemy.GetPointOfContact() - GetPlayerController().GetPlayerOffsetPosition().position;
+            forward = NearestEnemy.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
             forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerController().GetPlayerOffsetPosition().position, forward, ESkillRange);
+            ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, forward, ESkillRange);
         }
     }
 
@@ -267,7 +267,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
             return;
 
         switch (elementalSKill)
@@ -291,7 +291,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
                     return;
 
                 LookAtDirection(elementalOrb.transform.position - transform.position);
-                GetPlayerController().transform.position = elementalOrb.transform.position;
+                GetPlayerManager().transform.position = elementalOrb.transform.position;
                 Animator.SetTrigger("Slash");
                 StartElementalTimer(5f);
                 ResetThresHold();
@@ -315,7 +315,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     private void FloatFor(float sec)
     {
-        //GetPlayerController().StayAfloatFor(sec);
+        //GetPlayerManager().StayAfloatFor(sec);
     }
 
 
@@ -329,7 +329,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     public bool CoordinateAttackEnded()
     {
-        return GetPlayerController().GetPlayerState().GetPlayerMovementState() is not PlayerBurstState;
+        return GetPlayerManager().GetPlayerMovementState() is not PlayerBurstState;
     }
 
     public bool CoordinateCanShoot()

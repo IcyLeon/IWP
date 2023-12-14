@@ -171,7 +171,7 @@ public class InteractManager : MonoBehaviour
 
     private IInteract GetNearestInteractObj()
     {
-        Vector3 playerPosition = playerController.GetPlayerOffsetPosition().position;
+        Vector3 playerPosition = playerController.GetPlayerManager().GetPlayerOffsetPosition().position;
         Collider[] interactList = GetAllNearestInteractObj() as Collider[];
         IInteract nearestInteractable = null;
         float closestDistance = float.MaxValue;
@@ -194,7 +194,7 @@ public class InteractManager : MonoBehaviour
 
     private IInteract[] GetAllNearestInteractObj()
     {
-        Vector3 playerPosition = playerController.GetPlayerOffsetPosition().position;
+        Vector3 playerPosition = playerController.GetPlayerManager().GetPlayerOffsetPosition().position;
         Collider[] colliders = Physics.OverlapSphere(playerPosition, InteractRange);
         List<IInteract> InteractableList = new();
 

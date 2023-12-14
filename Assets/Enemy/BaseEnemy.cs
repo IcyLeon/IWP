@@ -10,7 +10,7 @@ public class BaseEnemy : Characters
     protected float DetectionRange;
     private ElementsIndicator elementsIndicator;
     protected float Ratio;
-    private PlayerController Player;
+    private IDamage Target;
     [SerializeField] protected NavMeshAgent NavMeshAgent;
     private EnemyManager EM;
     protected Vector3 RamdomDestination;
@@ -42,12 +42,49 @@ public class BaseEnemy : Characters
         return EnemyValueDropSO.BaseDropValue * (GetLevel() - 1) + EnemyValueDropSO.BaseDropValue * (Random.Range(0.5f, 1.5f));
     }
 
+    private IDamage[] GetAllFriendlyAllies()
+    {
+        GameObject[] goList = GameObject.FindGameObjectsWithTag("Player");
+        List<IDamage> goCopy = new();
+        for (int i = 0; i < goList.Length; i++)
+        {
+            IDamage damage = goList[i].GetComponent<IDamage>();
+            if (damage != null)
+            {
+                goCopy.Add(damage);
+            }
+        }
+        return goCopy.ToArray();
+    }
+
+    private IDamage GetNearestPlayerObject()
+    {
+        IDamage[] goList = GetAllFriendlyAllies();
+
+        if (goList.Length == 0)
+            return null;
+
+        IDamage nearest = goList[0];
+        for (int i = 0; i < goList.Length; i++)
+        {
+            float dist1 = Vector3.Distance(goList[i].GetPointOfContact(), GetPointOfContact());
+            float dist2 = Vector3.Distance(nearest.GetPointOfContact(), GetPointOfContact());
+
+            if (dist1 < dist2)
+            {
+                nearest = goList[i];
+            }
+        }
+        return nearest;
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
-        if (Player == null)
-            Player = CharacterManager.GetInstance().GetPlayerController();
-
+        if (Target == null)
+        {
+            Target = GetNearestPlayerObject();
+        }
         base.Update();
         UpdateHealthBar();
 
@@ -138,7 +175,8 @@ public class BaseEnemy : Characters
 
         if (e.GetElements() != Elemental.NONE)
         {
-            GameObject go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, transform.position, Quaternion.identity);
+            ElementalOrb go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, transform.position, Quaternion.identity).GetComponent<ElementalOrb>();
+            go.SetSource(CharacterManager.GetInstance().GetPlayerManager());
         }
 
         return e;
@@ -177,10 +215,10 @@ public class BaseEnemy : Characters
 
     protected Vector3 GetPlayerLocation()
     {
-        if (Player == null)
+        if (Target == null)
             return default(Vector3);
 
-        return Player.GetPlayerOffsetPosition().position;
+        return Target.GetPointOfContact();
     }
 
     protected bool isInDetectionRange(float range)

@@ -26,7 +26,7 @@ public class SkillsManager : MonoBehaviour
     void Start()
     {
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
-        CharacterManager.GetInstance().onCharacterChange += OnCharacterSwitch;
+        CharacterManager.GetInstance().GetPlayerManager().onCharacterChange += OnCharacterSwitch;
         OnCharacterSwitch(InventoryManager.GetInstance().GetCurrentEquipCharacterData());
     }
 

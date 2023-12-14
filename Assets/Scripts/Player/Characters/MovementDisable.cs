@@ -9,30 +9,33 @@ public class MovementDisable : StateMachineBehaviour
         Enable,
         Disable
     }
+    private PlayerCharacters playerCharacters;
     [SerializeField] Lock lockMovement;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
-        if (playerCharacters.GetPlayerController())
+        playerCharacters = animator.GetComponent<PlayerCharacters>();
+    }
+
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (playerCharacters.GetPlayerManager() == null)
+            return;
+
+        if (playerCharacters.GetPlayerManager().GetPlayerController())
         {
-            switch(lockMovement)
+            switch (lockMovement)
             {
                 case Lock.Enable:
-                    playerCharacters.GetPlayerController().SetLockMovemnt(LockMovement.Enable);
+                    playerCharacters.GetPlayerManager().GetPlayerController().SetLockMovemnt(LockMovement.Enable);
                     break;
                 case Lock.Disable:
-                    playerCharacters.GetPlayerController().SetLockMovemnt(LockMovement.Disable);
+                    playerCharacters.GetPlayerManager().GetPlayerController().SetLockMovemnt(LockMovement.Disable);
                     break;
             }
         }
     }
-
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

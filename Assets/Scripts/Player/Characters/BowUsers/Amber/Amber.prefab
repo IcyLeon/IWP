@@ -1190,6 +1190,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   Animator: {fileID: 2641773154839491820}
   Model: {fileID: 0}
+  HealthBarPivotParent: {fileID: 0}
   BurstCamera: {fileID: 1858090414510331355}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}

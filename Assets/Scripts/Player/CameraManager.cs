@@ -14,6 +14,13 @@ public class CameraManager : MonoBehaviour
         return aimCamera.gameObject;
     }
 
+    public static bool CheckIfInCameraView(Vector3 pos)
+    {
+        Vector3 viewPoint = Camera.main.WorldToViewportPoint(pos);
+        return viewPoint.z >= Camera.main.nearClipPlane && viewPoint.z <= Camera.main.farClipPlane &&
+                viewPoint.x >= 0 && viewPoint.x <= 1 && viewPoint.y >= 0 && viewPoint.y <= 1;
+    }
+
     private void LockWhenPaused()
     {
         CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
@@ -54,10 +61,10 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateCamera()
     {
-        if (playerController.GetCharacterRB() == null)
+        if (playerController.GetPlayerManager().GetCharacterRB() == null)
             return;
 
-        playerCamera.Follow = playerController.GetPlayerOffsetPosition();
+        playerCamera.Follow = playerController.GetPlayerManager().GetPlayerOffsetPosition();
         aimCamera.Follow = playerCamera.Follow;
         LockWhenPaused();
         //Vector3 d = testCamera.LookAt.position - (playerController.GetPlayerOffsetPosition().position);
@@ -76,7 +83,6 @@ public class CameraManager : MonoBehaviour
         playerCamera.gameObject.SetActive(false);
         aimCamera.gameObject.SetActive(true);
     }
-
 
     // Start is called before the first frame update
     void Start()

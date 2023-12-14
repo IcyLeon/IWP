@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,17 @@ public class InventoryUIManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        for (int i = itembutton_Dictionary.Count - 1; i > 0; i--)
+        {
+            KeyValuePair<Item, ItemButton> itemPair = itembutton_Dictionary.ElementAt(i);
+            if (itembutton_Dictionary.TryGetValue(itemPair.Key, out ItemButton itemButton))
+            {
+                itemButton.onButtonClick -= GetItemSelected;
+                itemButton.onButtonUpdate -= GetItemButtonUpdate;
+                Destroy(itemButton.gameObject);
+                itembutton_Dictionary.Remove(itemPair.Key);
+            }
+        }
         InventoryManager.OnInventoryItemAdd -= OnInventoryItemAdd;
         InventoryManager.OnInventoryItemRemove -= OnInventoryItemRemove;
         TabGroup.onTabChanged -= onTabChangedEvent;

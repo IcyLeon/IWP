@@ -42,7 +42,7 @@ public class Amber : BowCharacters, ICoordinateAttack
                 BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
 
             Destroy(BurstAura.gameObject, CoordinateTimer);
-            GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
+            GetPlayerManager().GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
         }
         return canTrigger;
     }
@@ -50,10 +50,10 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     protected override void ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerController().CanPerformAction())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
             return;
 
-        Vector3 pos = GetPlayerController().GetPlayerOffsetPosition().position;
+        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
         for (int i = 0; i < SkillsArrows; i++)
         {
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
@@ -122,7 +122,7 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     public bool CoordinateAttackEnded()
     {
-        if (GetPlayerController().isDeadState() && IsDead())
+        if (GetPlayerManager().isDeadState() && IsDead())
             return true;
 
         return CoodinateTimerElapsed <= 0f;
@@ -144,6 +144,7 @@ public class Amber : BowCharacters, ICoordinateAttack
         if (!CoordinateCanShoot() || CoordinateAttackEnded())
             return;
 
+        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
         int RandomValue = Random.Range(1, 4);
         for (int j = 0; j < RandomValue; j++)
         {
@@ -151,6 +152,7 @@ public class Amber : BowCharacters, ICoordinateAttack
             Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
             ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
             ca.SetCharacterData(GetCharacterData());
+            ca.SetTargetPos(GetContactPoint(pos));
         }
     }
 }

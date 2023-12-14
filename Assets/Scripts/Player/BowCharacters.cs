@@ -12,7 +12,7 @@ public class BowCharacters : PlayerCharacters
     private Elemental CurrentElemental, ShootElement;
     private float BaseFireSpeed = 800f;
     private float ChargedMaxElapsed = 1.5f; // do not change
-    private float ChargeElapsed;
+    private float ChargeElapsed, ShootChargeElapsed;
     private Vector3 Direction, ShootDirection;
     private bool isChargedFinish;
     private float threasHold_Charged;
@@ -33,10 +33,13 @@ public class BowCharacters : PlayerCharacters
     protected override void Update()
     {
         base.Update();
-        if (GetPlayerController().isDeadState())
+        if (GetPlayerManager() == null)
             return;
 
-        if (Input.GetMouseButton(1) && GetPlayerController().CanAttack())
+        if (GetPlayerManager().isDeadState())
+            return;
+
+        if (Input.GetMouseButton(1) && GetPlayerManager().CanAttack())
         {
             UpdateAim();
             isAimHold = true;
@@ -51,8 +54,8 @@ public class BowCharacters : PlayerCharacters
 
         if (Animator)
         {
-            Animator.SetFloat("AimVelocityX", GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
-            Animator.SetFloat("AimVelocityZ", GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
+            Animator.SetFloat("AimVelocityX", GetPlayerManager().GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
+            Animator.SetFloat("AimVelocityZ", GetPlayerManager().GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
         }
     }
 
@@ -68,7 +71,7 @@ public class BowCharacters : PlayerCharacters
         ArrowFire.SetElements(new Elements(ShootElement));
         ArrowFire.SetCharacterData(GetCharacterData());
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
-        ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + ChargeElapsed));
+        ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + ShootChargeElapsed));
         DestroyChargeUpEmitter();
         ChargeElapsed = 0;
         isChargedFinish = false;
@@ -125,7 +128,7 @@ public class BowCharacters : PlayerCharacters
     }
     protected override void ChargeHold()
     {
-        if (!GetPlayerController().CanAttack())
+        if (!GetPlayerManager().CanAttack())
             return;
 
         if (threasHold_Charged > 0.25f)
@@ -152,12 +155,13 @@ public class BowCharacters : PlayerCharacters
             }
         }
         ShootElement = CurrentElemental;
+        ShootChargeElapsed = ChargeElapsed;
         threasHold_Charged += Time.deltaTime;
     }
 
     protected override void ChargeTrigger()
     {
-        if (!GetPlayerController().CanAttack())
+        if (!GetPlayerManager().CanAttack())
             return;
 
         if (GetBurstActive())

@@ -158,7 +158,7 @@ public class Spitter : BaseEnemy
                 if (pc.GetBurstActive())
                     return;
                 pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f);
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerController().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
                 Destroy(hitEffect.gameObject, hitEffect.main.duration);
             }
         }

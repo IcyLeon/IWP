@@ -35,7 +35,7 @@ public class AmberESkillArrows : MonoBehaviour
         float maxTurnRate = 360f;
         float maxVelocity = 10f; 
 
-        while ((FocalPointPos - rb.position).magnitude > 1f)
+        while ((FocalPointPos - rb.position).magnitude > 1.5f)
         {
             Vector3 targetDirection = (FocalPointPos - rb.position).normalized;
 
@@ -65,7 +65,7 @@ public class AmberESkillArrows : MonoBehaviour
 
     void Explode()
     {
-        Collider[] colliders = Physics.OverlapSphere(rb.position, 4f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(rb.position, 3.5f, LayerMask.GetMask("Entity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             IDamage damageObject = colliders[i].gameObject.GetComponent<IDamage>();

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ElementalOrb : MonoBehaviour
 {
     private Elemental elemental;
-    private CharacterManager characterManager;
+    private PlayerManager pm;
     private float coneAngle = 30f;
     bool canTravel = false;
     [SerializeField] Rigidbody rb;
@@ -16,10 +16,12 @@ public class ElementalOrb : MonoBehaviour
     void Start()
     {
         rb.AddForce(25f * RandomVectorInCone(), ForceMode.VelocityChange);
-        characterManager = CharacterManager.GetInstance();
     }
 
-
+    public void SetSource(PlayerManager PM)
+    {
+        pm = PM;
+    }
     Vector3 RandomVectorInCone()
     {
         Quaternion randomRotation = Quaternion.AngleAxis(Random.Range(0, coneAngle), Random.onUnitSphere);
@@ -37,7 +39,7 @@ public class ElementalOrb : MonoBehaviour
     }
     void MoveTowardsPlayer()
     {
-        Vector3 collider = CharacterManager.GetInstance().GetCurrentCharacter().GetComponent<CapsuleCollider>().bounds.center;
+        Vector3 collider = pm.GetCurrentCharacter().GetComponent<CapsuleCollider>().bounds.center;
         Vector3 direction = (collider - transform.position).normalized;
         CurrentForce = Mathf.Lerp(CurrentForce, maxForce, Time.deltaTime / accelerationTime);
         rb.MovePosition(rb.position + direction * CurrentForce * Time.deltaTime);
@@ -79,11 +81,9 @@ public class ElementalOrb : MonoBehaviour
         PlayerCharacters playerCharacters = collision.transform.GetComponent<PlayerCharacters>();
         if (playerCharacters != null)
         {
-            characterManager = CharacterManager.GetInstance();
-
-            for (int i = 0; i < characterManager.GetCharactersOwnedList().Count; i++)
+            for (int i = 0; i < pm.GetCharactersOwnedList().Count; i++)
             {
-                CharacterData characterData = characterManager.GetCharactersOwnedList()[i];
+                CharacterData characterData = pm.GetCharactersOwnedList()[i];
 
                 if (characterData.GetPlayerCharacterSO().Elemental == elemental)
                     characterData.AddorRemoveCurrentEnergyBurstCost(2.5f);

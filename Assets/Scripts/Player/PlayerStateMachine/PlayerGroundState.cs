@@ -77,7 +77,7 @@ public class PlayerGroundState : PlayerMovementState
 
     private void OnDashInput()
     {
-        if (!GetPlayerState().GetPlayerController().GetStaminaManager().CanPerformDash() || !CanDash())
+        if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash())
             return;
 
         if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))

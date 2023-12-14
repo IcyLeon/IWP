@@ -50,16 +50,15 @@ public class StaminaManager : MonoBehaviour
         if (PlayerController != null)
             return;
 
-        PlayerController = CharacterManager.GetInstance().GetPlayerController();
+        PlayerController = CharacterManager.GetInstance().GetPlayerManager().GetPlayerController();
 
-        //PlayerController.onPlayerStateChange += PlayerStateChange;
         if (PlayerController == null)
             PlayerController.GetPlayerState().OnPlayerStateChange += PlayerStateChange;
     }
 
     private void PlayerStateChange(PlayerState state)
     {
-        switch (PlayerController.GetPlayerMovementState().GetPlayerStateEnum())
+        switch (PlayerController.GetPlayerManager().GetPlayerMovementState().GetPlayerStateEnum())
         {
             case PlayerMovementState.PlayerStateEnum.DASH:
                 if (GetStaminaSO() != null)

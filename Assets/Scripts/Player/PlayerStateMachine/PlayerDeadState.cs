@@ -36,12 +36,12 @@ public class PlayerDeadState : PlayerMovementState
 
     private void ChangeCharacter()
     {
-        GetPlayerState().GetPlayerController().GetCharacterManager().SwapCharacters(GetAliveCharacters());
+        GetPlayerState().GetPlayerController().GetPlayerManager().SwapCharacters(GetAliveCharacters());
     }
 
     private CharacterData GetAliveCharacters()
     {
-        return GetPlayerState().GetPlayerController().GetCharacterManager().GetAliveCharacters();
+        return GetPlayerState().GetPlayerController().GetPlayerManager().GetAliveCharacters();
     }
 
     public override void Update()

@@ -54,7 +54,7 @@ public class PlayerDashState : PlayerGroundState
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
             DisableDash();
         }
-        GetPlayerState().GetPlayerController().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerController().GetStaminaManager().GetStaminaSO().DashCost);
+        GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().GetStaminaSO().DashCost);
     }
 
     public override void Exit()

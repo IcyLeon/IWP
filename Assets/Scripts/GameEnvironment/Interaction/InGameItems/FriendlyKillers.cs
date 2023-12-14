@@ -213,7 +213,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                 float dist1 = Vector3.Distance(colliderCopy[i].transform.position, transform.position);
                 float dist2 = Vector3.Distance(nearestCollider.transform.position, transform.position);
 
-                if (dist1 <= dist2)
+                if (dist1 < dist2)
                 {
                     nearestCollider = colliderCopy[i];
                 }

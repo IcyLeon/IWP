@@ -16,7 +16,9 @@ public class FallenUI : MonoBehaviour
 
     void ReviveAllCharactersEvent()
     {
-        if (characterManager.GetAliveCharacters() != null)
+        if (characterManager.GetPlayerManager() == null)
+            return;
+        if (characterManager.GetPlayerManager().GetAliveCharacters() != null)
             return;
 
         SceneManager.GetInstance().ChangeScene(SceneEnum.SHOP);
@@ -27,10 +29,10 @@ public class FallenUI : MonoBehaviour
 
     void ReviveAllCharacters()
     {
-        for (int i = 0; i < characterManager.GetCharactersOwnedList().Count; i++)
+        for (int i = 0; i < characterManager.GetPlayerManager().GetCharactersOwnedList().Count; i++)
         {
-            CharacterData pc = characterManager.GetCharactersOwnedList()[i];
-            characterManager.HealCharacterBruteForce(pc, pc.GetMaxHealth());
+            CharacterData pc = characterManager.GetPlayerManager().GetCharactersOwnedList()[i];
+            characterManager.GetPlayerManager().HealCharacterBruteForce(pc, pc.GetMaxHealth());
         }
     }
 

@@ -14,12 +14,9 @@ public enum LockMovement
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Transform CameraLook;
     [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
     [SerializeField] CameraManager cameraManager;
-    private CharacterManager characterManager;
-    private StaminaManager staminaManager;
-    private Rigidbody rb;
+    private PlayerManager playerManager;
     private LockMovement lockMovement;
     private PlayerState playerState;
 
@@ -63,41 +60,26 @@ public class PlayerController : MonoBehaviour
         return playerState.GetPlayerMovementState().GetAnimationSpeed();
     }
 
-    public bool isBurstActive()
-    {
-        if (characterManager.GetCurrentCharacter() == null)
-            return false;
 
-        return characterManager.GetCurrentCharacter().GetBurstActive();
-    }
     private void Awake()
     {
         lockMovement = LockMovement.Enable;
+        playerManager = GetComponent<PlayerManager>();
         playerState = new PlayerState(this);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        characterManager = CharacterManager.GetInstance();
-        characterManager.SetPlayerController(this);
-
         mainUI = MainUI.GetInstance();
-        rb = GetComponent<Rigidbody>();
         resizeableCollider = GetComponent<ResizeableCollider>();
-        staminaManager = StaminaManager.GetInstance();
         RecalculateSize(null);
-        GetCharacterManager().onCharacterChange += RecalculateSize;
+        GetPlayerManager().onCharacterChange += RecalculateSize;
     }
 
     public MainUI GetMainUI()
     {
         return mainUI;
-    }
-
-    public CharacterManager GetCharacterManager()
-    {
-        return characterManager;
     }
 
     private void RecalculateSize(CharacterData characterData)
@@ -111,61 +93,28 @@ public class PlayerController : MonoBehaviour
         return playerState;
     }
 
-    public PlayerMovementState GetPlayerMovementState()
-    {
-        return playerState.GetPlayerMovementState();
-    }
-
-    private void OnDestroy()
-    {
-        if (GetCharacterManager())
-            GetCharacterManager().onCharacterChange -= RecalculateSize;
-    }
 
     void Update()
     {
-        if (rb == null)
+        if (GetPlayerManager().GetCharacterRB() == null)
             return;
 
         UpdateControls();
-        UpdateOutofBound();
         playerState.Update();
-    }
-
-    private void UpdateOutofBound()
-    {
-        if (rb == null)
-            return;
-
-        if (rb.position.y <= -100f)
-        {
-            characterManager.ResetAllEnergy();
-            characterManager.AddAllCharactersPercentage(-0.15f);
-            rb.position = GetPlayerState().PlayerData.PreviousPosition;
-        }
-    }
-
-    public Transform GetPlayerOffsetPosition()
-    {
-        return CameraLook;
     }
 
 
     public CapsuleCollider GetCapsuleCollider()
     {
-        if (GetCharacterManager() == null)
+        if (GetPlayerManager() == null)
             return null;
 
-        if (GetCharacterManager().GetCurrentCharacter() == null)
+        if (GetPlayerManager().GetCurrentCharacter() == null)
             return null;
 
-        return GetCharacterManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
+        return GetPlayerManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
     }
 
-    public bool IsAiming()
-    {
-        return GetPlayerMovementState() is PlayerAimState;
-    }
 
     public void CallPlungeAtk(Vector3 HitPosition)
     {
@@ -193,6 +142,11 @@ public class PlayerController : MonoBehaviour
         }
         return -1;
     }
+
+    public PlayerManager GetPlayerManager()
+    {
+        return playerManager;
+    }
     private void UpdateControls()
     {
         if (mainUI.isPaused() || Input.GetKey(KeyCode.LeftAlt) || mainUI.FallenPanelIsOpen())
@@ -207,7 +161,7 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        if (GetCharacterManager().GetAliveCharacters() == null)
+        if (GetPlayerManager().GetAliveCharacters() == null)
             return;
 
 
@@ -232,38 +186,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public bool IsMoving()
-    {
-        return GetPlayerMovementState() is PlayerMovingState;
-    }
-
-    public bool CanPerformAction()
-    {
-        return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAimState) && 
-            GetPlayerMovementState() is not PlayerDashState &&
-            !isBurstState();
-    }
-
-
-    public bool CanAttack()
-    {
-        return CanPerformAction() || GetPlayerMovementState() is PlayerAttackState;
-    }
-    public bool isDeadState()
-    {
-        return GetPlayerMovementState() is PlayerDeadState;
-    }
-
-    public bool isBurstState()
-    {
-        return GetPlayerMovementState() is PlayerBurstState;
-    }
-
-    public StaminaManager GetStaminaManager()
-    {
-        return staminaManager;
-    }
-
     public CameraManager GetCameraManager()
     {
         return cameraManager;
@@ -282,6 +204,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (GetPlayerManager().GetCharacterRB() == null)
+            return;
         playerState.FixedUpdate();
     }
 
@@ -290,8 +214,4 @@ public class PlayerController : MonoBehaviour
         return playerState.GetPlayerMovementState().GetInputDirection();
     }
  
-    public Rigidbody GetCharacterRB()
-    {
-        return rb;
-    }
 }

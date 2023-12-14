@@ -18,7 +18,7 @@ public class SwordCharacters : PlayerCharacters
     {
         BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(GetEmitterPivot());
-        Collider[] Colliders = Physics.OverlapSphere(GetPlayerController().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity"));
+        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity"));
         foreach (Collider other in Colliders)
         {
             IDamage damageObj = other.GetComponent<IDamage>();
@@ -90,7 +90,7 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (!GetPlayerController().CanAttack())
+        if (!GetPlayerManager().CanAttack())
             return;
 
         if (!GetModel().activeSelf)
