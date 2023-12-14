@@ -24,18 +24,15 @@ public class StaminaManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        WaitElapsed = 0f;
+        WaitToRegen = 1.5f;
+        staminaData = new StaminaData();
     }
 
     public static StaminaManager GetInstance()
     {
         return instance;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        WaitElapsed = 0f;
-        WaitToRegen = 1.5f;
-        staminaData = new StaminaData();
     }
 
     private void Update()

@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4319325138202050074}
   - component: {fileID: 2514232244059768129}
+  - component: {fileID: 7526025142291315149}
   - component: {fileID: 2296422559368538025}
   - component: {fileID: 435113665679426361}
   - component: {fileID: 461240154166491133}
-  - component: {fileID: 8947986169262794112}
   - component: {fileID: 4484403746063666375}
   - component: {fileID: 2142344314217808489}
   - component: {fileID: 3147508860641607269}
@@ -53,6 +53,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   artifactsListInfo: {fileID: 11400000, guid: e4a08a69655b3e246b8a3b12de45f174, type: 2}
+--- !u!114 &7526025142291315149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8915231430309993823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d27de27f7cf22d943a7bd795caebec28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startupSOTest:
+  - {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
+  - {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
 --- !u!114 &2296422559368538025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,21 +167,6 @@ MonoBehaviour:
   - CharacterPrefab: {fileID: 2313908216546761985, guid: c8ba7ffa1db7e3143ad3a0def77f8cd7,
       type: 3}
     playersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
---- !u!114 &8947986169262794112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8915231430309993823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d27de27f7cf22d943a7bd795caebec28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startupSOTest:
-  - {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
-  - {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
 --- !u!114 &4484403746063666375
 MonoBehaviour:
   m_ObjectHideFlags: 0

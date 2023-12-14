@@ -29,6 +29,15 @@ public class InventoryManager : MonoBehaviour {
 
         PlayerStats = new PlayerStats();
         EquipCharactersDatalist = new List<CharacterData>();
+
+
+
+        for (int i = 0; i < startupSOTest.Length; i++)
+        {
+            CharacterData characterData = new CharacterData(true, startupSOTest[i]);
+            AddCharacterDataToOwnList(characterData);
+        }
+        SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
     }
 
     public static InventoryManager GetInstance()
@@ -38,15 +47,7 @@ public class InventoryManager : MonoBehaviour {
 
     private void Start()
     {   
-        for (int i = 0; i < startupSOTest.Length; i++)
-        {
-            CharacterData characterData = new CharacterData(true, startupSOTest[i]);
-            AddCharacterDataToOwnList(characterData);
-        }
-        SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
-
         CharacterManager.GetInstance().SpawnCharacters(GetCharactersOwnedList());
-
     }
 
     public List<CharacterData> GetCharactersOwnedList()
