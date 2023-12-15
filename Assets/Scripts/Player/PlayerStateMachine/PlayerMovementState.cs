@@ -256,7 +256,7 @@ public class PlayerMovementState : IState
         if (rb == null)
             return;
 
-        if (this is PlayerDeadState)
+        if (this is PlayerDeadState || this is PlayerAttackState)
             return;
 
         if (this is not PlayerAimState)

@@ -10,7 +10,7 @@ public class BowCharacters : PlayerCharacters
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
     private Elemental CurrentElemental, ShootElement;
-    private float BaseFireSpeed = 800f;
+    private float OriginalFireSpeed = 1500f, BaseFireSpeed;
     private float ChargedMaxElapsed = 1.5f; // do not change
     private float ChargeElapsed, ShootChargeElapsed;
     private Vector3 Direction, ShootDirection;
@@ -71,7 +71,14 @@ public class BowCharacters : PlayerCharacters
         ArrowFire.SetElements(new Elements(ShootElement));
         ArrowFire.SetCharacterData(GetCharacterData());
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
+
+        if (!GetPlayerManager().IsAiming())
+            BaseFireSpeed = OriginalFireSpeed * 0.7f;
+        else
+            BaseFireSpeed = OriginalFireSpeed;
+
         ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + ShootChargeElapsed));
+
         DestroyChargeUpEmitter();
         ChargeElapsed = 0;
         isChargedFinish = false;
