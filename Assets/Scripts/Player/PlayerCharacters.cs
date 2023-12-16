@@ -274,9 +274,9 @@ public class PlayerCharacters : Characters
 
         if (Animator)
         {
-            Animator.SetBool("isFalling", GetPlayerManager().GetPlayerMovementState() is PlayerFallingState);
+            Animator.SetBool("isFalling", GetPlayerManager().GetPlayerMovementState() is PlayerFallingState && !GetPlayerManager().IsGrounded());
             Animator.SetFloat("Velocity", GetPlayerManager().GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
-            Animator.SetBool("isGrounded", GetPlayerManager().CanPerformAction());
+            Animator.SetBool("isGrounded", GetPlayerManager().IsGrounded());
             Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
         }
     }
@@ -410,31 +410,42 @@ public class PlayerCharacters : Characters
         GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;        
     }
 
+    public void TriggerOnAnimationTransition()
+    {
+        GetPlayerManager().GetPlayerController().OnAnimationTransition();
+    }
+
+    public void TriggerNextAtkTransition()
+    {
+        if (ContainsParam(Animator, "NextAtk"))
+            Animator.SetBool("NextAtk", true);
+    }
+
     private void PlayerStateChange(PlayerState state)
     {
-        if (state.GetPlayerMovementState() is not PlayerStoppingState)
-            Animator.SetBool("isStopping", false);
-        if (state.GetPlayerMovementState() is not PlayerDashState)
-            Animator.SetBool("isDashing", false);
+        //if (state.GetPlayerMovementState() is not PlayerStoppingState)
+        //    Animator.SetBool("isStopping", false);
+        //if (state.GetPlayerMovementState() is not PlayerDashState)
+        //    Animator.SetBool("isDashing", false);
 
-        switch (GetPlayerManager().GetPlayerMovementState().GetPlayerStateEnum())
-        {
-            case PlayerMovementState.PlayerStateEnum.JUMP:
-                if (Animator != null)
-                    Animator.SetTrigger("Jump");
-                break;
-            case PlayerMovementState.PlayerStateEnum.DASH:
-                if (Animator != null)
-                    Animator.SetBool("isDashing", true);
-                break;
-            case PlayerMovementState.PlayerStateEnum.STOPPING:
-                if (Animator != null)
-                    Animator.SetBool("isStopping", true);
-                break;
-            case PlayerMovementState.PlayerStateEnum.DEAD:
-                if (Animator != null)
-                    Animator.SetTrigger("Dead");
-                break;
-        }
+        //switch (GetPlayerManager().GetPlayerMovementState().GetPlayerStateEnum())
+        //{
+        //    case PlayerMovementState.PlayerStateEnum.JUMP:
+        //        if (Animator != null)
+        //            Animator.SetTrigger("Jump");
+        //        break;
+        //    case PlayerMovementState.PlayerStateEnum.DASH:
+        //        if (Animator != null)
+        //            Animator.SetBool("isDashing", true);
+        //        break;
+        //    case PlayerMovementState.PlayerStateEnum.STOPPING:
+        //        if (Animator != null)
+        //            Animator.SetBool("isStopping", true);
+        //        break;
+        //    case PlayerMovementState.PlayerStateEnum.DEAD:
+        //        if (Animator != null)
+        //            Animator.SetTrigger("Dead");
+        //        break;
+        //}
     }
 }

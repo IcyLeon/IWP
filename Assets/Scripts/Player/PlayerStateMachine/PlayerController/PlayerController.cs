@@ -93,6 +93,10 @@ public class PlayerController : MonoBehaviour
         return playerState;
     }
 
+    public void OnAnimationTransition()
+    {
+        playerState.OnAnimationTransition();
+    }
 
     void Update()
     {
@@ -102,7 +106,6 @@ public class PlayerController : MonoBehaviour
         UpdateControls();
         playerState.Update();
     }
-
 
     public CapsuleCollider GetCapsuleCollider()
     {

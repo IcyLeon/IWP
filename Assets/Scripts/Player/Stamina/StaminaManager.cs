@@ -55,12 +55,9 @@ public class StaminaManager : MonoBehaviour
 
     private void PlayerStateChange(PlayerState state)
     {
-        switch (PlayerController.GetPlayerManager().GetPlayerMovementState().GetPlayerStateEnum())
-        {
-            case PlayerMovementState.PlayerStateEnum.DASH:
-                if (GetStaminaSO() != null)
-                    PerformStaminaAction(GetStaminaSO().DashCost);                
-                break;
+        if (state.GetPlayerMovementState() is PlayerDashState) {
+            if (GetStaminaSO() != null)
+                PerformStaminaAction(GetStaminaSO().DashCost);                
         }
     }
     private void OnDestroy()

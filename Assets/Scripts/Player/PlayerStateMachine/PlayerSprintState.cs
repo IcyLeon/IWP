@@ -7,13 +7,12 @@ public class PlayerSprintState : PlayerMovingState
     private float RunSpeed;
     public PlayerSprintState(PlayerState playerState) : base(playerState)
     {
-        RunSpeed = GetWalkSpeed() * 1.6f;
+        RunSpeed = GetWalkSpeed() * 1.45f;
     }
 
     public override void Enter()
     {
         base.Enter();
-        playerStateEnum = PlayerStateEnum.SPRINTING;
         SetSpeed(RunSpeed);
     }
 
@@ -41,7 +40,7 @@ public class PlayerSprintState : PlayerMovingState
 
         if (GetPlayerState().PlayerData.Direction == Vector3.zero)
         {
-            GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+            GetPlayerState().ChangeState(GetPlayerState().playerStoppingState);
             return;
         }
 

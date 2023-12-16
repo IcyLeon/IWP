@@ -24,17 +24,12 @@ public class PlayerGroundState : PlayerMovementState
         GetPlayerState().PlayerData.DashLimitReachedElasped = GetPlayerState().PlayerData.DashLimitReachedCooldown;
     }
 
-    private bool CanDash()
-    {
-        return GetPlayerState().PlayerData.DashLimitReachedElasped <= 0;
-    }
-
     public override void FixedUpdate()
     {
         base.FixedUpdate();
         Float();
 
-        if (IsMovingHorizontally())
+        if (IsMovingHorizontally() && this is not PlayerDashState)
         {
             DecelerateHorizontal();
         }
@@ -75,14 +70,6 @@ public class PlayerGroundState : PlayerMovementState
             OnJump();
     }
 
-    private void OnDashInput()
-    {
-        if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash())
-            return;
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-            OnDash();
-    }
 
     private void OnAimInput()
     {
@@ -95,10 +82,5 @@ public class PlayerGroundState : PlayerMovementState
     private void OnJump()
     {
         GetPlayerState().ChangeState(GetPlayerState().playerJumpState);
-    }
-
-    private void OnDash()
-    {
-        GetPlayerState().ChangeState(GetPlayerState().playerDashState);
     }
 }

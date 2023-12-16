@@ -13,7 +13,6 @@ public class PlayerIdleState : PlayerGroundState
         base.Enter();
         ResetSpeed();
         GetPlayerState().PlayerData.CurrentJumpForceXZ = 0f;
-        playerStateEnum = PlayerStateEnum.IDLE;
     }
 
     // Update is called once per frame

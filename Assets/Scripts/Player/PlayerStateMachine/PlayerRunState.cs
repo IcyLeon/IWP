@@ -14,7 +14,6 @@ public class PlayerRunState : PlayerMovingState
         base.Enter();
         ResetSpeed();
         GetPlayerState().PlayerData.CurrentJumpForceXZ = 3.5f;
-        playerStateEnum = PlayerStateEnum.WALK;
     }
 
     public override float GetAnimationSpeed()
@@ -27,6 +26,12 @@ public class PlayerRunState : PlayerMovingState
     public override void Update()
     {
         base.Update();
+
+        if (GetPlayerState().PlayerData.Direction == Vector3.zero)
+        {
+            GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+            return;
+        }
     }
 
     public override void FixedUpdate()

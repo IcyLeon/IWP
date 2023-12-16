@@ -12,15 +12,23 @@ public class PlayerAttackState : PlayerMovementState
     public override void Enter()
     {
         base.Enter();
+        playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        if (playerCharacter != null)
+        {
+            playerCharacter.SetisAttacking(true);
+        }
     }
 
     public override void FixedUpdate()
     {
         Float();
-        if (IsMovingHorizontally())
+
+        if (!IsMovingHorizontally())
         {
-            DecelerateHorizontal();
+            return;
         }
+
+        DecelerateHorizontal();
     }
 
 
@@ -28,16 +36,19 @@ public class PlayerAttackState : PlayerMovementState
     {
         base.Update();
 
+        OnDashInput();
+
         if (IsAiming())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerAimState);
             return;
         }
 
+
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if (!playerCharacter.GetisAttacking())
+            if (!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState)
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
                 return;
@@ -52,8 +63,7 @@ public class PlayerAttackState : PlayerMovementState
 
         if (playerCharacter != null)
         {
-            if (playerCharacter.GetisAttacking())
-                playerCharacter.ResetAttack();
+            playerCharacter.ResetAttack();
         }
     }
 

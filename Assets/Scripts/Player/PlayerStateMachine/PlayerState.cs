@@ -8,6 +8,7 @@ public interface IState
     void Exit();
     void Update();
     void FixedUpdate();
+    public void OnAnimationTransition();
 }
 
 public class PlayerState
@@ -28,6 +29,8 @@ public class PlayerState
     public PlayerAimState playerAimState { get; }
     public PlayerBurstState playerBurstState { get; }
     public PlayerDeadState playerDeadState { get; }
+    public PlayerLandingState playerLandingState { get; }
+
     public PlayerAttackState playerAttackState { get; }
     public delegate void PlayerStateChange(PlayerState state);
     public PlayerStateChange OnPlayerStateChange;
@@ -51,12 +54,18 @@ public class PlayerState
     }
     public void Update()
     {
+        Debug.Log(currentState);
         currentState.Update();
     }
 
     public void FixedUpdate()
     {
         currentState.FixedUpdate();
+    }
+
+    public void OnAnimationTransition()
+    {
+        currentState.OnAnimationTransition();
     }
 
     public PlayerController GetPlayerController()
@@ -79,6 +88,7 @@ public class PlayerState
         playerBurstState = new PlayerBurstState(this);
         playerAttackState = new PlayerAttackState(this);
         playerDeadState = new PlayerDeadState(this);
+        playerLandingState = new PlayerLandingState(this);
         ChangeState(playerIdleState);
     }
 }

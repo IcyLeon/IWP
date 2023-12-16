@@ -5,9 +5,6 @@ using UnityEngine;
 public class PlayerDashState : PlayerGroundState
 {
     private Vector3 DashDirection;
-    private float StartDashTime;
-    private float DashTimer;
-    private float DashElasped;
 
     public PlayerDashState(PlayerState playerState) : base(playerState)
     {
@@ -16,13 +13,13 @@ public class PlayerDashState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
-        DashTimer = 0.25f;
-        DashElasped = 0f;
+
+        StartAnimation("isDashing");
+        ResetAllBasicAtk();
         GetPlayerState().PlayerData.CurrentJumpForceXZ = 5f;
-        playerStateEnum = PlayerStateEnum.DASH;
         DashDirection = GetPlayerState().GetPlayerController().transform.forward;
         Dash();
-        StartDashTime = Time.time;
+        GetPlayerState().PlayerData.StartDashTime = Time.time;
     }
 
     //private void SpawnDash()
@@ -31,7 +28,7 @@ public class PlayerDashState : PlayerGroundState
     //}
     private void Dash()
     {
-        if (Time.time - StartDashTime > GetPlayerState().PlayerData.TimeToBeConsideredConsecutive)
+        if (Time.time - GetPlayerState().PlayerData.StartDashTime > GetPlayerState().PlayerData.TimeToBeConsideredConsecutive)
         {
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
         }
@@ -60,33 +57,48 @@ public class PlayerDashState : PlayerGroundState
     public override void Exit()
     {
         base.Exit();
-
-        DashElasped = 0;
+        StopAnimation("isDashing");
     }
 
     public override void Update()
     {
         base.Update();
 
+        if (GetInputDirection() != Vector3.zero)
+        {
+            rb.velocity = GetPlayerState().PlayerData.Direction * rb.velocity.magnitude;
+        }
+
         if (CheckIfisAboutToFall())
             ResetVelocity();
-
-        if (DashElasped > DashTimer)
-        {
-            if (GetInputDirection() == Vector3.zero)
-            {
-                GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
-                return;
-            }
-
-            GetPlayerState().ChangeState(GetPlayerState().playerSprintState);
-        }
-        DashElasped += Time.deltaTime;
     }
 
+    public override void OnAnimationTransition()
+    {
+        if (GetInputDirection() == Vector3.zero)
+        {
+            GetPlayerState().ChangeState(GetPlayerState().playerStoppingState);
+            return;
+        }
+
+        GetPlayerState().ChangeState(GetPlayerState().playerSprintState);
+    }
+
+    private void ResetAllBasicAtk()
+    {
+        PlayerCharacters pc = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        if (pc != null)
+        {
+            SwordCharacters sc = pc as SwordCharacters;
+            if (sc != null)
+            {
+                sc.ResetBasicAttacks();
+            }
+            pc.ResetAttack();
+        }
+    }
     public override void FixedUpdate()
     {
-        RotateTowardsTargetRotation();
-        Float();
+        base.FixedUpdate();
     }
 }

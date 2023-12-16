@@ -14,7 +14,6 @@ public class PlayerDeadState : PlayerMovementState
     public override void Enter()
     {
         base.Enter();
-        playerStateEnum = PlayerStateEnum.DEAD;
     }
 
     public override void Exit()

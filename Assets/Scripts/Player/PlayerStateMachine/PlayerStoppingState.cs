@@ -8,15 +8,41 @@ public class PlayerStoppingState : PlayerGroundState
     {
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void Enter()
     {
-        
+        base.Enter();
+        StartAnimation("isStopping");
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdate()
     {
-        
+        base.FixedUpdate();
+
+        UpdateTargetRotation();
+
+        if (IsMovingHorizontally())
+        {
+            DecelerateHorizontal();
+        }
     }
+
+    public override void OnAnimationTransition()
+    {
+        GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+    }
+
+
+    public override void Update()
+    {
+        base.Update();
+        if (CheckIfisAboutToFall())
+            ResetVelocity();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation("isStopping");
+    }
+
 }

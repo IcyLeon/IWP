@@ -12,7 +12,6 @@ public class PlayerPlungeState : PlayerAirborneState
     {
         base.Enter();
         StayAfloatFor(0.45f);
-        playerStateEnum = PlayerStateEnum.PLUNGE;
     }
     public override void Exit()
     {
@@ -22,8 +21,8 @@ public class PlayerPlungeState : PlayerAirborneState
 
     private void OnPlungeAttack()
     {
-        float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - GetHitDistance();
-        GetPlayerState().GetPlayerController().CallPlungeAtk(GetCapsuleCollider().bounds.min + new Vector3(0, -distanceToFloatingPoint / 2f, 0));
+        Vector3 hitpos = GetCapsuleCollider().bounds.center + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f);
+        GetPlayerState().GetPlayerController().CallPlungeAtk(hitpos);
     }
 
     public override void FixedUpdate()

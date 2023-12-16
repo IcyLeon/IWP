@@ -12,7 +12,6 @@ public class PlayerFallingState : PlayerAirborneState
     public override void Enter()
     {
         base.Enter();
-        playerStateEnum = PlayerStateEnum.FALL;
     }
     public override void Exit()
     {
@@ -31,7 +30,8 @@ public class PlayerFallingState : PlayerAirborneState
 
         if (IsTouchingTerrain())
         {
-            GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
+            GetPlayerState().ChangeState(GetPlayerState().playerLandingState);
+            return;
         }
     }
 

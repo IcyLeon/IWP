@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerManager;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -18,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     private SceneManager SceneManager;
     public delegate void OnCharacterChange(CharacterData characterData);
     public OnCharacterChange onCharacterChange;
+    private Animator CharacterAnimatorReference;
 
     private void Awake()
     {
@@ -180,6 +180,11 @@ public class PlayerManager : MonoBehaviour
             !isBurstState();
     }
 
+    public bool IsGrounded()
+    {
+        return GetPlayerMovementState() is not PlayerAirborneState;
+    }
+
     public CharacterManager GetCharacterManager()
     {
         return characterManager;
@@ -210,6 +215,14 @@ public class PlayerManager : MonoBehaviour
     public PlayerController GetPlayerController()
     {
         return playerController;
+    }
+
+    public Animator GetAnimator()
+    {
+        if (CurrentCharacter == null)
+            return null;
+
+        return CurrentCharacter.GetAnimator();
     }
 
     // Update is called once per frame

@@ -1,35 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class PlayerMovementState : IState
 {
-    public enum PlayerStateEnum
-    {
-        IDLE,
-        WALK,
-        DASH,
-        SPRINTING,
-        STOPPING,
-        JUMP,
-        FALL,
-        PLUNGE,
-        DEAD
-    }
-
     private PlayerState PlayerState;
     private float WalkSpeed;
     private float Speed;
     protected Rigidbody rb;
-
-    protected PlayerStateEnum playerStateEnum;
     private float HitDistance;
+    private float DecelerateForce = 3.5f;
 
-    public PlayerStateEnum GetPlayerStateEnum()
-    {
-        return playerStateEnum;
-    }
     protected void SetSpeedModifier(float sp)
     {
         GetPlayerState().PlayerData.SpeedModifier = sp;
@@ -82,6 +65,24 @@ public class PlayerMovementState : IState
 
     public virtual void Exit()
     {
+    }
+
+    protected void StartAnimation(string animationString)
+    {
+        Animator animator = GetPlayerState().GetPlayerController().GetPlayerManager().GetAnimator();
+        if (animator == null)
+            return;
+
+        animator.SetBool(animationString, true);
+    }
+
+    protected void StopAnimation(string animationString)
+    {
+        Animator animator = GetPlayerState().GetPlayerController().GetPlayerManager().GetAnimator();
+        if (animator == null)
+            return;
+
+        animator.SetBool(animationString, false);
     }
 
     public virtual void FixedUpdate()
@@ -261,21 +262,17 @@ public class PlayerMovementState : IState
 
         if (this is not PlayerAimState)
         {
-            UpdateTargetRotation();
             UpdateInputTargetQuaternion();
+            UpdateTargetRotation();
         }
 
-        if (GetPlayerState().PlayerData.Direction == Vector3.zero)
+        if (GetInputDirection() == Vector3.zero || this is PlayerDashState)
             return;
 
         if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable || GetPlayerState().PlayerData.SpeedModifier == 0)
             return;
 
-        float friction = 0.25f;
-        Vector3 desiredVelocity = (GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier);
-        Vector3 horizontalVelocity = GetHorizontalVelocity();
-        Vector3 frictionForce = -horizontalVelocity * friction;
-        rb.AddForce(desiredVelocity - horizontalVelocity + frictionForce, ForceMode.VelocityChange);
+        rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
     protected bool IsTouchingTerrain()
@@ -286,9 +283,9 @@ public class PlayerMovementState : IState
 
         int layerMask = Physics.DefaultRaycastLayers;
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
-        Collider[] colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.up * GetCapsuleCollider().radius * 4f + Vector3.down * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, GetCapsuleCollider().radius, layerMask, QueryTriggerInteraction.Ignore);
+        Collider[] colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
 
-        return colliders.Length > 1 || Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance - 0.1f, layerMask, QueryTriggerInteraction.Ignore);
+        return colliders.Length >= 1;
     }
 
     protected CapsuleCollider GetCapsuleCollider()
@@ -300,11 +297,6 @@ public class PlayerMovementState : IState
             return null;
 
         return GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
-    }
-
-    private ResizeableCollider GetResizeableCollider()
-    {
-        return GetPlayerState().GetPlayerController().GetResizeableCollider();
     }
 
     public void UpdateInputTargetQuaternion()
@@ -320,6 +312,7 @@ public class PlayerMovementState : IState
         if (GetPlayerState().PlayerData.CurrentTargetRotation != GetPlayerState().PlayerData.Target_Rotation)
         {
             GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
+            GetPlayerState().PlayerData.dampedTargetRotationPassedTime = 0f;
         }
         RotateTowardsTargetRotation();
 
@@ -347,7 +340,7 @@ public class PlayerMovementState : IState
         return Quaternion.Euler(0f, targetRotationAngle, 0f) * Vector3.forward;
     }
 
-    protected void RotateTowardsTargetRotation()
+    private void RotateTowardsTargetRotation()
     {
         if (rb == null)
             return;
@@ -390,12 +383,12 @@ public class PlayerMovementState : IState
     protected void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 4.5f, ForceMode.Acceleration);
+        rb.AddForce(-playerVerticalVelocity * DecelerateForce, ForceMode.Acceleration);
     }
     protected void DecelerateHorizontal()
     {
         Vector3 playerHorizontalVelocity = GetHorizontalVelocity();
-        rb.AddForce(-playerHorizontalVelocity * 3f, ForceMode.Acceleration);
+        rb.AddForce(-playerHorizontalVelocity * DecelerateForce, ForceMode.Acceleration);
     }
 
     protected bool IsMovingUp(float minimumVelocity = 0f)
@@ -437,5 +430,24 @@ public class PlayerMovementState : IState
         GetPlayerState().PlayerData.Direction = (Camera.main.transform.forward * GetInputDirection().z) + (Camera.main.transform.right * GetInputDirection().x);
         GetPlayerState().PlayerData.Direction.y = 0;
         GetPlayerState().PlayerData.Direction.Normalize();
+    }
+
+    protected void OnDashInput()
+    {
+        if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash() || IsAiming())
+            return;
+
+        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && GetPlayerState().GetPlayerController().GetPlayerManager().CanAttack())
+            GetPlayerState().ChangeState(GetPlayerState().playerDashState);
+    }
+
+    private bool CanDash()
+    {
+        return GetPlayerState().PlayerData.DashLimitReachedElasped <= 0;
+    }
+
+    public virtual void OnAnimationTransition()
+    {
+
     }
 }

@@ -11,7 +11,7 @@ public class SwordCharacters : PlayerCharacters
     protected int BasicAttackPhase = 0;
     private int MaxAttackPhase;
     protected Elemental CurrentElement;
-    private float LastClickedTime, AttackRate = 0.2f;
+    private float LastClickedTime, AttackRate = 0.08f;
     protected int AttackLayer;
 
     public void SpawnSlash()
@@ -69,7 +69,7 @@ public class SwordCharacters : PlayerCharacters
         {
             string AtkName = "Attack" + BasicAttackPhase;
             if (ContainsParam(Animator, AtkName))
-                Animator.ResetTrigger(AtkName);
+                Animator.SetBool(AtkName, false);
         }
     }
 
@@ -96,12 +96,12 @@ public class SwordCharacters : PlayerCharacters
         if (!GetModel().activeSelf)
             return;
 
-        if (Time.time - LastClickedTime >= 1.5f)
+        if (Time.time - LastClickedTime >= 1f)
         {
             ResetBasicAttacks();
         }
 
-        if (Time.time - LastClickedTime > AttackRate && !Animator.GetCurrentAnimatorStateInfo(AttackLayer).IsName("Attack4"))
+        if (Time.time - LastClickedTime > AttackRate && !Animator.GetBool("Attack" + MaxAttackPhase))
         {
             if (NearestEnemy != null)
             {
@@ -118,10 +118,11 @@ public class SwordCharacters : PlayerCharacters
 
             string AtkName = "Attack" + BasicAttackPhase;
             if (ContainsParam(Animator, AtkName))
-                Animator.SetTrigger(AtkName);
+                Animator.SetBool(AtkName, true);
 
-            LastClickedTime = Time.time;
+            LastClickedTime = Time.time + AttackRate;
         }
+
     }
 
     public int GetBasicAttackPhase()
