@@ -321,13 +321,12 @@ public class PlayerMovementState : IState
     public void UpdateTargetRotation_Instant(Quaternion quaternion)
     {
         SetTargetRotation(quaternion);
-        if (GetPlayerState().PlayerData.CurrentTargetRotation != GetPlayerState().PlayerData.Target_Rotation)
-        {
-            GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
-        }
+
+        GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
 
         Quaternion targetRotation = Quaternion.Euler(0f, GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, 0f);
         rb.MoveRotation(targetRotation);
+
     }
 
     protected void SetTargetRotation(Quaternion quaternion)
@@ -434,7 +433,10 @@ public class PlayerMovementState : IState
 
     protected void OnDashInput()
     {
-        if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash() || IsAiming())
+        //if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash() || IsAiming())
+        //    return;
+
+        if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash())
             return;
 
         if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && GetPlayerState().GetPlayerController().GetPlayerManager().CanAttack())

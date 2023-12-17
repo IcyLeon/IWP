@@ -35,6 +35,7 @@ public class PlayerAimState : PlayerMovementState
     public override void Update()
     {
         base.Update();
+        OnDashInput();
         if (!IsAiming())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);

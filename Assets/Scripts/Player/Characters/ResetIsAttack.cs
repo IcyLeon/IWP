@@ -31,8 +31,17 @@ public class ResetIsAttack : StateMachineBehaviour
 
         PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
         if (playerCharacters != null)
-            playerCharacters.ResetAttack();
-
+        {
+            if (!Characters.ContainsParam(animator, "NextAtk"))
+            {
+                playerCharacters.ResetAttack();
+            }
+            else
+            {
+                if (animator.GetBool("NextAtk"))
+                    playerCharacters.ResetAttack();
+            }
+        }
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -16,7 +16,7 @@ public class PlayerAirborneState : PlayerMovementState
         float time = sec;
         canFloat = true;
         if (time <= 0)
-            time = 0.1f;
+            time = 0f;
 
         FloatTimeElapsed = time;
         ResetVelocity();
@@ -45,7 +45,7 @@ public class PlayerAirborneState : PlayerMovementState
         CheckPlunge();
     }
 
-    protected void FloatAbove()
+    protected virtual void FloatAbove()
     {
         if (FloatTimeElapsed > 0)
         {
@@ -70,6 +70,7 @@ public class PlayerAirborneState : PlayerMovementState
             if (Input.GetMouseButtonDown(0) && GetPlayerState().GetPlayerMovementState() is not PlayerPlungeState)
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerPlungeState);
+                return;
             }
         }
     }

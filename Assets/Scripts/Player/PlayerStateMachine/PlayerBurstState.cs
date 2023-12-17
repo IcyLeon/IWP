@@ -24,7 +24,6 @@ public class PlayerBurstState : PlayerGroundState
 
     public override void Update()
     {
-        //base.Update();
         if (!IsBurstActive())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);

@@ -14,6 +14,7 @@ public class PlayerCharacters : Characters
     [SerializeField] CinemachineVirtualCamera BurstCamera;
     protected Characters NearestEnemy;
     protected float Range = 1f;
+    protected CharacterState PlayerCharacterState;
 
     public void SetBurstActive(bool value)
     {
@@ -281,7 +282,7 @@ public class PlayerCharacters : Characters
         }
     }
 
-    public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
+    protected Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
         if (GetPlayerManager() == null)
             return Vector3.zero;
@@ -304,7 +305,7 @@ public class PlayerCharacters : Characters
         SetTargetRotation(quaternion);
     }
 
-    protected void UpdateCameraAim()
+    public void UpdateCameraAim()
     {
         if (GetPlayerManager() == null)
             return;
@@ -343,18 +344,12 @@ public class PlayerCharacters : Characters
             if (GetBurstCamera())
             {
                 GetBurstCamera().gameObject.SetActive(true);
-                if (ContainsParam(Animator, "IsBurst"))
-                {
-                    Animator.SetBool("IsBurst", true);
-                }
-                Animator.SetTrigger("BurstTrigger");
             }
             return true;
         }
 
         return false;
     }
-
 
     protected virtual void ChargeHold()
     {
@@ -374,7 +369,6 @@ public class PlayerCharacters : Characters
         GetPlayerManager().GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerManager().GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerManager().GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerManager().GetPlayerController().GetPlayerState().OnPlayerStateChange += PlayerStateChange;
         GetPlayerManager().GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
 
     }
@@ -406,7 +400,6 @@ public class PlayerCharacters : Characters
         GetPlayerManager().GetPlayerController().OnE_1Down -= EKey_1Down;
         GetPlayerManager().GetPlayerController().OnChargeHold -= ChargeHold;
         GetPlayerManager().GetPlayerController().OnChargeTrigger -= ChargeTrigger;
-        GetPlayerManager().GetPlayerController().GetPlayerState().OnPlayerStateChange -= PlayerStateChange;
         GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;        
     }
 
@@ -415,37 +408,15 @@ public class PlayerCharacters : Characters
         GetPlayerManager().GetPlayerController().OnAnimationTransition();
     }
 
+    public void TriggerOnCharacterStateAnimationTransition()
+    {
+        PlayerCharacterState.OnAnimationTransition();
+    }
+
+
     public void TriggerNextAtkTransition()
     {
         if (ContainsParam(Animator, "NextAtk"))
             Animator.SetBool("NextAtk", true);
-    }
-
-    private void PlayerStateChange(PlayerState state)
-    {
-        //if (state.GetPlayerMovementState() is not PlayerStoppingState)
-        //    Animator.SetBool("isStopping", false);
-        //if (state.GetPlayerMovementState() is not PlayerDashState)
-        //    Animator.SetBool("isDashing", false);
-
-        //switch (GetPlayerManager().GetPlayerMovementState().GetPlayerStateEnum())
-        //{
-        //    case PlayerMovementState.PlayerStateEnum.JUMP:
-        //        if (Animator != null)
-        //            Animator.SetTrigger("Jump");
-        //        break;
-        //    case PlayerMovementState.PlayerStateEnum.DASH:
-        //        if (Animator != null)
-        //            Animator.SetBool("isDashing", true);
-        //        break;
-        //    case PlayerMovementState.PlayerStateEnum.STOPPING:
-        //        if (Animator != null)
-        //            Animator.SetBool("isStopping", true);
-        //        break;
-        //    case PlayerMovementState.PlayerStateEnum.DEAD:
-        //        if (Animator != null)
-        //            Animator.SetTrigger("Dead");
-        //        break;
-        //}
     }
 }

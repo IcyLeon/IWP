@@ -31,9 +31,8 @@ public class PlayerState
     public PlayerDeadState playerDeadState { get; }
     public PlayerLandingState playerLandingState { get; }
 
+    public PlayerStayAirborneState playerStayAirborneState { get; }
     public PlayerAttackState playerAttackState { get; }
-    public delegate void PlayerStateChange(PlayerState state);
-    public PlayerStateChange OnPlayerStateChange;
 
     public void ChangeState(IState newState)
     {
@@ -43,7 +42,6 @@ public class PlayerState
         currentState = newState;
 
         currentState.Enter();
-        OnPlayerStateChange?.Invoke(this);
     }
 
     public PlayerMovementState GetPlayerMovementState()
@@ -54,7 +52,6 @@ public class PlayerState
     }
     public void Update()
     {
-        Debug.Log(currentState);
         currentState.Update();
     }
 
@@ -89,6 +86,7 @@ public class PlayerState
         playerAttackState = new PlayerAttackState(this);
         playerDeadState = new PlayerDeadState(this);
         playerLandingState = new PlayerLandingState(this);
+        playerStayAirborneState = new PlayerStayAirborneState(this);
         ChangeState(playerIdleState);
     }
 }

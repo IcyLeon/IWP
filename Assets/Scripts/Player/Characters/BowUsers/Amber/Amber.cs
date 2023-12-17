@@ -59,7 +59,7 @@ public class Amber : BowCharacters, ICoordinateAttack
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
             eSkillArrows.SetCharacterData(GetCharacterData());
             eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
-            eSkillArrows.SetFocalPointContact(GetContactPoint(pos));
+            eSkillArrows.SetFocalPointContact(GetContactPoint(pos), NearestEnemy);
         }
         Animator.SetTrigger("Dodge");
         GetCharacterData().ResetElementalSkillCooldown();

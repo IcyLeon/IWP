@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,24 @@ public class KaqingTeleporter : MonoBehaviour
     private Elements elements;
     private CharacterData Kaqing;
     private bool EnergyOrbMoving;
+    private Vector3 TargetLoc;
+
+    public event Action OnDestroyOrb;
+    public void SetTargetLoc(Vector3 pos)
+    {
+        TargetLoc = pos;
+    }
     // Start is called before the first frame update
     void Start()
     {
         EnergyOrbMoving = true;
+        StartCoroutine(MoveToTargetLocation(50f));
         Destroy(gameObject, 5f);
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyOrb?.Invoke();
     }
 
     void Explode()
@@ -24,11 +38,11 @@ public class KaqingTeleporter : MonoBehaviour
         this.elements = elements;
     }
 
-    public IEnumerator MoveToTargetLocation(Vector3 target, float speed)
+    private IEnumerator MoveToTargetLocation(float speed)
     {
-        while (transform.position != target)
+        while (transform.position != TargetLoc)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, TargetLoc, speed * Time.deltaTime);
             yield return null;
         }
         TravelDamage();

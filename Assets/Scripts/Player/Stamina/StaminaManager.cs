@@ -37,36 +37,13 @@ public class StaminaManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateController();
         UpdateRegen();
         UpdateStamina();
     }
 
-    private void UpdateController()
+    public void PerformStaminaAction()
     {
-        if (PlayerController != null)
-            return;
-
-        PlayerController = CharacterManager.GetInstance().GetPlayerManager().GetPlayerController();
-
-        if (PlayerController == null)
-            PlayerController.GetPlayerState().OnPlayerStateChange += PlayerStateChange;
-    }
-
-    private void PlayerStateChange(PlayerState state)
-    {
-        if (state.GetPlayerMovementState() is PlayerDashState) {
-            if (GetStaminaSO() != null)
-                PerformStaminaAction(GetStaminaSO().DashCost);                
-        }
-    }
-    private void OnDestroy()
-    {
-        if (PlayerController == null)
-            return;
-
-        //PlayerController.onPlayerStateChange -= PlayerStateChange;
-        PlayerController.GetPlayerState().OnPlayerStateChange -= PlayerStateChange;
+        PerformStaminaAction(GetStaminaSO().DashCost);                
     }
 
     private void UpdateRegen()
@@ -125,15 +102,4 @@ public class StaminaManager : MonoBehaviour
 
         return CanPerformStaminaAction(GetStaminaSO().DashCost);
     }
-
-    //private void PlayerStateChange()
-    //{
-    //    switch(PlayerController.GetPlayerActionStatus())
-    //    {
-    //        case PlayerActionStatus.DASH:
-    //            if (GetStaminaSO() != null)
-    //                PerformStaminaAction(GetStaminaSO().DashCost);
-    //            break;
-    //    }
-    //}
 }

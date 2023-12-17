@@ -12,9 +12,12 @@ public class SwordCharacters : PlayerCharacters
     private int MaxAttackPhase;
     protected Elemental CurrentElement;
     private float LastClickedTime, AttackRate = 0.08f;
-    protected int AttackLayer;
 
-    public void SpawnSlash()
+    public GameObject GetSwordModel()
+    {
+        return SwordModel;
+    }
+    public virtual void SpawnSlash()
     {
         BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(GetEmitterPivot());
@@ -46,7 +49,6 @@ public class SwordCharacters : PlayerCharacters
     {
         base.Start();
         Range = 5f;
-        AttackLayer = Animator.GetLayerIndex("Attack Layer");
         MaxAttackPhase = 4;
         ResetBasicAttacks();
     }
@@ -67,10 +69,13 @@ public class SwordCharacters : PlayerCharacters
 
         for (int i = 1; i <= MaxAttackPhase; i++)
         {
-            string AtkName = "Attack" + BasicAttackPhase;
+            string AtkName = "Attack" + i;
             if (ContainsParam(Animator, AtkName))
                 Animator.SetBool(AtkName, false);
         }
+
+        if (ContainsParam(Animator, "NextAtk"))
+            Animator.SetBool("NextAtk", false);
     }
 
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
@@ -90,7 +95,7 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (!GetPlayerManager().CanAttack())
+        if (!GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
             return;
 
         if (!GetModel().activeSelf)

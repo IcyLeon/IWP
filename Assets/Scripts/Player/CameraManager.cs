@@ -8,10 +8,42 @@ public class CameraManager : MonoBehaviour
     private PlayerController playerController;
     [SerializeField] CinemachineVirtualCamera playerCamera;
     [SerializeField] CinemachineVirtualCamera aimCamera;
+    private Coroutine ScreenShakeCoroutine;
 
     public GameObject GetAimCamera()
     {
         return aimCamera.gameObject;
+    }
+
+    private IEnumerator ScreenShake(float frequency, float amptitude, float timer)
+    {
+        CinemachineBasicMultiChannelPerlin VirtualCameraPerlin = playerCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        CinemachineBasicMultiChannelPerlin AimCameraPerlin = aimCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        VirtualCameraPerlin.m_AmplitudeGain = amptitude;
+        VirtualCameraPerlin.m_FrequencyGain = frequency;
+        AimCameraPerlin.m_AmplitudeGain = VirtualCameraPerlin.m_AmplitudeGain;
+        AimCameraPerlin.m_FrequencyGain = VirtualCameraPerlin.m_FrequencyGain;
+        float elapsed = 0;
+
+        while (elapsed < timer)
+        {
+            VirtualCameraPerlin.m_FrequencyGain = Mathf.Lerp(VirtualCameraPerlin.m_FrequencyGain, 0f, elapsed / timer);
+            AimCameraPerlin.m_FrequencyGain = VirtualCameraPerlin.m_FrequencyGain;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        VirtualCameraPerlin.m_FrequencyGain = 0f;
+        AimCameraPerlin.m_FrequencyGain = VirtualCameraPerlin.m_FrequencyGain;
+    }
+
+    public void CameraShake(float frequency, float amptitude, float timer)
+    {
+        if (ScreenShakeCoroutine != null)
+            StopCoroutine(ScreenShakeCoroutine);
+
+        ScreenShakeCoroutine = StartCoroutine(ScreenShake(frequency, amptitude, timer));
     }
 
     public static bool CheckIfInCameraView(Vector3 pos)
@@ -70,6 +102,18 @@ public class CameraManager : MonoBehaviour
         //Vector3 d = testCamera.LookAt.position - (playerController.GetPlayerOffsetPosition().position);
         //d.Normalize();
         //testCamera.m_XAxis.Value = Mathf.Atan2(d.x, d.z) * Mathf.Rad2Deg - 15f;
+    }
+    public void Recentering()
+    {
+        StartCoroutine(RecenteringCoroutine());
+    }
+    private IEnumerator RecenteringCoroutine()
+    {
+        CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
+
+        playerPOV.m_HorizontalRecentering.m_enabled = true;
+        yield return null;
+        playerPOV.m_HorizontalRecentering.m_enabled = false;
     }
 
     public void CameraDefault()

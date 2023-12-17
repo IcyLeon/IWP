@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 91803571}
   - component: {fileID: 91803570}
   - component: {fileID: 91803569}
+  - component: {fileID: 91803572}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -433,7 +434,7 @@ MonoBehaviour:
     m_MaxSpeed: 5
     m_AccelTime: 0.8
     m_DecelTime: 0.005
-    m_InputAxisName: Mouse Y
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 1
     m_MinValue: -45
@@ -457,7 +458,7 @@ MonoBehaviour:
     m_MaxSpeed: 3.5
     m_AccelTime: 0.8
     m_DecelTime: 0.25
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -472,7 +473,7 @@ MonoBehaviour:
   m_HorizontalRecentering:
     m_enabled: 0
     m_WaitTime: 0
-    m_RecenteringTime: 4
+    m_RecenteringTime: 0
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0
@@ -488,6 +489,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &91803572
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91803567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 2.5
+  m_FrequencyGain: 0
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &101144717
 GameObject:
   m_ObjectHideFlags: 0
@@ -5399,6 +5417,7 @@ GameObject:
   - component: {fileID: 1989664343}
   - component: {fileID: 1989664342}
   - component: {fileID: 1989664341}
+  - component: {fileID: 1989664344}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -5480,10 +5499,10 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 21.064692
     m_SpeedMode: 1
-    m_MaxSpeed: 5
+    m_MaxSpeed: 3
     m_AccelTime: 0.8
     m_DecelTime: 0.005
-    m_InputAxisName: Mouse Y
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 1
     m_MinValue: -45
@@ -5504,10 +5523,10 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: -127.48577
     m_SpeedMode: 1
-    m_MaxSpeed: 3.5
-    m_AccelTime: 0.8
+    m_MaxSpeed: 2
+    m_AccelTime: 0.5
     m_DecelTime: 0.25
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -5538,6 +5557,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1989664344
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989664339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 2.5
+  m_FrequencyGain: 0
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &2031396116
 GameObject:
   m_ObjectHideFlags: 0

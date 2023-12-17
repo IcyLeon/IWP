@@ -2,22 +2,31 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class BurstState : StateMachineBehaviour
 {
+    PlayerCharacters pc;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (Characters.ContainsParam(animator, "BurstTrigger"))
-            animator.ResetTrigger("BurstTrigger");
+        pc = animator.GetComponent<PlayerCharacters>();
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    //// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (stateInfo.normalizedTime > 0.5f && Characters.ContainsParam(animator, "IsBurst"))
-            animator.SetBool("IsBurst", false);
+        if (stateInfo.normalizedTime > 0.8f)
+        {
+            if (pc != null)
+            {
+                if (pc.GetBurstCamera())
+                {
+                    pc.GetBurstCamera().gameObject.SetActive(false);
+                }
+                pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
+            }
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -30,9 +39,8 @@ public class BurstState : StateMachineBehaviour
             {
                 pc.GetBurstCamera().gameObject.SetActive(false);
             }
+            pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
         }
-        if (Characters.ContainsParam(animator, "IsBurstFinish"))
-            animator.SetBool("IsBurstFinish", false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

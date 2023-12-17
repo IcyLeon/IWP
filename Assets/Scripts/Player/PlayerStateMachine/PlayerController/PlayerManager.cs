@@ -182,7 +182,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return GetPlayerMovementState() is not PlayerAirborneState;
+        return GetPlayerMovementState() is not PlayerAirborneState || GetPlayerMovementState() is PlayerStayAirborneState;
     }
 
     public CharacterManager GetCharacterManager()

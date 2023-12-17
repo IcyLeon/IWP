@@ -64,7 +64,7 @@ public class BowCharacters : PlayerCharacters
         ShootDirection = direction;
     }
 
-    public void FireArrows()
+    private void FireArrows()
     {
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
