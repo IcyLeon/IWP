@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KaqingESlash : KaqingElementalSkillState
 {
-    public KaqingESlash(KaqingState kaqingState) : base(kaqingState)
+    public KaqingESlash(PlayerCharacterState pcs) : base(pcs)
     {
     }
 

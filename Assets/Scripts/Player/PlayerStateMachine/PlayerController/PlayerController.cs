@@ -20,12 +20,10 @@ public class PlayerController : MonoBehaviour
     private LockMovement lockMovement;
     private PlayerState playerState;
 
-
-    public event Action OnElementalSkillHold;
-    public event Action OnE_1Down;
-    public delegate bool OnElementalBurst();
-    public event Action OnElementalSkillTrigger;
-    public event OnElementalBurst OnElementalBurstTrigger;
+    public delegate bool OnElemental();
+    public event OnElemental OnElementalSkillHold;
+    public event OnElemental OnElementalSkillTrigger;
+    public event OnElemental OnElementalBurstTrigger;
     public event Action OnInteract;
     public event Action OnChargeHold;
     public event Action OnChargeTrigger;
@@ -172,8 +170,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();
-        else if (Input.GetKeyDown(KeyCode.E))
-            OnE_1Down?.Invoke();
         else if (GetInputNums() != -1)
             OnNumsKeyInput?.Invoke(GetInputNums());
         else if (Input.GetKey(KeyCode.E))

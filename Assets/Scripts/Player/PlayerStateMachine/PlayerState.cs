@@ -52,6 +52,7 @@ public class PlayerState
     }
     public void Update()
     {
+        Debug.Log(currentState);
         currentState.Update();
     }
 

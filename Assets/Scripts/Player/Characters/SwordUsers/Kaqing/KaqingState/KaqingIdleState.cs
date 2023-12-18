@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KaqingIdleState : KaqingControlState
 {
-    public KaqingIdleState(KaqingState kaqingState) : base(kaqingState)
+    public KaqingIdleState(PlayerCharacterState pcs) : base(pcs)
     {
     }
 

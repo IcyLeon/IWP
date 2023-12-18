@@ -11,6 +11,11 @@ public class BurstState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         pc = animator.GetComponent<PlayerCharacters>();
+        if (pc != null)
+        {
+            pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
+            pc.SetBurstActive(true);
+        }
     }
 
     //// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -24,7 +29,6 @@ public class BurstState : StateMachineBehaviour
                 {
                     pc.GetBurstCamera().gameObject.SetActive(false);
                 }
-                pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
             }
         }
     }
@@ -32,14 +36,13 @@ public class BurstState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacters pc = animator.GetComponent<PlayerCharacters>();
         if (pc != null)
         {
             if (pc.GetBurstCamera())
             {
                 pc.GetBurstCamera().gameObject.SetActive(false);
             }
-            pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
+            pc.SetBurstActive(false);
         }
     }
 

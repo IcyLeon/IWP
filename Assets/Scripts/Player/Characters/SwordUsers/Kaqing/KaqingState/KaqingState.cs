@@ -2,15 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KaqingState : CharacterState
+public class KaqingState : PlayerCharacterState
 {
-    private Kaqing Kaqing;
-
     public KaqingData KaqingData;
-    public Kaqing GetKaqing()
-    {
-        return Kaqing;
-    }
     public KaqingBurstState kaqingBurstState { get; }
     public KaqingTeleportState kaqingTeleportState { get; }
     public KaqingThrowState kaqingThrowState { get; }
@@ -18,20 +12,20 @@ public class KaqingState : CharacterState
     public KaqingAimState kaqingAimState { get; }
     public KaqingIdleState kaqingIdleState { get; }
 
-    public void UpdateOffline()
-    {
-        ((IPlayerCharactersState)currentState).UpdateOffline();
-    }
-
     public KaqingControlState GetKaqingControlState()
     {
-        KaqingControlState p = currentState as KaqingControlState;
+        KaqingControlState p = GetIPlayerCharactersState() as KaqingControlState;
 
         return p;
     }
-    public KaqingState(Kaqing kaqing)
+
+    public Kaqing GetKaqing()
     {
-        Kaqing = kaqing;
+        return (Kaqing)Characters;
+    }
+
+    public KaqingState(Characters Characters) : base(Characters)
+    {
         KaqingData = new KaqingData();
         kaqingESlash = new KaqingESlash(this);
         kaqingAimState = new KaqingAimState(this);

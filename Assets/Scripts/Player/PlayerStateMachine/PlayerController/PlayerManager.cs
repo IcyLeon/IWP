@@ -289,13 +289,13 @@ public class PlayerManager : MonoBehaviour
         SwapCharacters((int)index - 1);
     }
 
-    public void SwapCharacters(CharacterData characterData)
+    public void SwapCharacters(CharacterData characterData, bool showeffect = false)
     {
         if (characterData == null)
             return;
 
         PlayerCharacters playerCharacters = GetPlayerCharacter(characterData.GetPlayerCharacterSO());
-        ChangeCharacter(playerCharacters, characterData, false);
+        ChangeCharacter(playerCharacters, characterData, showeffect);
     }
 
     public void SwapCharacters(int index)

@@ -14,7 +14,7 @@ public class PlayerCharacters : Characters
     [SerializeField] CinemachineVirtualCamera BurstCamera;
     protected Characters NearestEnemy;
     protected float Range = 1f;
-    protected CharacterState PlayerCharacterState;
+    protected PlayerCharacterState PlayerCharacterState;
 
     public void SetBurstActive(bool value)
     {
@@ -321,18 +321,24 @@ public class PlayerCharacters : Characters
         return false;
     }
 
-    protected virtual void ElementalSkillTrigger()
+    protected virtual bool ElementalSkillTrigger()
     {
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
+            return false;
+
+        PlayerCharacterState.ElementalBurstTrigger();
+        return true;
     }
 
-    protected virtual void ElementalSkillHold()
+    protected virtual bool ElementalSkillHold()
     {
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
+            return false;
+
+        PlayerCharacterState.ElementalSkillHold();
+        return true;
     }
 
-    protected virtual void EKey_1Down()
-    {
-
-    }
     protected virtual bool ElementalBurstTrigger()
     {
         if (characterData == null || !GetPlayerManager().CanAttack())
@@ -341,6 +347,7 @@ public class PlayerCharacters : Characters
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
         {
             characterData.ResetElementalBurstCooldown();
+            PlayerCharacterState.ElementalBurstTrigger();
             if (GetBurstCamera())
             {
                 GetBurstCamera().gameObject.SetActive(true);
@@ -366,7 +373,6 @@ public class PlayerCharacters : Characters
         GetPlayerManager().GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
         GetPlayerManager().GetPlayerController().OnElementalBurstTrigger += ElementalBurstTrigger;
         GetPlayerManager().GetPlayerController().OnElementalSkillTrigger += ElementalSkillTrigger;
-        GetPlayerManager().GetPlayerController().OnE_1Down += EKey_1Down;
         GetPlayerManager().GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerManager().GetPlayerController().OnChargeTrigger += ChargeTrigger;
         GetPlayerManager().GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
@@ -397,7 +403,6 @@ public class PlayerCharacters : Characters
         GetPlayerManager().GetPlayerController().OnElementalSkillHold -= ElementalSkillHold;
         GetPlayerManager().GetPlayerController().OnElementalBurstTrigger -= ElementalBurstTrigger;
         GetPlayerManager().GetPlayerController().OnElementalSkillTrigger -= ElementalSkillTrigger;
-        GetPlayerManager().GetPlayerController().OnE_1Down -= EKey_1Down;
         GetPlayerManager().GetPlayerController().OnChargeHold -= ChargeHold;
         GetPlayerManager().GetPlayerController().OnChargeTrigger -= ChargeTrigger;
         GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;        
@@ -412,7 +417,6 @@ public class PlayerCharacters : Characters
     {
         PlayerCharacterState.OnAnimationTransition();
     }
-
 
     public void TriggerNextAtkTransition()
     {

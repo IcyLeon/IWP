@@ -18,6 +18,7 @@ public class Amber : BowCharacters, ICoordinateAttack
     // Start is called before the first frame update
     protected override void Start()
     {
+        PlayerCharacterState = new PlayerCharacterState(this);
         base.Start();
         CoodinateTimerElapsed = 0;
         PlayerCoordinateAttackManager.OnCoordinateAttack += BasicAtkTrigger;
@@ -48,21 +49,24 @@ public class Amber : BowCharacters, ICoordinateAttack
     }
 
 
-    protected override void ElementalSkillTrigger()
+    protected override bool ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
-            return;
+        bool trigger = base.ElementalSkillTrigger();
 
-        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
-        for (int i = 0; i < SkillsArrows; i++)
+        if (trigger)
         {
-            AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
-            eSkillArrows.SetCharacterData(GetCharacterData());
-            eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
-            eSkillArrows.SetFocalPointContact(GetContactPoint(pos), NearestEnemy);
+            Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
+            for (int i = 0; i < SkillsArrows; i++)
+            {
+                AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
+                eSkillArrows.SetCharacterData(GetCharacterData());
+                eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
+                eSkillArrows.SetFocalPointContact(GetContactPoint(pos), NearestEnemy);
+            }
+            Animator.SetTrigger("Dodge");
+            GetCharacterData().ResetElementalSkillCooldown();
         }
-        Animator.SetTrigger("Dodge");
-        GetCharacterData().ResetElementalSkillCooldown();
+        return trigger;
     }
 
     private Vector3 GetShootPositionAndDirection(int i)

@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerController;
-
 public class KaqingBurstState : KaqingControlState
 {
     private enum ElementalBurst
@@ -19,7 +17,7 @@ public class KaqingBurstState : KaqingControlState
     private bool StartBurst;
     private Vector3 LastPosition;
 
-    public KaqingBurstState(KaqingState kaqingState) : base(kaqingState)
+    public KaqingBurstState(PlayerCharacterState pcs) : base(pcs)
     {
         TimeInBetweenHits = 2.5f / (TotalHits * 2f);
     }
@@ -29,6 +27,7 @@ public class KaqingBurstState : KaqingControlState
         base.Enter();
         StartBurst = false;
         StartAnimation("isBurst");
+        GetKaqingState().GetKaqing().SpawnEffects();
         elementalBurst = ElementalBurst.First_Phase;
         CurrentHits = 0;
         HitElapsed = Time.time + TimeInBetweenHits;
@@ -84,6 +83,7 @@ public class KaqingBurstState : KaqingControlState
                     if (Visible)
                     {
                         GetKaqingState().GetKaqing().GetModel().SetActive(true);
+                        GetKaqingState().GetKaqing().SetBurstActive(false);
                         StopAnimation("isBurst");
                     }
 

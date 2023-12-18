@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KaqingThrowState : KaqingElementalSkillState
 {
-    public KaqingThrowState(KaqingState kaqingState) : base(kaqingState)
+    public KaqingThrowState(PlayerCharacterState pcs) : base(pcs)
     {
     }
 

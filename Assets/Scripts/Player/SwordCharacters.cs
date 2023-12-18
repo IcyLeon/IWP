@@ -101,7 +101,7 @@ public class SwordCharacters : PlayerCharacters
         if (!GetModel().activeSelf)
             return;
 
-        if (Time.time - LastClickedTime >= 1f)
+        if (Time.time - LastClickedTime >= 1.15f)
         {
             ResetBasicAttacks();
         }

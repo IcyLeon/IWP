@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KaqingAimState : KaqingControlState
 {
-    public KaqingAimState(KaqingState kaqingState) : base(kaqingState)
+    public KaqingAimState(PlayerCharacterState pcs) : base(pcs)
     {
     }
 

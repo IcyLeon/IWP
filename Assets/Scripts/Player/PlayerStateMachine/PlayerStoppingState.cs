@@ -19,11 +19,6 @@ public class PlayerStoppingState : PlayerGroundState
         base.FixedUpdate();
 
         UpdateTargetRotation();
-
-        if (IsMovingHorizontally())
-        {
-            DecelerateHorizontal();
-        }
     }
 
     public override void OnAnimationTransition()

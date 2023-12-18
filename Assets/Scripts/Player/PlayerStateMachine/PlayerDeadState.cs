@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerDeadState : PlayerMovementState
 {
-    private float DeathPlayTimer = 1f;
-    private float DeathElapsed;
-
+    private bool StartDead;
     public PlayerDeadState(PlayerState playerState) : base(playerState)
     {
     }
@@ -14,13 +12,14 @@ public class PlayerDeadState : PlayerMovementState
     public override void Enter()
     {
         base.Enter();
+        StartAnimation("isDead");
+        StartDead = false;
     }
 
     public override void Exit()
     {
         base.Exit();
         ChangeCharacter();
-        DeathElapsed = 0f;
     }
 
     public override void FixedUpdate()
@@ -35,7 +34,7 @@ public class PlayerDeadState : PlayerMovementState
 
     private void ChangeCharacter()
     {
-        GetPlayerState().GetPlayerController().GetPlayerManager().SwapCharacters(GetAliveCharacters());
+        GetPlayerState().GetPlayerController().GetPlayerManager().SwapCharacters(GetAliveCharacters(), true);
     }
 
     private CharacterData GetAliveCharacters()
@@ -47,7 +46,7 @@ public class PlayerDeadState : PlayerMovementState
     {
         base.Update();
 
-        if (DeathElapsed > DeathPlayTimer && IsTouchingTerrain())
+        if (StartDead && IsTouchingTerrain())
         {
             if (GetAliveCharacters() != null)
             {
@@ -60,6 +59,10 @@ public class PlayerDeadState : PlayerMovementState
                 return;
             }
         }
-        DeathElapsed += Time.deltaTime;
+    }
+
+    public override void OnAnimationTransition()
+    {
+        StartDead = true;
     }
 }

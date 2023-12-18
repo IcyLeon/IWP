@@ -8,7 +8,7 @@ public class KaqingTeleportState : KaqingElementalSkillState
     private float Range;
     private Vector3 TargetPosition;
 
-    public KaqingTeleportState(KaqingState kaqingState) : base(kaqingState)
+    public KaqingTeleportState(PlayerCharacterState pcs) : base(pcs)
     {
     }
 

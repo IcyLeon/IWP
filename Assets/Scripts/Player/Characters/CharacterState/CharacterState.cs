@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterState
 {
+    protected Characters Characters;
+
     protected IState currentState;
     public void ChangeState(IState newState)
     {
@@ -27,5 +29,10 @@ public class CharacterState
     public void OnAnimationTransition()
     {
         currentState.OnAnimationTransition();
+    }
+
+    public CharacterState(Characters Characters)
+    {
+        this.Characters = Characters;
     }
 }

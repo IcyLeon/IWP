@@ -112,7 +112,8 @@ public class CameraManager : MonoBehaviour
         CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
 
         playerPOV.m_HorizontalRecentering.m_enabled = true;
-        yield return null;
+        yield return new WaitForSeconds(playerPOV.m_HorizontalRecentering.m_WaitTime);
+        yield return new WaitForSeconds(playerPOV.m_HorizontalRecentering.m_RecenteringTime);
         playerPOV.m_HorizontalRecentering.m_enabled = false;
     }
 

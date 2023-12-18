@@ -2,23 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KaqingControlState : IPlayerCharactersState
+public class PlayerControlState : IPlayerCharactersState
 {
-    private KaqingState kaqingState;
+    private PlayerCharacterState playerCharacterState;
 
-    public KaqingControlState(KaqingState kaqingState)
+    public PlayerControlState(PlayerCharacterState pcs)
     {
-        this.kaqingState = kaqingState;
+        playerCharacterState = pcs;
     }
-
-    public KaqingState GetKaqingState()
+    public PlayerCharacterState GetPlayerCharacterState()
     {
-        return kaqingState;
+        return playerCharacterState;
     }
-
     protected void StartAnimation(string animationString)
     {
-        Animator animator = GetKaqingState().GetKaqing().GetAnimator();
+        Animator animator = GetPlayerCharacterState().GetPlayerCharacters().GetAnimator();
         if (animator == null)
             return;
 
@@ -27,19 +25,11 @@ public class KaqingControlState : IPlayerCharactersState
 
     protected void StopAnimation(string animationString)
     {
-        Animator animator = GetKaqingState().GetKaqing().GetAnimator();
+        Animator animator = GetPlayerCharacterState().GetPlayerCharacters().GetAnimator();
         if (animator == null)
             return;
 
         animator.SetBool(animationString, false);
-    }
-
-    protected bool CanTriggerESlash()
-    {
-        if (GetKaqingState().KaqingData.kaqingTeleporter == null)
-            return false;
-
-        return !GetKaqingState().KaqingData.kaqingTeleporter.GetEnergyOrbMoving();
     }
     public virtual void Enter()
     {
@@ -71,6 +61,7 @@ public class KaqingControlState : IPlayerCharactersState
 
     public virtual void ElementalBurstTrigger()
     {
+
     }
 
     public virtual void ElementalSkillTrigger()
