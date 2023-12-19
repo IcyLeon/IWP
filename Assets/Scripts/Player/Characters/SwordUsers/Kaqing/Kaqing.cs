@@ -41,7 +41,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
     {
         base.SpawnSlash();
 
-        if (GetKaqingState().GetKaqingControlState() is KaqingESlash)
+        if (PlayerCharacterState.GetPlayerControlState() is KaqingESlash)
             GetKaqingState().GetKaqing().DestroyTeleporter();
     }
 
@@ -60,13 +60,16 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
         ElementalTimerCoroutine = StartCoroutine(ElementalTimer(timer));
     }
-
-    // Update is called once per frame
     protected override void Update()
     {
-        GetKaqingState().Update();
         base.Update();
+        if (Animator)
+        {
+            Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
+        }
+
     }
+
     public void SpawnHitEffect(IDamage damage)
     {
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, damage.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
@@ -119,6 +122,11 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
             Destroy(targetOrb);
     }
 
+    public override void OnBurstAnimationDone()
+    {
+        // do nothing
+    }
+
     public void DestroyTeleporter()
     {
         if (GetKaqingState().KaqingData.kaqingTeleporter != null)
@@ -140,7 +148,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
     public void InitElementalSkillHitPos_NoAim()
     {
         Vector3 forward;
-        if (NearestEnemy == null)
+        if (NearestTarget == null)
         {
             forward = transform.forward;
             forward.y = 0;
@@ -150,7 +158,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
         }
         else
         {
-            forward = NearestEnemy.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
             forward.Normalize();
             ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, forward, GetKaqingState().KaqingData.ESkillRange);
         }
@@ -168,7 +176,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     private void OnDestroyOrb()
     {
-        GetKaqingState().GetKaqing().GetCharacterData().ResetElementalSkillCooldown();
+        GetCharacterData().ResetElementalSkillCooldown();
     }
 
     private void ShootTeleportOrb()
@@ -188,7 +196,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     public bool CoordinateAttackEnded()
     {
-        return GetPlayerManager().GetPlayerMovementState() is not PlayerBurstState && GetKaqingState().GetKaqingControlState() is not KaqingBurstState;
+        return GetPlayerManager().GetPlayerMovementState() is not PlayerBurstState && PlayerCharacterState.GetPlayerControlState() is not KaqingBurstState;
     }
 
     public bool CoordinateCanShoot()

@@ -14,7 +14,6 @@ public class BurstState : StateMachineBehaviour
         if (pc != null)
         {
             pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
-            pc.SetBurstActive(true);
         }
     }
 
@@ -29,6 +28,7 @@ public class BurstState : StateMachineBehaviour
                 {
                     pc.GetBurstCamera().gameObject.SetActive(false);
                 }
+                pc.OnBurstAnimationDone();
             }
         }
     }

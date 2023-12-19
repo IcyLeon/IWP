@@ -14,14 +14,14 @@ public class KaqingState : PlayerCharacterState
 
     public KaqingControlState GetKaqingControlState()
     {
-        KaqingControlState p = GetIPlayerCharactersState() as KaqingControlState;
+        KaqingControlState p = GetPlayerControlState() as KaqingControlState;
 
         return p;
     }
 
     public Kaqing GetKaqing()
     {
-        return (Kaqing)Characters;
+        return (Kaqing)GetPlayerCharacters();
     }
 
     public KaqingState(Characters Characters) : base(Characters)

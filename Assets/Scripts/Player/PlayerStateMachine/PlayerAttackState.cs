@@ -12,11 +12,6 @@ public class PlayerAttackState : PlayerMovementState
     public override void Enter()
     {
         base.Enter();
-        playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
-        if (playerCharacter != null)
-        {
-            playerCharacter.SetisAttacking(true);
-        }
     }
 
     public override void FixedUpdate()
@@ -48,7 +43,7 @@ public class PlayerAttackState : PlayerMovementState
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if (!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState)
+            if (!playerCharacter.GetisAttacking())
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
                 return;

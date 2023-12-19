@@ -11,7 +11,7 @@ public class PlayerBurstState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
-
+        StartAnimation("isBurst");
     }
 
     public override void FixedUpdate()
@@ -35,5 +35,6 @@ public class PlayerBurstState : PlayerGroundState
     public override void Exit()
     {
         base.Exit();
+        StopAnimation("isBurst");
     }
 }

@@ -94,9 +94,10 @@ public class AssetManager : MonoBehaviour
         }
     }
 
-    public GameObject GetCrossHair()
+    public GameObject SpawnCrossHair()
     {
-        return CrossHair;
+        GameObject go = Instantiate(CrossHair, GetCanvasGO().transform);
+        return go;
     }
 
     public GameObject GetDragItem()

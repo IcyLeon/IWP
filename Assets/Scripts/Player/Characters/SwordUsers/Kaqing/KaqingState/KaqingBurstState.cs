@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class KaqingBurstState : KaqingControlState
+public class KaqingBurstState : PlayerElementalBurstState
 {
+    public KaqingState GetKaqingState()
+    {
+        return (KaqingState)GetPlayerCharacterState();
+    }
+
     private enum ElementalBurst
     {
         First_Phase,
@@ -26,7 +31,6 @@ public class KaqingBurstState : KaqingControlState
     {
         base.Enter();
         StartBurst = false;
-        StartAnimation("isBurst");
         GetKaqingState().GetKaqing().SpawnEffects();
         elementalBurst = ElementalBurst.First_Phase;
         CurrentHits = 0;

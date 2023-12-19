@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KaqingIdleState : KaqingControlState
 {
+    private float threasHold_Charged;
     public KaqingIdleState(PlayerCharacterState pcs) : base(pcs)
     {
     }
@@ -11,7 +12,7 @@ public class KaqingIdleState : KaqingControlState
     public override void Enter()
     {
         base.Enter();
-        GetKaqingState().KaqingData.threasHold_Charged = 0f;
+        threasHold_Charged = 0f;
     }
 
     public override void Update()
@@ -24,12 +25,12 @@ public class KaqingIdleState : KaqingControlState
         if (GetKaqingState().KaqingData.kaqingTeleporter != null)
             return;
 
-        if (GetKaqingState().KaqingData.threasHold_Charged > 0.1f)
+        if (threasHold_Charged > 0.1f)
         {
             GetKaqingState().ChangeState(GetKaqingState().kaqingAimState);
             return;
         }
-        GetKaqingState().KaqingData.threasHold_Charged += Time.deltaTime;
+        threasHold_Charged += Time.deltaTime;
     }
 
     public override void ElementalSkillTrigger()

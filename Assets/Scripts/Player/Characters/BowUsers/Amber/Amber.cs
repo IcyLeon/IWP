@@ -18,18 +18,12 @@ public class Amber : BowCharacters, ICoordinateAttack
     // Start is called before the first frame update
     protected override void Start()
     {
-        PlayerCharacterState = new PlayerCharacterState(this);
+        PlayerCharacterState = new AmberState(this);
         base.Start();
         CoodinateTimerElapsed = 0;
         PlayerCoordinateAttackManager.OnCoordinateAttack += BasicAtkTrigger;
     }
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-
-    }
 
     protected override bool ElementalBurstTrigger()
     {
@@ -37,7 +31,7 @@ public class Amber : BowCharacters, ICoordinateAttack
 
         if (canTrigger)
         {
-            isBurstActive = true;
+            //isBurstActive = true;
             CoodinateTimerElapsed = CoordinateTimer;
             if (BurstAura == null)
                 BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
@@ -48,34 +42,24 @@ public class Amber : BowCharacters, ICoordinateAttack
         return canTrigger;
     }
 
-
-    protected override bool ElementalSkillTrigger()
+    public void Spawn4Arrows()
     {
-        bool trigger = base.ElementalSkillTrigger();
-
-        if (trigger)
+        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
+        for (int i = 0; i < SkillsArrows; i++)
         {
-            Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
-            for (int i = 0; i < SkillsArrows; i++)
-            {
-                AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
-                eSkillArrows.SetCharacterData(GetCharacterData());
-                eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
-                eSkillArrows.SetFocalPointContact(GetContactPoint(pos), NearestEnemy);
-            }
-            Animator.SetTrigger("Dodge");
-            GetCharacterData().ResetElementalSkillCooldown();
+            AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
+            eSkillArrows.SetCharacterData(GetCharacterData());
+            eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
+            eSkillArrows.SetFocalPointContact(GetContactPoint(pos), NearestTarget);
         }
-        return trigger;
     }
 
     private Vector3 GetShootPositionAndDirection(int i)
     {
         float speed = 35f;
         float angle = 45f;
-        float UpOffset = 0.7f;
-        Vector3 forward = transform.forward;
-        forward.y = 0;
+        float UpOffset = 0.5f;
+        Vector3 forward = GetPlayerManager().transform.forward;
 
         Vector3 dir = Quaternion.Euler(0, ((-angle / 2) * (SkillsArrows - 1)) + (i * angle), 0) * forward;
         dir.y = 0;
@@ -91,9 +75,8 @@ public class Amber : BowCharacters, ICoordinateAttack
     private Vector3 GetContactPoint(Vector3 pos)
     {
         float range = 10f;
-        Characters NearestEnemy = GetNearestCharacters(range);
         Vector3 forward;
-        if (NearestEnemy == null)
+        if (NearestTarget == null)
         {
 
             forward = transform.forward;
@@ -107,10 +90,10 @@ public class Amber : BowCharacters, ICoordinateAttack
         }
         else
         {
-            forward = NearestEnemy.transform.position - pos;
+            forward = NearestTarget.GetPointOfContact() - pos;
             forward.Normalize();
             LookAtDirection(forward);
-            return NearestEnemy.GetPointOfContact();
+            return NearestTarget.GetPointOfContact();
         }
     }
 
@@ -156,7 +139,7 @@ public class Amber : BowCharacters, ICoordinateAttack
             Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
             ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
             ca.SetCharacterData(GetCharacterData());
-            ca.SetTargetPos(GetContactPoint(pos));
+            ca.SetTargetPos(GetContactPoint(pos), NearestTarget, GetPlayerManager().transform.forward * 10f);
         }
     }
 }

@@ -2,17 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BowControlState : MonoBehaviour
+public class BowControlState : PlayerControlState
 {
-    // Start is called before the first frame update
-    void Start()
+    public BowCharactersState GetBowCharactersState()
     {
-        
+        return (BowCharactersState)GetPlayerCharacterState();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Enter()
     {
-        
+        base.Enter();
+        ResetCharge();
+    }
+
+    protected void ResetCharge()
+    {
+        GetBowCharactersState().BowData.CurrentElemental = Elemental.NONE;
+        GetBowCharactersState().BowData.ChargeElapsed = 0;
+    }
+
+    public BowControlState(PlayerCharacterState pcs) : base(pcs)
+    {
     }
 }

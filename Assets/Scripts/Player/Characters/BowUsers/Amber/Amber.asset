@@ -27,4 +27,4 @@ MonoBehaviour:
     type: 3}
   ElementalSkillsCooldown: 10
   UltiSkillCooldown: 10
-  EnergyCost: 35
+  EnergyCost: 1

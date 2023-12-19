@@ -12,6 +12,7 @@ public class KaqingThrowState : KaqingElementalSkillState
     {
         base.Enter();
         StartAnimation("isThrowing");
+        GetKaqingState().GetKaqing().GetSwordModel().SetActive(false);
     }
 
     public override void Update()
@@ -29,6 +30,6 @@ public class KaqingThrowState : KaqingElementalSkillState
         base.Exit();
         StopAnimation("isThrowing");
         GetKaqingState().GetKaqing().GetSwordModel().SetActive(true);
-        GetKaqingState().GetKaqing().UpdateDefaultPosOffsetAndZoom(0.2f);
+        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0.2f);
     }
 }

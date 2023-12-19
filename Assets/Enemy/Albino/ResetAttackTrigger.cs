@@ -23,7 +23,7 @@ public class ResetAttackTrigger : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (Characters.ContainsParam(animator, triggerAtkName))
-            animator.SetBool(triggerAtkName, false);
+            animator.ResetTrigger(triggerAtkName);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AmberESkillArrows : MonoBehaviour
 {
-    private float speed = 50f;
     private CharacterData Amber;
     private IDamage target;
     [SerializeField] Rigidbody rb;
@@ -18,6 +17,10 @@ public class AmberESkillArrows : MonoBehaviour
     {
         FocalPointPos = pos;
         this.target = target;
+        if (this.target != null)
+        {
+            FocalPointPos = default(Vector3);
+        }
     }
 
     // Start is called before the first frame update
@@ -34,31 +37,34 @@ public class AmberESkillArrows : MonoBehaviour
 
     private IEnumerator Moving()
     {
-        float maxTurnRate = 360f;
-        float maxVelocity = 10f;
+        float maxTurnRate = 2.5f;
+        float maxVelocity = 12f;
         Vector3 forceDirection = rb.velocity.normalized;
 
-        while (((FocalPointPos - rb.position).magnitude > 1.5f) || target != null)
+        while (target != null || FocalPointPos != default(Vector3))
         {
+            if (((FocalPointPos - rb.position).magnitude <= 1f))
+                yield break;
+
             rb.useGravity = target != null;
 
-            Vector3 targetDirection = (FocalPointPos - rb.position).normalized;
+            Vector3 targetDirection;
 
-            float angle = Vector3.Angle(rb.velocity.normalized, targetDirection);
-
-            if (angle > 0.0f)
+            if (target != null)
             {
-                float turnRate = Mathf.Min((angle / 180.0f) * maxTurnRate, maxTurnRate);
-                forceDirection = Vector3.RotateTowards(rb.velocity.normalized, targetDirection, maxTurnRate * Time.deltaTime, 0.0f);
+                targetDirection = (target.GetPointOfContact() - rb.position).normalized;
+            }
+            else
+            {
+                targetDirection = (FocalPointPos - rb.position).normalized;
             }
 
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
-            rb.AddForce(forceDirection.normalized * speed);
+            forceDirection = Vector3.RotateTowards(forceDirection, targetDirection, maxTurnRate * Time.deltaTime, 0.0f);
 
+            rb.velocity = forceDirection.normalized * maxVelocity;
             yield return null;
         }
     }
-
     // Update is called once per frame
     void Update()
     {

@@ -39,5 +39,26 @@ public class PlayerCharacterState : CharacterState
     {
         if (GetIPlayerCharactersState() != null)
             GetIPlayerCharactersState().ElementalBurstTrigger();
+
+        GetPlayerCharacters().SetBurstActive(true);
+    }
+
+    public void ChargeHold()
+    {
+        if (GetIPlayerCharactersState() != null)
+            GetIPlayerCharactersState().ChargeHold();
+    }
+
+    public void ChargeTrigger()
+    {
+        if (GetIPlayerCharactersState() != null)
+            GetIPlayerCharactersState().ChargeTrigger();
+    }
+
+    public PlayerControlState GetPlayerControlState()
+    {
+        PlayerControlState p = GetIPlayerCharactersState() as PlayerControlState;
+
+        return p;
     }
 }

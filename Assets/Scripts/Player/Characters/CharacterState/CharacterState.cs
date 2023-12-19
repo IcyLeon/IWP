@@ -14,21 +14,26 @@ public class CharacterState
 
         currentState = newState;
 
-        currentState.Enter();
+        if (newState != null)
+            currentState.Enter();
     }
 
     public void Update()
     {
-        currentState.Update();
+        Debug.Log(currentState);
+        if (currentState != null)
+            currentState.Update();
     }
     public void FixedUpdate()
     {
-        currentState.FixedUpdate();
+        if (currentState != null)
+            currentState.FixedUpdate();
     }
 
     public void OnAnimationTransition()
     {
-        currentState.OnAnimationTransition();
+        if (currentState != null)
+            currentState.OnAnimationTransition();
     }
 
     public CharacterState(Characters Characters)

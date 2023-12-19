@@ -48,7 +48,7 @@ public class SwordCharacters : PlayerCharacters
     protected override void Start()
     {
         base.Start();
-        Range = 5f;
+        Range = 4f;
         MaxAttackPhase = 4;
         ResetBasicAttacks();
     }
@@ -71,7 +71,7 @@ public class SwordCharacters : PlayerCharacters
         {
             string AtkName = "Attack" + i;
             if (ContainsParam(Animator, AtkName))
-                Animator.SetBool(AtkName, false);
+                Animator.ResetTrigger(AtkName);
         }
 
         if (ContainsParam(Animator, "NextAtk"))
@@ -93,6 +93,9 @@ public class SwordCharacters : PlayerCharacters
         return colliders;
     }
 
+    public override void LaunchBasicAttack()
+    {
+    }
     protected override void ChargeTrigger()
     {
         if (!GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
@@ -101,20 +104,14 @@ public class SwordCharacters : PlayerCharacters
         if (!GetModel().activeSelf)
             return;
 
-        if (Time.time - LastClickedTime >= 1.15f)
+        if (Time.time - LastClickedTime >= 1f)
         {
             ResetBasicAttacks();
         }
 
-        if (Time.time - LastClickedTime > AttackRate && !Animator.GetBool("Attack" + MaxAttackPhase))
+        if (Time.time - LastClickedTime > AttackRate && BasicAttackPhase <= MaxAttackPhase)
         {
-            if (NearestEnemy != null)
-            {
-                Vector3 forward = NearestEnemy.transform.position - transform.position;
-                forward.Normalize();
-                LookAtDirection(forward);
-            }
-
+            SetLookAtTarget();
             BasicAttackPhase++;
             if (BasicAttackPhase > MaxAttackPhase)
             {
@@ -123,9 +120,21 @@ public class SwordCharacters : PlayerCharacters
 
             string AtkName = "Attack" + BasicAttackPhase;
             if (ContainsParam(Animator, AtkName))
-                Animator.SetBool(AtkName, true);
+                Animator.SetTrigger(AtkName);
 
             LastClickedTime = Time.time + AttackRate;
+        }
+
+    }
+
+    public override void SetLookAtTarget()
+    {
+        if (NearestTarget != null)
+        {
+            Vector3 forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            forward.y = 0;
+            forward.Normalize();
+            LookAtDirection(forward);
         }
 
     }

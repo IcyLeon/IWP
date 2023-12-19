@@ -12,7 +12,7 @@ public class PlayerCharacters : Characters
     protected bool isBurstActive;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
-    protected Characters NearestEnemy;
+    protected Characters NearestTarget;
     protected float Range = 1f;
     protected PlayerCharacterState PlayerCharacterState;
 
@@ -255,7 +255,7 @@ public class PlayerCharacters : Characters
         if (GetPlayerManager().isDeadState())
             return;
 
-        NearestEnemy = GetNearestCharacters(Range);
+        NearestTarget = GetNearestCharacters(Range);
 
         if (GetElementalReaction().GetElementList().Count != 0)
         {
@@ -278,8 +278,9 @@ public class PlayerCharacters : Characters
             Animator.SetBool("isFalling", GetPlayerManager().GetPlayerMovementState() is PlayerFallingState && !GetPlayerManager().IsGrounded());
             Animator.SetFloat("Velocity", GetPlayerManager().GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerManager().IsGrounded());
-            Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
         }
+
+        PlayerCharacterState.Update();
     }
 
     protected Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
@@ -326,7 +327,9 @@ public class PlayerCharacters : Characters
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
             return false;
 
-        PlayerCharacterState.ElementalBurstTrigger();
+        PlayerCharacterState.ElementalSkillTrigger();
+        GetCharacterData().ResetElementalSkillCooldown();
+
         return true;
     }
 
@@ -358,11 +361,26 @@ public class PlayerCharacters : Characters
         return false;
     }
 
-    protected virtual void ChargeHold()
+    public virtual void OnBurstAnimationDone()
+    {
+        SetBurstActive(false);
+    }
+
+    public virtual void SetLookAtTarget()
     {
 
     }
+
+    protected virtual void ChargeHold()
+    {
+        PlayerCharacterState.ChargeHold();
+    }
     protected virtual void ChargeTrigger()
+    {
+        PlayerCharacterState.ChargeTrigger();
+    }
+
+    public virtual void LaunchBasicAttack()
     {
 
     }

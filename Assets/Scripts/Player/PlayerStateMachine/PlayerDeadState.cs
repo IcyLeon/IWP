@@ -46,6 +46,9 @@ public class PlayerDeadState : PlayerMovementState
     {
         base.Update();
 
+        if (CheckIfisAboutToFall())
+            ResetVelocity();
+
         if (StartDead && IsTouchingTerrain())
         {
             if (GetAliveCharacters() != null)
