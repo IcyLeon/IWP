@@ -18,7 +18,7 @@ public class KaqingESlash : KaqingElementalSkillState
 
     public override void OnAnimationTransition()
     {
-        GetKaqingState().ChangeState(GetKaqingState().kaqingIdleState);
+        GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
 
         GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().ChangeState(
             GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().playerStayAirborneState

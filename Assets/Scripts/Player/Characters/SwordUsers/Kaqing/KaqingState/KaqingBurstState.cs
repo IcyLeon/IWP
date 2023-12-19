@@ -111,7 +111,7 @@ public class KaqingBurstState : PlayerElementalBurstState
                         BurstAreaDamage(LastPosition);
                         CurrentHits++;
 
-                        GetKaqingState().ChangeState(GetKaqingState().kaqingIdleState);
+                        GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
                     }
                     break;
             }

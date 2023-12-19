@@ -95,15 +95,6 @@ public class SwordCharacters : PlayerCharacters
 
     public override void LaunchBasicAttack()
     {
-    }
-    protected override void ChargeTrigger()
-    {
-        if (!GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
-            return;
-
-        if (!GetModel().activeSelf)
-            return;
-
         if (Time.time - LastClickedTime >= 1f)
         {
             ResetBasicAttacks();
@@ -124,7 +115,17 @@ public class SwordCharacters : PlayerCharacters
 
             LastClickedTime = Time.time + AttackRate;
         }
+    }
 
+    protected override void ChargeTrigger()
+    {
+        if (!GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
+            return;
+
+        if (!GetModel().activeSelf)
+            return;
+
+        base.ChargeTrigger();
     }
 
     public override void SetLookAtTarget()

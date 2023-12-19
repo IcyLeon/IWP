@@ -22,7 +22,7 @@ public class KaqingThrowState : KaqingElementalSkillState
 
     public override void OnAnimationTransition()
     {
-        GetKaqingState().ChangeState(GetKaqingState().kaqingIdleState);
+        GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
     }
 
     public override void Exit()

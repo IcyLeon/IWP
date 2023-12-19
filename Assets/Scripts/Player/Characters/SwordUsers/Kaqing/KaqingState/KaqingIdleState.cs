@@ -2,11 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KaqingIdleState : KaqingControlState
+public class KaqingIdleState : SwordIdleState
 {
     private float threasHold_Charged;
     public KaqingIdleState(PlayerCharacterState pcs) : base(pcs)
     {
+    }
+
+    public KaqingState GetKaqingState()
+    {
+        return (KaqingState)GetPlayerCharacterState();
+    }
+
+    protected bool CanTriggerESlash()
+    {
+        if (GetKaqingState().KaqingData.kaqingTeleporter == null)
+            return false;
+
+        return !GetKaqingState().KaqingData.kaqingTeleporter.GetEnergyOrbMoving();
     }
 
     public override void Enter()
