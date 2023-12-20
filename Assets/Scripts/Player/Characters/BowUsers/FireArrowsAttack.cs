@@ -10,7 +10,6 @@ public class FireArrowsAttack : StateMachineBehaviour
     {
         PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
         playerCharacters.SetisAttacking(true);
-        animator.ResetTrigger("TriggerAtk");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

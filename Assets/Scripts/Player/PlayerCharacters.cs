@@ -2,9 +2,10 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerCharacters : Characters
+public abstract class PlayerCharacters : Characters, ICoordinateAttack
 {
     protected float AimSpeed = 20f;
     private CharacterData characterData;
@@ -23,6 +24,11 @@ public class PlayerCharacters : Characters
     public bool GetBurstActive()
     {
         return isBurstActive;
+    }
+
+    public PlayerCharacterState GetPlayerCharacterState()
+    {
+        return PlayerCharacterState;
     }
 
     public CinemachineVirtualCamera GetBurstCamera()
@@ -278,9 +284,11 @@ public class PlayerCharacters : Characters
             Animator.SetBool("isFalling", GetPlayerManager().GetPlayerMovementState() is PlayerFallingState && !GetPlayerManager().IsGrounded());
             Animator.SetFloat("Velocity", GetPlayerManager().GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerManager().IsGrounded());
+            if (ContainsParam(Animator, "isWalking"))
+                Animator.SetBool("isWalking", GetPlayerManager().GetPlayerMovementState() is PlayerMovingState);
         }
 
-        PlayerCharacterState.Update();
+        GetPlayerCharacterState().Update();
     }
 
     protected Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
@@ -327,7 +335,7 @@ public class PlayerCharacters : Characters
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
             return false;
 
-        PlayerCharacterState.ElementalSkillTrigger();
+        GetPlayerCharacterState().ElementalSkillTrigger();
         GetCharacterData().ResetElementalSkillCooldown();
 
         return true;
@@ -338,7 +346,7 @@ public class PlayerCharacters : Characters
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
             return false;
 
-        PlayerCharacterState.ElementalSkillHold();
+        GetPlayerCharacterState().ElementalSkillHold();
         return true;
     }
 
@@ -350,7 +358,7 @@ public class PlayerCharacters : Characters
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
         {
             characterData.ResetElementalBurstCooldown();
-            PlayerCharacterState.ElementalBurstTrigger();
+            GetPlayerCharacterState().ElementalBurstTrigger();
             if (GetBurstCamera())
             {
                 GetBurstCamera().gameObject.SetActive(true);
@@ -373,11 +381,11 @@ public class PlayerCharacters : Characters
 
     protected virtual void ChargeHold()
     {
-        PlayerCharacterState.ChargeHold();
+        GetPlayerCharacterState().ChargeHold();
     }
     protected virtual void ChargeTrigger()
     {
-        PlayerCharacterState.ChargeTrigger();
+        GetPlayerCharacterState().ChargeTrigger();
     }
 
     public virtual void LaunchBasicAttack()
@@ -433,12 +441,26 @@ public class PlayerCharacters : Characters
 
     public void TriggerOnCharacterStateAnimationTransition()
     {
-        PlayerCharacterState.OnAnimationTransition();
+        GetPlayerCharacterState().OnAnimationTransition();
     }
 
     public void TriggerNextAtkTransition()
     {
         if (ContainsParam(Animator, "NextAtk"))
             Animator.SetBool("NextAtk", true);
+    }
+
+    public virtual void UpdateCoordinateAttack()
+    {
+    }
+
+    public virtual bool CoordinateAttackEnded()
+    {
+        return true;
+    }
+
+    public virtual bool CoordinateCanShoot()
+    {
+        return false;
     }
 }

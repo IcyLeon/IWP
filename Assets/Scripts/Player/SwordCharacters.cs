@@ -100,7 +100,8 @@ public class SwordCharacters : PlayerCharacters
             ResetBasicAttacks();
         }
 
-        if (Time.time - LastClickedTime > AttackRate && BasicAttackPhase <= MaxAttackPhase)
+
+        if (Time.time - LastClickedTime > AttackRate && BasicAttackPhase < MaxAttackPhase && !GetPlayerManager().IsSkillCasting())
         {
             SetLookAtTarget();
             BasicAttackPhase++;

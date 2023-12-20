@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BowAimState : BowControlState
 {
+    private bool AimHold;
+    private float DelayToIdle = 0.25f, DelayToIdleElasped;
+    private bool StartDelay;
     public BowAimState(PlayerCharacterState pcs) : base(pcs)
     {
     }
@@ -11,6 +14,8 @@ public class BowAimState : BowControlState
     public override void Enter()
     {
         base.Enter();
+        StartDelay = false;
+        DelayToIdleElasped = Time.time;
         GetBowCharactersState().BowData.isChargedFinish = false;
         StartAnimation("isAiming");
     }
@@ -18,19 +23,35 @@ public class BowAimState : BowControlState
     public override void Update()
     {
         base.Update();
-
         GetBowCharactersState().GetBowCharacters().InitHitPos_Aim();
         UpdateBowAim();
+
+        if (StartDelay)
+        {
+            if (Time.time - DelayToIdleElasped > DelayToIdle)
+            {
+                GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);
+                GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0);
+                DelayToIdleElasped = Time.time;
+            }
+        }
     }
 
     public override void ChargeTrigger()
     {
         GetBowCharactersState().GetBowCharacters().LaunchBasicAttack();
-        GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);
 
-        if (!Input.GetMouseButtonDown(1))
-            GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0.5f);
+        if (!AimHold)
+        {
+            DelayToIdleElasped = Time.time;
+            StartDelay = true;
+        }
+    }
 
+    public override void ChargeHold()
+    {
+        DelayToIdleElasped = Time.time;
+        StartDelay = false;
     }
 
     private void UpdateBowAim()
@@ -38,6 +59,13 @@ public class BowAimState : BowControlState
         GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
         GetBowCharactersState().GetBowCharacters().SpawnChargeEmitter();
 
+        AimHold = Input.GetMouseButton(1);
+
+        if (AimHold)
+        {
+            DelayToIdleElasped = Time.time;
+            StartDelay = false;
+        }
         if (Input.GetMouseButtonUp(1))
         {
             GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);

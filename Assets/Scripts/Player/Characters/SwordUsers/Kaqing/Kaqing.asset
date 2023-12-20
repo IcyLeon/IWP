@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemDesc: Kaqing
   ItemSprite: {fileID: 0}
   Rarity: 4
-  BaseHP: 1020
+  BaseHP: 1
   BaseATK: 25
   BaseDEF: 62
   Elemental: 3

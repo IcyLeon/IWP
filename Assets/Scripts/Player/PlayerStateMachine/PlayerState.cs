@@ -37,9 +37,14 @@ public class PlayerState
     public void ChangeState(IState newState)
     {
         if (currentState != null)
+        {
+            GetPlayerController().GetPlayerManager().onCharacterChange -= OnCharacterChange;
             currentState.Exit();
+        }
 
         currentState = newState;
+
+        GetPlayerController().GetPlayerManager().onCharacterChange += OnCharacterChange;
 
         currentState.Enter();
     }
@@ -88,6 +93,12 @@ public class PlayerState
         playerDeadState = new PlayerDeadState(this);
         playerLandingState = new PlayerLandingState(this);
         playerStayAirborneState = new PlayerStayAirborneState(this);
+
+        ChangeState(playerIdleState);
+    }
+
+    private void OnCharacterChange(CharacterData cd)
+    {
         ChangeState(playerIdleState);
     }
 }

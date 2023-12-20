@@ -86,8 +86,8 @@ public class KaqingBurstState : PlayerElementalBurstState
 
                     if (Visible)
                     {
-                        GetKaqingState().GetKaqing().GetModel().SetActive(true);
-                        GetKaqingState().GetKaqing().SetBurstActive(false);
+                        GetPlayerCharacterState().GetPlayerCharacters().GetModel().SetActive(true);
+                        GetPlayerCharacterState().GetPlayerCharacters().SetBurstActive(false);
                         StopAnimation("isBurst");
                     }
 

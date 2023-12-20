@@ -11,12 +11,16 @@ public class PlayerPlungeState : PlayerAirborneState
     public override void Enter()
     {
         base.Enter();
-        StayAfloatFor(0.35f);
+        ResetVelocity();
+        rb.useGravity = false;
+        StartAnimation("isPlunging");
     }
     public override void Exit()
     {
         base.Exit();
+        rb.useGravity = true;
         OnPlungeAttack();
+        StopAnimation("isPlunging");
     }
     private void OnPlungeAttack()
     {
@@ -26,9 +30,14 @@ public class PlayerPlungeState : PlayerAirborneState
         GetPlayerState().GetPlayerController().GetCameraManager().CameraShake(2.5f, 2.5f, 1.5f);
     }
 
+    public override void OnAnimationTransition()
+    {
+        rb.useGravity = true;
+    }
+
     public override void FixedUpdate()
     {
-        if (!GetCanFloat())
+        if (rb.useGravity)
         {
             rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
             LimitFallVelocity();

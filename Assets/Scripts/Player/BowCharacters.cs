@@ -9,9 +9,10 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
-    private float OriginalFireSpeed = 1500f, BaseFireSpeed;
-    private float LastClickedTime, AttackRate = 0.1f;
+    private float OriginalFireSpeed = 1000f, BaseFireSpeed;
+    private float LastClickedTime, AttackRate = 0.05f;
     private Vector3 Direction;
+    private Elemental ShootElemental;
 
     public Transform GetEmitterPivot()
     {
@@ -20,7 +21,7 @@ public class BowCharacters : PlayerCharacters
 
     private void Awake()
     {
-        Range = 6.5f;
+        Range = 8f;
     }
     protected override void Update()
     {
@@ -37,24 +38,34 @@ public class BowCharacters : PlayerCharacters
         return (BowCharactersState)PlayerCharacterState;
     }
 
+    protected override void ChargeHold()
+    {
+        if (!GetPlayerManager().CanAttack() || GetBurstActive())
+            return;
+
+        base.ChargeHold();
+    }
+
     private void FireArrows()
     {
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
-        ArrowFire.SetElements(new Elements(GetBowCharactersState().BowData.CurrentElemental));
+        ArrowFire.SetElements(new Elements(ShootElemental));
         ArrowFire.SetCharacterData(GetCharacterData());
         ArrowFire.transform.rotation = Quaternion.LookRotation(Direction);
 
         if (!GetPlayerManager().IsAiming())
-            BaseFireSpeed = OriginalFireSpeed * 0.7f;
+            BaseFireSpeed = OriginalFireSpeed * 0.75f;
         else
             BaseFireSpeed = OriginalFireSpeed;
 
         ArrowRB.AddForce(Direction.normalized * BaseFireSpeed * (1 + GetBowCharactersState().BowData.ChargeElapsed));
 
         DestroyChargeUpEmitter();
+        ShootElemental = Elemental.NONE;
         BasicAttackTrigger();
     }
+
 
     public override void LaunchBasicAttack()
     {
@@ -62,6 +73,7 @@ public class BowCharacters : PlayerCharacters
         {
             if (GetBowCharactersState().GetBowControlState() is not BowAimState)
                 SetLookAtTarget();
+            ShootElemental = GetBowCharactersState().BowData.CurrentElemental;
             Animator.SetTrigger("Attack1");
             LastClickedTime = Time.time;
         }
@@ -97,8 +109,8 @@ public class BowCharacters : PlayerCharacters
     {
         SpawnCrossHair();
 
-        Vector3 hitdir = (Camera.main.transform.position + Camera.main.transform.forward * 100f) - GetPlayerManager().GetPlayerOffsetPosition().position;
-        Direction = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, 100f) - GetEmitterPivot().position;
+        Vector3 hitdir = (Camera.main.transform.position + Camera.main.transform.forward * 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
+        Direction = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
         LookAtDirection(Direction);
     }
 
@@ -130,7 +142,7 @@ public class BowCharacters : PlayerCharacters
 
     public void BasicAttack()
     {
-        if (Time.time - LastClickedTime > AttackRate)
+        if (Time.time - LastClickedTime > AttackRate && !GetPlayerManager().IsSkillCasting())
         {
             SetLookAtTarget();
             Animator.SetBool("Attack1", true);
@@ -144,7 +156,10 @@ public class BowCharacters : PlayerCharacters
             Destroy(ChargeUpEmitter.gameObject);
 
         if (GetBowCharactersState() != null)
+        {
             GetBowCharactersState().BowData.isChargedFinish = false;
+            GetBowCharactersState().BowData.ChargeElapsed = 0;
+        }
     }
 
     public void DestroyCrossHair()

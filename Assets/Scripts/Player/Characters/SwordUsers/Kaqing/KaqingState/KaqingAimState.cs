@@ -18,17 +18,6 @@ public class KaqingAimState : KaqingElementalSkillState
         StartAnimation("2ndSkillAim");
     }
 
-    public override void ElementalSkillHold()
-    {
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
-        if (Timer >= MaxTimer)
-        {
-            GetKaqingState().ChangeState(GetKaqingState().kaqingThrowState);
-            return;
-        }
-        Timer += Time.deltaTime;
-    }
-
     public override void ElementalSkillTrigger()
     {
         GetKaqingState().ChangeState(GetKaqingState().kaqingThrowState);
@@ -38,8 +27,16 @@ public class KaqingAimState : KaqingElementalSkillState
     {
         base.Update();
 
+        GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
         GetKaqingState().GetKaqing().InitElementalSkillHitPos_Aim();
         GetKaqingState().GetKaqing().UpdateTargetOrb();
+
+        if (Timer >= MaxTimer)
+        {
+            GetKaqingState().ChangeState(GetKaqingState().kaqingThrowState);
+            return;
+        }
+        Timer += Time.deltaTime;
     }
 
     public override void Exit()

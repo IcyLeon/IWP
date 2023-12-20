@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
-public class Kaqing : SwordCharacters, ICoordinateAttack
+public class Kaqing : SwordCharacters
 {
     private Coroutine ElementalTimerCoroutine;
     private Vector3 ElementalHitPos;
@@ -95,7 +96,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     protected override bool ElementalBurstTrigger()
     {
-        if (GetPlayerManager().CanPerformAction() && GetPlayerManager().GetPlayerMovementState() is not PlayerAimState)
+        if (GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerAimState)
         {
             bool canTrigger = base.ElementalBurstTrigger();
             if (canTrigger)
@@ -135,7 +136,7 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
 
     public void LookAtElementalHitPos()
     {
-        LookAtDirection(ElementalHitPos - EmitterPivot.position);
+        LookAtDirection(ElementalHitPos - GetPlayerManager().GetPlayerOffsetPosition().position);
     }
 
     public void InitElementalSkillHitPos_Aim()
@@ -168,7 +169,8 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
     protected override bool ElementalSkillTrigger()
     {
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
-            return false;
+            if (!GetPlayerManager().IsSkillCasting())
+                return false;
 
         GetKaqingState().ElementalSkillTrigger();
         return true;
@@ -189,17 +191,17 @@ public class Kaqing : SwordCharacters, ICoordinateAttack
         GetKaqingState().KaqingData.kaqingTeleporter = Orb;
     }
 
-    public void UpdateCoordinateAttack()
+    public override void UpdateCoordinateAttack()
     {
         GetKaqingState().UpdateOffline();
     }
 
-    public bool CoordinateAttackEnded()
+    public override bool CoordinateAttackEnded()
     {
         return GetPlayerManager().GetPlayerMovementState() is not PlayerBurstState && PlayerCharacterState.GetPlayerControlState() is not KaqingBurstState;
     }
 
-    public bool CoordinateCanShoot()
+    public override bool CoordinateCanShoot()
     {
         return false;
     }

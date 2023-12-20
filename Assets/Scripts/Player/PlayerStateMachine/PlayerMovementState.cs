@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class PlayerMovementState : IState
@@ -10,7 +9,6 @@ public class PlayerMovementState : IState
     private float WalkSpeed;
     private float Speed;
     protected Rigidbody rb;
-    private float HitDistance;
     private float DecelerateForce = 3.5f;
 
     protected void SetSpeedModifier(float sp)
@@ -107,8 +105,10 @@ public class PlayerMovementState : IState
         {
             if (GetPlayerState().GetPlayerMovementState() is not PlayerDeadState)
             {
-                if (playerCharacter.GetisAttacking()) {
-                    GetPlayerState().ChangeState(GetPlayerState().playerAttackState);
+                if (playerCharacter.GetBurstActive())
+                {
+                    playerCharacter.ResetAttack();
+                    GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
                     return;
                 }
                 if (playerCharacter.IsDead())
@@ -177,7 +177,7 @@ public class PlayerMovementState : IState
 
             SetSpeedModifier(slopeSpeedModifier);
 
-            HitDistance = hit.distance;
+            GetPlayerState().PlayerData.HitDistance = hit.distance;
             float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - hit.distance;
 
             if (distanceToFloatingPoint == 0f)
@@ -195,7 +195,7 @@ public class PlayerMovementState : IState
             if (!IsTouchingTerrain())
                 return;
 
-            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - GetHitDistance();
+            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - GetPlayerState().PlayerData.HitDistance;
             float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
 
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
@@ -247,17 +247,12 @@ public class PlayerMovementState : IState
         }
     }
 
-    public float GetHitDistance()
-    {
-        return HitDistance;
-    }
-
     private void UpdatePhysicsMovement()
     {
         if (rb == null)
             return;
 
-        if (this is PlayerDeadState || this is PlayerAttackState)
+        if (this is PlayerDeadState || this is PlayerAttackState || this is PlayerBurstState)
             return;
 
         if (this is not PlayerAimState)
@@ -432,9 +427,6 @@ public class PlayerMovementState : IState
 
     protected void OnDashInput()
     {
-        //if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash() || IsAiming())
-        //    return;
-
         if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash())
             return;
 

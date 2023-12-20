@@ -6,7 +6,7 @@ public class KaqingElementalSkillState : PlayerElementalSkillState
 {
     public KaqingState GetKaqingState()
     {
-        return (KaqingState)GetPlayerCharacterState();
+        return (KaqingState)GetSwordCharactersState();
     }
 
     public KaqingElementalSkillState(PlayerCharacterState pcs) : base(pcs)

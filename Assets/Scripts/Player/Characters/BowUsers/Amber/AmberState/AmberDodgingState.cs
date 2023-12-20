@@ -13,11 +13,6 @@ public class AmberDodgingState : AmberElementalSkillState
         StartAnimation("isDodging");
     }
 
-    //public override void Update()
-    //{
-    //    base.Update();
-    //}
-
     public override void OnAnimationTransition()
     {
         GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);

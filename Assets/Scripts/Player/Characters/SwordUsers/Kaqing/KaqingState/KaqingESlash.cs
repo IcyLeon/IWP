@@ -14,6 +14,7 @@ public class KaqingESlash : KaqingElementalSkillState
         StartAnimation("ESlash");
         GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerMovementState().ResetVelocity();
         GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0f);
+        GetKaqingState().GetKaqing().StartElementalTimer(GetKaqingState().KaqingData.ElectroInfusionTimer);
     }
 
     public override void OnAnimationTransition()
@@ -30,7 +31,5 @@ public class KaqingESlash : KaqingElementalSkillState
     {
         base.Exit();
         StopAnimation("ESlash");
-
-        GetKaqingState().GetKaqing().StartElementalTimer(GetKaqingState().KaqingData.ElectroInfusionTimer);
     }
 }

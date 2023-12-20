@@ -10,6 +10,17 @@ public class PlayerControlState : IPlayerCharactersState
     {
         playerCharacterState = pcs;
     }
+
+    public BowCharactersState GetBowCharactersState()
+    {
+        return (BowCharactersState)GetPlayerCharacterState();
+    }
+    public SwordCharacterState GetSwordCharactersState()
+    {
+        return (SwordCharacterState)GetPlayerCharacterState();
+    }
+
+
     public PlayerCharacterState GetPlayerCharacterState()
     {
         return playerCharacterState;
@@ -46,9 +57,27 @@ public class PlayerControlState : IPlayerCharactersState
     public virtual void OnAnimationTransition()
     {
     }
+    private void InterruptUpdate()
+    {
+        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
+            return;
 
+        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+            return;
+
+        switch (GetPlayerCharacterState())
+        {
+            case BowCharactersState bcs:
+                GetPlayerCharacterState().ChangeState(bcs.bowIdleState);
+                break;
+            case SwordCharacterState scs:
+                GetPlayerCharacterState().ChangeState(scs.swordIdleState);
+                break;
+        }
+    }
     public virtual void Update()
     {
+        InterruptUpdate();
     }
 
     public virtual void ChargeHold()

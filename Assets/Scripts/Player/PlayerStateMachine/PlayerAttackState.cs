@@ -38,12 +38,12 @@ public class PlayerAttackState : PlayerMovementState
             GetPlayerState().ChangeState(GetPlayerState().playerAimState);
             return;
         }
-
+        
 
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if (!playerCharacter.GetisAttacking())
+            if (!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState)
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
                 return;
@@ -58,7 +58,7 @@ public class PlayerAttackState : PlayerMovementState
 
         if (playerCharacter != null)
         {
-            playerCharacter.ResetAttack();
+            //playerCharacter.ResetAttack();
         }
     }
 

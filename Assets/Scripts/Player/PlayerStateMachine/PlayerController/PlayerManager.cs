@@ -176,7 +176,7 @@ public class PlayerManager : MonoBehaviour
     public bool CanPerformAction()
     {
         return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAimState) &&
-            GetPlayerMovementState() is not PlayerDashState &&
+            !IsDashing() && !IsSkillCasting() &&
             !isBurstState();
     }
 
@@ -199,7 +199,7 @@ public class PlayerManager : MonoBehaviour
     }
     public bool CanAttack()
     {
-        return CanPerformAction() || GetPlayerMovementState() is PlayerAttackState;
+        return (CanPerformAction() || GetPlayerMovementState() is PlayerAttackState) && !IsSkillCasting();
     }
     public bool isDeadState()
     {
@@ -255,6 +255,11 @@ public class PlayerManager : MonoBehaviour
         return GetPlayerMovementState() is PlayerMovingState;
     }
 
+    public bool IsDashing()
+    {
+        return GetPlayerMovementState() is PlayerDashState;
+    }
+
     public List<CharacterData> GetEquippedCharacterData()
     {
         return inventoryManager.GetEquipCharactersDataList();
@@ -283,7 +288,10 @@ public class PlayerManager : MonoBehaviour
         if (isBurstState())
             return;
 
-        if (GetPlayerController().GetPlayerState().GetPlayerMovementState() is PlayerDeadState || IsAiming() || GetPlayerController().GetPlayerState().GetPlayerMovementState() is PlayerAttackState)
+        if (isDeadState() || IsAiming() || GetPlayerMovementState() is PlayerAirborneState)
+            return;
+
+        if (GetCurrentCharacter()?.GetPlayerCharacterState()?.GetPlayerControlState() is PlayerElementalSkillState || GetCurrentCharacter()?.GetPlayerCharacterState()?.GetPlayerControlState() is PlayerElementalBurstState)
             return;
 
         SwapCharacters((int)index - 1);
@@ -314,6 +322,9 @@ public class PlayerManager : MonoBehaviour
     {
         if (characterData != null && playerCharacters != null)
         {
+            if (playerCharacters == GetCurrentCharacter())
+                return;
+
             if (playerCharacters.IsDead())
                 return;
 
@@ -323,7 +334,7 @@ public class PlayerManager : MonoBehaviour
             }
 
             playerCharacters.SetCharacterData(characterData);
-            playerCharacters.SetisAttacking(false);
+            playerCharacters.ResetAttack();
             inventoryManager.SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(playerCharacters);
             playerCharacters.gameObject.SetActive(true);
@@ -347,6 +358,17 @@ public class PlayerManager : MonoBehaviour
     public PlayerCharacters GetCurrentCharacter()
     {
         return CurrentCharacter;
+    }
+
+    public bool IsSkillCasting()
+    {
+        if (GetCurrentCharacter() == null)
+            return false;
+
+        if (GetCurrentCharacter().GetPlayerCharacterState() == null)
+            return false;
+
+        return (GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalBurstState);
     }
 
     private PlayerCharacters GetPlayerCharacter(PlayerCharacterSO playersSO)

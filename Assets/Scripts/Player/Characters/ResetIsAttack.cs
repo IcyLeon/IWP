@@ -39,7 +39,9 @@ public class ResetIsAttack : StateMachineBehaviour
             else
             {
                 if (animator.GetBool("NextAtk"))
+                {
                     playerCharacters.ResetAttack();
+                }
             }
         }
     }

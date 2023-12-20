@@ -19,4 +19,6 @@ public class PlayerData
 
     public float CurrentJumpForceXZ;
     public Vector3 PreviousPosition;
+
+    public float HitDistance;
 }

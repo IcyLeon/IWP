@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Amber : BowCharacters, ICoordinateAttack
+public class Amber : BowCharacters
 {
     [SerializeField] Transform CoordinateAttackPivot;
     private float CoodinateTimerElapsed;
@@ -31,7 +31,6 @@ public class Amber : BowCharacters, ICoordinateAttack
 
         if (canTrigger)
         {
-            //isBurstActive = true;
             CoodinateTimerElapsed = CoordinateTimer;
             if (BurstAura == null)
                 BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
@@ -44,7 +43,7 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     public void Spawn4Arrows()
     {
-        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
+        Vector3 pos = GetPlayerManager().transform.position;
         for (int i = 0; i < SkillsArrows; i++)
         {
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
@@ -98,24 +97,33 @@ public class Amber : BowCharacters, ICoordinateAttack
     }
 
 
-    public void UpdateCoordinateAttack()
+    public override void UpdateCoordinateAttack()
     {
         CoodinateTimerElapsed -= Time.deltaTime;
         CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, CoordinateTimer);
 
         if (BurstAura)
-            BurstAura.transform.position = transform.position;
+        {
+            if (IsDead())
+            {
+                Destroy(BurstAura.gameObject);
+            }
+            else
+            {
+                BurstAura.transform.position = GetPlayerManager().transform.position;
+            }
+        }
     }
 
-    public bool CoordinateAttackEnded()
+    public override bool CoordinateAttackEnded()
     {
-        if (GetPlayerManager().isDeadState() && IsDead())
+        if (IsDead())
             return true;
 
         return CoodinateTimerElapsed <= 0f;
     }
 
-    public bool CoordinateCanShoot()
+    public override bool CoordinateCanShoot()
     {
         if (Time.time > nextFire)
         {
@@ -129,6 +137,9 @@ public class Amber : BowCharacters, ICoordinateAttack
     private void BasicAtkTrigger()
     {
         if (!CoordinateCanShoot() || CoordinateAttackEnded())
+            return;
+
+        if (GetPlayerManager() == null)
             return;
 
         Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;

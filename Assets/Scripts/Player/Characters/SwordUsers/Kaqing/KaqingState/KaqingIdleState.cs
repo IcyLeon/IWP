@@ -38,7 +38,7 @@ public class KaqingIdleState : SwordIdleState
         if (GetKaqingState().KaqingData.kaqingTeleporter != null)
             return;
 
-        if (threasHold_Charged > 0.1f)
+        if (threasHold_Charged > 0.25f)
         {
             GetKaqingState().ChangeState(GetKaqingState().kaqingAimState);
             return;

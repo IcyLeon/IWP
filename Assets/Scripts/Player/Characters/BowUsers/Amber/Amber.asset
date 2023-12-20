@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemDesc: Amber
   ItemSprite: {fileID: 0}
   Rarity: 3
-  BaseHP: 793
+  BaseHP: 1
   BaseATK: 18
   BaseDEF: 50
   Elemental: 1

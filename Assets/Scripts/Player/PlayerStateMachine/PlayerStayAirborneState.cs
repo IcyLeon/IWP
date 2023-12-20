@@ -8,19 +8,10 @@ public class PlayerStayAirborneState : PlayerAirborneState
     {
     }
 
-    public void StayAirborneFor(float sec)
-    {
-        StayAfloatFor(sec);
-    }
-
     public override void Enter()
     {
         base.Enter();
         rb.useGravity = false;
-    }
-
-    protected override void FloatAbove()
-    {
     }
 
     public void TurnOffAirborne()
