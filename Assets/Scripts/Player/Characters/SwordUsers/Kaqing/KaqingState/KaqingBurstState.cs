@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class KaqingBurstState : PlayerElementalBurstState
+public class KaqingBurstState : SwordElementalBurstState
 {
     public KaqingState GetKaqingState()
     {

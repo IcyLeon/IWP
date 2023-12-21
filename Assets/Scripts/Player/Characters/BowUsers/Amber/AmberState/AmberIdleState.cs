@@ -15,7 +15,11 @@ public class AmberIdleState : BowIdleState
 
     public override void ElementalSkillTrigger()
     {
-        GetAmberState().GetAmber().Spawn4Arrows();
         GetAmberState().ChangeState(GetAmberState().amberDodgingState);
+    }
+
+    public override void ElementalBurstTrigger()
+    {
+        GetAmberState().ChangeState(GetAmberState().amberElementalBurstState);
     }
 }

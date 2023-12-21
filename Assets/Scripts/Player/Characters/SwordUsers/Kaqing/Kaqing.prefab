@@ -791,14 +791,14 @@ MonoBehaviour:
   Model: {fileID: 2025528108361651698}
   HealthBarPivotParent: {fileID: 0}
   BurstCamera: {fileID: 5768029138009864271}
-  SwordModel: {fileID: 3228397461706563601}
-  EmitterPivot: {fileID: 5913488171116269540}
+  SwordModel: {fileID: 2316705126754495589}
   ElementalOrbPrefab: {fileID: 8455810837854244540, guid: 038cc286a7384c54e86b6e5e09da6fdb,
     type: 3}
   BurstRangeEffectPrefab: {fileID: 6484485155401033903, guid: 6d66f1935347e634b8714e0ddf6eaafb,
     type: 3}
   TargetOrbPrefab: {fileID: 260796668554883667, guid: c7219445ca073fd4088e1595e66881e1,
     type: 3}
+  EmitterPivot: {fileID: 2132850761548433918}
 --- !u!95 &41062414002266592
 Animator:
   serializedVersion: 5
@@ -2385,7 +2385,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7110222856139830792}
-  m_LocalRotation: {x: -0.08086667, y: 0.8817081, z: -0.16393004, w: -0.4349465}
+  m_LocalRotation: {x: -0.080866665, y: 0.8817081, z: -0.16393003, w: -0.43494657}
   m_LocalPosition: {x: 1.506, y: 2.131, z: 1.155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3027,18 +3027,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 130
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 888146972988425238, guid: eb7c6d468911dbf4293b6e834dc5de85, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb7c6d468911dbf4293b6e834dc5de85, type: 3}
---- !u!4 &2848037268507769515 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 861174000417362648, guid: eb7c6d468911dbf4293b6e834dc5de85,
+--- !u!114 &2316705126754495589 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 888146972988425238, guid: eb7c6d468911dbf4293b6e834dc5de85,
     type: 3}
   m_PrefabInstance: {fileID: 3203682208599992435}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3228397461706563601 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 51881127414958178, guid: eb7c6d468911dbf4293b6e834dc5de85,
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56bc61abc260b59438c23bc82f1fa7fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2848037268507769515 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 861174000417362648, guid: eb7c6d468911dbf4293b6e834dc5de85,
     type: 3}
   m_PrefabInstance: {fileID: 3203682208599992435}
   m_PrefabAsset: {fileID: 0}

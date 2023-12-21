@@ -8,7 +8,6 @@ public class Amber : BowCharacters
 {
     [SerializeField] Transform CoordinateAttackPivot;
     private float CoodinateTimerElapsed;
-    private float CoordinateTimer = 8f;
     private int SkillsArrows = 4;
     private float nextFire;
     [SerializeField] GameObject AmberAuraBurstPrefab;
@@ -24,21 +23,12 @@ public class Amber : BowCharacters
         PlayerCoordinateAttackManager.OnCoordinateAttack += BasicAtkTrigger;
     }
 
-
-    protected override bool ElementalBurstTrigger()
+    public void SpawnAura()
     {
-        bool canTrigger = base.ElementalBurstTrigger();
-
-        if (canTrigger)
-        {
-            CoodinateTimerElapsed = CoordinateTimer;
-            if (BurstAura == null)
-                BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
-
-            Destroy(BurstAura.gameObject, CoordinateTimer);
-            GetPlayerManager().GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
-        }
-        return canTrigger;
+        CoodinateTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer;
+        if (BurstAura == null)
+            BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
+        Destroy(BurstAura.gameObject, CoodinateTimerElapsed);
     }
 
     public void Spawn4Arrows()
@@ -100,7 +90,7 @@ public class Amber : BowCharacters
     public override void UpdateCoordinateAttack()
     {
         CoodinateTimerElapsed -= Time.deltaTime;
-        CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, CoordinateTimer);
+        CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer);
 
         if (BurstAura)
         {
@@ -132,7 +122,6 @@ public class Amber : BowCharacters
         }
         return false;
     }
-
 
     private void BasicAtkTrigger()
     {

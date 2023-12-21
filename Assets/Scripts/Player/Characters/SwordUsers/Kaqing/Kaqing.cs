@@ -12,6 +12,7 @@ public class Kaqing : SwordCharacters
     [SerializeField] GameObject BurstRangeEffectPrefab;
     private ParticleSystem BurstRangeEffect;
     [SerializeField] GameObject TargetOrbPrefab;
+    [SerializeField] Transform EmitterPivot;
 
     private KaqingState GetKaqingState()
     {
@@ -61,15 +62,6 @@ public class Kaqing : SwordCharacters
 
         ElementalTimerCoroutine = StartCoroutine(ElementalTimer(timer));
     }
-    protected override void Update()
-    {
-        base.Update();
-        if (Animator)
-        {
-            Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
-        }
-
-    }
 
     public void SpawnHitEffect(IDamage damage)
     {
@@ -96,7 +88,7 @@ public class Kaqing : SwordCharacters
 
     protected override bool ElementalBurstTrigger()
     {
-        if (GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerAimState)
+        if (GetPlayerManager().CanAttack() && !GetPlayerManager().IsAiming())
         {
             bool canTrigger = base.ElementalBurstTrigger();
             if (canTrigger)
@@ -155,7 +147,6 @@ public class Kaqing : SwordCharacters
             forward.y = 0;
             forward.Normalize();
             ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, forward, GetKaqingState().KaqingData.ESkillRange);
-            ElementalHitPos.y = EmitterPivot.position.y;
         }
         else
         {

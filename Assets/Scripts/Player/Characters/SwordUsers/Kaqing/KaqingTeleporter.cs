@@ -20,7 +20,6 @@ public class KaqingTeleporter : MonoBehaviour
     {
         EnergyOrbMoving = true;
         StartCoroutine(MoveToTargetLocation(50f));
-        Destroy(gameObject, 5f);
     }
 
     private void OnDestroy()
@@ -47,6 +46,7 @@ public class KaqingTeleporter : MonoBehaviour
         }
         TravelDamage();
         yield return new WaitForSeconds(0.1f);
+        Destroy(gameObject, Kaqing.GetPlayerCharacterSO().ElementalSkillsTimer);
         EnergyOrbMoving = false;
     }
 

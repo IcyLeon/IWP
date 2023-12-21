@@ -25,7 +25,6 @@ public class KaqingESlash : KaqingElementalSkillState
 
     public override void Exit()
     {
-        base.Exit();
         StopAnimation("ESlash");
     }
 }

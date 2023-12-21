@@ -26,6 +26,9 @@ public class PlayerCharacterSO : CharactersSO
     public float ElementalSkillsCooldown;
     public float UltiSkillCooldown;
     public float EnergyCost;
+    [Header("Skills timer")]
+    public float ElementalBurstTimer;
+    public float ElementalSkillsTimer;
 
     public override Type GetTypeREF()
     {

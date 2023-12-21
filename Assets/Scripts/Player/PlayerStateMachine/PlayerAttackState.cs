@@ -34,7 +34,7 @@ public class PlayerAttackState : PlayerGroundState
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if (!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState)
+            if (!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState || GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
                 return;

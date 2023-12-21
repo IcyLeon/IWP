@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class BowControlState : PlayerControlState
 {
-    public BowCharactersState GetBowCharactersState()
-    {
-        return (BowCharactersState)GetPlayerCharacterState();
-    }
-
     public override void Enter()
     {
         base.Enter();

@@ -8,7 +8,8 @@ public class PlayerCoordinateAttackManager : MonoBehaviour
     private List<PlayerCharacters> PlayerCharactersList;
     public static event Action OnCoordinateAttack;
 
-    public static void CallCoordinateAttack()
+    public static void 
+        CallCoordinateAttack()
     {
         OnCoordinateAttack?.Invoke();
     }

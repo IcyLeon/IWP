@@ -285,7 +285,7 @@ public abstract class PlayerCharacters : Characters, ICoordinateAttack
             Animator.SetFloat("Velocity", GetPlayerManager().GetPlayerController().GetAnimationSpeed(), 0.15f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerManager().IsGrounded());
             if (ContainsParam(Animator, "isWalking"))
-                Animator.SetBool("isWalking", GetPlayerManager().GetPlayerMovementState() is PlayerMovingState);
+                Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
         }
 
         GetPlayerCharacterState().Update();

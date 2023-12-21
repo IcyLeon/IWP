@@ -14,7 +14,6 @@ public class KaqingTeleportState : KaqingElementalSkillState
 
     public override void Enter()
     {
-        base.Enter();
         Range = GetKaqingState().KaqingData.ESkillRange;
         TargetPosition = GetTargetPosition();
 
@@ -62,6 +61,5 @@ public class KaqingTeleportState : KaqingElementalSkillState
 
     public override void Exit()
     {
-        base.Exit();
     }
 }

@@ -37,6 +37,7 @@ public class PlayerPlungeState : PlayerAirborneState
 
     public override void FixedUpdate()
     {
+        Float();
         if (rb.useGravity)
         {
             rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);

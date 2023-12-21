@@ -14,7 +14,7 @@ public class KaqingAimState : KaqingElementalSkillState
     {
         base.Enter();
         Timer = 0f;
-        GetKaqingState().GetKaqing().GetSwordModel().SetActive(false);
+        GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(false);
         StartAnimation("2ndSkillAim");
     }
 

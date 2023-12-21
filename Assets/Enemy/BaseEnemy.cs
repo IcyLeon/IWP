@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class BaseEnemy : Characters
 {
     [SerializeField] protected Collider col;
+    [SerializeField] protected Rigidbody rb;
     protected float DetectionRange;
     private ElementsIndicator elementsIndicator;
     protected float Ratio;

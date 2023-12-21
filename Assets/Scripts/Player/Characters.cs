@@ -29,7 +29,6 @@ public class Characters : MonoBehaviour, IDamage
     protected int Level;
 
     [SerializeField] protected CharactersSO CharactersSO;
-    [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Animator Animator;
     [SerializeField] protected GameObject Model;
     [SerializeField] protected Transform HealthBarPivotParent;

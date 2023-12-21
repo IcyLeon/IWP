@@ -68,6 +68,7 @@ MonoBehaviour:
   startupSOTest:
   - {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
   - {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
+  - {fileID: 11400000, guid: 1f82e998edf14f041978ed9b72e14bc4, type: 2}
 --- !u!114 &2296422559368538025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +168,9 @@ MonoBehaviour:
   - CharacterPrefab: {fileID: 2313908216546761985, guid: c8ba7ffa1db7e3143ad3a0def77f8cd7,
       type: 3}
     playersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
+  - CharacterPrefab: {fileID: 1498305590801993984, guid: 0e3217d5d4bfb5f448372e3b47e7a923,
+      type: 3}
+    playersSO: {fileID: 11400000, guid: 1f82e998edf14f041978ed9b72e14bc4, type: 2}
 --- !u!114 &4484403746063666375
 MonoBehaviour:
   m_ObjectHideFlags: 0

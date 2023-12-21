@@ -6,21 +6,20 @@ using UnityEngine.TextCore.Text;
 
 public class SwordCharacters : PlayerCharacters
 {
-    [SerializeField] protected GameObject SwordModel;
-    [SerializeField] protected Transform EmitterPivot;
+    [SerializeField] protected Sword SwordModel;
     protected int BasicAttackPhase = 0;
     private int MaxAttackPhase;
     protected Elemental CurrentElement;
     private float LastClickedTime, AttackRate = 0.08f;
 
-    public GameObject GetSwordModel()
+    public Sword GetSwordModel()
     {
         return SwordModel;
     }
     public virtual void SpawnSlash()
     {
         BasicAttackTrigger();
-        AssetManager.GetInstance().SpawnSlashEffect(GetEmitterPivot());
+        AssetManager.GetInstance().SpawnSlashEffect(GetSwordModel().GetSlashPivot());
         Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity"));
         foreach (Collider other in Colliders)
         {
@@ -59,10 +58,6 @@ public class SwordCharacters : PlayerCharacters
         base.Update();
     }
 
-    public Transform GetEmitterPivot()
-    {
-        return EmitterPivot;
-    }
     public void ResetBasicAttacks()
     {
         BasicAttackPhase = 0;

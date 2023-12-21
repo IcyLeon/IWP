@@ -291,7 +291,7 @@ public class PlayerManager : MonoBehaviour
         if (isDeadState() || IsAiming() || GetPlayerMovementState() is PlayerAirborneState)
             return;
 
-        if (GetCurrentCharacter()?.GetPlayerCharacterState()?.GetPlayerControlState() is PlayerElementalSkillState || GetCurrentCharacter()?.GetPlayerCharacterState()?.GetPlayerControlState() is PlayerElementalBurstState)
+        if (IsSkillCasting())
             return;
 
         SwapCharacters((int)index - 1);

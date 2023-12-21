@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 4349451007376416125}
   - component: {fileID: 1997537665954752951}
   - component: {fileID: 888146972988425238}
-  - component: {fileID: 5728530176271605180}
   m_Layer: 3
   m_Name: dullbladeGI
   m_TagString: Untagged
@@ -126,19 +125,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 51881127414958178}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b4f96e5443522243a62258f111d13a9, type: 3}
+  m_Script: {fileID: 11500000, guid: 56bc61abc260b59438c23bc82f1fa7fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &5728530176271605180
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 51881127414958178}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 0.85}
-  m_Center: {x: 0, y: 0.00000009313226, z: -0.48}
+  SlashPivot: {fileID: 9107736225787897751}

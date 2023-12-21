@@ -7,4 +7,21 @@ public class PlayerElementalSkillState : PlayerControlState
     public PlayerElementalSkillState(PlayerCharacterState pcs) : base(pcs)
     {
     }
+
+    protected virtual void ResetAllAttacks()
+    {
+
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        StartAnimation("isCasting");
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation("isCasting");
+    }
 }
