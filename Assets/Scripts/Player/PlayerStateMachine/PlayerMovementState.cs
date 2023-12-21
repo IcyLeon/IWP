@@ -10,7 +10,7 @@ public class PlayerMovementState : IState
     private float Speed;
     protected Rigidbody rb;
     private float DecelerateForce = 3.5f;
-
+    private PlayerCharacters playerCharacter;
     protected void SetSpeedModifier(float sp)
     {
         GetPlayerState().PlayerData.SpeedModifier = sp;
@@ -100,7 +100,7 @@ public class PlayerMovementState : IState
         UpdateDash();
         UpdatePreviousPosition();
 
-        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
             if (GetPlayerState().GetPlayerMovementState() is not PlayerDeadState)
@@ -252,8 +252,10 @@ public class PlayerMovementState : IState
         if (rb == null)
             return;
 
-        if (this is PlayerDeadState || this is PlayerAttackState || this is PlayerBurstState)
-            return;
+
+        if (playerCharacter)
+            if (playerCharacter.GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState)
+                return;
 
         if (this is not PlayerAimState)
         {
@@ -261,7 +263,7 @@ public class PlayerMovementState : IState
             UpdateTargetRotation();
         }
 
-        if (GetInputDirection() == Vector3.zero || this is PlayerDashState)
+        if (GetInputDirection() == Vector3.zero)
             return;
 
         if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable || GetPlayerState().PlayerData.SpeedModifier == 0)

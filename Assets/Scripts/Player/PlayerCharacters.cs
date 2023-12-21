@@ -359,10 +359,6 @@ public abstract class PlayerCharacters : Characters, ICoordinateAttack
         {
             characterData.ResetElementalBurstCooldown();
             GetPlayerCharacterState().ElementalBurstTrigger();
-            if (GetBurstCamera())
-            {
-                GetBurstCamera().gameObject.SetActive(true);
-            }
             return true;
         }
 

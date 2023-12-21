@@ -14,6 +14,10 @@ public class BurstState : StateMachineBehaviour
         if (pc != null)
         {
             pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
+            if (pc.GetBurstCamera())
+            {
+                pc.GetBurstCamera().gameObject.SetActive(true);
+            }
         }
     }
 
