@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackState : PlayerMovementState
+public class PlayerAttackState : PlayerGroundState
 {
     private PlayerCharacters playerCharacter;
     public PlayerAttackState(PlayerState playerState) : base(playerState)
@@ -30,15 +30,6 @@ public class PlayerAttackState : PlayerMovementState
     public override void Update()
     {
         base.Update();
-
-        OnDashInput();
-
-        if (IsAiming())
-        {
-            GetPlayerState().ChangeState(GetPlayerState().playerAimState);
-            return;
-        }
-        
 
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)

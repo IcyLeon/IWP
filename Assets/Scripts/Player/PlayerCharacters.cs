@@ -381,6 +381,9 @@ public abstract class PlayerCharacters : Characters, ICoordinateAttack
     }
     protected virtual void ChargeTrigger()
     {
+        if (!GetPlayerManager().CanAttack())
+            return;
+
         GetPlayerCharacterState().ChargeTrigger();
     }
 

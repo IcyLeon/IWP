@@ -105,12 +105,6 @@ public class PlayerMovementState : IState
         {
             if (GetPlayerState().GetPlayerMovementState() is not PlayerDeadState)
             {
-                if (playerCharacter.GetBurstActive())
-                {
-                    playerCharacter.ResetAttack();
-                    GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
-                    return;
-                }
                 if (playerCharacter.IsDead())
                 {
                     GetPlayerState().ChangeState(GetPlayerState().playerDeadState);

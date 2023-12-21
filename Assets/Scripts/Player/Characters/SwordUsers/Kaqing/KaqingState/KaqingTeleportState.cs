@@ -18,9 +18,10 @@ public class KaqingTeleportState : KaqingElementalSkillState
         Range = GetKaqingState().KaqingData.ESkillRange;
         TargetPosition = GetTargetPosition();
 
-        GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().ChangeState(
-            GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().playerStayAirborneState
-            );
+        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = false;
+        //GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().ChangeState(
+        //    GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().playerStayAirborneState
+        //    );
 
         GetKaqingState().GetKaqing().LookAtElementalHitPos();
     }
