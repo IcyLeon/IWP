@@ -30,8 +30,6 @@ public class PlayerState
     public PlayerBurstState playerBurstState { get; }
     public PlayerDeadState playerDeadState { get; }
     public PlayerLandingState playerLandingState { get; }
-
-    public PlayerStayAirborneState playerStayAirborneState { get; }
     public PlayerAttackState playerAttackState { get; }
 
     public void ChangeState(IState newState)
@@ -92,7 +90,6 @@ public class PlayerState
         playerAttackState = new PlayerAttackState(this);
         playerDeadState = new PlayerDeadState(this);
         playerLandingState = new PlayerLandingState(this);
-        playerStayAirborneState = new PlayerStayAirborneState(this);
 
         ChangeState(playerIdleState);
     }

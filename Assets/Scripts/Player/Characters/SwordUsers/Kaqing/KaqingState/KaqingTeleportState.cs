@@ -19,9 +19,6 @@ public class KaqingTeleportState : KaqingElementalSkillState
         TargetPosition = GetTargetPosition();
 
         GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = false;
-        //GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().ChangeState(
-        //    GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().playerStayAirborneState
-        //    );
 
         GetKaqingState().GetKaqing().LookAtElementalHitPos();
     }

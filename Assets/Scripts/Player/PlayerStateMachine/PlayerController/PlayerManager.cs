@@ -182,7 +182,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return GetPlayerMovementState() is not PlayerAirborneState || GetPlayerMovementState() is PlayerStayAirborneState;
+        return GetPlayerMovementState() is not PlayerAirborneState;
     }
 
     public CharacterManager GetCharacterManager()
@@ -368,7 +368,7 @@ public class PlayerManager : MonoBehaviour
         if (GetCurrentCharacter().GetPlayerCharacterState() == null)
             return false;
 
-        return (GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalBurstState);
+        return (GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || GetPlayerMovementState() is PlayerBurstState);
     }
 
     private PlayerCharacters GetPlayerCharacter(PlayerCharacterSO playersSO)

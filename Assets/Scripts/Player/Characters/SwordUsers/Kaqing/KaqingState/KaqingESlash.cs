@@ -21,7 +21,6 @@ public class KaqingESlash : KaqingElementalSkillState
     {
         GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
         GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = true;
-        //GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetPlayerState().playerStayAirborneState.TurnOffAirborne();
     }
 
     public override void Exit()

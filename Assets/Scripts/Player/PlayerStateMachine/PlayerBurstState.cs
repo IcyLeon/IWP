@@ -11,6 +11,7 @@ public class PlayerBurstState : PlayerGroundState
     public override void Enter()
     {
         base.Enter();
+        ResetVelocity();
         StartAnimation("isBurst");
     }
 
