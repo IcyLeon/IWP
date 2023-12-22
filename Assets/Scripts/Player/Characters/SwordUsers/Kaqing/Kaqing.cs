@@ -8,6 +8,7 @@ public class Kaqing : SwordCharacters
     private Coroutine ElementalTimerCoroutine;
     private Vector3 ElementalHitPos;
     private GameObject targetOrb;
+    [SerializeField] GameObject ElectroSlashPrefab;
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
     private ParticleSystem BurstRangeEffect;
@@ -41,11 +42,42 @@ public class Kaqing : SwordCharacters
     }
     public override void SpawnSlash()
     {
-        base.SpawnSlash();
+        if (GetCurrentSwordElemental() == Elemental.NONE)
+            base.SpawnSlash();
+        else
+            SpawnElectroSlash();
 
         if (PlayerCharacterState.GetPlayerControlState() is KaqingESlash)
             GetKaqingState().GetKaqing().DestroyTeleporter();
     }
+
+    private void SpawnElectroSlash()
+    {
+        BasicAttackTrigger();
+        AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
+        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2.3f, 2.8f, LayerMask.GetMask("Entity"));
+        foreach (Collider other in Colliders)
+        {
+            IDamage damageObj = other.GetComponent<IDamage>();
+            if (damageObj != null)
+            {
+                if (!damageObj.IsDead())
+                {
+                    Vector3 hitPosition = other.transform.position;
+
+                    if (other is MeshCollider meshCollider)
+                    {
+                        hitPosition = meshCollider.ClosestPointOnBounds(other.transform.position);
+                    }
+
+                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
+                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), 150f);
+                }
+            }
+        }
+    }
+
 
     private IEnumerator ElementalTimer(float timer)
     {

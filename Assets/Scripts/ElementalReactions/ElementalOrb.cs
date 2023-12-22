@@ -9,13 +9,13 @@ public class ElementalOrb : MonoBehaviour
     private float coneAngle = 30f;
     bool canTravel = false;
     [SerializeField] Rigidbody rb;
-    private float maxForce = 25f;
-    private float CurrentForce = 0f;
-    private float accelerationTime = 3f;
+    private float maxForce = 15f;
+    private float currentForce = 0f;
+    private float accelerationTime = 2f;
 
     void Start()
     {
-        rb.AddForce(25f * RandomVectorInCone(), ForceMode.VelocityChange);
+        rb.velocity = maxForce * 0.5f * RandomVectorInCone();
     }
 
     public void SetSource(PlayerManager PM)
@@ -29,52 +29,22 @@ public class ElementalOrb : MonoBehaviour
         return randomDirection.normalized;
     }
 
-    private void Update()
-    {
-        if (!canTravel)
-        {
-            if (!IsMovingUp())
-                canTravel = true;
-        }
-    }
     void MoveTowardsPlayer()
     {
         Vector3 collider = pm.GetCurrentCharacter().GetComponent<CapsuleCollider>().bounds.center;
-        Vector3 direction = (collider - transform.position).normalized;
-        CurrentForce = Mathf.Lerp(CurrentForce, maxForce, Time.deltaTime / accelerationTime);
-        rb.MovePosition(rb.position + direction * CurrentForce * Time.deltaTime);
+        Vector3 direction = (collider - rb.position).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        currentForce = Mathf.Lerp(currentForce, maxForce, Time.deltaTime / accelerationTime);
+        rb.MoveRotation(rotation);
+        rb.MovePosition(rb.position + direction * currentForce * Time.deltaTime);
     }
 
 
     private void FixedUpdate()
     {
-        if (canTravel)
-            MoveTowardsPlayer();
-
-        if (IsMovingUp())
-        {
-            DecelerateVertically();
-        }
+        MoveTowardsPlayer();
     }
 
-    private void DecelerateVertically()
-    {
-        Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * 8.5f, ForceMode.Acceleration);
-    }
-
-    private bool IsMovingUp(float minimumVelocity = 0.15f)
-    {
-        return GetVerticalVelocity().y > minimumVelocity;
-    }
-
-    private Vector3 GetVerticalVelocity()
-    {
-        if (rb == null)
-            return Vector3.zero;
-
-        return new Vector3(0f, rb.velocity.y, 0f);
-    }
 
     private void OnTriggerEnter(Collider collision)
     {

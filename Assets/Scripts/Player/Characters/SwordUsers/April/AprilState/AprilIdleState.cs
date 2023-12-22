@@ -17,4 +17,9 @@ public class AprilIdleState : SwordIdleState
     {
         GetAprilState().ChangeState(GetAprilState().aprilElementalSkillState);
     }
+
+    public override void ElementalBurstTrigger()
+    {
+        GetAprilState().ChangeState(GetAprilState().aprilElementalBurstState);
+    }
 }

@@ -16,15 +16,15 @@ MonoBehaviour:
   ItemDesc: 
   ItemSprite: {fileID: 0}
   Rarity: 3
-  BaseHP: 1000
+  BaseHP: 1030
   BaseATK: 45
   BaseDEF: 20
   Elemental: 2
   PartyIcon: {fileID: 21300000, guid: f5af248767e68b9409f2582f10554519, type: 3}
   ElementalSkillSprite: {fileID: 0}
   ElementalBurstSprite: {fileID: 0}
-  ElementalSkillsCooldown: 10
+  ElementalSkillsCooldown: 15
   UltiSkillCooldown: 10
   EnergyCost: 1
   ElementalBurstTimer: 8
-  ElementalSkillsTimer: 8
+  ElementalSkillsTimer: 12

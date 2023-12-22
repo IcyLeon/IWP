@@ -786,12 +786,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
-  rb: {fileID: 0}
   Animator: {fileID: 41062414002266592}
   Model: {fileID: 2025528108361651698}
   HealthBarPivotParent: {fileID: 0}
   BurstCamera: {fileID: 5768029138009864271}
   SwordModel: {fileID: 2316705126754495589}
+  ElectroSlashPrefab: {fileID: 4339637571636687090, guid: c7364b6ba3e03904a9cd240f20c17bb2,
+    type: 3}
   ElementalOrbPrefab: {fileID: 8455810837854244540, guid: 038cc286a7384c54e86b6e5e09da6fdb,
     type: 3}
   BurstRangeEffectPrefab: {fileID: 6484485155401033903, guid: 6d66f1935347e634b8714e0ddf6eaafb,
@@ -2385,7 +2386,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7110222856139830792}
-  m_LocalRotation: {x: -0.080866665, y: 0.8817081, z: -0.16393003, w: -0.43494657}
+  m_LocalRotation: {x: -0.08086667, y: 0.8817081, z: -0.16393004, w: -0.4349465}
   m_LocalPosition: {x: 1.506, y: 2.131, z: 1.155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

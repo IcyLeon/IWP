@@ -13,9 +13,9 @@ public class BurstState : StateMachineBehaviour
         pc = animator.GetComponent<PlayerCharacters>();
         if (pc != null)
         {
-            pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
             if (pc.GetBurstCamera())
             {
+                pc.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
                 pc.GetBurstCamera().gameObject.SetActive(true);
             }
         }

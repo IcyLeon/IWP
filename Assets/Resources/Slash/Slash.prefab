@@ -39,6 +39,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2869293212131583210}
     m_Modifications:
+    - target: {fileID: 2349394997441826322, guid: 3407e378c048bb5438424b28c7740b48,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3071203166238714258, guid: 3407e378c048bb5438424b28c7740b48,
         type: 3}
       propertyPath: m_RootOrder
@@ -98,6 +103,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Stone slash
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307283671839139976, guid: 3407e378c048bb5438424b28c7740b48,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549210112660318882, guid: 3407e378c048bb5438424b28c7740b48,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3407e378c048bb5438424b28c7740b48, type: 3}

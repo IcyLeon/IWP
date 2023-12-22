@@ -9,12 +9,12 @@ public class AmberState : BowCharactersState
         return (Amber)GetPlayerCharacters();
     }
     public AmberElementalBurstState amberElementalBurstState;
-    public AmberDodgingState amberDodgingState { get; }
+    public AmberElementalSkillState amberElementalSkillState { get; }
     public AmberState(Characters Characters) : base(Characters)
     {
         bowIdleState = new AmberIdleState(this);
         amberElementalBurstState = new AmberElementalBurstState(this);
-        amberDodgingState = new AmberDodgingState(this);
+        amberElementalSkillState = new AmberElementalSkillState(this);
 
         ChangeState(bowIdleState);
     }

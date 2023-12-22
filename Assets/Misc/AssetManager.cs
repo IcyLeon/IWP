@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
 public interface IToggle
@@ -38,6 +36,8 @@ public class AssetManager : MonoBehaviour
     [Header("Amber")]
     public GameObject ESkillArrowsPrefab;
     public GameObject CoordinateAttackPrefab;
+    [Header("Kaqing")]
+    public GameObject ElectroSlashPrefab;
 
     [Header("UI")]
     public GameObject EnemyHealthUIPrefab;
@@ -221,11 +221,17 @@ public class AssetManager : MonoBehaviour
         dt.SpawnText(position, element, text);
     }
 
-    public GameObject SpawnSlashEffect(Transform source)
+    public void SpawnSlashEffect(Transform source)
     {
         GameObject slash = Instantiate(SlashPrefab, source);
         slash.transform.SetParent(null);
         Destroy(slash, 0.5f);
-        return slash;
+    }
+
+    public void SpawnSlashEffect(GameObject prefab, Transform source)
+    {
+        GameObject slash = Instantiate(prefab, source);
+        slash.transform.SetParent(null);
+        Destroy(slash, 0.5f);
     }
 }
