@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -5,9 +6,9 @@ using UnityEngine;
 
 public class Kaqing : SwordCharacters
 {
-    private Coroutine ElementalTimerCoroutine;
     private Vector3 ElementalHitPos;
     private GameObject targetOrb;
+    private float CurrentElementalSwordFusion;
     [SerializeField] GameObject ElectroSlashPrefab;
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
@@ -24,7 +25,9 @@ public class Kaqing : SwordCharacters
     protected override void Start()
     {
         PlayerCharacterState = new KaqingState(this);
+        CurrentElementalSwordFusion = 0;
         base.Start();
+        UltiRange = 8f;
         ElementalHitPos = Vector3.zero;
         CurrentElement = Elemental.NONE;
         GetPlayerManager().onCharacterChange += onCharacterChange;
@@ -78,21 +81,10 @@ public class Kaqing : SwordCharacters
         }
     }
 
-
-    private IEnumerator ElementalTimer(float timer)
+    public void StartElementalTimer()
     {
-        CurrentElement = GetCharacterData().GetPlayerCharacterSO().Elemental;
-        yield return new WaitForSeconds(timer);
-        CurrentElement = Elemental.NONE;
-        ElementalTimerCoroutine = null;
-    }
-
-    public void StartElementalTimer(float timer)
-    {
-        if (ElementalTimerCoroutine != null)
-            StopCoroutine(ElementalTimerCoroutine);
-
-        ElementalTimerCoroutine = StartCoroutine(ElementalTimer(timer));
+        CurrentElementalSwordFusion = GetPlayersSO().ElementalSkillsTimer;
+        GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeSkillsState(this);
     }
 
     public void SpawnHitEffect(IDamage damage)
@@ -111,23 +103,30 @@ public class Kaqing : SwordCharacters
     {
         yield return new WaitForSeconds(0.18f);
         BurstRangeEffect = Instantiate(BurstRangeEffectPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Vector3 scale = Vector3.one * GetKaqingState().KaqingData.UltiRange;
+        Vector3 scale = Vector3.one * UltiRange;
         scale.y = 1f;
         BurstRangeEffect.transform.localScale = scale;
         Destroy(BurstRangeEffect.gameObject, BurstRangeEffect.main.duration);
 
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (ISkillsEnded())
+        {
+            CurrentElement = Elemental.NONE;
+        }
+        else
+        {
+            CurrentElement = GetPlayersSO().Elemental;
+        }
+    }
     protected override bool ElementalBurstTrigger()
     {
         if (GetPlayerManager().CanAttack() && !GetPlayerManager().IsAiming())
         {
-            bool canTrigger = base.ElementalBurstTrigger();
-            if (canTrigger)
-            {
-                GetPlayerManager().GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(this);
-            }
-            return canTrigger;
+            base.ElementalBurstTrigger();
         }
 
         return false;
@@ -214,18 +213,26 @@ public class Kaqing : SwordCharacters
         GetKaqingState().KaqingData.kaqingTeleporter = Orb;
     }
 
-    public override void UpdateCoordinateAttack()
+    public override void UpdateISkills()
     {
-        GetKaqingState().UpdateOffline();
+        base.UpdateISkills();
+        CurrentElementalSwordFusion -= Time.deltaTime;
+        CurrentElementalSwordFusion = Mathf.Clamp(CurrentElementalSwordFusion, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
     }
 
-    public override bool CoordinateAttackEnded()
+    public override bool ISkillsEnded()
     {
+        if (IsDead())
+            return true;
+
+        return CurrentElementalSwordFusion <= 0;
+    }
+
+    public override bool IBurstEnded()
+    {
+        if (IsDead())
+            return true;
+
         return GetPlayerManager().GetPlayerMovementState() is not PlayerBurstState && PlayerCharacterState.GetPlayerControlState() is not KaqingBurstState;
-    }
-
-    public override bool CoordinateCanShoot()
-    {
-        return false;
     }
 }

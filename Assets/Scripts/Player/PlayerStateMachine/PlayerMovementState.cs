@@ -206,7 +206,11 @@ public class PlayerMovementState : IState
         float verticalDisCheck = 1.5f;
         Vector3 dir = rb.velocity;
         if (dir == Vector3.zero)
+        {
             dir = GetPlayerState().GetPlayerController().transform.forward;
+            if (GetPlayerState().PlayerData.Direction != Vector3.zero)
+                dir = GetPlayerState().PlayerData.Direction;
+        }
         dir.y = 0f;
         dir.Normalize();
 

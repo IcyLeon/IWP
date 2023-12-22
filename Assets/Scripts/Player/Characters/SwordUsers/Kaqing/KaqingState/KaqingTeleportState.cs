@@ -18,7 +18,7 @@ public class KaqingTeleportState : KaqingElementalSkillState
         TargetPosition = GetTargetPosition();
 
         GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = false;
-
+        GetKaqingState().GetKaqing().GetModel().SetActive(false);
         GetKaqingState().GetKaqing().LookAtElementalHitPos();
     }
 
@@ -33,7 +33,7 @@ public class KaqingTeleportState : KaqingElementalSkillState
         if ((GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position - TargetPosition).magnitude > 1f)
         {
             GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position = Vector3.MoveTowards(
-                GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position, TargetPosition, Time.deltaTime * 100f
+                GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position, TargetPosition, Time.deltaTime * 50f
                 );
         }
         else

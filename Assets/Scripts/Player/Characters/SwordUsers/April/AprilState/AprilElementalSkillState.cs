@@ -23,7 +23,7 @@ public class AprilElementalSkillState : SwordElementalSkillState
     {
         GetAprilState().GetApril().SpawnShield();
         GetAprilState().GetApril().DrainHealth();
-        GetAprilState().GetPlayerCharacters().GetPlayerManager().GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(GetAprilState().GetApril());
+        GetAprilState().GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeSkillsState(GetAprilState().GetApril());
         base.OnAnimationTransition();
     }
 

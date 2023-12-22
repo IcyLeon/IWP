@@ -10,5 +10,6 @@ public interface IPlayerCharactersState : IState
     public void ElementalSkillTrigger();
     public void ElementalSkillHold();
 
-    public void UpdateOffline();
+    public void UpdateElementalSkill();
+    public void UpdateBurst();
 }

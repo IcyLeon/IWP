@@ -29,6 +29,11 @@ public class PlayerAimState : PlayerMovementState
             return;
         }
 
+        if (CheckIfisAboutToFall())
+        {
+            return;
+        }
+
         base.FixedUpdate();
     }
 

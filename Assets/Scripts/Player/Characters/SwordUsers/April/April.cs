@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class April : SwordCharacters
@@ -8,7 +10,7 @@ public class April : SwordCharacters
     [SerializeField] GameObject ShieldExplosion;
     [SerializeField] GameObject HealPrefab;
     private List<ParticleSystem> ExplosionShield;
-    private float CoodinateTimerElapsed;
+    private float ShieldTimerElapsed;
     private float nextHitExplosion;
     private ParticleSystem Shield;
 
@@ -17,15 +19,15 @@ public class April : SwordCharacters
         ExplosionShield = new();
         PlayerCharacterState = new AprilState(this);
         base.Start();
+        UltiRange = 4f;
     }
-
 
     public void SpawnShield()
     {
-        CoodinateTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer;
+        ShieldTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer;
         if (Shield == null)
             Shield = Instantiate(ShieldPrefab).GetComponent<ParticleSystem>();
-        Destroy(Shield.gameObject, CoodinateTimerElapsed);
+        Destroy(Shield.gameObject, ShieldTimerElapsed);
     }
 
     private void DamageEnemies()
@@ -53,10 +55,10 @@ public class April : SwordCharacters
             SetHealth(GetHealth() - (GetHealth() * 0.3f));
     }
 
-    public override void UpdateCoordinateAttack()
+    public override void UpdateISkills()
     {
-        CoodinateTimerElapsed -= Time.deltaTime;
-        CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
+        ShieldTimerElapsed -= Time.deltaTime;
+        ShieldTimerElapsed = Mathf.Clamp(ShieldTimerElapsed, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
 
         for (int i = ExplosionShield.Count - 1; i > 0; i--)
         {
@@ -74,7 +76,7 @@ public class April : SwordCharacters
             }
             else
             {
-                if (CoordinateCanShoot())
+                if (Time.time - nextHitExplosion > 1.5f)
                 {
                     DamageEnemies();
                 }
@@ -89,16 +91,17 @@ public class April : SwordCharacters
         Destroy(heal.gameObject, heal.main.duration);
     }
 
-    public override bool CoordinateAttackEnded()
+    public override bool ISkillsEnded()
     {
         if (IsDead())
             return true;
 
-        return CoodinateTimerElapsed <= 0f;
+        return ShieldTimerElapsed <= 0f;
     }
 
-    public override bool CoordinateCanShoot()
+    public override void UpdateIBursts()
     {
-        return Time.time - nextHitExplosion > 1.5f;
+
     }
+
 }

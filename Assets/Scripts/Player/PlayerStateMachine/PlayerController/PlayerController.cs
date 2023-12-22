@@ -14,7 +14,6 @@ public enum LockMovement
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
     [SerializeField] CameraManager cameraManager;
     private PlayerManager playerManager;
     private LockMovement lockMovement;
@@ -39,10 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         return resizeableCollider;
     }
-    public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
-    {
-        return PlayerCoordinateAttackManager;
-    }
+
 
     public void SetLockMovemnt(LockMovement lockMovement)
     {

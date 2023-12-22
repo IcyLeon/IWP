@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Amber : BowCharacters
+public class Amber : BowCharacters, ICoordinateAttack
 {
     [SerializeField] Transform CoordinateAttackPivot;
     private float CoodinateTimerElapsed;
@@ -87,7 +87,7 @@ public class Amber : BowCharacters
     }
 
 
-    public override void UpdateCoordinateAttack()
+    public void UpdateCoordinateAttack()
     {
         CoodinateTimerElapsed -= Time.deltaTime;
         CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer);
@@ -105,7 +105,7 @@ public class Amber : BowCharacters
         }
     }
 
-    public override bool CoordinateAttackEnded()
+    public bool CoordinateAttackEnded()
     {
         if (IsDead())
             return true;
@@ -113,7 +113,7 @@ public class Amber : BowCharacters
         return CoodinateTimerElapsed <= 0f;
     }
 
-    public override bool CoordinateCanShoot()
+    public bool CoordinateCanShoot()
     {
         if (Time.time > nextFire)
         {

@@ -22,7 +22,7 @@ public class AmberElementalBurstState : BowElementalBurstState
     public override void OnAnimationTransition()
     {
         GetAmberState().GetAmber().SpawnAura();
-        GetAmberState().GetPlayerCharacters().GetPlayerManager().GetPlayerController().GetPlayerCoordinateAttackManager().Subscribe(GetAmberState().GetAmber());
+        GetAmberState().GetPlayerCharacters().GetPlayerManager().GetPlayerCoordinateAttackManager().Subscribe(GetAmberState().GetAmber());
         base.OnAnimationTransition();
     }
 

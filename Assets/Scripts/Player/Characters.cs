@@ -20,6 +20,15 @@ public interface ICoordinateAttack
 
 }
 
+public interface ISkillsBurstManager
+{
+    void UpdateISkills();
+    void UpdateIBursts();
+    bool ISkillsEnded();
+    bool IBurstEnded();
+
+}
+
 public class Characters : MonoBehaviour, IDamage
 {
     protected float BaseMaxHealth;

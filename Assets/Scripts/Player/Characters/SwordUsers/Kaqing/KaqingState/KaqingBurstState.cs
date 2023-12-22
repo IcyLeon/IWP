@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class KaqingBurstState : SwordElementalBurstState
 
     public KaqingBurstState(PlayerCharacterState pcs) : base(pcs)
     {
-        TimeInBetweenHits = 2.5f / (TotalHits * 2f);
+        TimeInBetweenHits = 3f / (TotalHits * 2f);
     }
 
     public override void Enter()
@@ -36,6 +37,8 @@ public class KaqingBurstState : SwordElementalBurstState
         CurrentHits = 0;
         HitElapsed = Time.time + TimeInBetweenHits;
         LastPosition = GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerOffsetPosition().position;
+
+        GetKaqingState().GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(GetKaqingState().GetKaqing());
     }
 
     public override void Exit()
@@ -50,14 +53,14 @@ public class KaqingBurstState : SwordElementalBurstState
         base.Update();
     }
 
-    public override void UpdateOffline()
+    public override void UpdateBurst()
     {
         UpdateBurstState();
     }
 
     private void BurstAreaDamage(Vector3 pos)
     {
-        Collider[] colliders = Physics.OverlapSphere(pos, GetKaqingState().KaqingData.UltiRange, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(pos, GetKaqingState().GetKaqing().GetUltiRange(), LayerMask.GetMask("Entity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             Collider collider = colliders[i];

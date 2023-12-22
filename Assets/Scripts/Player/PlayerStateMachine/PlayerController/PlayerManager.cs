@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
+    [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
     [SerializeField] Transform CameraLook;
     private Rigidbody rb;
     private List<PlayerCharacters> PlayerCharactersList = new();
@@ -17,7 +19,16 @@ public class PlayerManager : MonoBehaviour
     private SceneManager SceneManager;
     public delegate void OnCharacterChange(CharacterData characterData);
     public OnCharacterChange onCharacterChange;
-    private Animator CharacterAnimatorReference;
+
+    public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
+    {
+        return PlayerCoordinateAttackManager;
+    }
+
+    public PlayerElementalSkillandBurstManager GetPlayerElementalSkillandBurstManager()
+    {
+        return PlayerElementalSkillandBurstManager;
+    }
 
     private void Awake()
     {

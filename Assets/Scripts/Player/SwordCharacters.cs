@@ -47,7 +47,7 @@ public class SwordCharacters : PlayerCharacters
     protected override void Start()
     {
         base.Start();
-        Range = 4f;
+        Range = 5f;
         MaxAttackPhase = 4;
         ResetBasicAttacks();
     }

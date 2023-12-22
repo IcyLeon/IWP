@@ -101,8 +101,11 @@ public class PlayerControlState : IPlayerCharactersState
     {
     }
 
-    public virtual void UpdateOffline()
+    public virtual void UpdateElementalSkill()
     {
+    }
 
+    public virtual void UpdateBurst()
+    {
     }
 }

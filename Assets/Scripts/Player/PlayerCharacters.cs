@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class PlayerCharacters : Characters, ICoordinateAttack
+public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 {
     protected float AimSpeed = 20f;
     private CharacterData characterData;
@@ -14,7 +14,7 @@ public abstract class PlayerCharacters : Characters, ICoordinateAttack
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
     protected Characters NearestTarget;
-    protected float Range = 1f;
+    protected float Range = 1f, UltiRange = 1f;
     protected PlayerCharacterState PlayerCharacterState;
 
     public void SetBurstActive(bool value)
@@ -26,6 +26,10 @@ public abstract class PlayerCharacters : Characters, ICoordinateAttack
         return isBurstActive;
     }
 
+    public float GetUltiRange()
+    {
+        return UltiRange;
+    }
     public PlayerCharacterState GetPlayerCharacterState()
     {
         return PlayerCharacterState;
@@ -449,17 +453,23 @@ public abstract class PlayerCharacters : Characters, ICoordinateAttack
             Animator.SetBool("NextAtk", true);
     }
 
-    public virtual void UpdateCoordinateAttack()
+    public virtual void UpdateISkills()
     {
+        GetPlayerCharacterState().UpdateElementalSkill();
     }
 
-    public virtual bool CoordinateAttackEnded()
+    public virtual bool ISkillsEnded()
     {
         return true;
     }
 
-    public virtual bool CoordinateCanShoot()
+    public virtual void UpdateIBursts()
     {
-        return false;
+        GetPlayerCharacterState().UpdateBurst();
+    }
+
+    public virtual bool IBurstEnded()
+    {
+        return true;
     }
 }

@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 7182423578951183842}
   - component: {fileID: 4563240697774977713}
   - component: {fileID: 6677480311715409904}
+  - component: {fileID: 6785168847716851814}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -98,7 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64be746642b6dcd4799935d023c5d34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
   cameraManager: {fileID: 5113795436203482261}
 --- !u!114 &5889022338644147868
 MonoBehaviour:
@@ -224,4 +224,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5a53470f0e1ed4cb6d4ebdd40432dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
+  PlayerElementalSkillandBurstManager: {fileID: 6785168847716851814}
   CameraLook: {fileID: 2798339205668980939}
+--- !u!114 &6785168847716851814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8466442129360495668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad60337606b6301479e4c5e3c21c1336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

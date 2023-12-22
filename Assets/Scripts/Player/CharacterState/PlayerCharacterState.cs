@@ -18,10 +18,16 @@ public class PlayerCharacterState : CharacterState
         return (IPlayerCharactersState)currentState;
     }
 
-    public void UpdateOffline()
+    public void UpdateBurst()
     {
         if (GetIPlayerCharactersState() != null)
-            GetIPlayerCharactersState().UpdateOffline();
+            GetIPlayerCharactersState().UpdateBurst();
+    }
+
+    public void UpdateElementalSkill()
+    {
+        if (GetIPlayerCharactersState() != null)
+            GetIPlayerCharactersState().UpdateElementalSkill();
     }
 
     public void ElementalSkillTrigger()
