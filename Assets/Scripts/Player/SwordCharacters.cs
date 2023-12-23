@@ -115,7 +115,7 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (!GetPlayerManager().CanAttack() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
+        if (!GetPlayerManager().CanPerformAction() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
             return;
 
         if (!GetModel().activeSelf)

@@ -41,7 +41,7 @@ public class BowIdleState : BowControlState
 
     private void UpdateBowAimThresHold()
     {
-        if (!GetBowCharactersState().GetBowCharacters().GetPlayerManager().CanAttack() || GetBowCharactersState().GetBowCharacters().GetBurstActive())
+        if (!GetBowCharactersState().GetBowCharacters().GetPlayerManager().CanPerformAction() || GetBowCharactersState().GetBowCharacters().GetBurstActive())
             return;
 
         if (Input.GetMouseButton(1))

@@ -59,9 +59,13 @@ public class PlayerGroundState : PlayerMovementState
             if (GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
                 return;
 
+            OnAimInput();
+
+            if (IsAiming())
+                return;
+
             OnJumpInput();
             OnDashInput();
-            OnAimInput();
 
             if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState
                 && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)

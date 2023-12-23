@@ -336,7 +336,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual bool ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
             return false;
 
         GetPlayerCharacterState().ElementalSkillTrigger();
@@ -347,7 +347,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual bool ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanAttack())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
             return false;
 
         GetPlayerCharacterState().ElementalSkillHold();
@@ -356,7 +356,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual bool ElementalBurstTrigger()
     {
-        if (characterData == null || !GetPlayerManager().CanAttack())
+        if (characterData == null || !GetPlayerManager().CanPerformAction())
             return false;
 
         if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
@@ -381,11 +381,14 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual void ChargeHold()
     {
+        if (!GetPlayerManager().CanPerformAction())
+            return;
+
         GetPlayerCharacterState().ChargeHold();
     }
     protected virtual void ChargeTrigger()
     {
-        if (!GetPlayerManager().CanAttack())
+        if (!GetPlayerManager().CanPerformAction())
             return;
 
         GetPlayerCharacterState().ChargeTrigger();

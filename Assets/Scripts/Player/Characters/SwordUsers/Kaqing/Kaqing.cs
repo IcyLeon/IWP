@@ -124,7 +124,7 @@ public class Kaqing : SwordCharacters
     }
     protected override bool ElementalBurstTrigger()
     {
-        if (GetPlayerManager().CanAttack() && !GetPlayerManager().IsAiming())
+        if (GetPlayerManager().CanPerformAction() && !GetPlayerManager().IsAiming())
         {
             base.ElementalBurstTrigger();
         }

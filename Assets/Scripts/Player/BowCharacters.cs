@@ -38,14 +38,6 @@ public class BowCharacters : PlayerCharacters
         return (BowCharactersState)PlayerCharacterState;
     }
 
-    protected override void ChargeHold()
-    {
-        if (!GetPlayerManager().CanAttack() || GetBurstActive())
-            return;
-
-        base.ChargeHold();
-    }
-
     private void FireArrows()
     {
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
@@ -78,6 +70,15 @@ public class BowCharacters : PlayerCharacters
             LastClickedTime = Time.time;
         }
     }
+
+    protected override void ChargeTrigger()
+    {
+        if (!GetPlayerManager().CanPerformAction() && GetPlayerManager().GetPlayerMovementState() is not PlayerAimState)
+            return;
+
+        GetPlayerCharacterState().ChargeTrigger();
+    }
+
 
     public void SpawnCrossHair()
     {
@@ -130,24 +131,6 @@ public class BowCharacters : PlayerCharacters
         }
         forward.Normalize();
         Direction = forward;
-    }
-
-    protected override void ChargeTrigger()
-    {
-        if (!GetPlayerManager().CanAttack() || GetBurstActive())
-            return;
-
-        base.ChargeTrigger();
-    }
-
-    public void BasicAttack()
-    {
-        if (Time.time - LastClickedTime > AttackRate && !GetPlayerManager().IsSkillCasting())
-        {
-            SetLookAtTarget();
-            Animator.SetBool("Attack1", true);
-            LastClickedTime = Time.time;
-        }
     }
 
     public void DestroyChargeUpEmitter()

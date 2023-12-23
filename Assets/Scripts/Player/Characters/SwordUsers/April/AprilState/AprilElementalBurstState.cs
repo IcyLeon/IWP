@@ -35,7 +35,8 @@ public class AprilElementalBurstState : SwordElementalBurstState
             if (dmg != null)
             {
                 MarkerEnemyData m = new MarkerEnemyData(GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData(), dmg);
-                GetAprilState().aprilData.MarkerEnemyDataList.Add(m);
+
+                GetAprilState().aprilData.MarkerEnemyDataList.Add(m, dmg);
             }
         }
     }

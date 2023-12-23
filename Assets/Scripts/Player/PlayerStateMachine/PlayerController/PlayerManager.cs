@@ -186,7 +186,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool CanPerformAction()
     {
-        return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAimState) &&
+        return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAttackState) &&
             !IsDashing() && !IsSkillCasting() &&
             !isBurstState();
     }
@@ -208,10 +208,7 @@ public class PlayerManager : MonoBehaviour
 
         return GetCurrentCharacter().GetBurstActive();
     }
-    public bool CanAttack()
-    {
-        return (CanPerformAction() || GetPlayerMovementState() is PlayerAttackState) && !IsSkillCasting();
-    }
+
     public bool isDeadState()
     {
         return GetPlayerMovementState() is PlayerDeadState;

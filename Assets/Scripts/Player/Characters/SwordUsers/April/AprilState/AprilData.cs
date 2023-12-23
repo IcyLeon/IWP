@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class AprilData
 {
-    public List<MarkerEnemyData> MarkerEnemyDataList;
+    public Dictionary<MarkerEnemyData, IDamage> MarkerEnemyDataList;
 }

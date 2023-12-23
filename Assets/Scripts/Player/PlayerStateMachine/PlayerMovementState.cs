@@ -430,7 +430,7 @@ public class PlayerMovementState : IState
         if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash())
             return;
 
-        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && GetPlayerState().GetPlayerController().GetPlayerManager().CanAttack())
+        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && GetPlayerState().GetPlayerController().GetPlayerManager().CanPerformAction())
             GetPlayerState().ChangeState(GetPlayerState().playerDashState);
     }
 
