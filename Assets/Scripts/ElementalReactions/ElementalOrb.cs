@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class ElementalOrb : MonoBehaviour
 {
     private Elemental elemental;
     private PlayerManager pm;
-    private float coneAngle = 30f;
+    private float coneAngle = 60f;
     bool canTravel = false;
     [SerializeField] Rigidbody rb;
     private float maxForce = 15f;
@@ -15,7 +16,7 @@ public class ElementalOrb : MonoBehaviour
 
     void Start()
     {
-        rb.velocity = maxForce * 0.5f * RandomVectorInCone();
+        rb.velocity = maxForce * 0.65f * RandomVectorInCone();
     }
 
     public void SetSource(PlayerManager PM)
@@ -29,22 +30,13 @@ public class ElementalOrb : MonoBehaviour
         return randomDirection.normalized;
     }
 
-    void MoveTowardsPlayer()
+
+    private void Update()
     {
-        Vector3 collider = pm.GetCurrentCharacter().GetComponent<CapsuleCollider>().bounds.center;
-        Vector3 direction = (collider - rb.position).normalized;
-        Quaternion rotation = Quaternion.LookRotation(direction);
+        Vector3 direction = (pm.GetPlayerOffsetPosition().position - rb.position).normalized;
         currentForce = Mathf.Lerp(currentForce, maxForce, Time.deltaTime / accelerationTime);
-        rb.MoveRotation(rotation);
-        rb.MovePosition(rb.position + direction * currentForce * Time.deltaTime);
+        rb.position = Vector3.MoveTowards(rb.position, pm.GetPlayerOffsetPosition().position, currentForce * Time.deltaTime);
     }
-
-
-    private void FixedUpdate()
-    {
-        MoveTowardsPlayer();
-    }
-
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -55,10 +47,13 @@ public class ElementalOrb : MonoBehaviour
             {
                 CharacterData characterData = pm.GetCharactersOwnedList()[i];
 
-                if (characterData.GetPlayerCharacterSO().Elemental == elemental)
-                    characterData.AddorRemoveCurrentEnergyBurstCost(2.5f);
-                else
-                    characterData.AddorRemoveCurrentEnergyBurstCost(1f);
+                if (!characterData.IsDead())
+                {
+                    if (characterData.GetPlayerCharacterSO().Elemental == elemental)
+                        characterData.AddorRemoveCurrentEnergyBurstCost(2.5f);
+                    else
+                        characterData.AddorRemoveCurrentEnergyBurstCost(1f);
+                }
             }
             Destroy(gameObject);
         }

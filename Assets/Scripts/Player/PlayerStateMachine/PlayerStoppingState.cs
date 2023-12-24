@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStoppingState : PlayerGroundState
+public class PlayerStoppingState : PlayerMovingState
 {
     public PlayerStoppingState(PlayerState playerState) : base(playerState)
     {
@@ -30,6 +30,7 @@ public class PlayerStoppingState : PlayerGroundState
     public override void Update()
     {
         base.Update();
+
         if (CheckIfisAboutToFall())
             ResetVelocity();
     }

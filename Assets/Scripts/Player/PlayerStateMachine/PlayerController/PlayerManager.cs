@@ -183,7 +183,6 @@ public class PlayerManager : MonoBehaviour
             playerController.OnNumsKeyInput -= SwapCharactersControls;
 
         SceneManager.OnSceneChanged -= OnSceneChanged;
-        onCharacterChange -= CharacterChange;
     }
 
 

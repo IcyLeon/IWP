@@ -12,8 +12,8 @@ public class PlayerDashState : PlayerGroundState
 
     public override void Enter()
     {
-        ResetAllBasicAtk();
         base.Enter();
+        ResetAllBasicAtk();
         StartAnimation("isDashing");
         GetPlayerState().PlayerData.CurrentJumpForceXZ = 5f;
         DashDirection = GetPlayerState().GetPlayerController().transform.forward;

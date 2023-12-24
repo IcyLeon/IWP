@@ -25,6 +25,9 @@ public class BowIdleState : BowControlState
 
     public override void ChargeHold()
     {
+        if (GetBowCharactersState().GetBowCharacters().GetPlayerManager().GetPlayerMovementState() is PlayerDashState)
+            return;
+
         if (threasHold_Charged > 0.25f)
         {
             GetBowCharactersState().ChangeState(GetBowCharactersState().bowAimState);
@@ -35,6 +38,9 @@ public class BowIdleState : BowControlState
 
     public override void ChargeTrigger()
     {
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
+            return;
+
         GetBowCharactersState().GetBowCharacters().LaunchBasicAttack();
         threasHold_Charged = 0;
     }
@@ -42,6 +48,9 @@ public class BowIdleState : BowControlState
     private void UpdateBowAimThresHold()
     {
         if (!GetBowCharactersState().GetBowCharacters().GetPlayerManager().CanPerformAction() || GetBowCharactersState().GetBowCharacters().GetBurstActive())
+            return;
+
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
             return;
 
         if (Input.GetMouseButton(1))

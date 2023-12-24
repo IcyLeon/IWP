@@ -252,7 +252,7 @@ public class PlayerMovementState : IState
 
 
         if (playerCharacter)
-            if (playerCharacter.GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState)
+            if (playerCharacter.GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || this is PlayerAttackState)
                 return;
 
         if (this is not PlayerAimState)

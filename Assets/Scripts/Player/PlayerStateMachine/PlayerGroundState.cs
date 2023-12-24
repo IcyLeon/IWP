@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class PlayerGroundState : PlayerMovementState
@@ -67,21 +68,11 @@ public class PlayerGroundState : PlayerMovementState
             OnJumpInput();
             OnDashInput();
 
-            if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState
-                && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)
+            if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState
+                && GetPlayerState().GetPlayerMovementState() is not PlayerDashState)
             {
                 OnFall();
                 return;
-            }
-
-            PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
-            if (playerCharacter != null)
-            {
-                if (playerCharacter.GetisAttacking())
-                {
-                    GetPlayerState().ChangeState(GetPlayerState().playerAttackState);
-                    return;
-                }
             }
         }
     }

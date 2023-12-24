@@ -54,6 +54,11 @@ public class Amber : BowCharacters, ICoordinateAttack
         float angle = 45f;
         float UpOffset = 0.5f;
         Vector3 forward = GetPlayerManager().transform.forward;
+        if (NearestTarget != null)
+        {
+            forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            forward.Normalize();
+        }
 
         Vector3 dir = Quaternion.Euler(0, ((-angle / 2) * (SkillsArrows - 1)) + (i * angle), 0) * forward;
         dir.y = 0;

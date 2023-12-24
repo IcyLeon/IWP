@@ -10,6 +10,9 @@ public class SwordIdleState : SwordControlState
 
     public override void ChargeTrigger()
     {
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
+            return;
+
         GetSwordCharactersState().GetSwordCharacters().LaunchBasicAttack();
     }
 
