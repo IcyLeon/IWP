@@ -20,6 +20,14 @@ public class PlayerManager : MonoBehaviour
     public delegate void OnCharacterChange(CharacterData characterData);
     public OnCharacterChange onCharacterChange;
 
+    public delegate void OnEntityHit(Elements e, IDamage IDamage);
+    public static OnEntityHit onEntityHitSendInfo;
+
+    public static void CallEntityHitSendInfo(Elements e, IDamage IDamage)
+    {
+        onEntityHitSendInfo?.Invoke(e, IDamage);
+    }
+
     public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
     {
         return PlayerCoordinateAttackManager;
@@ -187,7 +195,7 @@ public class PlayerManager : MonoBehaviour
     public bool CanPerformAction()
     {
         return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAttackState) &&
-            !IsDashing() && !IsSkillCasting() &&
+            !IsSkillCasting() &&
             !isBurstState();
     }
 

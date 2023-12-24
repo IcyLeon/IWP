@@ -73,6 +73,16 @@ public class PlayerGroundState : PlayerMovementState
                 OnFall();
                 return;
             }
+
+            PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+            if (playerCharacter != null)
+            {
+                if (playerCharacter.GetisAttacking())
+                {
+                    GetPlayerState().ChangeState(GetPlayerState().playerAttackState);
+                    return;
+                }
+            }
         }
     }
     

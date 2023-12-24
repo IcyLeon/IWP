@@ -44,8 +44,9 @@ public class Spitter : BaseEnemy
         UpdateState();
     }
 
-    protected override void OnHit(Elements e)
+    protected override void OnHit(Elements e, IDamage dmg)
     {
+        base.OnHit(e, dmg);
         TriggerStaggering(2);
     }
 

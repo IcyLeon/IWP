@@ -6,12 +6,19 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
 {
     private List<PlayerCharacters> PlayerElementalSkillStateList;
     private List<PlayerCharacters> PlayerElementalBurstStateList;
+    private List<PlayerCharacters> PlayerCharacterList;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerElementalSkillStateList = new();
         PlayerElementalBurstStateList = new();
+        PlayerCharacterList = new();
+    }
+
+    public void Subscribe(PlayerCharacters p)
+    {
+        PlayerCharacterList.Add(p);
     }
 
     public void SubscribeSkillsState(PlayerCharacters c)
@@ -68,6 +75,15 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
     {
         UpdateESkills();
         UpdateBurstSkills();
+        UpdateCharactersEverytime();
+    }
+
+    void UpdateCharactersEverytime()
+    {
+        for (int i = 0; i < PlayerCharacterList.Count; i++)
+        {
+            PlayerCharacterList[i].UpdateEveryTime();
+        }
     }
 
     void UpdateESkills()

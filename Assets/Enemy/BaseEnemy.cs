@@ -30,7 +30,6 @@ public class BaseEnemy : Characters
         DetectionRange = 1f;
         Level = 1;
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
-
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
     }
@@ -56,6 +55,11 @@ public class BaseEnemy : Characters
             }
         }
         return goCopy.ToArray();
+    }
+
+    protected override void OnHit(Elements e, IDamage d)
+    {
+        PlayerManager.CallEntityHitSendInfo(e, d);
     }
 
     private IDamage GetNearestPlayerObject()
@@ -160,13 +164,13 @@ public class BaseEnemy : Characters
         }
         if (elementsIndicator)
         {
-            elementsIndicator.transform.position = HealthBarPivotParent.position + Vector3.up * 2f;
+            elementsIndicator.transform.position = HealthBarPivotParent.position + Vector3.up * 1.8f;
         }
     }
 
-    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt)
+    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt, bool callHitInfo = true)
     {
-        Elements e = base.TakeDamage(pos, elements, amt);
+        Elements e = base.TakeDamage(pos, elements, amt, callHitInfo);
 
         if (elementsIndicator == null)
         {

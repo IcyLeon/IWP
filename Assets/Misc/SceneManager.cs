@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum SceneEnum
 {
@@ -13,8 +15,10 @@ public enum SceneEnum
 public class SceneManager : MonoBehaviour
 {
     private static SceneManager instance;
+    [SerializeField] Image ProgressBar;
+    [SerializeField] GameObject LoadingCanvas;
     public event Action OnSceneChanged;
-    private bool isChangingScene;
+    private float TargetProgress = 0f;
 
     private void Awake()
     {
@@ -27,7 +31,6 @@ public class SceneManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        isChangingScene = false;
     }
 
     public static SceneManager GetInstance()
@@ -37,21 +40,57 @@ public class SceneManager : MonoBehaviour
 
     public void ChangeScene(SceneEnum scene)
     {
-        if (!isChangingScene)
-            StartCoroutine(LoadSceneAsync(GetSceneName(scene)));
+        //StartCoroutine(LoadSceneAsync(GetSceneName(scene)));
+        LoadSceneAsync(GetSceneName(scene));
     }
 
-    private IEnumerator LoadSceneAsync(string sceneName)
+    private async void LoadSceneAsync(string sceneName)
     {
         AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-        isChangingScene = true;
-        while (!asyncOperation.isDone)
+        asyncOperation.allowSceneActivation = false;
+        LoadingCanvas.SetActive(true);
+        ProgressBar.fillAmount = TargetProgress = 0f;
+
+        do
         {
-            yield return null;
-        }
-        isChangingScene = false;
+            await Task.Delay(500);
+            TargetProgress = asyncOperation.progress;
+        } while (asyncOperation.progress < 0.9f);
+
+        await Task.Delay(2500);
+        TargetProgress = asyncOperation.progress;
+        asyncOperation.allowSceneActivation = true;
+        await Task.Delay(1000);
+
+        LoadingCanvas.SetActive(false);
+
         OnSceneChanged?.Invoke();
     }
+
+    private void Update()
+    {
+        ProgressBar.fillAmount = Mathf.MoveTowards(ProgressBar.fillAmount, TargetProgress, Time.deltaTime * 2f);
+    }
+
+    //private IEnumerator LoadSceneAsync(string sceneName)
+    //{
+    //    AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+    //    //asyncOperation.allowSceneActivation = false;
+    //    LoadingCanvas.SetActive(true);
+    //    ProgressBar.fillAmount = 0f;
+
+    //    while (!asyncOperation.isDone)
+    //    {
+    //        ProgressBar.fillAmount = asyncOperation.progress;
+    //        yield return null;
+    //    }
+
+    //    ProgressBar.fillAmount = asyncOperation.progress;
+    //    //asyncOperation.allowSceneActivation = true;
+    //    LoadingCanvas.SetActive(false);
+
+    //    OnSceneChanged?.Invoke();
+    //}
 
     private string GetSceneName(SceneEnum SceneEnum)
     {

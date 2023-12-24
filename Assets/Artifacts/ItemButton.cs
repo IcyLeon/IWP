@@ -43,7 +43,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     [SerializeField] Image NewImage;
     [SerializeField] LockItem lockItem;
     [SerializeField] CanvasGroup canvasGroup;
-    [SerializeField] ParticleSystem Burst;
+    //[SerializeField] ParticleSystem Burst;
 
 
     private RectTransform ItemButton_Rect;
@@ -276,8 +276,8 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
                 DisableNewImage();
             }
         }
-        Burst.gameObject.SetActive(true);
-        Burst.Emit(1);
+        //Burst.gameObject.SetActive(true);
+        //Burst.Emit(1);
         onButtonClick?.Invoke(this);
         transform.localScale = Vector3.one;
     }

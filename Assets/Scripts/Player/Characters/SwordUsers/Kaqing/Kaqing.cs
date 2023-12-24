@@ -110,18 +110,6 @@ public class Kaqing : SwordCharacters
 
     }
 
-    protected override void Update()
-    {
-        base.Update();
-        if (ISkillsEnded())
-        {
-            CurrentElement = Elemental.NONE;
-        }
-        else
-        {
-            CurrentElement = GetPlayersSO().Elemental;
-        }
-    }
     protected override bool ElementalBurstTrigger()
     {
         if (GetPlayerManager().CanPerformAction() && !GetPlayerManager().IsAiming())
@@ -227,7 +215,17 @@ public class Kaqing : SwordCharacters
 
         return CurrentElementalSwordFusion <= 0;
     }
-
+    public override void UpdateEveryTime()
+    {
+        if (ISkillsEnded() && GetKaqingState().GetPlayerControlState() is not KaqingESlash && GetKaqingState().GetPlayerControlState() is not KaqingTeleportState)
+        {
+            CurrentElement = Elemental.NONE;
+        }
+        else
+        {
+            CurrentElement = GetPlayersSO().Elemental;
+        }
+    }
     public override bool IBurstEnded()
     {
         if (IsDead())

@@ -6,6 +6,7 @@ public class PlayerCharacterState : CharacterState
 {
     public PlayerCharacterState(Characters Characters) : base(Characters)
     {
+        GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().Subscribe(GetPlayerCharacters());
     }
 
     public PlayerCharacters GetPlayerCharacters()
@@ -23,7 +24,6 @@ public class PlayerCharacterState : CharacterState
         if (GetIPlayerCharactersState() != null)
             GetIPlayerCharactersState().UpdateBurst();
     }
-
     public void UpdateElementalSkill()
     {
         if (GetIPlayerCharactersState() != null)

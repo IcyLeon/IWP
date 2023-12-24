@@ -290,7 +290,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.5
+      scalar: 2.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5198,7 +5198,6 @@ MonoBehaviour:
   EnhancementContent: {fileID: 3106419891093178151}
   ButtonMask: {fileID: 6750902943873316563}
   EnhancementItemToSell: 6
-  upgradeCanvas: {fileID: 1162535181412237601}
   selectedItemImage: {fileID: 2738979129186405944}
   LevelDisplay: {fileID: 8828226998032897823}
   ExpAmountDisplay: {fileID: 8351447116123733452}
@@ -5997,7 +5996,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.5
+      scalar: 2.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -13230,7 +13229,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2535215079273704023
 GameObject:
@@ -13534,7 +13533,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2658992105557909388
 GameObject:
@@ -18949,7 +18948,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.5
+      scalar: 2.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -23766,7 +23765,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.8
+      scalar: 2.55
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -29580,7 +29579,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.15
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -36313,7 +36312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3a3aa75da6c54459209fa487c3c68c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradeCanvas: {fileID: 1162535181412237601}
   ItemShowcaseCanvas: {fileID: 4646048842711511956}
 --- !u!1 &4646048841370419785
 GameObject:
@@ -36924,7 +36922,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4646048841768968356}
   m_HandleRect: {fileID: 4646048841768968359}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -38470,6 +38468,7 @@ GameObject:
   - component: {fileID: 4646048842291109570}
   - component: {fileID: 4646048842291109568}
   - component: {fileID: 4646048842291109571}
+  - component: {fileID: 4112983828412570257}
   m_Layer: 5
   m_Name: selectedItem
   m_TagString: Untagged
@@ -38535,6 +38534,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!223 &4112983828412570257
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646048842291109581}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 3
+  m_TargetDisplay: 0
 --- !u!1 &4646048842331262465
 GameObject:
   m_ObjectHideFlags: 0

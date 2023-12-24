@@ -317,6 +317,10 @@ MonoBehaviour:
   ShieldExplosion: {fileID: 2804463155698594004, guid: ff82cef3a9843ad4f868ee4325b9c0e7,
     type: 3}
   HealPrefab: {fileID: 1282364566017586, guid: 38e2ad2405a73b94ca4acff97076788a, type: 3}
+  EnemyMarkerPrefab: {fileID: 5843656760640273766, guid: 52093c3e13ef7dd4491fbc6052ad9d39,
+    type: 3}
+  ConnectionPrefab: {fileID: 5741767689826894581, guid: 8b0856e85c8bc6f44a2889bcd05ce833,
+    type: 3}
 --- !u!136 &8339764944362983642
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -826,7 +830,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3115587661502974819}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3, z: 0}
+  m_LocalPosition: {x: 0, y: 1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1372,8 +1376,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4795640412758466519}
-  m_LocalRotation: {x: -0.0011926653, y: 0.99833894, z: -0.053049315, w: -0.022444857}
-  m_LocalPosition: {x: 0.035, y: 1.383, z: 0.778}
+  m_LocalRotation: {x: -0.0011926657, y: 0.99833894, z: -0.05304931, w: -0.022444867}
+  m_LocalPosition: {x: 0.035, y: 1.2830001, z: 0.778}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1402,7 +1406,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 2282616178519970809}
   m_Follow: {fileID: 2282616178519970809}
   m_Lens:
-    FieldOfView: 50
+    FieldOfView: 55
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000

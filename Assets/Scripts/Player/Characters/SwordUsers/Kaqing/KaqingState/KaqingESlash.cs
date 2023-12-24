@@ -20,6 +20,7 @@ public class KaqingESlash : KaqingElementalSkillState
 
     public override void OnAnimationTransition()
     {
+        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState().ResetVelocity();
         GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
         GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = true;
     }

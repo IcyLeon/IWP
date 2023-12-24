@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +9,7 @@ public class ArtifactTabGroup : MonoBehaviour
 {
     List<ArtifactTabButton> tabs = new List<ArtifactTabButton>();
     public event EventHandler onTabChanged;
+    private Coroutine MovingScrollbar;
 
     [Serializable]
     public struct TabMenu
@@ -89,7 +89,12 @@ public class ArtifactTabGroup : MonoBehaviour
         selectedtab = tb;
         selectedtab.SelectedTabIcons();
         OpenPanel();
-        StartCoroutine(MoveScrollBar());
+
+        if (MovingScrollbar != null)
+        {
+            StopCoroutine(MovingScrollbar);
+        }
+        MovingScrollbar = StartCoroutine(MoveScrollBar());
         onTabChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -103,6 +108,7 @@ public class ArtifactTabGroup : MonoBehaviour
 
     IEnumerator MoveScrollBar()
     {
+        //float targetValue = ((tabs.Count - (float)tabs.IndexOf(selectedtab) - 1) / (tabs.Count - 1));
         float targetValue = ((float)tabs.IndexOf(selectedtab) / (tabs.Count - 1));
         float elapsedTime = 0f;
         float animationDuration = 0.15f;

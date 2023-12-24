@@ -8,7 +8,7 @@ using UnityEngine;
 public interface IDamage {
     Vector3 GetPointOfContact();
     bool IsDead();
-    Elements TakeDamage(Vector3 position, Elements elements, float damageAmt);
+    Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, bool callHitInfo = true);
 }
 
 public interface ICoordinateAttack
@@ -46,8 +46,6 @@ public class Characters : MonoBehaviour, IDamage
 
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
     public onElementReactionHit OnElementReactionHit;
-    public delegate void onHit(Elements e);
-    public onHit HitInfo;
 
     protected Coroutine DieCoroutine;
     protected bool isAttacking;
@@ -55,7 +53,6 @@ public class Characters : MonoBehaviour, IDamage
     {
         BaseMaxHealth = CharactersSO.BaseHP;
         isAttacking = false;
-        HitInfo += OnHit;
     }
     public void ResetAttack()
     {
@@ -151,7 +148,7 @@ public class Characters : MonoBehaviour, IDamage
         return false;
     }
 
-    public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt)
+    public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, bool callHitInfo = true)
     {
         if (IsDead())
             return null;
@@ -184,21 +181,17 @@ public class Characters : MonoBehaviour, IDamage
             OnElementReactionHit?.Invoke(ElementalReactionsTrigger);
         }
         SetHealth(GetHealth() - amt);
-        HitInfo?.Invoke(e);
+        if (callHitInfo)
+            OnHit(e, this);
         UpdateDie();
         AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, amt.ToString());
 
         return e;
     }
 
-    protected virtual void OnHit(Elements e)
+    protected virtual void OnHit(Elements e, IDamage d)
     {
-        if (e.GetElements() == Elemental.NONE)
-            return;
 
-        //ElementalParticleEffects EPE = Instantiate(AssetManager.GetInstance().ElectricEffect, transform).GetComponent<ElementalParticleEffects>();
-        //EPE.SetDamagableObj(this);
-        //EPE.SetElemental(e.GetElements());
     }
 
 
@@ -234,7 +227,6 @@ public class Characters : MonoBehaviour, IDamage
 
     protected virtual void OnDestroy()
     {
-        HitInfo -= OnHit;
     }
 
     public virtual Vector3 GetPointOfContact()

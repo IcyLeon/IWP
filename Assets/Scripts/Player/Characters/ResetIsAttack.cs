@@ -9,7 +9,13 @@ public class ResetIsAttack : StateMachineBehaviour
     {
         PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
         if (playerCharacters != null)
+        {
+            if (Characters.ContainsParam(animator, "isDashing"))
+            {
+                animator.SetBool("isDashing", false); // fix the issue from dash > attack immediately
+            }
             playerCharacters.SetisAttacking(true);
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

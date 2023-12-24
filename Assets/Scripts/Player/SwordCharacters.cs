@@ -52,11 +52,6 @@ public class SwordCharacters : PlayerCharacters
         ResetBasicAttacks();
     }
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-    }
 
     public void ResetBasicAttacks()
     {
@@ -115,25 +110,13 @@ public class SwordCharacters : PlayerCharacters
 
     protected override void ChargeTrigger()
     {
-        if (!GetPlayerManager().CanPerformAction() && GetPlayerManager().GetPlayerMovementState() is not PlayerDashState)
+        if (!GetPlayerManager().CanPerformAction())
             return;
 
         if (!GetModel().activeSelf)
             return;
 
         base.ChargeTrigger();
-    }
-
-    public override void SetLookAtTarget()
-    {
-        if (NearestTarget != null)
-        {
-            Vector3 forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
-            forward.y = 0;
-            forward.Normalize();
-            LookAtDirection(forward);
-        }
-
     }
 
     public int GetBasicAttackPhase()

@@ -39,7 +39,7 @@ public class BowAimState : BowControlState
 
     public override void ChargeTrigger()
     {
-        GetBowCharactersState().GetBowCharacters().LaunchBasicAttack();
+        GetBowCharactersState().GetBowCharacters().LaunchChargedAttack();
 
         if (!AimHold)
         {
@@ -77,6 +77,7 @@ public class BowAimState : BowControlState
         if (GetBowCharactersState().BowData.ChargeElapsed < GetBowCharactersState().BowData.ChargedMaxElapsed)
         {
             GetBowCharactersState().BowData.ChargeElapsed += Time.deltaTime;
+            GetBowCharactersState().BowData.CurrentElemental = Elemental.NONE;
         }
         else
         {

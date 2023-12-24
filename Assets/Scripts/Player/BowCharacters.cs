@@ -10,7 +10,7 @@ public class BowCharacters : PlayerCharacters
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
     private float OriginalFireSpeed = 1000f, BaseFireSpeed;
-    private float LastClickedTime, AttackRate = 0.05f;
+    private float LastClickedTime, AttackRate = 0.05f, ChargedAttackRate = 0.5f;
     private Vector3 Direction;
     private Elemental ShootElemental;
 
@@ -63,8 +63,16 @@ public class BowCharacters : PlayerCharacters
     {
         if (Time.time - LastClickedTime > AttackRate)
         {
-            if (GetBowCharactersState().GetBowControlState() is not BowAimState)
-                SetLookAtTarget();
+            SetLookAtTarget();
+            Animator.SetTrigger("Attack1");
+            LastClickedTime = Time.time;
+        }
+    }
+
+    public void LaunchChargedAttack()
+    {
+        if (Time.time - LastClickedTime > ChargedAttackRate)
+        {
             ShootElemental = GetBowCharactersState().BowData.CurrentElemental;
             Animator.SetTrigger("Attack1");
             LastClickedTime = Time.time;
@@ -79,12 +87,6 @@ public class BowCharacters : PlayerCharacters
         GetPlayerCharacterState().ChargeTrigger();
     }
 
-
-    public void SpawnCrossHair()
-    {
-        if (CrossHair == null)
-            CrossHair = AssetManager.GetInstance().SpawnCrossHair();
-    }
 
     public void SpawnChargeUpFinish()
     {
@@ -108,7 +110,8 @@ public class BowCharacters : PlayerCharacters
 
     public void InitHitPos_Aim()
     {
-        SpawnCrossHair();
+        if (CrossHair == null)
+            CrossHair = AssetManager.GetInstance().SpawnCrossHair();
 
         Vector3 hitdir = (Camera.main.transform.position + Camera.main.transform.forward * 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
         Direction = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
@@ -117,20 +120,8 @@ public class BowCharacters : PlayerCharacters
 
     public override void SetLookAtTarget()
     {
-        Vector3 forward;
-        if (NearestTarget == null)
-        {
-            forward = transform.forward;
-            forward.y = 0;
-        }
-        else
-        {
-            forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
-            forward.y = 0;
-            LookAtDirection(forward);
-        }
-        forward.Normalize();
-        Direction = forward;
+        base.SetLookAtTarget();
+        Direction = transform.forward;
     }
 
     public void DestroyChargeUpEmitter()
@@ -151,6 +142,11 @@ public class BowCharacters : PlayerCharacters
             Destroy(CrossHair);
     }
 
+    protected override void OnCharacterChanged(CharacterData c)
+    {
+        base.OnCharacterChanged(c);
+        DestroyCrossHair();
+    }
     protected override void OnDisable()
     {
         DestroyChargeUpEmitter();

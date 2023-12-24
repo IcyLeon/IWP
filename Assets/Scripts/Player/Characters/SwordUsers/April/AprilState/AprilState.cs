@@ -13,7 +13,7 @@ public class AprilState : SwordCharacterState
     public AprilElementalBurstState aprilElementalBurstState;
     public AprilState(Characters Characters) : base(Characters)
     {
-        aprilData = new AprilData();
+        aprilData = new AprilData(GetApril());
         aprilElementalSkillState = new AprilElementalSkillState(this);
         aprilElementalBurstState = new AprilElementalBurstState(this);
         swordIdleState = new AprilIdleState(this);

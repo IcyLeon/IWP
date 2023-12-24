@@ -10,10 +10,9 @@ public class ElementalParticleEffects : MonoBehaviour
     private void Start()
     {
         Characters characters = IDamageableObj as Characters;
-        characters.HitInfo += OnHit;
     }
 
-    private void OnHit(Elements e)
+    private void OnHit(Elements e, IDamage dmg)
     {
         if (IDamageableObj == null)
             return;

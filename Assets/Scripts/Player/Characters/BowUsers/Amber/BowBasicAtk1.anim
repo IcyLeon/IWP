@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack
+  m_Name: BowBasicAtk1
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -33943,8 +33943,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.2
+  - time: 0.23333333
     functionName: FireArrows
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: TriggerNextAtkTransition
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

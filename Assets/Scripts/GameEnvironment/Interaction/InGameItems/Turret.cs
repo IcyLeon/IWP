@@ -52,12 +52,6 @@ public class Turret : FriendlyKillers
         return AllTargetsAvailable.Contains(target);
     }
 
-    public override Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
-    {
-        Elements e = base.TakeDamage(position, elements, damageAmt);
-        return e;
-    }
-
     private float GetFireRate()
     {
         return GetTurretSO().FireRate;

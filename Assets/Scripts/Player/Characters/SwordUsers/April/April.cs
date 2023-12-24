@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class April : SwordCharacters
     [SerializeField] GameObject ShieldPrefab;
     [SerializeField] GameObject ShieldExplosion;
     [SerializeField] GameObject HealPrefab;
+    [SerializeField] GameObject EnemyMarkerPrefab;
+    [SerializeField] LineRenderer ConnectionPrefab;
     private List<ParticleSystem> ExplosionShield;
     private float ShieldTimerElapsed;
     private float nextHitExplosion;
@@ -20,6 +23,23 @@ public class April : SwordCharacters
         PlayerCharacterState = new AprilState(this);
         base.Start();
         UltiRange = 4f;
+    }
+
+    public MarkerOnTargets GetEnemyMarker()
+    {
+        MarkerOnTargets go = Instantiate(EnemyMarkerPrefab).GetComponent<MarkerOnTargets>();
+        return go;
+    }
+
+    public LineRenderer GetConnectionLine()
+    {
+        LineRenderer go = Instantiate(ConnectionPrefab).GetComponent<LineRenderer>();
+        return go;
+    }
+
+    private AprilState GetAprilState()
+    {
+        return (AprilState)PlayerCharacterState;
     }
 
     public void SpawnShield()
@@ -99,9 +119,67 @@ public class April : SwordCharacters
         return ShieldTimerElapsed <= 0f;
     }
 
-    public override void UpdateIBursts()
+    public override bool IBurstEnded()
     {
+        if (IsDead())
+            return true;
 
+        return false;
     }
 
+    private void SetMarkersOnEnemy()
+    {
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerOffsetPosition().position, GetPlayerCharacterState().GetPlayerCharacters().GetUltiRange(), LayerMask.GetMask("Entity"));
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            IDamage dmg = colliders[i].GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                MarkerEnemyData m = new MarkerEnemyData(GetEnemyMarker(), GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData(), dmg, GetPlayersSO().ElementalBurstTimer);
+                GetAprilState().aprilData.m_MarkerData.AddMarkerToEnemy(m);
+            }
+        }
+    }
+
+    public override void OnEntityHitSendInfo(Elements e, IDamage d)
+    {
+        MarkerEnemyData m = GetAprilState().aprilData.m_MarkerData.GetMarkerEnemyData(d);
+        if (m != null)
+        {
+            if (GetPlayerManager().GetAliveCharacters() != null)
+                GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), 25f);
+
+            if (e.GetElements() != Elemental.NONE)
+            {
+                DealDamageToAllConnected(e, m);
+            }
+        }
+    }
+
+    private void DealDamageToAllConnected(Elements e, MarkerEnemyData m)
+    {
+        foreach(var d in GetAprilState().aprilData.m_MarkerData.GetMarkerEnemyDataList())
+        {
+            if (d.Value != null)
+                if (!d.Value.IsDead() && d.Value != m.GetIDamageObj())
+                    d.Value.TakeDamage(d.Value.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.1f * GetMaxHealth() + 95f, false);
+        }
+    }
+
+    public void DestroyLine()
+    {
+        Destroy(GetAprilState().aprilData.connectedLineRenderer.gameObject);
+    }
+
+    public override void UpdateIBursts()
+    {
+        GetAprilState().aprilData.UpdateMarkerData();
+        GetAprilState().aprilData.UpdateConnections();
+    }
+
+    public override void UpdateEveryTime()
+    {
+        if (IBurstEnded())
+            GetAprilState().aprilData.RemoveAllMarkers();
+    }
 }

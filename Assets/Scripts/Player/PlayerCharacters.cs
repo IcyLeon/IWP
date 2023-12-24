@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static PlayerManager;
 
 public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 {
@@ -17,6 +18,10 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     protected float Range = 1f, UltiRange = 1f;
     protected PlayerCharacterState PlayerCharacterState;
 
+    public virtual void OnEntityHitSendInfo(Elements e, IDamage d)
+    {
+
+    }
     public void SetBurstActive(bool value)
     {
         isBurstActive = value;
@@ -77,12 +82,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public void SetCharacterData(CharacterData characterData)
     {
         this.characterData = characterData;
-    }
-
-    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt)
-    {
-        Elements e = base.TakeDamage(pos, elements, amt);
-        return e;
     }
 
     private ElementsIndicator GetElementsIndicator()
@@ -217,7 +216,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         SetBurstActive(false);
 
         healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
-
+        PlayerManager.onEntityHitSendInfo += OnEntityHitSendInfo;
         if (GetBurstCamera())
             GetBurstCamera().gameObject.SetActive(false);
 
@@ -376,7 +375,13 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     public virtual void SetLookAtTarget()
     {
-
+        if (NearestTarget != null)
+        {
+            Vector3 forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            forward.y = 0;
+            forward.Normalize();
+            LookAtDirection(forward);
+        }
     }
 
     protected virtual void ChargeHold()
@@ -408,7 +413,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         GetPlayerManager().GetPlayerController().OnChargeHold += ChargeHold;
         GetPlayerManager().GetPlayerController().OnChargeTrigger += ChargeTrigger;
         GetPlayerManager().GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
-
+        GetPlayerManager().onCharacterChange += OnCharacterChanged;
     }
 
     protected void BasicAttackTrigger()
@@ -427,6 +432,11 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         DisableInputs();
     }
 
+    protected virtual void OnCharacterChanged(CharacterData c)
+    {
+        UpdateDefaultPosOffsetAndZoom(0f);
+    }
+
     private void DisableInputs()
     {
         if (GetPlayerManager() == null)
@@ -437,7 +447,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         GetPlayerManager().GetPlayerController().OnElementalSkillTrigger -= ElementalSkillTrigger;
         GetPlayerManager().GetPlayerController().OnChargeHold -= ChargeHold;
         GetPlayerManager().GetPlayerController().OnChargeTrigger -= ChargeTrigger;
-        GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;        
+        GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
+        GetPlayerManager().onCharacterChange -= OnCharacterChanged;
     }
 
     public void TriggerOnAnimationTransition()
@@ -459,6 +470,19 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public virtual void UpdateISkills()
     {
         GetPlayerCharacterState().UpdateElementalSkill();
+    }
+    public virtual void UpdateEveryTime()
+    {
+
+    }
+
+    public void StopBurstAnimation()
+    {
+        if (GetBurstCamera())
+        {
+            GetBurstCamera().gameObject.SetActive(false);
+            GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
+        }
     }
 
     public virtual bool ISkillsEnded()

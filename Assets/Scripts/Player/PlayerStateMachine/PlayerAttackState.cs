@@ -49,7 +49,8 @@ public class PlayerAttackState : PlayerGroundState
 
         if (playerCharacter != null)
         {
-            //playerCharacter.ResetAttack();
+            //if (playerCharacter.GetisAttacking())
+            //    playerCharacter.ResetAttack();
         }
     }
 

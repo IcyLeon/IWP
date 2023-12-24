@@ -20,17 +20,6 @@ public class PlayerIdleState : PlayerGroundState
     {
         base.Update();
 
-
-        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
-        if (playerCharacter != null)
-        {
-            if (playerCharacter.GetisAttacking())
-            {
-                GetPlayerState().ChangeState(GetPlayerState().playerAttackState);
-                return;
-            }
-        }
-
         if (GetInputDirection() != Vector3.zero && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState)
         {
             GetPlayerState().ChangeState(GetPlayerState().playerRunState);

@@ -33,13 +33,18 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     public void Spawn4Arrows()
     {
-        Vector3 pos = GetPlayerManager().transform.position;
+        Vector3 targetPos = GetContactPoint();
+        Vector3 lookatDir = targetPos - GetPlayerManager().transform.position;
+        lookatDir.y = 0;
+        lookatDir.Normalize();
+        LookAtDirection(lookatDir);
+
         for (int i = 0; i < SkillsArrows; i++)
         {
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
             eSkillArrows.SetCharacterData(GetCharacterData());
             eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
-            eSkillArrows.SetFocalPointContact(GetContactPoint(pos), NearestTarget);
+            eSkillArrows.SetFocalPointContact(targetPos, NearestTarget);
         }
     }
 
@@ -61,29 +66,22 @@ public class Amber : BowCharacters, ICoordinateAttack
     }
 
 
-    private Vector3 GetContactPoint(Vector3 pos)
+    private Vector3 GetContactPoint()
     {
         float range = 10f;
-        Vector3 forward;
         if (NearestTarget == null)
         {
-
-            forward = transform.forward;
+            Vector3 forward = transform.forward;
             forward.y = 0;
-            Vector3 endPos = pos + forward * range;
+            Vector3 endPos = GetPlayerManager().GetPlayerOffsetPosition().position + forward * range;
             if (Physics.Raycast(endPos, Vector3.down, out RaycastHit hit))
             {
                 endPos = hit.point;
             }
             return endPos;
         }
-        else
-        {
-            forward = NearestTarget.GetPointOfContact() - pos;
-            forward.Normalize();
-            LookAtDirection(forward);
-            return NearestTarget.GetPointOfContact();
-        }
+
+        return NearestTarget.GetPointOfContact();
     }
 
 
@@ -131,7 +129,8 @@ public class Amber : BowCharacters, ICoordinateAttack
         if (GetPlayerManager() == null)
             return;
 
-        Vector3 pos = GetPlayerManager().GetPlayerOffsetPosition().position;
+        Vector3 targetPos = GetContactPoint();
+
         int RandomValue = Random.Range(1, 4);
         for (int j = 0; j < RandomValue; j++)
         {
@@ -139,7 +138,7 @@ public class Amber : BowCharacters, ICoordinateAttack
             Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
             ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
             ca.SetCharacterData(GetCharacterData());
-            ca.SetTargetPos(GetContactPoint(pos), NearestTarget, GetPlayerManager().transform.forward * 10f);
+            ca.SetTargetPos(targetPos, NearestTarget, GetPlayerManager().transform.forward * 10f);
         }
     }
 }

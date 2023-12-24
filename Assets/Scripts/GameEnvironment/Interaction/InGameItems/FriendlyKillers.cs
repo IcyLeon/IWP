@@ -124,7 +124,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         return GetFriendlyKillerData().GetCurrentHealth() <= 0 && !canBuy;
     }
 
-    public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt)
+    public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, bool callHitInfo = true)
     {
         if (IsDead() || canBuy)
             return null;

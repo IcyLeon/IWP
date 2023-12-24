@@ -136,12 +136,14 @@ public class AssetManager : MonoBehaviour
             Destroy(PopupPanel.gameObject);
 
         PopupPanel = Instantiate(PopupPanelPrefab, GetCanvasGO().transform).GetComponent<PopupPanel>();
+        PopupPanel.transform.SetAsLastSibling();
         PopupPanel.SetMessage(text);
     }
 
     public void OpenMessageNotification(string text)
     {
         MessageNotification m = Instantiate(MessageNotificationPrefab, GetCanvasGO().transform).GetComponent<MessageNotification>();
+        m.transform.SetAsLastSibling();
         m.SetMessage(text);
     }
 
@@ -206,18 +208,21 @@ public class AssetManager : MonoBehaviour
     public void SpawnWorldText_Elemental(Vector3 position, Elemental element, string text)
     {
         DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
+        dt.transform.SetAsFirstSibling();
         dt.SpawnText(position, element, text);
     }
 
     public void SpawnWorldText_Other(Vector3 position, OthersState OthersState, string text)
     {
         DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
+        dt.transform.SetAsFirstSibling();
         dt.SpawnText(position, OthersState, text);
     }
 
     public void SpawnWorldText_ElementalReaction(Vector3 position, ElementalReactionState element, string text)
     {
         DamageText dt = Instantiate(DamageText, GetCanvasGO().transform).GetComponent<DamageText>();
+        dt.transform.SetAsFirstSibling();
         dt.SpawnText(position, element, text);
     }
 
