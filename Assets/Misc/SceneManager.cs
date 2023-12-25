@@ -60,7 +60,7 @@ public class SceneManager : MonoBehaviour
         await Task.Delay(2500);
         TargetProgress = asyncOperation.progress;
         asyncOperation.allowSceneActivation = true;
-        await Task.Delay(1000);
+        await Task.Delay(100);
 
         LoadingCanvas.SetActive(false);
 
