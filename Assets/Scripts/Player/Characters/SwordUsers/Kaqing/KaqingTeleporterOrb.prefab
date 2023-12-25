@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 9056683522043158385}
   - component: {fileID: 3209496471578366145}
   m_Layer: 2
-  m_Name: ElementalOrb
+  m_Name: KaqingTeleporterOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
