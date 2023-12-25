@@ -800,6 +800,8 @@ MonoBehaviour:
   TargetOrbPrefab: {fileID: 260796668554883667, guid: c7219445ca073fd4088e1595e66881e1,
     type: 3}
   EmitterPivot: {fileID: 2132850761548433918}
+  UltiSlashPrefab: {fileID: 6171312371999307619, guid: ba5fbea4e031e9a4eb88ede1f32f7494,
+    type: 3}
 --- !u!95 &41062414002266592
 Animator:
   serializedVersion: 5

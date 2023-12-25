@@ -109,6 +109,7 @@ public class KaqingBurstState : SwordElementalBurstState
                     }
                     break;
                 case ElementalBurst.Last_Hit:
+                    GetKaqingState().GetKaqing().DestroyUltiSlash();
                     if (Time.time - LastHitTimer > 0.8f)
                     {
                         BurstAreaDamage(LastPosition);
@@ -126,5 +127,6 @@ public class KaqingBurstState : SwordElementalBurstState
         GetKaqingState().GetKaqing().GetModel().SetActive(false);
         GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
         StartBurst = true;
+        GetKaqingState().GetKaqing().SpawnUltiSlash();
     }
 }

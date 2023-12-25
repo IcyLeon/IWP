@@ -15,6 +15,22 @@ public class Kaqing : SwordCharacters
     private ParticleSystem BurstRangeEffect;
     [SerializeField] GameObject TargetOrbPrefab;
     [SerializeField] Transform EmitterPivot;
+    [SerializeField] GameObject UltiSlashPrefab;
+    private ParticleSystem UltiSlash;
+
+    public void SpawnUltiSlash()
+    {
+        if (UltiSlash != null)
+            DestroyUltiSlash();
+
+        UltiSlash = Instantiate(UltiSlashPrefab, GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up * 1f, Quaternion.identity).GetComponent<ParticleSystem>();
+    }
+
+    public void DestroyUltiSlash()
+    {
+        if (UltiSlash)
+            Destroy(UltiSlash.gameObject);
+    }
 
     private KaqingState GetKaqingState()
     {
