@@ -9,6 +9,7 @@ public class InventoryUIManager : MonoBehaviour
 {
     [SerializeField] ItemContentManager ItemContentManager;
     [SerializeField] GameObject ItemContent;
+    [SerializeField] UpgradeCanvasTransition UpgradeItem;
     [SerializeField] UseItem UseItem;
     [SerializeField] InvTabGroup TabGroup;
     [SerializeField] ScrollRect ScrollRect;
@@ -46,6 +47,7 @@ public class InventoryUIManager : MonoBehaviour
         InventoryManager.OnInventoryItemRemove -= OnInventoryItemRemove;
         TabGroup.onTabChanged -= onTabChangedEvent;
     }
+
 
     private void onTabChangedEvent(object sender, EventArgs e)
     {
@@ -125,7 +127,7 @@ public class InventoryUIManager : MonoBehaviour
             AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);
         }
         SelectedItemButton = itembutton_Dictionary[selectedItem];
-        ItemContent.SetActive(SelectedItemButton != null);
+        UpgradeItem.SetItemREF(SelectedItemButton);
         UseItem.SetItemREF(SelectedItemButton);
         AssetManager.GetInstance().UpdateCurrentSelectionOutline(null, SelectedItemButton);
     }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7081428479805541896}
   - component: {fileID: 895054843949573966}
   - component: {fileID: 2741243841039659890}
-  - component: {fileID: 5074914678337411487}
+  - component: {fileID: 5367633756893768036}
   m_Layer: 6
   m_Name: Albino
   m_TagString: Untagged
@@ -71,7 +71,7 @@ NavMeshAgent:
   m_Acceleration: 5
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 2
+  m_StoppingDistance: 3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -92,11 +92,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
-  rb: {fileID: 2741243841039659890}
   Animator: {fileID: 9545436}
   Model: {fileID: 189936}
   HealthBarPivotParent: {fileID: 419222}
-  col: {fileID: 5074914678337411487}
+  col: {fileID: 5367633756893768036}
+  rb: {fileID: 2741243841039659890}
   NavMeshAgent: {fileID: 7081428479805541896}
   EnemyValueDropSO: {fileID: 11400000, guid: f8b3150eea4f0364296d3ee81f3ead30, type: 2}
 --- !u!54 &2741243841039659890
@@ -115,8 +115,8 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!135 &5074914678337411487
-SphereCollider:
+--- !u!136 &5367633756893768036
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -125,9 +125,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.8
-  m_Center: {x: 0, y: 0.75, z: 0}
+  m_Radius: 0.6517362
+  m_Height: 3.1489763
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.7416298, z: 0}
 --- !u!1 &102148
 GameObject:
   m_ObjectHideFlags: 0

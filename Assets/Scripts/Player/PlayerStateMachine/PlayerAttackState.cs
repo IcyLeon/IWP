@@ -31,6 +31,7 @@ public class PlayerAttackState : PlayerGroundState
     {
         base.Update();
 
+        
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {

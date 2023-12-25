@@ -237,7 +237,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
             AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);
         }
         SelectedItemButton = itembutton_Dictionary[GetItemCurrentSelected()];
-        UpgradeButton.GetComponent<UpgradeCanvasTransition>().SetItemREF(GetItemCurrentSelected());
+        UpgradeButton.GetComponent<UpgradeCanvasTransition>().SetItemREF(SelectedItemButton);
         AssetManager.GetInstance().UpdateCurrentSelectionOutline(null, SelectedItemButton);
     }
 }

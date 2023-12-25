@@ -110,8 +110,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
             Characters c = colliderCopy[i].GetComponent<Characters>();
             if (c != null)
             {
-                Vector3 dir = GetPlayerManager().GetPlayerOffsetPosition().position - c.transform.position;
-                if (Physics.Raycast(c.transform.position, dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+                Vector3 dir = GetPlayerManager().GetPlayerOffsetPosition().position - c.GetPointOfContact();
+                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
                 {
                     if (hit.collider.GetComponent<PlayerCharacters>() == null)
                     {
@@ -132,7 +132,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public Characters GetNearestCharacters(float range)
     {
         Collider[] colliders = GetAllNearestCharacters(range);
-
         if (colliders.Length == 0)
             return null;
 
@@ -145,8 +144,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
             Characters c = colliderCopy[i].GetComponent<Characters>();
             if (c != null)
             {
-                float dist1 = Vector3.Distance(colliderCopy[i].transform.position, GetPlayerManager().transform.position);
-                float dist2 = Vector3.Distance(nearestCollider.transform.position, GetPlayerManager().transform.position);
+                float dist1 = Vector3.Distance(c.GetPointOfContact(), GetPlayerManager().transform.position);
+                float dist2 = Vector3.Distance(nearestCollider.GetComponent<Characters>().GetPointOfContact(), GetPlayerManager().transform.position);
 
                 if (dist1 <= dist2)
                 {
@@ -462,6 +461,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     public void TriggerNextAtkTransition()
     {
+        ResetAttack();
         if (ContainsParam(Animator, "NextAtk"))
             Animator.SetBool("NextAtk", true);
     }

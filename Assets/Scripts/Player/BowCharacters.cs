@@ -11,7 +11,7 @@ public class BowCharacters : PlayerCharacters
     private GameObject CrossHair;
     private float OriginalFireSpeed = 1000f, BaseFireSpeed;
     private float LastClickedTime, AttackRate = 0.05f, ChargedAttackRate = 0.5f;
-    private Vector3 Direction;
+    private Vector3 Direction, ShootDirection;
     private Elemental ShootElemental;
 
     public Transform GetEmitterPivot()
@@ -26,6 +26,7 @@ public class BowCharacters : PlayerCharacters
     protected override void Update()
     {
         base.Update();
+        Debug.Log(Direction);
 
         if (Animator)
         {
@@ -44,14 +45,14 @@ public class BowCharacters : PlayerCharacters
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(ShootElemental));
         ArrowFire.SetCharacterData(GetCharacterData());
-        ArrowFire.transform.rotation = Quaternion.LookRotation(Direction);
+        ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
 
         if (!GetPlayerManager().IsAiming())
             BaseFireSpeed = OriginalFireSpeed * 0.75f;
         else
             BaseFireSpeed = OriginalFireSpeed;
 
-        ArrowRB.AddForce(Direction.normalized * BaseFireSpeed * (1 + GetBowCharactersState().BowData.ChargeElapsed));
+        ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + GetBowCharactersState().BowData.ChargeElapsed));
 
         DestroyChargeUpEmitter();
         ShootElemental = Elemental.NONE;
@@ -64,6 +65,7 @@ public class BowCharacters : PlayerCharacters
         if (Time.time - LastClickedTime > AttackRate)
         {
             SetLookAtTarget();
+            ShootDirection = Direction;
             Animator.SetTrigger("Attack1");
             LastClickedTime = Time.time;
         }
@@ -115,13 +117,14 @@ public class BowCharacters : PlayerCharacters
 
         Vector3 hitdir = (Camera.main.transform.position + Camera.main.transform.forward * 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
         Direction = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
+        ShootDirection = Direction;
         LookAtDirection(Direction);
     }
 
     public override void SetLookAtTarget()
     {
         base.SetLookAtTarget();
-        Direction = transform.forward;
+        Direction = GetPlayerManager().transform.forward;
     }
 
     public void DestroyChargeUpEmitter()

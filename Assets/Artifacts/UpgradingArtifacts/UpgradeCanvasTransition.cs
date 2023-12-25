@@ -27,9 +27,9 @@ public class UpgradeCanvasTransition : MonoBehaviour, IPointerClickHandler
         ItemShowcaseCanvas.SetActive(false);
     }
 
-    public void SetItemREF(Item item)
+    public void SetItemREF(ItemButton itembutton)
     {
-        ItemREF = item;
+        ItemREF = itembutton.GetItemREF();
 
         if (ItemREF == null || !(ItemREF is UpgradableItems))
         {

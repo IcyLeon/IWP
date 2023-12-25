@@ -319,7 +319,7 @@ public class PlayerMovementState : IState
         GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
 
         Quaternion targetRotation = Quaternion.Euler(0f, GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, 0f);
-        rb.MoveRotation(targetRotation);
+        rb.transform.rotation = targetRotation;
 
     }
 

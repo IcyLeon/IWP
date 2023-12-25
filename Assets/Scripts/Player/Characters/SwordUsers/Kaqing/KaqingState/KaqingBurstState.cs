@@ -15,7 +15,7 @@ public class KaqingBurstState : SwordElementalBurstState
         Last_Hit,
     }
     private ElementalBurst elementalBurst;
-    private int TotalHits = 10;
+    private int TotalHits = 12;
     private float TimeInBetweenHits;
     private float LastHitTimer;
     private float HitElapsed;
@@ -25,7 +25,7 @@ public class KaqingBurstState : SwordElementalBurstState
 
     public KaqingBurstState(PlayerCharacterState pcs) : base(pcs)
     {
-        TimeInBetweenHits = 3f / (TotalHits * 2f);
+        TimeInBetweenHits = 2.5f / (TotalHits * 2f);
     }
 
     public override void Enter()
