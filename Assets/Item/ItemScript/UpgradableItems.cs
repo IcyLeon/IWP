@@ -22,6 +22,12 @@ public abstract class UpgradableItems : Item
         return Level;
     }
 
+    public int GetMaxLevel()
+    {
+        return MaxLevel;
+    }
+
+
     public float GetExpAmount()
     {
         return ExpAmount;

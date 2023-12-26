@@ -18,11 +18,21 @@ MonoBehaviour:
   artifactsInfoTypeName:
   - artifactType: 0
     artifactPieceName: Flower of Life
+    artifactIconSprite: {fileID: 21300000, guid: 5205fd8e99942e54bb5c540cb6336817,
+      type: 3}
   - artifactType: 1
     artifactPieceName: Plume of Death
+    artifactIconSprite: {fileID: 21300000, guid: 88733443c5219e44ba1645d1bfecfc68,
+      type: 3}
   - artifactType: 2
     artifactPieceName: Sands of Eon
+    artifactIconSprite: {fileID: 21300000, guid: e82e2dd43046e4b45a82c24cdf6c03f7,
+      type: 3}
   - artifactType: 3
     artifactPieceName: Goblet of Eonothem
+    artifactIconSprite: {fileID: 21300000, guid: b89326ae64f35004f9b1055e25a45d66,
+      type: 3}
   - artifactType: 4
     artifactPieceName: Circlet of Logos
+    artifactIconSprite: {fileID: 21300000, guid: e180bf643c4981645ba51d0a520ebfb5,
+      type: 3}

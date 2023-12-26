@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElementalInfoList:
   - elemental: 0
+    elementName: Physical
     ElementSprite: {fileID: 0}
     ElementBurstBackground: {fileID: 0}
     color:
       serializedVersion: 2
       rgba: 4294967295
   - elemental: 1
+    elementName: Fire
     ElementSprite: {fileID: 21300000, guid: 881220943809535439f45f097fb53877, type: 3}
     ElementBurstBackground: {fileID: 21300000, guid: 4e5b60015e7c06a4fadfbb20767c445b,
       type: 3}
@@ -27,6 +29,7 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4278688763
   - elemental: 2
+    elementName: Ice
     ElementSprite: {fileID: 21300000, guid: ee58ebf305c2bc748ab14b6536c87ef0, type: 3}
     ElementBurstBackground: {fileID: 21300000, guid: 5212263ab76231242a868731eba6bf43,
       type: 3}
@@ -34,6 +37,7 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4294900884
   - elemental: 3
+    elementName: Electro
     ElementSprite: {fileID: 21300000, guid: b47e003034e54d14bb0ddc75b1c14191, type: 3}
     ElementBurstBackground: {fileID: 21300000, guid: b67000eb57a5190409622f333442f4cb,
       type: 3}

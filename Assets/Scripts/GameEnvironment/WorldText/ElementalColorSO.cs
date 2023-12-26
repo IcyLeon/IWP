@@ -10,6 +10,7 @@ public class ElementalColorSO : ScriptableObject
     public class ElementalInfo
     {
         public Elemental elemental;
+        public string elementName;
         public Sprite ElementSprite;
         public Sprite ElementBurstBackground;
         public Color32 color;

@@ -139,6 +139,9 @@ public class SlotPopup : MonoBehaviour
 
     public void HideItem(Item item)
     {
+        if (itembutton_Dictionary == null)
+            return;
+
         foreach (var rt in itembutton_Dictionary.Keys)
         {
             ItemButton itemButton = itembutton_Dictionary[rt].GetComponent<ItemButton>();

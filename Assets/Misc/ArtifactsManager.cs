@@ -115,13 +115,13 @@ public class ArtifactsManager : MonoBehaviour
 
 
 
-    public string GetArtifactPieceName(ArtifactType ArtifactType)
+    public ArtifactsListInfo.CommonArtifactPiece GetArtifactPiece(ArtifactType ArtifactType)
     {
         for (int j = 0; j < artifactsListInfo.artifactsInfoTypeName.Length; j++)
         {
             if (ArtifactType == artifactsListInfo.artifactsInfoTypeName[j].artifactType)
             {
-                return artifactsListInfo.artifactsInfoTypeName[j].artifactPieceName;
+                return artifactsListInfo.artifactsInfoTypeName[j];
             }
         }
         return null;

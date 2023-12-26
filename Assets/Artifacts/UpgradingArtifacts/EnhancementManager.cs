@@ -17,7 +17,7 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] GameObject ButtonMask;
     [Header("Enhancement Infomation")]
     [SerializeField] int EnhancementItemToSell;
-    [SerializeField] Image selectedItemImage;
+    [SerializeField] SelectedArtifactsBubble SelectedArtifactsBubble;
     [SerializeField] TextMeshProUGUI LevelDisplay, ExpAmountDisplay, IncreaseAmountExpDisplay, IncreaseLevelDisplay;
     [SerializeField] Button AutoAddBtn;
     [SerializeField] Button UpgradeBtn;
@@ -41,6 +41,8 @@ public class EnhancementManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Init();
+
         InventoryManager = InventoryManager.GetInstance();
         InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
         LoadEmptySlots();
@@ -52,7 +54,6 @@ public class EnhancementManager : MonoBehaviour
             RaritySelection = AutoAddSelection.value;
         }
         );
-        Init();
     }
 
     public void Init()
@@ -99,6 +100,9 @@ public class EnhancementManager : MonoBehaviour
 
     private void HideItem()
     {
+        if (upgradeCanvas == null)
+            return;
+
         upgradeCanvas.SlotPopup.HideItem(GetItemREF());
 
         if (upgradeCanvas.SlotPopup.GetItemButton_Dictionary() != null)
@@ -124,6 +128,9 @@ public class EnhancementManager : MonoBehaviour
 
     public Item GetItemREF()
     {
+        if (upgradeCanvas == null)
+            return null;
+
         return upgradeCanvas.GetItemREF();
     }
 
@@ -216,7 +223,7 @@ public class EnhancementManager : MonoBehaviour
         if (GetItemREF() != null)
         {
             UpgradableItems UpgradableItemREF = GetItemREF() as UpgradableItems;
-            selectedItemImage.sprite = UpgradableItemREF.GetItemSO().ItemSprite;
+            SelectedArtifactsBubble.UpdateSelectedItem((Artifacts)GetItemREF(), (ArtifactsSO)UpgradableItemREF.GetItemSO());
             LevelDisplay.text = "+" + UpgradableItemREF.GetLevel();
             ExpAmountDisplay.text = Mathf.RoundToInt(upgradeProgressSlider.value) + "/" + upgradeProgressSlider.maxValue.ToString();
 
@@ -271,6 +278,9 @@ public class EnhancementManager : MonoBehaviour
     }
     private void LoadEmptySlots()
     {
+        if (upgradeCanvas == null)
+            return;
+
         upgradeCanvas.SlotPopup.onSlotSend -= ManualAddItems;
         for (int i = EnhancementItemList.Count - 1; i >= 0; i--)
         {
@@ -297,6 +307,9 @@ public class EnhancementManager : MonoBehaviour
         if (sendslotInfo.slot)
         {
             if (!sendslotInfo.itemButtonREF)
+                return;
+
+            if (upgradeCanvas == null)
                 return;
 
             if (upgradeCanvas.SlotPopup.GetItemButton_Dictionary().TryGetValue(sendslotInfo.itemButtonREF.GetItemREF(), out ItemButton SlotPopupitemButton))

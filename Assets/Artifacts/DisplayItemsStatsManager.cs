@@ -26,7 +26,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
     [SerializeField] GameObject UpgradeButton;
     [SerializeField] EquipItems EquipButton;
     [SerializeField] EquippedByCharacter EquippedByCharacter;
-    [SerializeField] Image SelectedItemImage;
+    [SerializeField] SelectedArtifactsBubble SelectedArtifactsBubble;
     [SerializeField] ItemContentDisplay ItemContentDisplay;
 
     [Header("Display Artifacts")]
@@ -95,7 +95,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
     private void UpdateArtifactEquipContent()
     {
-        Artifacts artifacts = SelectedItem as Artifacts;
+        Artifacts artifacts = GetItemCurrentSelected() as Artifacts;
         EquippedByCharacter.gameObject.SetActive(false);
         if (artifacts != null)
         {
@@ -150,15 +150,15 @@ public class DisplayItemsStatsManager : MonoBehaviour
     // Update is called once per frame
     void DisplaySelectedItem()
     {
-        if (SelectedItem != null)
-            SetCurrentBackground(SelectedItem.GetRarity());
+        if (GetItemCurrentSelected() != null)
+            SetCurrentBackground(GetItemCurrentSelected().GetRarity());
         else
             SetCurrentBackground(SelectedItemsSO.Rarity);
 
-        SelectedItemImage.sprite = SelectedItemsSO.ItemSprite;
-        EquipButton.SetItemREF(SelectedItem);
-        LockButton.SetItemREF(SelectedItem);
-        ItemContentDisplay.RefreshItemContentDisplay(SelectedItem, SelectedItemsSO);
+        SelectedArtifactsBubble.UpdateSelectedItem((Artifacts)GetItemCurrentSelected(), (ArtifactsSO)SelectedItemsSO);
+        EquipButton.SetItemREF(GetItemCurrentSelected());
+        LockButton.SetItemREF(GetItemCurrentSelected());
+        ItemContentDisplay.RefreshItemContentDisplay(GetItemCurrentSelected(), SelectedItemsSO);
     }
 
     private void onTabChangedEvent(object sender, EventArgs e)
@@ -207,7 +207,11 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
     private void GetItemSelected(ItemButton itemButton)
     {
-        PreviousSelectedItem = SelectedItem;
+        PreviousSelectedItem = GetItemCurrentSelected();
+
+        if (itemButton == null)
+            return;
+
         SelectedItemsSO = itemButton.GetItemsSO();
         SelectedItem = itemButton.GetItemREF();
         UpdateOutlineSelection();
@@ -230,8 +234,19 @@ public class DisplayItemsStatsManager : MonoBehaviour
         return SelectedItem;
     }
 
+    public void SetCurrentSelectedItem(Item item)
+    {
+        SelectedItem = item;
+        UpdateOutlineSelection();
+        GetItemSelected(SelectedItemButton);
+        gameObject.transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+
     private void UpdateOutlineSelection()
     {
+        if (GetItemCurrentSelected() == null)
+            return;
         foreach (ItemButton itemButton in itembutton_Dictionary.Values)
         {
             AssetManager.GetInstance().UpdateCurrentSelectionOutline(itemButton, null);

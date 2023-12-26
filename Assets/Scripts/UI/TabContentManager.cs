@@ -12,6 +12,7 @@ public class TabContentManager : MonoBehaviour
     [SerializeField] ToggleGroup TabToggleGroup;
     [SerializeField] GameObject[] TabContent;
     [SerializeField] Color32 SelectedColor, DefaultColor;
+    [SerializeField] bool IncreaseSizeWhenSelected;
     private Toggle[] TabToggleGroupList;
 
     // Start is called before the first frame update
@@ -47,8 +48,9 @@ public class TabContentManager : MonoBehaviour
 
         if (toggle.isOn)
         {
-            toggle.transform.localScale = new Vector3(1.3f, 1.3f, 1);
-            toggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = SelectedColor;
+            if (IncreaseSizeWhenSelected)
+                toggle.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+            toggle.transform.GetComponent<TextMeshProUGUI>().color = SelectedColor;
         }
         else
         {
@@ -59,6 +61,6 @@ public class TabContentManager : MonoBehaviour
     void ResetToggle(Toggle toggle)
     {
         toggle.transform.localScale = Vector3.one;
-        toggle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = DefaultColor;
+        toggle.transform.GetComponent<TextMeshProUGUI>().color = DefaultColor;
     }
 }

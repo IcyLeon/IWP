@@ -26,7 +26,6 @@ public class BowCharacters : PlayerCharacters
     protected override void Update()
     {
         base.Update();
-        Debug.Log(Direction);
 
         if (Animator)
         {

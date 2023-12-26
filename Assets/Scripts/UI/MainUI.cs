@@ -14,6 +14,7 @@ public class MainUI : MonoBehaviour
     [SerializeField] GameObject FallenUI;
     [SerializeField] GameObject[] MainUIList;
     [SerializeField] UpgradeCanvas upgradeCanvas;
+    [SerializeField] DisplayItemsStatsManager displayItemsStatsManager;
     [SerializeField] GameObject ItemBag;
     private List<ArrowIndicator> ArrowIndicatorList;
     [SerializeField] GameObject BlueEffectObject;
@@ -29,6 +30,10 @@ public class MainUI : MonoBehaviour
         return upgradeCanvas;
     }
 
+    public DisplayItemsStatsManager GetDisplayItemsStatsManager()
+    {
+        return displayItemsStatsManager;
+    }
     public InteractionContentUI GetInteractOptionsUI()
     {
         return InteractOptionsUI;

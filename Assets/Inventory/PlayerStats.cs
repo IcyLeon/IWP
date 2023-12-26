@@ -12,6 +12,8 @@ public class PlayerStats
     List<CharacterData> CharactersOwnedList;
     List<Item> InventoryList;
     public delegate void onPlayerCurrencyChanged();
+    public delegate void onPlayerCharactersAdd(CharacterData character);
+    public onPlayerCharactersAdd OnPlayerCharactersAdd;
     public onPlayerCurrencyChanged OnCoinsChanged;
     public onPlayerCurrencyChanged OnCashChanged;
 
@@ -22,6 +24,7 @@ public class PlayerStats
 
         if (GetOwnedCharacterData(characterData.GetItemSO() as PlayerCharacterSO) == null) {
             CharactersOwnedList.Add(characterData);
+            OnPlayerCharactersAdd?.Invoke(characterData);
         }
     }
 

@@ -24,6 +24,7 @@ public class ArtifactsListInfo : ScriptableObject
     {
         public ArtifactType artifactType;
         public string artifactPieceName;
+        public Sprite artifactIconSprite;
     }
 
     [Header("Artifacts Set Information")]
