@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4296433293417086925}
   - component: {fileID: 5113835836731951061}
   - component: {fileID: 4778762506708706976}
+  - component: {fileID: 3997925640853831666}
   m_Layer: 5
   m_Name: selectedItembubble
   m_TagString: Untagged
@@ -94,6 +95,21 @@ MonoBehaviour:
   ArtifactsBubbleImage: {fileID: 5113835836731951061}
   ArtifactsItemImage: {fileID: 8701057294822354546}
   PlaceholderArtifactsImage: {fileID: 6228211797068879452}
+--- !u!114 &3997925640853831666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6781309054295377064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df59f23990791c428d754a55aae7a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  artifactType: 0
+  IgnoreArtifactType: 0
+  SelectedArtifactsBubble: {fileID: 4778762506708706976}
 --- !u!1 &7012117128838337077
 GameObject:
   m_ObjectHideFlags: 0

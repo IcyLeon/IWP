@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class ArtifactTabGroup : MonoBehaviour
 {
-    List<ArtifactTabButton> tabs = new List<ArtifactTabButton>();
-    public event EventHandler onTabChanged;
+    public event Action onTabChanged;
     private Coroutine MovingScrollbar;
 
     [Serializable]
@@ -16,6 +15,7 @@ public class ArtifactTabGroup : MonoBehaviour
     {
         public GameObject TabPanel;
         public ArtifactType ArtifactType;
+        public ArtifactTabButton TabButton;
     }
     [SerializeField] TabMenu[] TabMenuList;
     private ArtifactTabButton selectedtab;
@@ -35,11 +35,11 @@ public class ArtifactTabGroup : MonoBehaviour
         return currentPanel;
     }
 
-    public int GetTabPanelIdx(ArtifactType ArtifactType)
+    public int GetTabPanelIdx(ArtifactTabButton atb)
     {
         for (int i = 0; i < TabMenuList.Length; i++)
         {
-            if (TabMenuList[i].ArtifactType == ArtifactType)
+            if (TabMenuList[i].TabButton == atb)
             {
                 return i;
             }
@@ -53,24 +53,24 @@ public class ArtifactTabGroup : MonoBehaviour
         {
             TabMenuList[i].TabPanel.SetActive(false);
         }
-        currentPanel = TabMenuList[GetTabPanelIdx(selectedtab.artifactType)];
+        currentPanel = TabMenuList[GetTabPanelIdx(selectedtab)];
         currentPanel.TabPanel.SetActive(true);
     }
 
     void Start()
     {
-        for (int i = 0; i < tabs.Count; i++)
+        for (int i = 0; i < TabMenuList.Length; i++)
         {
-            if (tabs[i].artifactType == ArtifactType.FLOWER)
-                OnTabSelected(tabs[i]);
+            if (TabMenuList[i].ArtifactType == ArtifactType.FLOWER)
+                OnTabSelected(TabMenuList[i].TabButton);
         }
         InitSliderSize();
     }
 
     void InitSliderSize()
     {
-        slider.GetComponent<RectTransform>().sizeDelta = new Vector2(tabs.Count * (70f + TabButtonsLayoutGroup.spacing), slider.GetComponent<RectTransform>().sizeDelta.y);
-        slider.size = 1f / tabs.Count;
+        slider.GetComponent<RectTransform>().sizeDelta = new Vector2(TabMenuList.Length * (70f + TabButtonsLayoutGroup.spacing), slider.GetComponent<RectTransform>().sizeDelta.y);
+        slider.size = 1f / TabMenuList.Length;
     }
 
     public ArtifactTabButton GetTabSelected()
@@ -78,9 +78,14 @@ public class ArtifactTabGroup : MonoBehaviour
         return selectedtab;
     }
 
-    public void Subscribe(ArtifactTabButton tb)
+    public int GetTabMenuByArtifactType(ArtifactType artifactType)
     {
-        tabs.Add(tb);
+        for (int i = 0; i < TabMenuList.Length; i++)
+        {
+            if (TabMenuList[i].ArtifactType == artifactType)
+                return i;
+        }
+        return -1;
     }
 
     public void OnTabSelected(ArtifactTabButton tb)
@@ -90,32 +95,38 @@ public class ArtifactTabGroup : MonoBehaviour
         selectedtab.SelectedTabIcons();
         OpenPanel();
 
+        float targetValue = ((float)(GetTabPanelIdx(selectedtab)) / (TabMenuList.Length - 1));
+
         if (MovingScrollbar != null)
         {
             StopCoroutine(MovingScrollbar);
         }
-        MovingScrollbar = StartCoroutine(MoveScrollBar());
-        onTabChanged?.Invoke(this, EventArgs.Empty);
+
+        if (gameObject.activeInHierarchy)
+            MovingScrollbar = StartCoroutine(MoveScrollBar(targetValue));
+        else
+            slider.value = targetValue;
+
+        onTabChanged?.Invoke();
     }
 
     public void OnTabReset()
     {
-        foreach(ArtifactTabButton tb in tabs)
+        foreach(TabMenu tb in TabMenuList)
         {
-            tb.ResetTabIcons();
+            tb.TabButton.ResetTabIcons();
         }
     }
 
-    IEnumerator MoveScrollBar()
+    IEnumerator MoveScrollBar(float target)
     {
         //float targetValue = ((tabs.Count - (float)tabs.IndexOf(selectedtab) - 1) / (tabs.Count - 1));
-        float targetValue = ((float)tabs.IndexOf(selectedtab) / (tabs.Count - 1));
         float elapsedTime = 0f;
         float animationDuration = 0.15f;
 
-        while (!Mathf.Approximately(slider.value, targetValue))
+        while (!Mathf.Approximately(slider.value, target))
         {
-            slider.value = Mathf.Lerp(slider.value, targetValue, elapsedTime / animationDuration);
+            slider.value = Mathf.Lerp(slider.value, target, elapsedTime / animationDuration);
             elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }

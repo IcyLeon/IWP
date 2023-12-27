@@ -824,8 +824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e867c426cd08b8440a150adfdae8aa35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArtifactType: 2
-  tabGroup: {fileID: 2404738263509157490}
+  tabGroup: {fileID: 8029005592871419623}
   onlineBorder: {fileID: 7761408002701986051}
   tabIcon: {fileID: 3593495393298636523}
 --- !u!114 &3135668599080031328
@@ -4018,10 +4017,10 @@ RectTransform:
   m_Father: {fileID: 5750320258653920484}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225, y: -81.07}
-  m_SizeDelta: {x: 450, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5246300831770725129
 MonoBehaviour:
@@ -11966,6 +11965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55ffa5ced20fb249b5bc489820c89b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentCharacterArtifactsList:
+  - {fileID: 4173099488427557354}
 --- !u!1 &3832258147266386040
 GameObject:
   m_ObjectHideFlags: 0
@@ -12713,8 +12714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e867c426cd08b8440a150adfdae8aa35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArtifactType: 3
-  tabGroup: {fileID: 2404738263509157490}
+  tabGroup: {fileID: 8029005592871419623}
   onlineBorder: {fileID: 8826348619547456684}
   tabIcon: {fileID: 7641474763860293253}
 --- !u!114 &5850050998130644773
@@ -13456,8 +13456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e867c426cd08b8440a150adfdae8aa35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArtifactType: 1
-  tabGroup: {fileID: 2404738263509157490}
+  tabGroup: {fileID: 8029005592871419623}
   onlineBorder: {fileID: 1153599434663242116}
   tabIcon: {fileID: 6658813418092853575}
 --- !u!114 &3249799108613544588
@@ -14902,8 +14901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e867c426cd08b8440a150adfdae8aa35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArtifactType: 0
-  tabGroup: {fileID: 2404738263509157490}
+  tabGroup: {fileID: 8029005592871419623}
   onlineBorder: {fileID: 8027325032699463230}
   tabIcon: {fileID: 7098545327676336039}
 --- !u!114 &30889105203428788
@@ -17441,6 +17439,7 @@ GameObject:
   - component: {fileID: 4646048842711512170}
   - component: {fileID: 8099876040330363184}
   - component: {fileID: 6981828125068990835}
+  - component: {fileID: 8029005592871419623}
   m_Layer: 5
   m_Name: ItemsShowcase
   m_TagString: Untagged
@@ -17534,7 +17533,7 @@ MonoBehaviour:
   EquippedByCharacter: {fileID: 1744574295815048011}
   SelectedArtifactsBubble: {fileID: 7337637565622126159}
   ItemContentDisplay: {fileID: 4646048842711512171}
-  TabGroup: {fileID: 2404738263509157490}
+  TabGroup: {fileID: 8029005592871419623}
 --- !u!223 &8099876040330363184
 Canvas:
   m_ObjectHideFlags: 0
@@ -17573,6 +17572,36 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &8029005592871419623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646048842711511956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cdac30a4eca18e489b6751c020c93e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TabMenuList:
+  - TabPanel: {fileID: 4646048840873915107}
+    ArtifactType: 0
+    TabButton: {fileID: 4646048841318157077}
+  - TabPanel: {fileID: 4646048841296682683}
+    ArtifactType: 1
+    TabButton: {fileID: 4646048840650597292}
+  - TabPanel: {fileID: 4646048842726694269}
+    ArtifactType: 2
+    TabButton: {fileID: 3557253074029080279}
+  - TabPanel: {fileID: 4646048840847751524}
+    ArtifactType: 3
+    TabButton: {fileID: 2127183444107061293}
+  - TabPanel: {fileID: 4646048841409124184}
+    ArtifactType: 4
+    TabButton: {fileID: 1387414543839297211}
+  slider: {fileID: 5061116430678502125}
+  TabButtonsLayoutGroup: {fileID: 2585303151506487779}
 --- !u!1 &4646048842713085491
 GameObject:
   m_ObjectHideFlags: 0
@@ -19484,7 +19513,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8782862704915488895}
-  - component: {fileID: 2404738263509157490}
   m_Layer: 5
   m_Name: TabArtifactGroup
   m_TagString: Untagged
@@ -19514,31 +19542,6 @@ RectTransform:
   m_AnchoredPosition: {x: -257, y: 380}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2404738263509157490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5783070475260232131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdac30a4eca18e489b6751c020c93e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TabMenuList:
-  - TabPanel: {fileID: 4646048840873915107}
-    ArtifactType: 0
-  - TabPanel: {fileID: 4646048841296682683}
-    ArtifactType: 1
-  - TabPanel: {fileID: 4646048842726694269}
-    ArtifactType: 2
-  - TabPanel: {fileID: 4646048840847751524}
-    ArtifactType: 3
-  - TabPanel: {fileID: 4646048841409124184}
-    ArtifactType: 4
-  slider: {fileID: 5061116430678502125}
-  TabButtonsLayoutGroup: {fileID: 2585303151506487779}
 --- !u!1 &5884510066394403223
 GameObject:
   m_ObjectHideFlags: 0
@@ -21061,8 +21064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e867c426cd08b8440a150adfdae8aa35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArtifactType: 4
-  tabGroup: {fileID: 2404738263509157490}
+  tabGroup: {fileID: 8029005592871419623}
   onlineBorder: {fileID: 256067332126423181}
   tabIcon: {fileID: 8658260861649676126}
 --- !u!114 &2384323662836020910
@@ -31997,6 +31999,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3997925640853831666, guid: 50c7b3105c6a50f499bcb95a65214f7b,
+        type: 3}
+      propertyPath: CharactersArtifactsInfoContentManager
+      value: 
+      objectReference: {fileID: 3534493671265563671}
     - target: {fileID: 6781309054295377064, guid: 50c7b3105c6a50f499bcb95a65214f7b,
         type: 3}
       propertyPath: m_Name
@@ -32010,27 +32017,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1050095107678830104}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5804756500383070896 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6781309054295377064, guid: 50c7b3105c6a50f499bcb95a65214f7b,
+--- !u!114 &4173099488427557354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3997925640853831666, guid: 50c7b3105c6a50f499bcb95a65214f7b,
     type: 3}
   m_PrefabInstance: {fileID: 1050095107678830104}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6237239686837265151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5804756500383070896}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1df59f23990791c428d754a55aae7a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayItemsStatsManager: {fileID: 4646048842711512170}
-  artifactType: 0
-  CharactersArtifactsInfoContentManager: {fileID: 3534493671265563671}
 --- !u!1001 &1916517721756614031
 PrefabInstance:
   m_ObjectHideFlags: 0

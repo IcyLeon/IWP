@@ -39,7 +39,7 @@ public class MessageNotification : MonoBehaviour
 
             canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, t);
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
 

@@ -81,7 +81,6 @@ public class PlayerController : MonoBehaviour
         resizeableCollider.Resize();
     }
 
-
     public PlayerState GetPlayerState()
     {
         return playerState;
