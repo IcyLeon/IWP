@@ -39,7 +39,27 @@ public class PlayerStats
         }
         return null;
     }
-
+    public int CountNumberOfItems(ItemTemplate itemSOREF)
+    {
+        int total = 0;
+        for (int i = 0; i < GetINVList().Count; i++)
+        {
+            Item item = GetINVList()[i];
+            if (item.GetItemSO() == itemSOREF)
+            {
+                ConsumableItem cItem = item as ConsumableItem;
+                if (cItem != null)
+                {
+                    total += cItem.GetAmount();
+                }
+                else
+                {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
     public int GetCoins()
     {
         return coins;

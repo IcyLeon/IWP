@@ -9,9 +9,10 @@ public class InventoryManager : MonoBehaviour {
     private List<CharacterData> EquipCharactersDatalist;
     private CharacterData currentequipCharacter;
 
-    public delegate void OnInventoryListChange(Item item);
+    public delegate void OnInventoryListChange(Item item, ItemTemplate itemSO);
     public OnInventoryListChange OnInventoryItemAdd;
     public OnInventoryListChange OnInventoryItemRemove;
+    public OnInventoryListChange OnInventoryChanged; // if there is a change in the inventory (be it add or remove for all types of item)
 
     [SerializeField] PlayerCharacterSO[] startupSOTest;
 
@@ -78,6 +79,24 @@ public class InventoryManager : MonoBehaviour {
         return PlayerStats;
     }
 
+    public Item GetItemREF(ItemTemplate itemsSO)
+    {
+        for (int i = 0; i < GetPlayerStats().GetINVList().Count; i++)
+        {
+            Item item = GetPlayerStats().GetINVList()[i];
+            if (item.GetItemSO() == itemsSO)
+                return item;
+        }
+        return null;
+    }
+    public int CountNumberOfItems(ItemTemplate itemSOREF)
+    {
+        if (GetPlayerStats() == null)
+            return 0;
+
+        return GetPlayerStats().CountNumberOfItems(itemSOREF);
+    }
+
     public List<Item> GetINVList()
     {
         if (PlayerStats == null)
@@ -95,12 +114,19 @@ public class InventoryManager : MonoBehaviour {
         {
             ConsumableItem consumableItem = ExistItem as ConsumableItem;
             consumableItem.AddAmount();
+            CallOnInventoryChanged(consumableItem, consumableItem.GetItemSO());
             return consumableItem;
         }
 
         PlayerStats.AddItems(item);
-        OnInventoryItemAdd?.Invoke(item);
+        OnInventoryItemAdd?.Invoke(item, item.GetItemSO());
+        CallOnInventoryChanged(item, item.GetItemSO());
         return item;
+    }
+
+    public void CallOnInventoryChanged(Item item, ItemTemplate itemSO)
+    {
+        OnInventoryChanged?.Invoke(item, itemSO);
     }
 
     private Item isConsumableItemExisted(Item ExistItemCheck)
@@ -125,7 +151,8 @@ public class InventoryManager : MonoBehaviour {
     {
         if (PlayerStats.RemoveItems(item))
         {
-            OnInventoryItemRemove?.Invoke(item);
+            OnInventoryItemRemove?.Invoke(item, item.GetItemSO());
+            CallOnInventoryChanged(item, item.GetItemSO());
         }
     }
     public List<CharacterData> GetEquipCharactersDataList()

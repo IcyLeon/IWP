@@ -17,7 +17,6 @@ public class BowAimState : BowControlState
         StartDelay = false;
         DelayToIdleElasped = Time.time;
         GetBowCharactersState().BowData.isChargedFinish = false;
-        StartAnimation("isAiming");
     }
 
     public override void Update()
@@ -93,7 +92,6 @@ public class BowAimState : BowControlState
     public override void Exit()
     {
         base.Exit();
-        StopAnimation("isAiming");
         ResetCharge();
         GetBowCharactersState().BowData.isChargedFinish = false;
 

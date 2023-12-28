@@ -54,7 +54,7 @@ public class InventoryUIManager : MonoBehaviour
         ScrollRect.content = TabGroup.GetCurrentTabPanel().TabPanel.GetComponent<RectTransform>();
     }
 
-    private void OnInventoryItemAdd(Item item)
+    private void OnInventoryItemAdd(Item item, ItemTemplate itemSO  )
     {
         GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab);
         ItemButton itemButton = go.GetComponent<ItemButton>();
@@ -66,7 +66,7 @@ public class InventoryUIManager : MonoBehaviour
         itembutton_Dictionary.Add(item, itemButton);
     }
 
-    private void OnInventoryItemRemove(Item item)
+    private void OnInventoryItemRemove(Item item, ItemTemplate itemSO)
     {
         ItemButton itemButton = itembutton_Dictionary[item];
         itemButton.onButtonClick -= GetItemSelected;
@@ -81,7 +81,7 @@ public class InventoryUIManager : MonoBehaviour
         for (int i = 0; i < InventoryManager.GetINVList().Count; i++)
         {
             Item item = InventoryManager.GetINVList()[i];
-            OnInventoryItemAdd(item);
+            OnInventoryItemAdd(item, item.GetItemSO());
         }
     }
 

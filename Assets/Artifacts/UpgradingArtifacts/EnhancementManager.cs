@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -319,7 +318,7 @@ public class EnhancementManager : MonoBehaviour
         }
     }
 
-    private void OnInventoryItemRemove(Item item)
+    private void OnInventoryItemRemove(Item item, ItemTemplate itemSO)
     {
         ClearAll();
     }
@@ -389,36 +388,33 @@ public class EnhancementManager : MonoBehaviour
             UpgradinginProgress = true;
             if (UpgradableItemREF.GetLevel() < CostList.Length)
             {
-                if (Mathf.Approximately(upgradeProgressSlider.value, upgradeProgressSlider.maxValue))
+                if (Mathf.Approximately(Mathf.RoundToInt(upgradeProgressSlider.value), (int)upgradeProgressSlider.maxValue))
                 {
+                    UpgradableItemREF.SetExpAmount(UpgradableItemREF.GetExpAmount() - upgradeProgressSlider.maxValue);
                     if ((UpgradableItemREF.GetLevel() + 1) < CostList.Length)
-                    {
-                        UpgradableItemREF.SetExpAmount(UpgradableItemREF.GetExpAmount() - upgradeProgressSlider.maxValue);
                         SetProgressUpgrades(0, CostList[UpgradableItemREF.GetLevel() + 1]);
-                    }
-                    else
-                    {
-                        SetProgressUpgrades(0, 0); // max level
-                        UpdateContent();
-                    }
+
                     UpdatePreviewEXP();
                     upgradeProgressSlider.value = upgradeProgressSlider.minValue;
                     UpgradableItemREF.Upgrade();
                 }
+
+                if (!Mathf.Approximately(Mathf.RoundToInt(upgradeProgressSlider.value), (int)UpgradableItemREF.GetExpAmount()))
+                    upgradeProgressSlider.value = Mathf.Lerp(upgradeProgressSlider.value, UpgradableItemREF.GetExpAmount(), UpgradeElasped / smoothTime);
+                else
+                    break;
             }
             else
             {
+                SetProgressUpgrades(0, 0); // max level
+                UpdateContent();
                 break;
             }
-
-            if (!Mathf.Approximately(upgradeProgressSlider.value, UpgradableItemREF.GetExpAmount()))
-                upgradeProgressSlider.value = Mathf.Lerp(upgradeProgressSlider.value, UpgradableItemREF.GetExpAmount(), UpgradeElasped / smoothTime);
-            else
-                break;
 
             UpgradeElasped += Time.unscaledDeltaTime;
             yield return null;
         }
+        upgradeProgressSlider.value = UpgradableItemREF.GetExpAmount();
         ButtonMask.SetActive(false);
         UpgradinginProgress = false;
     }
@@ -455,7 +451,7 @@ public class EnhancementManager : MonoBehaviour
 
         return total;
     }
-    public void EnhanceUpgrade()
+    private void EnhanceUpgrade()
     {
         if (GetItemREF() != null)
         {

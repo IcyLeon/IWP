@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class ArtifactStrongBoxes : ConsumableItem
 {
     private ArtifactStrongBoxesSO artifactStrongBoxesSO;
-    private InventoryManager inventoryManager;
+
     private void GetRandomArtifacts()
     {
         if (artifactStrongBoxesSO == null)
@@ -31,7 +31,6 @@ public class ArtifactStrongBoxes : ConsumableItem
 
     public ArtifactStrongBoxes(bool isNew, ItemTemplate itemSO) : base(isNew,itemSO)
     {
-        inventoryManager = InventoryManager.GetInstance();
         artifactStrongBoxesSO = GetItemSO() as ArtifactStrongBoxesSO;
     }
 

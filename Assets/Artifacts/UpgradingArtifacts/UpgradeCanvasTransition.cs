@@ -7,6 +7,7 @@ public class UpgradeCanvasTransition : MonoBehaviour, IPointerClickHandler
 {
     private Item ItemREF;
     private UpgradeCanvas upgradeCanvas;
+    [SerializeField] GameObject CharacterShowcaseCanvas;
     [SerializeField] GameObject ItemShowcaseCanvas;
 
     void Start()
@@ -24,7 +25,9 @@ public class UpgradeCanvasTransition : MonoBehaviour, IPointerClickHandler
             return;
 
         upgradeCanvas.OpenUpgradeItemCanvas(ItemREF);
+
         ItemShowcaseCanvas.transform.GetChild(0).gameObject.SetActive(false);
+        CharacterShowcaseCanvas.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void SetItemREF(ItemButton itembutton)

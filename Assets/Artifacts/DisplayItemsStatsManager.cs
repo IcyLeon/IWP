@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,7 +49,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
         Init();
     }
 
-    private void OnInventoryItemAdd(Item item)
+    private void OnInventoryItemAdd(Item item, ItemTemplate itemSO)
     {
         GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab);
         ItemButton itemButton = go.GetComponent<ItemButton>();
@@ -70,7 +69,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
         itembutton_Dictionary.Add(item, itemButton);
     }
 
-    private void OnInventoryItemRemove(Item item)
+    private void OnInventoryItemRemove(Item item, ItemTemplate itemSO)
     {
         ItemButton itemButton = itembutton_Dictionary[item];
         itemButton.onButtonClick -= GetItemSelected;
@@ -84,7 +83,7 @@ public class DisplayItemsStatsManager : MonoBehaviour
         for (int i = 0; i < InventoryManager.GetINVList().Count; i++)
         {
             Item item = InventoryManager.GetINVList()[i];
-            OnInventoryItemAdd(item);
+            OnInventoryItemAdd(item, item.GetItemSO());
         }
     }
 
@@ -173,10 +172,13 @@ public class DisplayItemsStatsManager : MonoBehaviour
             KeyValuePair<Item, ItemButton> itemPair = itembutton_Dictionary.ElementAt(i);
             if (itembutton_Dictionary.TryGetValue(itemPair.Key, out ItemButton itemButton))
             {
-                itemButton.onButtonClick -= GetItemSelected;
-                itemButton.onButtonUpdate -= GetItemButtonUpdate;
-                Destroy(itemButton.gameObject);
-                itembutton_Dictionary.Remove(itemPair.Key);
+                if (itemButton != null)
+                {
+                    itemButton.onButtonClick -= GetItemSelected;
+                    itemButton.onButtonUpdate -= GetItemButtonUpdate;
+                    Destroy(itemButton.gameObject);
+                    itembutton_Dictionary.Remove(itemPair.Key);
+                }
             }
         }
 

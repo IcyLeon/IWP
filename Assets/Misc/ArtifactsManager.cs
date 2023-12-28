@@ -4,10 +4,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEditor.Experimental;
 
 public class ArtifactsManager : MonoBehaviour
 {
     private static ArtifactsManager instance;
+    [SerializeField] ExpItemSO expItemSO; // test
     [SerializeField] ArtifactsListInfo artifactsListInfo;
 
     public ArtifactsListInfo GetArtifactsListInfo()
@@ -45,6 +47,11 @@ public class ArtifactsManager : MonoBehaviour
             AddArtifactsToInventory(ArtifactType.GOBLET, ArtifactsSet.THUNDERING_FURY, Rarity.ThreeStar);
 
 
+
+            Type ItemType = expItemSO.GetTypeREF();
+            object instance = Activator.CreateInstance(ItemType, true, expItemSO);
+            ExpItem ExpItem = (ExpItem)instance;
+            InventoryManager.GetInstance().AddItems(ExpItem);
         }
 
     }

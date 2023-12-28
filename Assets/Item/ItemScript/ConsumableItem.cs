@@ -7,7 +7,6 @@ using UnityEngine;
 public abstract class ConsumableItem : Item
 {
     protected int amount;
-    public event Action onValueChanged;
 
     public virtual void Use(int Useamount)
     {
@@ -33,7 +32,7 @@ public abstract class ConsumableItem : Item
     protected void OverflowManager()
     {
         amount = Mathf.Clamp(amount, 0, 1000);
-        onValueChanged?.Invoke();
+        InventoryManager.GetInstance().CallOnInventoryChanged(this, ItemsSO);
     }
 
 

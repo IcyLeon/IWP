@@ -9,18 +9,23 @@ public class Arrow : MonoBehaviour
     private CharacterData BowCharacters;
     private float FlightTime = 10f;
 
-    private float gravityScale = 1f;
-
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(TurnOnGravity());
         Destroy(gameObject, FlightTime);
+    }
+
+    IEnumerator TurnOnGravity()
+    {
+        rb.useGravity = false;
+        yield return new WaitForSeconds(0.5f);
+        rb.useGravity = true;
     }
 
     void FixedUpdate()
     {
         LimitFallVelocity();
-        rb.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
     }
 
     private void LimitFallVelocity()

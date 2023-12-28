@@ -57,10 +57,10 @@ public class PlayerGroundState : PlayerMovementState
         }
         else
         {
+            OnAimInput();
+
             if (GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
                 return;
-
-            OnAimInput();
 
             if (IsAiming())
                 return;

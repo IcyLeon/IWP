@@ -7,8 +7,10 @@ using UnityEngine.UI;
 
 public class CharactersShowcaseManager : MonoBehaviour
 {
+    private static CharactersShowcaseManager instance;
     [SerializeField] CharacterInfoContentManager CharacterInfoContentManager;
     [SerializeField] CharactersArtifactsInfoContentManager CharactersArtifactsInfoContentManager;
+    [SerializeField] EnhanceCharactersManager EnhanceCharactersManager;
     [SerializeField] GameObject CharactersIconPrefab;
     [SerializeField] TextMeshProUGUI CharacterNameText;
     [SerializeField] Image CharacterElemental;
@@ -17,6 +19,15 @@ public class CharactersShowcaseManager : MonoBehaviour
     private CharacterIconButton SelectedCharacterIcon;
     private InventoryManager inventoryManager;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    public static CharactersShowcaseManager GetInstance()
+    {
+        return instance;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +64,11 @@ public class CharactersShowcaseManager : MonoBehaviour
         charactersDictionary.Add(CharacterIconButton, CharacterIconButton.GetCharacterData());
     }
 
+    public void RefreshCharacter()
+    {
+        OnCharacterButtonClick(SelectedCharacterIcon);
+    }
+
     void OnCharacterButtonClick(CharacterIconButton c)
     {
         SelectedCharacterIcon = c;
@@ -69,9 +85,14 @@ public class CharactersShowcaseManager : MonoBehaviour
 
             CharacterInfoContentManager.Init(this, SelectedCharacterIcon.GetCharacterData());
             CharactersArtifactsInfoContentManager.Init(this, SelectedCharacterIcon.GetCharacterData());
+            EnhanceCharactersManager.Init(this, SelectedCharacterIcon.GetCharacterData());
         }
     }
 
+    public EnhanceCharactersManager GetEnhanceCharactersManager()
+    {
+        return EnhanceCharactersManager;
+    }
     public CharacterIconButton GetSelectedCharacterData()
     {
         return SelectedCharacterIcon;

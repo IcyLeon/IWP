@@ -7,12 +7,12 @@ using UnityEngine;
 public class Kaqing : SwordCharacters
 {
     private Vector3 ElementalHitPos;
-    private GameObject targetOrb;
     private float CurrentElementalSwordFusion;
     [SerializeField] GameObject ElectroSlashPrefab;
     [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
     private ParticleSystem BurstRangeEffect;
+    private GameObject targetOrb;
     [SerializeField] GameObject TargetOrbPrefab;
     [SerializeField] Transform EmitterPivot;
     [SerializeField] GameObject UltiSlashPrefab;
@@ -168,7 +168,9 @@ public class Kaqing : SwordCharacters
 
     public void InitElementalSkillHitPos_Aim()
     {
-        Vector3 hitdir = (Camera.main.transform.position + Camera.main.transform.forward * GetKaqingState().KaqingData.ESkillRange) - GetPlayerManager().GetPlayerOffsetPosition().position;
+        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+
+        Vector3 hitdir = (ray.origin + ray.direction * GetKaqingState().KaqingData.ESkillRange) - GetPlayerManager().GetPlayerOffsetPosition().position;
         ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, GetKaqingState().KaqingData.ESkillRange);
         LookAtElementalHitPos();
     }

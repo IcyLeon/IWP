@@ -13,7 +13,7 @@ public class UseItem : MonoBehaviour, IPointerClickHandler
     {
         this.ItemButtonREF = ItemButtonREF;
 
-        gameObject.SetActive(true);
+        gameObject.SetActive(ItemButtonREF?.GetItemREF() is not ConsumableItemForbiddenInInventory && ItemButtonREF?.GetItemREF() is ConsumableItem);
     }
 
     public void OnPointerClick(PointerEventData eventData)

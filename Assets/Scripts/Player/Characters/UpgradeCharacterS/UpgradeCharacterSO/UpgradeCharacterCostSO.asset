@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7230281dddd25614aaea3931f18511da, type: 3}
+  m_Name: UpgradeCharacterCostSO
+  m_EditorClassIdentifier: 
+  CharacterUpgradeCost: e80300002d050000a406000066080000410a00004e0c0000a60e0000fe100000881300004416000032190000391c0000721f0000dd22000061260000fe290000cd2d0000b5310000cf3500001b3a0000

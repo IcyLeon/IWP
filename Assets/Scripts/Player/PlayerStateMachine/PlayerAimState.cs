@@ -12,6 +12,7 @@ public class PlayerAimState : PlayerMovementState
     public override void Enter()
     {
         base.Enter();
+        StartAnimation("isAiming");
         SetSpeed(AimSpeed);
     }
 
@@ -53,6 +54,7 @@ public class PlayerAimState : PlayerMovementState
     public override void Exit()
     {
         base.Exit();
+        StopAnimation("isAiming");
         ResetSpeed();
     }
 

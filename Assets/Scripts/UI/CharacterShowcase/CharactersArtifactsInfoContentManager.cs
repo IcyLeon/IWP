@@ -1,16 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static CurrentCharacterArtifacts;
 
 public class CharactersArtifactsInfoContentManager : MonoBehaviour
 {
     private CharactersShowcaseManager CharactersShowcaseManager;
     private CharacterData characterData;
+    [SerializeField] RectTransform ArtifactPivotPoint;
     [SerializeField] CurrentCharacterArtifacts[] CurrentCharacterArtifactsList;
     public CharactersShowcaseManager GetCharactersShowcaseManager()
     {
         return CharactersShowcaseManager;
+    }
+
+    private void RotateAroundPivot()
+    {
+        ArtifactPivotPoint.rotation *= Quaternion.Euler(0, 0, Time.unscaledDeltaTime * 5f);
+
+        if (ArtifactPivotPoint.rotation.eulerAngles.z >= 360f)
+        {
+            // Subtract 360 degrees to keep the rotation within the valid range
+            ArtifactPivotPoint.rotation = Quaternion.Euler(0, 0, ArtifactPivotPoint.rotation.eulerAngles.z - 360f);
+        }
+
+        for (int i = 0; i < CurrentCharacterArtifactsList.Length; i++)
+        {
+            CurrentCharacterArtifacts artifactBubble = CurrentCharacterArtifactsList[i];
+            artifactBubble.transform.rotation = Quaternion.identity;
+        }
     }
 
     public void Init(CharactersShowcaseManager CharactersShowcaseManager, CharacterData c)
@@ -30,13 +47,27 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
         return characterData;
     }
 
+    private void InitPosition(CurrentCharacterArtifacts artifactBubble, int idx)
+    {
+        float length = 250f;
+        Vector2 dir = Quaternion.Euler(0, 0, Mathf.Rad2Deg * ((Mathf.PI / CurrentCharacterArtifactsList.Length) * (idx * 2f))) * Vector2.right;
+        artifactBubble.GetComponent<RectTransform>().anchoredPosition = dir.normalized * length;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        foreach(var artifactBubble in CurrentCharacterArtifactsList)
+        for(int i = 0; i < CurrentCharacterArtifactsList.Length; i++)
         {
+            CurrentCharacterArtifacts artifactBubble = CurrentCharacterArtifactsList[i];
+            InitPosition(artifactBubble, i);
             artifactBubble.ArtifactsBubbleClick += SelectedArtifactsBubbleClick;
         }
+    }
+
+    private void Update()
+    {
+        RotateAroundPivot();
     }
 
     private void OnDestroy()

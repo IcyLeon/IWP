@@ -15,7 +15,6 @@ public class KaqingAimState : KaqingElementalSkillState
         base.Enter();
         Timer = 0f;
         GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(false);
-        StartAnimation("2ndSkillAim");
     }
 
     public override void ElementalSkillTrigger()
@@ -42,7 +41,6 @@ public class KaqingAimState : KaqingElementalSkillState
     public override void Exit()
     {
         base.Exit();
-        StopAnimation("2ndSkillAim");
         GetKaqingState().GetKaqing().DestroyTargetOrb();
     }
 }

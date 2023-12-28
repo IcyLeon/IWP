@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CurrentCharacterArtifacts : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] ArtifactType artifactType;
+    [SerializeField] TextMeshProUGUI ArtifactLevel;
     [SerializeField] bool IgnoreArtifactType = true;
     private CharacterData characterData;
     [SerializeField] SelectedArtifactsBubble SelectedArtifactsBubble;
@@ -23,6 +25,14 @@ public class CurrentCharacterArtifacts : MonoBehaviour, IPointerClickHandler
         characterData = c;
     }
 
+    void Start()
+    {
+        if (!IgnoreArtifactType)
+        {
+            if (ArtifactLevel)
+                ArtifactLevel.gameObject.SetActive(false);
+        }
+    }
     private void Update()
     {
         UpdateCurrentArtifact();
@@ -47,6 +57,11 @@ public class CurrentCharacterArtifacts : MonoBehaviour, IPointerClickHandler
         {
             SelectedArtifactsBubble.UpdatePlaceholderArtifactsItemSprite(AM.GetArtifactPiece(artifactType).artifactIconSprite);
         }
+
+        ArtifactLevel.gameObject.SetActive(artifactsSO != null);
+
+        if (artifacts != null)
+            ArtifactLevel.text = "+" + artifacts.GetLevel();
     }
 
     private ArtifactsSO GetArtifactsSO(Artifacts artifact)

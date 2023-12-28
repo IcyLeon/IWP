@@ -9,7 +9,7 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
-    private float OriginalFireSpeed = 1000f, BaseFireSpeed;
+    private float OriginalFireSpeed = 500f, BaseFireSpeed;
     private float LastClickedTime, AttackRate = 0.05f, ChargedAttackRate = 0.5f;
     private Vector3 Direction, ShootDirection;
     private Elemental ShootElemental;
@@ -47,7 +47,7 @@ public class BowCharacters : PlayerCharacters
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
 
         if (!GetPlayerManager().IsAiming())
-            BaseFireSpeed = OriginalFireSpeed * 0.75f;
+            BaseFireSpeed = OriginalFireSpeed * 0.8f;
         else
             BaseFireSpeed = OriginalFireSpeed;
 
@@ -114,10 +114,13 @@ public class BowCharacters : PlayerCharacters
         if (CrossHair == null)
             CrossHair = AssetManager.GetInstance().SpawnCrossHair();
 
-        Vector3 hitdir = (Camera.main.transform.position + Camera.main.transform.forward * 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
-        Direction = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, 50f) - GetPlayerManager().GetPlayerOffsetPosition().position;
+        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        Vector3 hitpos = GetRayPosition3D(ray.origin, ray.direction, 25f);
+        Vector3 hitdir = hitpos - EmitterPivot.position;
+
+        Direction = hitdir;
         ShootDirection = Direction;
-        LookAtDirection(Direction);
+        LookAtDirection(Camera.main.transform.forward);
     }
 
     public override void SetLookAtTarget()

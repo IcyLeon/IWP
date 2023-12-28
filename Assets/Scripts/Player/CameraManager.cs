@@ -88,7 +88,6 @@ public class CameraManager : MonoBehaviour
                 aimPOV.m_VerticalAxis.m_InputAxisValue = 0f;
             }
         }
-        //playerCamera.enabled = aimCamera.enabled = !MainUI.GetInstance().isCursorVisible();
     }
 
     private void UpdateCamera()
@@ -119,13 +118,11 @@ public class CameraManager : MonoBehaviour
 
     public void CameraDefault()
     {
-        playerCamera.gameObject.SetActive(true);
         aimCamera.gameObject.SetActive(false);
     }
 
     public void CameraAim()
     {
-        playerCamera.gameObject.SetActive(false);
         aimCamera.gameObject.SetActive(true);
     }
 

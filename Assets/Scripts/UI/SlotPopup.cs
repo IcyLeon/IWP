@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class SendSlotInfo : EventArgs
 {
@@ -21,12 +22,11 @@ public class SlotPopup : MonoBehaviour
     [SerializeField] bool AllowDragnDrop;
     private Slot SlotREF;
     private InventoryManager InventoryManager;
-    private Dictionary<Item, ItemButton> itembutton_Dictionary;
+    private Dictionary<Item, ItemButton> itembutton_Dictionary = new();
 
     // Update is called once per frame
     void Start()
     {
-        itembutton_Dictionary = new();
         InventoryManager = InventoryManager.GetInstance();
         InventoryManager.OnInventoryItemAdd += OnInventoryItemAdd;
         InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
@@ -43,7 +43,7 @@ public class SlotPopup : MonoBehaviour
         for (int i = 0; i < InventoryManager.GetINVList().Count; i++)
         {
             Item item = InventoryManager.GetINVList()[i];
-            OnInventoryItemAdd(item);
+            OnInventoryItemAdd(item, item.GetItemSO());
         }
     }
 
@@ -71,7 +71,7 @@ public class SlotPopup : MonoBehaviour
         }
     }
 
-    private void OnInventoryItemAdd(Item item)
+    private void OnInventoryItemAdd(Item item, ItemTemplate itemSO)
     {
         GameObject go = Instantiate(AssetManager.GetInstance().ItemBorderPrefab, scrollRect.content);
         ItemButton itemButton = go.GetComponent<ItemButton>();
@@ -91,7 +91,7 @@ public class SlotPopup : MonoBehaviour
         itembutton_Dictionary.Add(item, itemButton);
     }
 
-    private void OnInventoryItemRemove(Item item)
+    private void OnInventoryItemRemove(Item item, ItemTemplate itemSO)
     {
         ItemButton itemButton = itembutton_Dictionary[item];
         itemButton.onButtonSpawn -= OnItemSpawned;
@@ -142,13 +142,23 @@ public class SlotPopup : MonoBehaviour
         if (itembutton_Dictionary == null)
             return;
 
-        foreach (var rt in itembutton_Dictionary.Keys)
+        foreach (var rt in itembutton_Dictionary.Values)
         {
-            ItemButton itemButton = itembutton_Dictionary[rt].GetComponent<ItemButton>();
-            itemButton.gameObject.SetActive(itemButton.GetItemREF() != item);
+            if (rt.GetItemREF() == item)
+                rt.gameObject.SetActive(false);
         }
     }
 
+    public void Refresh()
+    {
+        if (itembutton_Dictionary == null)
+            return;
+
+        foreach (var rt in itembutton_Dictionary.Values)
+        {
+            rt.gameObject.SetActive(true);
+        }
+    }
 
     private void OnItemRemove(ItemButton itemButton)
     {

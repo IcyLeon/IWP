@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 524504a3ae4340d419379cb0571efe82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expItemSO: {fileID: 11400000, guid: 3ae1aa8cfa5d346489fd6ff4b5e9c8a0, type: 2}
   artifactsListInfo: {fileID: 11400000, guid: e4a08a69655b3e246b8a3b12de45f174, type: 2}
 --- !u!114 &7526025142291315149
 MonoBehaviour:

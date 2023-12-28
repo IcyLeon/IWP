@@ -29,8 +29,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     [SerializeField] EquippedByCharacter EquipByIconContent;
 
     [Header("Item")]
-    [SerializeField] TextMeshProUGUI ConsumableAmountTxt;
-    [SerializeField] TextMeshProUGUI UpgradableTxt;
+    [SerializeField] TextMeshProUGUI DisplayAmountTxt;
 
     [Header("Button Components")]
     [SerializeField] Image Background;
@@ -128,29 +127,10 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     void Start()
     {
         SetButtonSprites();
-        SetButtonText();
         onButtonSpawn?.Invoke(this);
 
         gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y , 0);
         transform.localScale = Vector3.one;
-    }
-
-    void SetButtonText()
-    {
-        if (GetItemREF() != null)
-        {
-            SetDisplayStars(GetItemREF().GetRarity());
-
-            switch (GetItemREF())
-            {
-                case Item item when item is UpgradableItems:
-                    UpgradableTxt.gameObject.SetActive(true);
-                    break;
-                case Item item when item is ConsumableItem:
-                    ConsumableAmountTxt.gameObject.SetActive(true);
-                    break;
-            }
-        }
     }
 
     private void Update()
@@ -167,13 +147,11 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
         {
             switch (GetItemREF())
             {
-                case Item item when item is UpgradableItems:
-                    UpgradableItems upgradableItems = (UpgradableItems)item;
-                    UpgradableTxt.text = "+" + upgradableItems.GetLevel();
+                case UpgradableItems upgradableItems:
+                    SetDisplayText("+" + upgradableItems.GetLevel());
                     break;
-                case Item item when item is ConsumableItem:
-                    ConsumableItem consumableItem = (ConsumableItem)item;
-                    ConsumableAmountTxt.text = consumableItem.GetAmount().ToString();
+                case ConsumableItem consumableItem:
+                    SetDisplayText(consumableItem.GetAmount().ToString());
                     break;
             }
         }
@@ -213,6 +191,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
         if (itemREF != null)
         {
             itemSprite = itemREF.GetItemSO().ItemSprite;
+            SetDisplayStars(GetItemREF().GetRarity());
 
             if (itemREF.isNew)
             {
@@ -224,11 +203,12 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
             if (DisplayitemTemplate != null)
             {
                 itemTemplate = DisplayitemTemplate;
-                itemSprite = itemTemplate.ItemSprite;
-                SetDisplayStars(itemTemplate.Rarity);
             }
 
+            itemSprite = itemTemplate.ItemSprite;
+            SetDisplayStars(itemTemplate.Rarity);
         }
+
         ItemImage.sprite = itemSprite;
     }
 
@@ -250,6 +230,12 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
         {
             transform.localScale = Vector3.one;
         }
+    }
+
+    public void SetDisplayText(string txt)
+    {
+        DisplayAmountTxt.gameObject.SetActive(true);
+        DisplayAmountTxt.text = txt;
     }
 
     public void SetItemREF(Item item)
