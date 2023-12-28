@@ -246,6 +246,21 @@ public class EnhanceCharactersManager : MonoBehaviour
         }
     }
 
+    public void ClosePanel()
+    {
+        for (int i = 0; i < GiveExp_Dictionary.Count; i++)
+        {
+            KeyValuePair<ExpItemSO, int> itembutton_Dictionary_KeyPair = GiveExp_Dictionary.ElementAt(i);
+            if (GiveExp_Dictionary.TryGetValue(itembutton_Dictionary_KeyPair.Key, out int value))
+            {
+                GiveExp_Dictionary[itembutton_Dictionary_KeyPair.Key] = 0;
+            }
+        }
+        CharactersShowcaseManager.RefreshCharacter();
+        UpdateAmountAddTxt();
+        gameObject.SetActive(false);
+    }
+
     private IEnumerator UpgradeProgress()
     {
         float smoothTime = 4.5f;
