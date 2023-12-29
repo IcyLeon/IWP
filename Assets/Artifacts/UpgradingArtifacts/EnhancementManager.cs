@@ -275,12 +275,12 @@ public class EnhancementManager : MonoBehaviour
     {
         return EnhancementItemList;
     }
-    private void LoadEmptySlots()
+
+    private void OnDestroy()
     {
         if (upgradeCanvas == null)
             return;
 
-        upgradeCanvas.SlotPopup.onSlotSend -= ManualAddItems;
         for (int i = EnhancementItemList.Count - 1; i >= 0; i--)
         {
             Slot slot = EnhancementItemList[i].GetComponent<Slot>();
@@ -288,6 +288,16 @@ public class EnhancementManager : MonoBehaviour
             slot.SlotItemButtonChanged -= OnSlotItemButtonChanged;
             Destroy(EnhancementItemList[i].gameObject);
         }
+        EnhancementItemList.Clear();
+
+        upgradeCanvas.SlotPopup.onSlotSend -= ManualAddItems;
+        upgradeCanvas.SlotPopup.onSlotItemRemove -= ManualRemoveItems;
+    }
+
+    private void LoadEmptySlots()
+    {
+        if (upgradeCanvas == null)
+            return;
 
         for (int i = 0; i < EnhancementItemToSell; i++)
         {

@@ -69,6 +69,9 @@ public class SlotPopup : MonoBehaviour
                 itembutton_Dictionary.Remove(itemPair.Key);
             }
         }
+
+        InventoryManager.OnInventoryItemAdd -= OnInventoryItemAdd;
+        InventoryManager.OnInventoryItemRemove -= OnInventoryItemRemove;
     }
 
     private void OnInventoryItemAdd(Item item, ItemTemplate itemSO)

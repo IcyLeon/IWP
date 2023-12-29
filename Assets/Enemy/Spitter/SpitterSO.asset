@@ -16,6 +16,10 @@ MonoBehaviour:
   ItemDesc: 
   ItemSprite: {fileID: 0}
   Rarity: 0
-  BaseHP: 1000
-  BaseATK: 80
-  BaseDEF: 10
+  AscensionInfoList:
+  - BaseHP: 1500
+    BaseATK: 46
+    BaseDEF: 25
+    BaseMaxHP: 0
+    BaseMaxATK: 0
+    BaseMaxDEF: 0

@@ -16,9 +16,13 @@ MonoBehaviour:
   ItemDesc: Amber
   ItemSprite: {fileID: 0}
   Rarity: 3
-  BaseHP: 793
-  BaseATK: 18
-  BaseDEF: 50
+  AscensionInfoList:
+  - BaseHP: 793
+    BaseATK: 18
+    BaseDEF: 50
+    BaseMaxHP: 2037
+    BaseMaxATK: 48
+    BaseMaxDEF: 129
   Elemental: 1
   PartyIcon: {fileID: 21300000, guid: 6e349c75f188ca54bbe143cfc6623cba, type: 3}
   ElementalSkillSprite: {fileID: 21300000, guid: 32c78eb0e64026b45ae3670d6612e33e,

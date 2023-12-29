@@ -16,9 +16,13 @@ MonoBehaviour:
   ItemDesc: Kaqing
   ItemSprite: {fileID: 0}
   Rarity: 4
-  BaseHP: 1020
-  BaseATK: 25
-  BaseDEF: 62
+  AscensionInfoList:
+  - BaseHP: 1020
+    BaseATK: 25
+    BaseDEF: 62
+    BaseMaxHP: 2646
+    BaseMaxATK: 65
+    BaseMaxDEF: 161
   Elemental: 3
   PartyIcon: {fileID: 21300000, guid: 50a4657062194a746b5e026bbeb8dedd, type: 3}
   ElementalSkillSprite: {fileID: 21300000, guid: 3d9964099f93fa6439a7c9c0d689b251,

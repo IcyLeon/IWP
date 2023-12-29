@@ -33,7 +33,7 @@ public class EnhanceCharactersManager : MonoBehaviour
     [SerializeField] Slider upgradeProgressSlider, previewProgressSlider;
     private bool UpgradinginProgress = false;
     private InventoryManager IM;
-
+    [SerializeField] CharacterStatsDisplay[] CharacterStatsDisplayList;
     private int GetActualLevel()
     {
         return GetCharacterData().GetLevel() - 1;
@@ -152,6 +152,12 @@ public class EnhanceCharactersManager : MonoBehaviour
     {
         this.CharactersShowcaseManager = CharactersShowcaseManager;
         characterData = c;
+
+        foreach (var CharacterStatsDisplay in CharacterStatsDisplayList)
+        {
+            CharacterStatsDisplay.SetCharacterData(characterData);
+            CharacterStatsDisplay.DisplayCharactersStat();
+        }
     }
 
     public CharacterData GetCharacterData()
@@ -292,6 +298,12 @@ public class EnhanceCharactersManager : MonoBehaviour
             UpgradeElasped += Time.unscaledDeltaTime;
             yield return null;
         }
+
+        foreach (var CharacterStatsDisplay in CharacterStatsDisplayList)
+        {
+            CharacterStatsDisplay.DisplayCharactersStat();
+        }
+
         upgradeProgressSlider.value = GetCharacterData().GetExpAmount();
         ButtonMask.SetActive(false);
         UpgradinginProgress = false;
