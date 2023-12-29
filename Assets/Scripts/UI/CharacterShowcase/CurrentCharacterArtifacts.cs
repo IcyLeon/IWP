@@ -40,10 +40,7 @@ public class CurrentCharacterArtifacts : MonoBehaviour, IPointerClickHandler
 
     public void UpdateCurrentArtifact()
     {
-        if (IgnoreArtifactType)
-            return;
-
-        if (GetCharacterData() == null)
+        if (IgnoreArtifactType || GetCharacterData() == null)
             return;
 
         if (AM == null)

@@ -35,7 +35,7 @@ public abstract class UpgradableItems : Item
 
     public void SetExpAmount(float amt)
     {
-        ExpAmount = amt; 
+        ExpAmount = amt;
     }
 
 

@@ -35,8 +35,10 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
         this.CharactersShowcaseManager = CharactersShowcaseManager;
         characterData = c;
 
-        foreach (var artifactBubble in CurrentCharacterArtifactsList)
+        for (int i = 0; i < CurrentCharacterArtifactsList.Length; i++)
         {
+            var artifactBubble = CurrentCharacterArtifactsList[i];
+            InitPosition(artifactBubble, i);
             artifactBubble.SetCharacterData(GetCharacterData());
             artifactBubble.UpdateCurrentArtifact();
         }
@@ -57,10 +59,9 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < CurrentCharacterArtifactsList.Length; i++)
+        for (int i = 0; i < CurrentCharacterArtifactsList.Length; i++)
         {
-            CurrentCharacterArtifacts artifactBubble = CurrentCharacterArtifactsList[i];
-            InitPosition(artifactBubble, i);
+            var artifactBubble = CurrentCharacterArtifactsList[i];
             artifactBubble.ArtifactsBubbleClick += SelectedArtifactsBubbleClick;
         }
     }

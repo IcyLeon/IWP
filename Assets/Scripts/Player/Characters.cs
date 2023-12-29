@@ -35,6 +35,7 @@ public class Characters : MonoBehaviour, IDamage
     protected float CurrentHealth;
     protected float BaseATK;
     protected float BaseDEF;
+    protected float BaseEM;
     protected int Level;
 
     [SerializeField] protected CharactersSO CharactersSO;
@@ -51,7 +52,7 @@ public class Characters : MonoBehaviour, IDamage
     protected bool isAttacking;
     protected virtual void Start()
     {
-        BaseMaxHealth = CharactersSO.BaseHP;
+        BaseMaxHealth = CharactersSO.GetAscensionInfo(0).BaseHP;
         isAttacking = false;
     }
     public void ResetAttack()
@@ -210,7 +211,7 @@ public class Characters : MonoBehaviour, IDamage
         return Level;
     }
 
-    public virtual float GetDamage()
+    public virtual float GetATK()
     {
         return BaseATK;
     }

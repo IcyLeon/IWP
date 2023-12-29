@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainUI : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class MainUI : MonoBehaviour
     [SerializeField] GameObject BlueEffectObject;
     private bool Paused;
 
+    public static void SetProgressUpgrades(Slider slider, float min, float max)
+    {
+        slider.minValue = min;
+        slider.maxValue = max;
+    }
     public static MainUI GetInstance()
     {
         return instance;

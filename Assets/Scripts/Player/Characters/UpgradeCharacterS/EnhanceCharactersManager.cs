@@ -187,9 +187,9 @@ public class EnhanceCharactersManager : MonoBehaviour
             return;
 
         if (GetCharacterData().GetLevel() < UpgradeCharacterSO.CharacterUpgradeCost.Length)
-            SetProgressUpgrades(0, UpgradeCharacterSO.CharacterUpgradeCost[GetActualLevel()]);
+            MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, UpgradeCharacterSO.CharacterUpgradeCost[GetActualLevel()]);
         else
-            SetProgressUpgrades(0, 0);
+            MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, 0);
 
         upgradeProgressSlider.value = GetCharacterData().GetExpAmount();
     }
@@ -198,12 +198,6 @@ public class EnhanceCharactersManager : MonoBehaviour
     {
         SetExpDisplay();
         gameObject.SetActive(true);
-    }
-
-    private void SetProgressUpgrades(float min, float max)
-    {
-        upgradeProgressSlider.minValue = min;
-        upgradeProgressSlider.maxValue = max;
     }
 
     private int GetLevelIncrease()
@@ -256,7 +250,7 @@ public class EnhanceCharactersManager : MonoBehaviour
                 GiveExp_Dictionary[itembutton_Dictionary_KeyPair.Key] = 0;
             }
         }
-        CharactersShowcaseManager.RefreshCharacter();
+
         UpdateAmountAddTxt();
         gameObject.SetActive(false);
     }
@@ -276,7 +270,7 @@ public class EnhanceCharactersManager : MonoBehaviour
                 {
                     GetCharacterData().SetExpAmount(GetCharacterData().GetExpAmount() - upgradeProgressSlider.maxValue);
                     if ((GetActualLevel() + 1) < UpgradeCharacterSO.CharacterUpgradeCost.Length)
-                        SetProgressUpgrades(0, UpgradeCharacterSO.CharacterUpgradeCost[GetActualLevel() + 1]);
+                        MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, UpgradeCharacterSO.CharacterUpgradeCost[GetActualLevel() + 1]);
 
                     UpdatePreviewEXP();
                     upgradeProgressSlider.value = upgradeProgressSlider.minValue;
@@ -290,7 +284,7 @@ public class EnhanceCharactersManager : MonoBehaviour
             }
             else
             {
-                SetProgressUpgrades(0, 0); // max level
+                MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, 0); // max level
                 UpdateContent();
                 break;
             }

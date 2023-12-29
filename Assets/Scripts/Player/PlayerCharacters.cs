@@ -181,12 +181,12 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return characterData.GetMaxHealth();
     }
 
-    public override float GetDamage()
+    public override float GetATK()
     {
         if (characterData == null)
-            return base.GetDamage();
+            return base.GetATK();
 
-        return characterData.GetDamage();
+        return characterData.GetATK();
     }
 
     public override void SetHealth(float val)
@@ -298,6 +298,14 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
             return Vector3.zero;
 
         return GetPlayerManager().GetPlayerController().GetRayPosition3D(origin, direction, maxdistance);
+    }
+
+    protected RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
+    {
+        if (GetPlayerManager() == null)
+            return default(RaycastHit[]);
+
+        return GetPlayerManager().GetPlayerController().GetRayPositionAll3D(origin, direction, maxdistance);
     }
 
 

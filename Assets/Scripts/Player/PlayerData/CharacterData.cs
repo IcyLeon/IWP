@@ -14,9 +14,15 @@ public class CharacterData : UpgradableItems
     private float ElementalSkillCooldown;
     private float CurrentElementalBurstEnergyCooldown;
     private float ElementalBurstEnergyCooldown;
+    private int MaxAscensionLevel;
+    private int CurrentAscension;
     private ElementalReaction elementalReaction;
     private List<Artifacts> EquippedArtifacts = new List<Artifacts>();
 
+    public int GetCurrentAscension()
+    {
+        return CurrentAscension;
+    }
     public List<Artifacts> GetEquippedArtifactsList()
     {
         return EquippedArtifacts;
@@ -52,14 +58,15 @@ public class CharacterData : UpgradableItems
     public CharacterData(bool isNew, PlayerCharacterSO playerCharacterSO) : base(isNew, playerCharacterSO)
     {
         SetItemsSO(playerCharacterSO);
-        BaseMaxHealth = playerCharacterSO.BaseHP;
+        BaseMaxHealth = playerCharacterSO.GetAscensionInfo(0).BaseHP;
         CurrentHealth = BaseMaxHealth;
-        BaseATK = playerCharacterSO.BaseATK;
+        BaseATK = playerCharacterSO.GetAscensionInfo(0).BaseATK;
         ResetEnergyCost();
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
         CurrentElementalSkillCooldown = 0;
         CurrentElementalBurstEnergyCooldown = 0;
+        MaxAscensionLevel = CurrentAscension = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         Level = 1;
         MaxLevel = 20;
@@ -69,7 +76,7 @@ public class CharacterData : UpgradableItems
     public CharacterData(bool isNew, PlayerCharacterSO playerCharacterSO, float damage, int level, float currentEnergy) : base(isNew, playerCharacterSO)
     {
         SetItemsSO(playerCharacterSO);
-        BaseMaxHealth = playerCharacterSO.BaseHP;
+        BaseMaxHealth = playerCharacterSO.GetAscensionInfo(0).BaseHP;
         CurrentHealth = BaseMaxHealth;
         BaseATK = damage;
         Level = level;
@@ -78,6 +85,7 @@ public class CharacterData : UpgradableItems
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
         CurrentElementalSkillCooldown = 0;
         CurrentElementalBurstEnergyCooldown = 0;
+        CurrentAscension = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         MaxLevel = 20;
         elementalReaction = new ElementalReaction();
@@ -173,19 +181,37 @@ public class CharacterData : UpgradableItems
             SetHealth(GetMaxHealth());
         }
     }
-
-    public float GetMaxHealth()
+    public float GetEM()
     {
-        return BaseMaxHealth + (BaseMaxHealth * (Level - 1));
-    }
-
-    public float GetDamage()
-    {
-        return BaseATK * (1 + 0);
+        return 0f;
     }
 
     public float GetDEF()
     {
-        return BaseDEF * (1 + 0);
+        if (GetLevel() == 1)
+            return BaseDEF;
+
+        return Mathf.RoundToInt(BaseDEF + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxDEF - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF) / GetMaxLevel()) * (GetLevel()));
+    }
+
+    public float GetATK()
+    {
+        if (GetLevel() == 1)
+            return BaseATK;
+
+        return Mathf.RoundToInt(BaseATK + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxATK - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK) / GetMaxLevel()) * (GetLevel()));
+    }
+
+    public float GetMaxHealth()
+    {
+        if (GetLevel() == 1)
+            return BaseMaxHealth;
+
+        return Mathf.RoundToInt(BaseMaxHealth + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxHP - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP) / GetMaxLevel()) * (GetLevel()));
+    }
+
+    public int GetActualMaxLevel()
+    {
+        return GetMaxLevel() * (MaxAscensionLevel + 1);
     }
 }

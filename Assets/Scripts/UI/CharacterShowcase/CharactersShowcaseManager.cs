@@ -64,9 +64,17 @@ public class CharactersShowcaseManager : MonoBehaviour
         charactersDictionary.Add(CharacterIconButton, CharacterIconButton.GetCharacterData());
     }
 
-    public void RefreshCharacter()
+    private void OnDestroy()
     {
-        OnCharacterButtonClick(SelectedCharacterIcon);
+        for (int i = 0; i < charactersDictionary.Count; i++)
+        {
+            KeyValuePair<CharacterIconButton, CharacterData> charactersDictionary_KeyPair = charactersDictionary.ElementAt(i);
+            if (charactersDictionary.TryGetValue(charactersDictionary_KeyPair.Key, out CharacterData value))
+            {
+                charactersDictionary_KeyPair.Key.OnCharacterButtonClick -= OnCharacterButtonClick;
+            }
+        }
+        charactersDictionary.Clear();
     }
 
     void OnCharacterButtonClick(CharacterIconButton c)

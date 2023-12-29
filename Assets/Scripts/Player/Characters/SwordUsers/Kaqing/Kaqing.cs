@@ -103,12 +103,6 @@ public class Kaqing : SwordCharacters
         GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeSkillsState(this);
     }
 
-    public void SpawnHitEffect(IDamage damage)
-    {
-        ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, damage.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
-        Destroy(hitEffect.gameObject, hitEffect.main.duration);
-        damage.TakeDamage(damage.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 100f);
-    }
 
     public void SpawnEffects()
     {

@@ -22,10 +22,15 @@ public class SelectedArtifactsBubble : MonoBehaviour
             if (ArtifactsSO)
                 ArtifactsItemImage.sprite = ArtifactsSO.ItemSprite;
         }
-
+        UpdateContent();
     }
 
     private void Update()
+    {
+        UpdateContent();
+    }
+
+    private void UpdateContent()
     {
         if (PlaceholderArtifactsImage)
         {
@@ -36,7 +41,6 @@ public class SelectedArtifactsBubble : MonoBehaviour
             ArtifactsItemImage.gameObject.SetActive(ArtifactsSO != null);
         }
     }
-
     public void UpdatePlaceholderArtifactsItemSprite(Sprite sprite)
     {
         PlaceholderArtifactsImage.sprite = sprite;

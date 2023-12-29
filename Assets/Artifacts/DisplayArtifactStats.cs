@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Artifacts;
 
 public class DisplayArtifactStats : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class DisplayArtifactStats : MonoBehaviour
 
 
     // Update is called once per frame
-    public void DisplayArtifactsStat(string Name, ArtifactsStat artifactsStat, string Value)
+    public void DisplayArtifactsStat(string Name, Artifacts.ArtifactsStat artifactsStat, string Value)
     {
         if (ArtifactStatValueText)
         {
@@ -30,9 +29,9 @@ public class DisplayArtifactStats : MonoBehaviour
         }
     }
 
-    private bool CheckIfInBetweenStats_PERCENT(ArtifactsStat stat)
+    private bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)
     {
-        for (int i = (int)ArtifactsStat.HPPERCENT; i <= (int)ArtifactsStat.CritDamage; i++)
+        for (int i = (int)Artifacts.ArtifactsStat.HPPERCENT; i <= (int)Artifacts.ArtifactsStat.CritDamage; i++)
         {
             if ((int)stat == i)
             {

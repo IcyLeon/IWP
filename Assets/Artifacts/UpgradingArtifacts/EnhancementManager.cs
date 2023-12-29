@@ -66,9 +66,9 @@ public class EnhancementManager : MonoBehaviour
 
         CostList = itemList.GetCostListStatus(GetItemREF().GetRarity());
         if (UpgradableItemREF.GetLevel() < CostList.Length)
-            SetProgressUpgrades(0, CostList[UpgradableItemREF.GetLevel()]);
+            MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, CostList[UpgradableItemREF.GetLevel()]);
         else
-            SetProgressUpgrades(0, 0);
+            MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, 0);
 
         upgradeProgressSlider.value = UpgradableItemREF.GetExpAmount();
     }
@@ -392,7 +392,7 @@ public class EnhancementManager : MonoBehaviour
                 {
                     UpgradableItemREF.SetExpAmount(UpgradableItemREF.GetExpAmount() - upgradeProgressSlider.maxValue);
                     if ((UpgradableItemREF.GetLevel() + 1) < CostList.Length)
-                        SetProgressUpgrades(0, CostList[UpgradableItemREF.GetLevel() + 1]);
+                        MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, CostList[UpgradableItemREF.GetLevel() + 1]);
 
                     UpdatePreviewEXP();
                     upgradeProgressSlider.value = upgradeProgressSlider.minValue;
@@ -406,7 +406,7 @@ public class EnhancementManager : MonoBehaviour
             }
             else
             {
-                SetProgressUpgrades(0, 0); // max level
+                MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, 0); // max level
                 UpdateContent();
                 break;
             }
@@ -417,12 +417,6 @@ public class EnhancementManager : MonoBehaviour
         upgradeProgressSlider.value = UpgradableItemREF.GetExpAmount();
         ButtonMask.SetActive(false);
         UpgradinginProgress = false;
-    }
-
-    private void SetProgressUpgrades(float min, float max)
-    {
-        upgradeProgressSlider.minValue = min;
-        upgradeProgressSlider.maxValue = max;
     }
 
     private float GetTotalEXP()

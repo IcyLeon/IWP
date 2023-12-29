@@ -127,6 +127,12 @@ public class PlayerController : MonoBehaviour
         return origin + direction.normalized * maxdistance;
     }
 
+    public RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
+    {
+        RaycastHit[] RaycastAll = Physics.RaycastAll(origin, direction.normalized, maxdistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        return RaycastAll;
+    }
+
     private int GetInputNums()
     {
         for (int i = 0; i < 10; i++)

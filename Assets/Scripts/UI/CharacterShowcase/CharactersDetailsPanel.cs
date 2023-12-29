@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharactersDetailsPanel : MonoBehaviour
 {
@@ -9,29 +10,53 @@ public class CharactersDetailsPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI CharacterLevelText;
     [SerializeField] TextMeshProUGUI CharacterMaxLevelText;
     [SerializeField] TextMeshProUGUI CharacterDescText;
+    [SerializeField] TextMeshProUGUI CharacterEXP;
+    [SerializeField] Slider ExpSlider;
+    [SerializeField] UpgradeCharacterSO UpgradeCharacterSO;
+    [SerializeField] CharacterStatsDisplay[] CharacterStatsDisplayList;
     private CharacterData characterData;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        
+        ExpSlider.value = 0;
     }
-
     public void Init(CharacterData c)
     {
         characterData = c;
         if (characterData != null)
         {
+            foreach (var CharacterStatsDisplay in CharacterStatsDisplayList)
+            {
+                CharacterStatsDisplay.SetCharacterData(characterData);
+            }
+
             CharacterNameText.text = characterData.GetPlayerCharacterSO().ItemName;
-            CharacterLevelText.text = characterData.GetLevel().ToString();
-            CharacterMaxLevelText.text = characterData.GetMaxLevel().ToString();
             CharacterDescText.text = characterData.GetPlayerCharacterSO().ItemDesc;
+            UpdateLevel();
+        }
+    }
+
+    // Update is called once per frame
+    void UpdateLevel()
+    {
+        if (characterData == null)
+            return;
+
+        ExpSlider.value = characterData.GetExpAmount() / UpgradeCharacterSO.CharacterUpgradeCost[characterData.GetLevel() - 1];
+        CharacterEXP.text = characterData.GetExpAmount() + "/" + UpgradeCharacterSO.CharacterUpgradeCost[characterData.GetLevel() - 1];
+        CharacterEXP.gameObject.SetActive(characterData.GetMaxLevel() != characterData.GetLevel());
+        CharacterLevelText.text = characterData.GetLevel().ToString();
+        CharacterMaxLevelText.text = characterData.GetMaxLevel().ToString();
+
+        foreach(var CharacterStatsDisplay in CharacterStatsDisplayList)
+        {
+            CharacterStatsDisplay.DisplayCharactersStat();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateLevel();
     }
 }

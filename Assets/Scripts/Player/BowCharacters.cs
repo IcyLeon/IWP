@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BowCharacters : PlayerCharacters
 {
@@ -109,16 +111,35 @@ public class BowCharacters : PlayerCharacters
         ChargeUpEmitter.Play();
     }
 
+    private Vector3 GetFirstTargetHits(float length)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        RaycastHit[] raycastsHitAll = GetRayPositionAll3D(ray.origin, ray.direction, length);
+        List<RaycastHit> hits = new List<RaycastHit>(raycastsHitAll);
+
+        for(int i = hits.Count - 1; i >= 0; i--)
+        {
+            RaycastHit hit = hits[i];
+            if (Vector3.Distance(hit.point, ray.origin) < Vector3.Distance(ray.origin, EmitterPivot.position))
+            {
+                hits.Remove(hit);
+            }
+        }
+
+        hits.Sort((hit1, hit2) => hit1.distance.CompareTo(hit2.distance));
+
+        if (hits.Count > 0)
+            return hits[0].point;
+
+        return ray.origin + ray.direction * length;
+    }
+
     public void InitHitPos_Aim()
     {
         if (CrossHair == null)
             CrossHair = AssetManager.GetInstance().SpawnCrossHair();
 
-        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        Vector3 hitpos = GetRayPosition3D(ray.origin, ray.direction, 25f);
-        Vector3 hitdir = hitpos - EmitterPivot.position;
-
-        Direction = hitdir;
+        Direction = GetFirstTargetHits(20f) - EmitterPivot.position;
         ShootDirection = Direction;
         LookAtDirection(Camera.main.transform.forward);
     }
