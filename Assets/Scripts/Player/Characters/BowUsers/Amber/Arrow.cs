@@ -64,7 +64,7 @@ public class Arrow : MonoBehaviour
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharacters.GetATK());
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharacters.GetATK(BowCharacters.GetLevel()));
             }
 
             ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();

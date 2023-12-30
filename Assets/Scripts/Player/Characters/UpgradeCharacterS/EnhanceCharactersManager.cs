@@ -216,7 +216,7 @@ public class EnhanceCharactersManager : MonoBehaviour
 
         for (int i = 0; i < UpgradeCharacterSO.CharacterUpgradeCost.Length; i++)
         {
-            if (i >= GetCharacterData().GetLevel())
+            if (i >= GetActualLevel() && (GetCharacterData().GetLevel() + increaseLevel < GetCharacterData().GetMaxLevel()))
             {
                 if (current < UpgradeCharacterSO.CharacterUpgradeCost[i])
                     break;
@@ -243,6 +243,11 @@ public class EnhanceCharactersManager : MonoBehaviour
 
             MaxLevelContent.SetActive(GetCharacterData().GetLevel() == UpgradeCharacterSO.CharacterUpgradeCost.Length);
             EnhancementContent.SetActive(GetCharacterData().GetLevel() < UpgradeCharacterSO.CharacterUpgradeCost.Length);
+
+            foreach (var CharacterStatsDisplay in CharacterStatsDisplayList)
+            {
+                CharacterStatsDisplay.DisplayIncreaseValueStats(GetLevelIncrease());
+            }
         }
     }
 

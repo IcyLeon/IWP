@@ -16,13 +16,20 @@ public enum CharacterStatsType
 public class CharacterStatsDisplay : MonoBehaviour
 {
     [SerializeField] CharacterStatsType characterStatsType;
-    [SerializeField] TextMeshProUGUI characterStatsNameText, characterStatsValueText;
+    [SerializeField] TextMeshProUGUI characterStatsNameText, characterStatsValueText, characterIncreasePreviewValueText;
+    [SerializeField] GameObject IncreasePreviewValueContent;
     [SerializeField] bool ShowOnlyBaseStats;
     private CharacterData characterData;
 
     public void SetCharacterData(CharacterData c)
     {
         characterData = c;
+    }
+
+    public void DisplayIncreaseValueStats(int increaselevelPreview)
+    {
+        IncreasePreviewValueContent.SetActive(increaselevelPreview > 0);
+        characterIncreasePreviewValueText.text = ShowTotalStatsCharactersValue(characterData.GetLevel() + increaselevelPreview).ToString();
     }
 
     public void DisplayCharactersStat()
@@ -38,23 +45,23 @@ public class CharacterStatsDisplay : MonoBehaviour
             if (ShowOnlyBaseStats)
                 characterStatsValueText.text = ShowbaseStatsCharactersValue().ToString();
             else
-                characterStatsValueText.text = ShowTotalStatsCharactersValue().ToString();
+                characterStatsValueText.text = ShowTotalStatsCharactersValue(characterData.GetLevel()).ToString();
         }
 
     }
 
-    private float ShowTotalStatsCharactersValue()
+    private float ShowTotalStatsCharactersValue(int level)
     {
         switch (characterStatsType)
         {
             case CharacterStatsType.HP:
-                return characterData.GetMaxHealth();
+                return characterData.GetMaxHealth(level);
             case CharacterStatsType.EM:
-                return characterData.GetEM();
+                return characterData.GetEM(level);
             case CharacterStatsType.DEF:
-                return characterData.GetDEF();
+                return characterData.GetDEF(level);
             case CharacterStatsType.ATK:
-                return characterData.GetATK();
+                return characterData.GetATK(level);
         }
         return 0f;
     }

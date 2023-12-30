@@ -77,7 +77,7 @@ public class SwordCharacters : PlayerCharacters
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetATK());
+                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetATK(GetCharacterData().GetLevel()));
             }
         }
         return colliders;

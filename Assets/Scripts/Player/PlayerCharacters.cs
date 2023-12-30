@@ -178,7 +178,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null)
             return base.GetMaxHealth();
 
-        return characterData.GetMaxHealth();
+        return characterData.GetMaxHealth(characterData.GetLevel());
     }
 
     public override float GetATK()
@@ -186,7 +186,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null)
             return base.GetATK();
 
-        return characterData.GetATK();
+        return characterData.GetATK(characterData.GetLevel());
     }
 
     public override void SetHealth(float val)
@@ -202,7 +202,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null)
             return base.GetDEF();
 
-        return characterData.GetDEF();
+        return characterData.GetDEF(characterData.GetLevel());
     }
 
     public PlayerManager GetPlayerManager()

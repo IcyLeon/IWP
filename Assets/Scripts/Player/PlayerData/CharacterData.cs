@@ -56,7 +56,7 @@ public class CharacterData : UpgradableItems
     {
         MaxAscensionLevel = CurrentAscension = 0;
         SetItemsSO(playerCharacterSO);
-        CurrentHealth = GetMaxHealth();
+        CurrentHealth = GetMaxHealth(GetLevel());
         ResetEnergyCost();
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
@@ -72,7 +72,7 @@ public class CharacterData : UpgradableItems
     {
         MaxAscensionLevel = CurrentAscension = 0;
         SetItemsSO(playerCharacterSO);
-        CurrentHealth = GetMaxHealth();
+        CurrentHealth = GetMaxHealth(GetLevel());
         Level = level;
         CurrentEnergyBurstCost = currentEnergy;
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
@@ -164,7 +164,7 @@ public class CharacterData : UpgradableItems
     public void SetHealth(float Hp)
     {
         CurrentHealth = (int)Hp;
-        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth(GetLevel()));
     }
 
     public override void Upgrade()
@@ -172,36 +172,33 @@ public class CharacterData : UpgradableItems
         if (Level != MaxLevel)
         {
             base.Upgrade();
-            SetHealth(GetMaxHealth());
+            SetHealth(GetMaxHealth(GetLevel()));
         }
     }
-    public float GetEM()
+    public float GetEM(int level)
     {
         return 0f;
     }
 
-    public float GetDEF()
+    public float GetDEF(int level)
     {
-        if (GetLevel() == 1)
-            return GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF;
-
-        return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxDEF - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF) / GetMaxLevel()) * (GetLevel()));
+        if (level < 0)
+            level = Mathf.Abs(level);
+        return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxDEF - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF) / (GetMaxLevel() - 1)) * (level - 1));
     }
 
-    public float GetATK()
+    public int GetATK(int level)
     {
-        if (GetLevel() == 1)
-            return GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK;
-
-        return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxATK - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK) / GetMaxLevel()) * (GetLevel()));
+        if (level < 0)
+            level = Mathf.Abs(level);
+        return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxATK - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK) / (GetMaxLevel() - 1)) * (level - 1));
     }
 
-    public float GetMaxHealth()
+    public int GetMaxHealth(int level)
     {
-        if (GetLevel() == 1)
-            return GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP;
-
-        return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxHP - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP) / GetMaxLevel()) * (GetLevel()));
+        if (level < 0)
+            level = Mathf.Abs(level);
+        return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxHP - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP) / (GetMaxLevel() - 1)) * (level - 1));
     }
 
     public int GetActualMaxLevel()

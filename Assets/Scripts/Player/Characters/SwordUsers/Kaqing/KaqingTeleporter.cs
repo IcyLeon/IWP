@@ -60,7 +60,7 @@ public class KaqingTeleporter : MonoBehaviour
             if (damage != null)
             {
                 if (!damage.IsDead())
-                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetATK());
+                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetATK(Kaqing.GetLevel()));
             }
         }
     }
