@@ -12,11 +12,11 @@ public class ElementalOrb : MonoBehaviour
     [SerializeField] Rigidbody rb;
     private float maxForce = 15f;
     private float currentForce = 0f;
-    private float accelerationTime = 2f;
+    private float accelerationTime = 2.25f;
 
     void Start()
     {
-        rb.velocity = maxForce * 0.65f * RandomVectorInCone();
+        rb.velocity = maxForce * 0.6f * RandomVectorInCone();
     }
 
     public void SetSource(PlayerManager PM)
@@ -33,7 +33,6 @@ public class ElementalOrb : MonoBehaviour
 
     private void Update()
     {
-        Vector3 direction = (pm.GetPlayerOffsetPosition().position - rb.position).normalized;
         currentForce = Mathf.Lerp(currentForce, maxForce, Time.deltaTime / accelerationTime);
         rb.position = Vector3.MoveTowards(rb.position, pm.GetPlayerOffsetPosition().position, currentForce * Time.deltaTime);
     }

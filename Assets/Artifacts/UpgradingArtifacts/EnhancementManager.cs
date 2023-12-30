@@ -241,7 +241,7 @@ public class EnhancementManager : MonoBehaviour
                 DisplayArtifactStats stats = ArtifactsStatsContainer[i].GetComponent<DisplayArtifactStats>();
                 if (stats != null)
                 {
-                    if (i <= (int)selectedartifacts.GetRarity())
+                    if (i <= selectedartifacts.GetTotalSubstatsDisplay())
                     {
                         stats.DisplayArtifactsStat(selectedartifacts.GetArtifactStatsName(i), selectedartifacts.GetStats(i), selectedartifacts.GetArtifactStatsValue(i));
                         stats.gameObject.SetActive(true);

@@ -31,7 +31,7 @@ public class DisplayArtifactStats : MonoBehaviour
 
     private bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)
     {
-        for (int i = (int)Artifacts.ArtifactsStat.HPPERCENT; i <= (int)Artifacts.ArtifactsStat.CritDamage; i++)
+        for (int i = (int)Artifacts.ArtifactsStat.HPPERCENT; i < (int)Artifacts.ArtifactsStat.TOTAL_STATS; i++)
         {
             if ((int)stat == i)
             {

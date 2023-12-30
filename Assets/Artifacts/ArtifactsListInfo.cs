@@ -32,4 +32,7 @@ public class ArtifactsListInfo : ScriptableObject
 
     [Header("Artifacts Piece Name")]
     public CommonArtifactPiece[] artifactsInfoTypeName;
+
+    [Header("Weighing System")]
+    public ArtifactWeightManagement ArtifactWeightManagement;
 }

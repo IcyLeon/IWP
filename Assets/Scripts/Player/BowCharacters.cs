@@ -11,7 +11,7 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
-    private float OriginalFireSpeed = 500f, BaseFireSpeed;
+    private float OriginalFireSpeed = 800f, BaseFireSpeed;
     private float LastClickedTime, AttackRate = 0.05f, ChargedAttackRate = 0.5f;
     private Vector3 Direction, ShootDirection;
     private Elemental ShootElemental;

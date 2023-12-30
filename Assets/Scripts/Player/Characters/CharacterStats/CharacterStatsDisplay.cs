@@ -3,19 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public enum CharacterStatsType
-{
-    HP,
-    EM,
-    DEF,
-    ATK,
-    CRIT_DMG,
-    CRIT_RATE
-}
-
 public class CharacterStatsDisplay : MonoBehaviour
 {
-    [SerializeField] CharacterStatsType characterStatsType;
+    [SerializeField] Artifacts.ArtifactsStat characterStatsType;
     [SerializeField] TextMeshProUGUI characterStatsNameText, characterStatsValueText, characterIncreasePreviewValueText;
     [SerializeField] GameObject IncreasePreviewValueContent;
     [SerializeField] bool ShowOnlyBaseStats;
@@ -38,7 +28,7 @@ public class CharacterStatsDisplay : MonoBehaviour
             return;
 
         if (characterStatsNameText)
-            characterStatsNameText.text = GetCharactersName();
+            characterStatsNameText.text = GetStatsName(characterStatsType);
 
         if (characterStatsValueText)
         {
@@ -54,13 +44,13 @@ public class CharacterStatsDisplay : MonoBehaviour
     {
         switch (characterStatsType)
         {
-            case CharacterStatsType.HP:
+            case Artifacts.ArtifactsStat.HP:
                 return characterData.GetMaxHealth(level);
-            case CharacterStatsType.EM:
+            case Artifacts.ArtifactsStat.EM:
                 return characterData.GetEM(level);
-            case CharacterStatsType.DEF:
+            case Artifacts.ArtifactsStat.DEF:
                 return characterData.GetDEF(level);
-            case CharacterStatsType.ATK:
+            case Artifacts.ArtifactsStat.ATK:
                 return characterData.GetATK(level);
         }
         return 0f;
@@ -70,31 +60,43 @@ public class CharacterStatsDisplay : MonoBehaviour
     {
         switch (characterStatsType)
         {
-            case CharacterStatsType.HP:
+            case Artifacts.ArtifactsStat.HP:
                 return characterData.GetPlayerCharacterSO().GetAscensionInfo(characterData.GetCurrentAscension()).BaseHP;
-            case CharacterStatsType.EM:
+            case Artifacts.ArtifactsStat.EM:
                 return 0;
-            case CharacterStatsType.DEF:
+            case Artifacts.ArtifactsStat.DEF:
                 return characterData.GetPlayerCharacterSO().GetAscensionInfo(characterData.GetCurrentAscension()).BaseDEF;
-            case CharacterStatsType.ATK:           
+            case Artifacts.ArtifactsStat.ATK:           
                 return characterData.GetPlayerCharacterSO().GetAscensionInfo(characterData.GetCurrentAscension()).BaseATK;
         }
         return 0f;
     }
 
 
-    private string GetCharactersName()
+    public static string GetStatsName(Artifacts.ArtifactsStat artifactType)
     {
-        switch(characterStatsType)
+        switch(artifactType)
         {
-            case CharacterStatsType.HP:
-                return "Max HP";
-            case CharacterStatsType.EM:
+            case Artifacts.ArtifactsStat.HP:
+                return "HP";
+            case Artifacts.ArtifactsStat.EM:
                 return "Elemental Mastery";
-            case CharacterStatsType.DEF:
+            case Artifacts.ArtifactsStat.DEF:
                 return "DEF";
-            case CharacterStatsType.ATK:
+            case Artifacts.ArtifactsStat.ATK:
                 return "ATK";
+            case Artifacts.ArtifactsStat.ATKPERCENT:
+                return "ATK";
+            case Artifacts.ArtifactsStat.CritDamage:
+                return "CRIT Rate";
+            case Artifacts.ArtifactsStat.CritRate:
+                return "CRIT DMG";
+            case Artifacts.ArtifactsStat.DEFPERCENT:
+                return "DEF";
+            case Artifacts.ArtifactsStat.ER:
+                return "Energy Recharge";
+            case Artifacts.ArtifactsStat.HPPERCENT:
+                return "HP";
         }
         return null;
     } 

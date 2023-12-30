@@ -19,7 +19,7 @@ public class Arrow : MonoBehaviour
     IEnumerator TurnOnGravity()
     {
         rb.useGravity = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.15f);
         rb.useGravity = true;
     }
 

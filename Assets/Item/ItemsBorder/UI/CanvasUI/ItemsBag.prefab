@@ -985,7 +985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6442831526298354323
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4276,7 +4276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 867.71, y: -37.5}
+  m_AnchoredPosition: {x: 867.7101, y: -37.5}
   m_SizeDelta: {x: 189.65, y: 43.82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2589569881279180361
@@ -4537,7 +4537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3204149908728763790
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6667,7 +6667,7 @@ RectTransform:
   m_Father: {fileID: 4101332260190546954}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.083045006}
+  m_AnchorMin: {x: 0, y: 0.08304489}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -7175,7 +7175,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1728270033714025014}
   m_HandleRect: {fileID: 2878534661992988415}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -22508,8 +22508,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1069406868282005469}
   m_HandleRect: {fileID: 3828763470568278789}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.916955
+  m_Value: 1.0000013
+  m_Size: 0.9169551
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -36710,7 +36710,7 @@ PrefabInstance:
     - target: {fileID: 7863763268483624318, guid: 2d8123522d243eb4a911ca1f3a8d01fc,
         type: 3}
       propertyPath: characterStatsType
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8322867673467614025, guid: 2d8123522d243eb4a911ca1f3a8d01fc,
         type: 3}
@@ -37571,7 +37571,7 @@ PrefabInstance:
     - target: {fileID: 7863763268483624318, guid: 2d8123522d243eb4a911ca1f3a8d01fc,
         type: 3}
       propertyPath: characterStatsType
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8322867673467614025, guid: 2d8123522d243eb4a911ca1f3a8d01fc,
         type: 3}

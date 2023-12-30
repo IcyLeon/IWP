@@ -12,6 +12,7 @@ public class CharacterData : UpgradableItems
     private float CurrentElementalBurstEnergyCooldown;
     private float ElementalBurstEnergyCooldown;
     private int MaxAscensionLevel;
+    private int PreviewsMaxCapLevel;
     private int CurrentAscension;
     private ElementalReaction elementalReaction;
     private List<Artifacts> EquippedArtifacts = new List<Artifacts>();
@@ -54,7 +55,7 @@ public class CharacterData : UpgradableItems
 
     public CharacterData(bool isNew, PlayerCharacterSO playerCharacterSO) : base(isNew, playerCharacterSO)
     {
-        MaxAscensionLevel = CurrentAscension = 0;
+        MaxAscensionLevel = CurrentAscension = PreviewsMaxCapLevel = 0;
         SetItemsSO(playerCharacterSO);
         CurrentHealth = GetMaxHealth(GetLevel());
         ResetEnergyCost();
@@ -201,8 +202,8 @@ public class CharacterData : UpgradableItems
         return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxHP - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP) / (GetMaxLevel() - 1)) * (level - 1));
     }
 
-    public int GetActualMaxLevel()
+    public override int GetMaxLevel()
     {
-        return GetMaxLevel() * (MaxAscensionLevel + 1);
+        return base.GetMaxLevel() * (MaxAscensionLevel + 1);
     }
 }

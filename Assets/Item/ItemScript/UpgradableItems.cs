@@ -22,7 +22,7 @@ public abstract class UpgradableItems : Item
         return Level;
     }
 
-    public int GetMaxLevel()
+    public virtual int GetMaxLevel()
     {
         return MaxLevel;
     }

@@ -37,7 +37,7 @@ public class AmberESkillArrows : MonoBehaviour
 
     private IEnumerator Moving()
     {
-        float maxTurnRate = 2.5f;
+        float maxTurnRate = 5f;
         float maxVelocity = 12f;
         Vector3 forceDirection = rb.velocity.normalized;
 
@@ -62,6 +62,8 @@ public class AmberESkillArrows : MonoBehaviour
             forceDirection = Vector3.RotateTowards(forceDirection, targetDirection, maxTurnRate * Time.deltaTime, 0.0f);
 
             rb.velocity = forceDirection.normalized * maxVelocity;
+
+            maxTurnRate += Time.deltaTime;
             yield return null;
         }
     }

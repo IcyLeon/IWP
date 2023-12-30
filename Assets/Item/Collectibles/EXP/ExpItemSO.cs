@@ -9,7 +9,7 @@ public class ExpItemSO : ItemTemplate
     public float ExpAmount;
     public override Type GetTypeREF()
     {
-        return typeof(ExpItem);
+        return typeof(ConsumableItemForbiddenInInventory);
     }
 
     public override string GetItemType()

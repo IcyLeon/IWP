@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.ProBuilder.Shapes;
+using Random = UnityEngine.Random;
 
 public class Artifacts : UpgradableItems
 {
+    private ArtifactsManager AM;
     private CharacterData characterData;
     public enum ArtifactsStat
     {
@@ -17,137 +20,46 @@ public class Artifacts : UpgradableItems
         HPPERCENT,
         DEFPERCENT,
         ATKPERCENT,
-        DMGBONUS,
         CritRate,
-        CritDamage
+        CritDamage,
+        TOTAL_STATS
     }
 
-    private Dictionary<ArtifactsStat, string> ArtifactStatsName = new()
-    {
-        { ArtifactsStat.HP, "HP" },
-        { ArtifactsStat.HPPERCENT, "HP" },
-        { ArtifactsStat.EM, "Elemental Mastery" },
-        { ArtifactsStat.DEF, "DEF" },
-        { ArtifactsStat.DEFPERCENT, "DEF" },
-        { ArtifactsStat.ER, "Energy Recharge" },
-        { ArtifactsStat.ATK, "ATK" },
-        { ArtifactsStat.ATKPERCENT, "ATK" },
-        { ArtifactsStat.CritRate, "CRIT Rate" },
-        { ArtifactsStat.CritDamage, "CRIT DMG" },
-        { ArtifactsStat.DMGBONUS, "DMG BONUS" }
-    };
-
-    public ArtifactsStat[] StatsList = {
-        ArtifactsStat.HP,
-        ArtifactsStat.EM,
-        ArtifactsStat.DEF,
-        ArtifactsStat.ER,
-        ArtifactsStat.ATK,
-        ArtifactsStat.HPPERCENT,
-        ArtifactsStat.DEFPERCENT,
-        ArtifactsStat.ATKPERCENT,
-        ArtifactsStat.DMGBONUS,
-        ArtifactsStat.CritRate,
-        ArtifactsStat.CritDamage
-    };
+    private int TotalSubstatsDisplay;
     private List<ArtifactsStat> Stats = new List<ArtifactsStat>();
-
-    private Dictionary<ArtifactsStat, Dictionary<Rarity, float>> MainStatsInfo = new()
-    {  
-        {
-            ArtifactsStat.HP, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 430f  },
-                { Rarity.FourStar, 645f },
-                { Rarity.FiveStar, 717f }
-            }
-        },
-        {
-            ArtifactsStat.HPPERCENT, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 5.2f },
-                { Rarity.FourStar, 6.3f },
-                { Rarity.FiveStar, 7.0f }
-            }
-        },
-        {
-            ArtifactsStat.ATK, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 28f },
-                { Rarity.FourStar, 42f },
-                { Rarity.FiveStar, 47f }
-            }
-        },
-        {
-            ArtifactsStat.ATKPERCENT, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 5.2f },
-                { Rarity.FourStar, 6.3f },
-                { Rarity.FiveStar, 7.0f }
-            }
-        },
-        {
-            ArtifactsStat.DEFPERCENT, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 6.6f },
-                { Rarity.FourStar, 7.9f },
-                { Rarity.FiveStar, 8.7f }
-            }
-        },
-        {
-            ArtifactsStat.EM, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 21f },
-                { Rarity.FourStar, 25f },
-                { Rarity.FiveStar, 28f }
-            }
-        },
-        {
-            ArtifactsStat.ER, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 5.8f },
-                { Rarity.FourStar, 7.0f },
-                { Rarity.FiveStar, 7.8f }
-            }
-        },
-        {
-            ArtifactsStat.DMGBONUS, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 5.2f },
-                { Rarity.FourStar, 6.3f },
-                { Rarity.FiveStar, 7.0f }
-            }
-        },
-        {
-            ArtifactsStat.CritDamage, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 7.0f },
-                { Rarity.FourStar, 8.4f },
-                { Rarity.FiveStar, 9.3f }
-            }
-        },
-        {
-            ArtifactsStat.CritRate, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 3.5f },
-                { Rarity.FourStar, 4.2f },
-                { Rarity.FiveStar, 4.7f }
-            }
-        },
-
-        {
-            ArtifactsStat.DEF, new Dictionary<Rarity, float>() {
-                { Rarity.ThreeStar, 3.5f },
-                { Rarity.FourStar, 4.2f },
-                { Rarity.FiveStar, 4.7f }
-            }
-        }
-    };
-
     private ArtifactsSet ArtifactsSet;
 
+    public int GetTotalSubstatsDisplay()
+    {
+        return TotalSubstatsDisplay;
+    }
     public ArtifactsSet GetArtifactsSet()
     {
         return ArtifactsSet;
     }
 
-    public Artifacts(ArtifactsSet artifactsSet, Rarity rarity, ItemTemplate itemsSO, bool isNew) : base(isNew, itemsSO)
+    public Artifacts(ArtifactsSet artifactsSet, Rarity r, ItemTemplate itemsSO, bool isNew) : base(isNew, itemsSO)
     {
+        AM = ArtifactsManager.GetInstance();
         ArtifactsSet = artifactsSet;
         locked = false;
-        this.rarity = rarity;
+        rarity = r;
+
+
+        if (ArtifactsManager.isInProbabilityRange(0.66f))
+        {
+            TotalSubstatsDisplay = GetLowestNumberofStats(rarity).LowestDropValue;
+        }
+        else
+        {
+            TotalSubstatsDisplay = GetLowestNumberofStats(rarity).MaxDropValue;
+        }
     }
 
+    private ArtifactWeightManagement.PossibleNumberofStats GetLowestNumberofStats(Rarity rarity)
+    {
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetPossibleNumberofStatst(rarity);
+    }
 
     private void GenerateRandomArtifacts(ArtifactsStat[] excludeArtifactsStatsList = null)
     {
@@ -156,8 +68,8 @@ public class Artifacts : UpgradableItems
         ArtifactsStat currentArtifactsStatsSelection;
         do
         {
-            randomIndex = random.Next(0, StatsList.Length);
-            currentArtifactsStatsSelection = StatsList[randomIndex];
+            randomIndex = random.Next(0, (int)ArtifactsStat.TOTAL_STATS);
+            currentArtifactsStatsSelection = (ArtifactsStat)randomIndex;
         } while (CheckIfStatsAlreadyExist(currentArtifactsStatsSelection, excludeArtifactsStatsList));
 
         Stats.Add(currentArtifactsStatsSelection);
@@ -179,14 +91,14 @@ public class Artifacts : UpgradableItems
         return Stats.Contains(currentStat);
     }
 
-    public int GetMaxLevel()
+    public override int GetMaxLevel()
     {
         return MaxLevel;
     }
 
     public void GenerateSubArtifactStats()
     {
-        for (int i = 0; i < (int)GetRarity(); i++)
+        for (int i = 0; i < TotalSubstatsDisplay; i++)
         {
             GenerateRandomArtifacts();
         }
@@ -202,33 +114,9 @@ public class Artifacts : UpgradableItems
 
     public void GenerateMainArtifactStats()
     {
-        switch (GetArtifactType())
-        {
-            case ArtifactType.FLOWER:
-                Stats.Add(ArtifactsStat.HP);
-                break;
-            case ArtifactType.PLUME:
-                Stats.Add(ArtifactsStat.ATK);
-                break;
-            case ArtifactType.SANDS:
-                {
-                    ArtifactsStat[] excludeArtifactsStatsList = { ArtifactsStat.DMGBONUS, ArtifactsStat.CritRate, ArtifactsStat.CritDamage, ArtifactsStat.DEF, ArtifactsStat.HP, ArtifactsStat.ATK };
-                    GenerateRandomArtifacts(excludeArtifactsStatsList);
-                }
-                break;
-            case ArtifactType.GOBLET:
-                {
-                    ArtifactsStat[] excludeArtifactsStatsList = { ArtifactsStat.DEF, ArtifactsStat.HP, ArtifactsStat.ATK, ArtifactsStat.ER };
-                    GenerateRandomArtifacts(excludeArtifactsStatsList);
-                }
-                break;
-            case ArtifactType.CIRCLET:
-                {
-                    ArtifactsStat[] excludeArtifactsStatsList = { ArtifactsStat.DMGBONUS, ArtifactsStat.DEF, ArtifactsStat.HP, ArtifactsStat.ATK, ArtifactsStat.ER };
-                    GenerateRandomArtifacts(excludeArtifactsStatsList);
-                }
-                break;
-        }
+        int randomIndex = Random.Range(0, AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactMainStatsInfoList(GetArtifactType()).Length);
+        ArtifactsStat currentArtifactsStatsSelection = AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactMainStatsInfoList(GetArtifactType())[randomIndex].ArtifactsStat;
+        Stats.Add(currentArtifactsStatsSelection);
     }
 
     public void GenerateArtifactStats()
@@ -252,11 +140,20 @@ public class Artifacts : UpgradableItems
 
     public override void Upgrade()
     {
+        base.Upgrade();
+
         if (Level % 4 == 0)
         {
+            if (GetTotalSubstatsDisplay() != GetLowestNumberofStats(rarity).MaxDropValue)
+            {
+                GenerateRandomArtifacts();
+                TotalSubstatsDisplay++;
+            }
+            else
+            {
 
+            }
         }
-        base.Upgrade();
     }
 
     public CharacterData GetCharacterEquipped()
@@ -276,11 +173,11 @@ public class Artifacts : UpgradableItems
 
     public string GetArtifactStatsName(int idx)
     {
-        return ArtifactStatsName[GetStats(idx)];
+        return CharacterStatsDisplay.GetStatsName(GetStats(idx));
     }
 
     public string GetArtifactStatsValue(int idx)
     {
-        return MainStatsInfo[GetStats(idx)][GetRarity()].ToString();
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStartingValue(GetArtifactType(), GetStats(idx), GetRarity()).ToString();
     }
 }

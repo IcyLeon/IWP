@@ -56,6 +56,12 @@ public class EnhanceCharactersManager : MonoBehaviour
         if (SelectedExpItemSO == null)
             return;
 
+        if (value > 0)
+        {
+            if ((GetCharacterData().GetLevel() + GetLevelIncrease() >= GetCharacterData().GetMaxLevel()))
+                return;
+        }
+
         GiveExp_Dictionary[SelectedExpItemSO] += value;
         GiveExp_Dictionary[SelectedExpItemSO] = Mathf.Clamp(GiveExp_Dictionary[SelectedExpItemSO], 0, IM.CountNumberOfItems(SelectedExpItemSO));
 

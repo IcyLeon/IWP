@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
-using UnityEditor.Experimental;
+using Random = UnityEngine.Random;
 
 public class ArtifactsManager : MonoBehaviour
 {
@@ -15,6 +15,13 @@ public class ArtifactsManager : MonoBehaviour
     public ArtifactsListInfo GetArtifactsListInfo()
     {
         return artifactsListInfo;
+    }
+
+    public static bool isInProbabilityRange(float a)
+    {
+        float randomValue = Random.value;
+        float probability = 1.0f - a;
+        return randomValue < probability;
     }
 
     private void Awake()
@@ -50,7 +57,7 @@ public class ArtifactsManager : MonoBehaviour
 
             Type ItemType = expItemSO.GetTypeREF();
             object instance = Activator.CreateInstance(ItemType, true, expItemSO);
-            ExpItem ExpItem = (ExpItem)instance;
+            ConsumableItemForbiddenInInventory ExpItem = (ConsumableItemForbiddenInInventory)instance;
             InventoryManager.GetInstance().AddItems(ExpItem);
         }
 
