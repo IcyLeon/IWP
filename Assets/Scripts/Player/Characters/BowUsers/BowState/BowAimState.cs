@@ -22,6 +22,10 @@ public class BowAimState : BowControlState
     public override void Update()
     {
         base.Update();
+
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+            return;
+
         GetBowCharactersState().GetBowCharacters().InitHitPos_Aim();
         UpdateBowAim();
 

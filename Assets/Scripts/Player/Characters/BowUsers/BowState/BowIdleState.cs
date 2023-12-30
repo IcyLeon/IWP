@@ -14,6 +14,7 @@ public class BowIdleState : BowControlState
     public override void Enter()
     {
         base.Enter();
+        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0);
         threasHold_Charged = 0;
     }
 
@@ -25,7 +26,7 @@ public class BowIdleState : BowControlState
 
     public override void ChargeHold()
     {
-        if (GetBowCharactersState().GetBowCharacters().GetPlayerManager().GetPlayerMovementState() is PlayerDashState)
+        if (GetBowCharactersState().GetBowCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
         if (threasHold_Charged > 0.25f)
@@ -38,7 +39,7 @@ public class BowIdleState : BowControlState
 
     public override void ChargeTrigger()
     {
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
         GetBowCharactersState().GetBowCharacters().LaunchBasicAttack();
@@ -50,7 +51,7 @@ public class BowIdleState : BowControlState
         if (!GetBowCharactersState().GetBowCharacters().GetPlayerManager().CanPerformAction() || GetBowCharactersState().GetBowCharacters().GetBurstActive())
             return;
 
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
         if (Input.GetMouseButton(1))

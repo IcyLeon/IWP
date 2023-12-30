@@ -59,19 +59,18 @@ public class PlayerControlState : IPlayerCharactersState
     }
     private void InterruptUpdate()
     {
-        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
-            return;
-
         if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
         switch (GetPlayerCharacterState())
         {
             case BowCharactersState bcs:
-                GetPlayerCharacterState().ChangeState(bcs.bowIdleState);
+                if (GetPlayerCharacterState().GetPlayerControlState() is not BowIdleState)
+                    GetPlayerCharacterState().ChangeState(bcs.bowIdleState);
                 break;
             case SwordCharacterState scs:
-                GetPlayerCharacterState().ChangeState(scs.swordIdleState);
+                if (GetPlayerCharacterState().GetPlayerControlState() is not SwordIdleState)
+                    GetPlayerCharacterState().ChangeState(scs.swordIdleState);
                 break;
         }
     }

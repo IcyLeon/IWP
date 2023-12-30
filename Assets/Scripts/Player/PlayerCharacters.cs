@@ -259,6 +259,9 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager() == null)
             return;
 
+
+        GetPlayerCharacterState().Update();
+
         if (GetPlayerManager().isDeadState())
             return;
 
@@ -288,8 +291,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
             if (ContainsParam(Animator, "isWalking"))
                 Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
         }
-
-        GetPlayerCharacterState().Update();
     }
 
     protected Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)

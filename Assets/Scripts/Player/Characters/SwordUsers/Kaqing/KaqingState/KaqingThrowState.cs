@@ -15,11 +15,6 @@ public class KaqingThrowState : KaqingElementalSkillState
         GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(false);
     }
 
-    public override void Update()
-    {
-        base.Update();
-    }
-
     public override void OnAnimationTransition()
     {
         GetKaqingState().ChangeState(GetKaqingState().swordIdleState);

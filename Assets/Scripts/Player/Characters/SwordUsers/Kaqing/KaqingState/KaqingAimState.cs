@@ -26,6 +26,9 @@ public class KaqingAimState : KaqingElementalSkillState
     {
         base.Update();
 
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+            return;
+
         GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
         GetKaqingState().GetKaqing().InitElementalSkillHitPos_Aim();
         GetKaqingState().GetKaqing().UpdateTargetOrb();
