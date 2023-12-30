@@ -243,7 +243,7 @@ public class EnhancementManager : MonoBehaviour
                 {
                     if (i <= selectedartifacts.GetTotalSubstatsDisplay())
                     {
-                        stats.DisplayArtifactsStat(selectedartifacts.GetArtifactStatsName(i), selectedartifacts.GetStats(i), selectedartifacts.GetArtifactStatsValue(i));
+                        stats.DisplayArtifactsStat(selectedartifacts.GetArtifactStatsName(i), selectedartifacts.GetStats(i));
                         stats.gameObject.SetActive(true);
                     }
                     else

@@ -6,6 +6,33 @@ using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
 
+public class ArtifactStatsInfo
+{
+    private Artifacts.ArtifactsStat ArtifactsStat;
+    private float StatsValue;
+
+    public ArtifactStatsInfo(Artifacts.ArtifactsStat ArtifactsStat)
+    {
+        this.ArtifactsStat = ArtifactsStat;
+        StatsValue = 0;
+    }
+
+    public Artifacts.ArtifactsStat GetArtifactsStat()
+    {
+        return ArtifactsStat;
+    }
+
+    public void SetStatsValue(float value)
+    {
+        StatsValue = value;
+    }
+
+    public float GetStatsValue()
+    {
+        return StatsValue;
+    }
+}
+
 public class Artifacts : UpgradableItems
 {
     private ArtifactsManager AM;
@@ -26,7 +53,7 @@ public class Artifacts : UpgradableItems
     }
 
     private int TotalSubstatsDisplay;
-    private List<ArtifactsStat> Stats = new List<ArtifactsStat>();
+    private List<ArtifactStatsInfo> Stats = new List<ArtifactStatsInfo>();
     private ArtifactsSet ArtifactsSet;
 
     public int GetTotalSubstatsDisplay()
@@ -45,8 +72,20 @@ public class Artifacts : UpgradableItems
         locked = false;
         rarity = r;
 
+        switch (GetRarity())
+        {
+            case Rarity.ThreeStar:
+                MaxLevel = 12;
+                break;
+            case Rarity.FourStar:
+                MaxLevel = 16;
+                break;
+            case Rarity.FiveStar:
+                MaxLevel = 20;
+                break;
+        }
 
-        if (ArtifactsManager.isInProbabilityRange(0.66f))
+        if (ArtifactsManager.isInProbabilityRange(0.7f))
         {
             TotalSubstatsDisplay = GetLowestNumberofStats(rarity).LowestDropValue;
         }
@@ -72,7 +111,8 @@ public class Artifacts : UpgradableItems
             currentArtifactsStatsSelection = (ArtifactsStat)randomIndex;
         } while (CheckIfStatsAlreadyExist(currentArtifactsStatsSelection, excludeArtifactsStatsList));
 
-        Stats.Add(currentArtifactsStatsSelection);
+        ArtifactStatsInfo a = new ArtifactStatsInfo(currentArtifactsStatsSelection);
+        Stats.Add(a);
     }
 
     private bool CheckIfStatsAlreadyExist(ArtifactsStat currentStat, ArtifactsStat[] excludeArtifactsStatsList = null)
@@ -88,12 +128,13 @@ public class Artifacts : UpgradableItems
             }
         }
 
-        return Stats.Contains(currentStat);
-    }
+        for(int i = 0; i < Stats.Count; i++)
+        {
+            if (Stats[i].GetArtifactsStat() == currentStat)
+                return true;
+        }
 
-    public override int GetMaxLevel()
-    {
-        return MaxLevel;
+        return false;
     }
 
     public void GenerateSubArtifactStats()
@@ -116,32 +157,23 @@ public class Artifacts : UpgradableItems
     {
         int randomIndex = Random.Range(0, AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactMainStatsInfoList(GetArtifactType()).Length);
         ArtifactsStat currentArtifactsStatsSelection = AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactMainStatsInfoList(GetArtifactType())[randomIndex].ArtifactsStat;
-        Stats.Add(currentArtifactsStatsSelection);
+
+        ArtifactStatsInfo a = new ArtifactStatsInfo(currentArtifactsStatsSelection);
+        a.SetStatsValue(GetArtifactStartingValue(a.GetArtifactsStat()));
+        Stats.Add(a);
     }
 
     public void GenerateArtifactStats()
     {
         GenerateMainArtifactStats();
         GenerateSubArtifactStats();
-
-        switch (GetRarity())
-        {
-            case Rarity.ThreeStar:
-                MaxLevel = 12;
-                break;
-            case Rarity.FourStar:
-                MaxLevel = 16;
-                break;
-            case Rarity.FiveStar:
-                MaxLevel = 20;
-                break;
-        }
     }
 
     public override void Upgrade()
     {
         base.Upgrade();
 
+        UpgradeMainStats();
         if (Level % 4 == 0)
         {
             if (GetTotalSubstatsDisplay() != GetLowestNumberofStats(rarity).MaxDropValue)
@@ -166,18 +198,30 @@ public class Artifacts : UpgradableItems
         this.characterData = characterData;
     }
 
-    public ArtifactsStat GetStats(int idx)
+    public ArtifactStatsInfo GetStats(int idx)
     {
         return Stats[idx];
     }
 
     public string GetArtifactStatsName(int idx)
     {
-        return CharacterStatsDisplay.GetStatsName(GetStats(idx));
+        return CharacterStatsDisplay.GetStatsName(GetStats(idx).GetArtifactsStat());
     }
 
-    public string GetArtifactStatsValue(int idx)
+    private float GetArtifactStartingValue(ArtifactsStat artifactsStat)
     {
-        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStartingValue(GetArtifactType(), GetStats(idx), GetRarity()).ToString();
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStartingValue(GetArtifactType(), artifactsStat, GetRarity());
+    }
+
+
+    private float GetArtifactMainStatsIncreaseRatioValue(int idx)
+    {
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactIncreaseValue(GetArtifactType(), GetStats(idx).GetArtifactsStat(), GetRarity());
+    }
+
+
+    private void UpgradeMainStats()
+    {
+        GetStats(0).SetStatsValue(GetStats(0).GetStatsValue() + GetArtifactMainStatsIncreaseRatioValue(0));
     }
 }

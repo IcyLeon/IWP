@@ -40,7 +40,7 @@ public class ItemContentDisplay : MonoBehaviour
                 {
                     if (i <= artifacts.GetTotalSubstatsDisplay())
                     {
-                        stats.DisplayArtifactsStat(artifacts.GetArtifactStatsName(i), artifacts.GetStats(i), artifacts.GetArtifactStatsValue(i));
+                        stats.DisplayArtifactsStat(artifacts.GetArtifactStatsName(i), artifacts.GetStats(i));
                     }
                     stats.gameObject.SetActive(i <= artifacts.GetTotalSubstatsDisplay());
                 }

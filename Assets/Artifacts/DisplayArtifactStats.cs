@@ -10,22 +10,22 @@ public class DisplayArtifactStats : MonoBehaviour
 
 
     // Update is called once per frame
-    public void DisplayArtifactsStat(string Name, Artifacts.ArtifactsStat artifactsStat, string Value)
+    public void DisplayArtifactsStat(string Name, ArtifactStatsInfo a)
     {
         if (ArtifactStatValueText)
         {
-            ArtifactStatValueText.text = Value;
+            ArtifactStatValueText.text = a.GetStatsValue().ToString();
             ArtifactStatNameText.text = Name;
         }
         else
-            ArtifactStatNameText.text = Name + "+" + Value;
+            ArtifactStatNameText.text = Name + "+" + a.GetStatsValue();
 
-        if (CheckIfInBetweenStats_PERCENT(artifactsStat))
+        if (CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat()))
         {
             if (ArtifactStatValueText)
-                ArtifactStatValueText.text = Value + "%";
+                ArtifactStatValueText.text = a.GetStatsValue() + "%";
             else
-                ArtifactStatNameText.text = Name + "+" + Value + "%";
+                ArtifactStatNameText.text = Name + "+" + a.GetStatsValue() + "%";
         }
     }
 

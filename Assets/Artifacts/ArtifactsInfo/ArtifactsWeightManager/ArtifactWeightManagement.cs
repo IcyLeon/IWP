@@ -10,6 +10,7 @@ public class ArtifactWeightManagement : ScriptableObject
     [Serializable]
     public class ArtifactWeight
     {
+
         public int Weight;
         public ArtifactsStat ArtifactsStat;
     }
@@ -18,6 +19,7 @@ public class ArtifactWeightManagement : ScriptableObject
     public class StartingArtifactStatsHand
     {
         public Rarity rarity;
+        public float increaseValueRatio;
         public float value;
     }
 
@@ -70,6 +72,29 @@ public class ArtifactWeightManagement : ScriptableObject
         }
         return null;
     }
+
+    public float GetArtifactIncreaseValue(ArtifactType ArtifactType, ArtifactsStat ArtifactsStat, Rarity rarity)
+    {
+        ArtifactMainStatsInfo[] list = GetArtifactMainStatsInfoList(ArtifactType);
+
+        for (int i = 0; i < list.Length; i++)
+        {
+            if (list[i].ArtifactsStat == ArtifactsStat)
+            {
+                for (int j = 0; j < list[i].StartingArtifactStatsHand.Length; j++)
+                {
+                    StartingArtifactStatsHand StartingArtifactStatsHand = list[i].StartingArtifactStatsHand[j];
+                    if (StartingArtifactStatsHand.rarity == rarity)
+                    {
+                        return StartingArtifactStatsHand.increaseValueRatio;
+                    }
+                }
+            }
+        }
+
+        return 0f;
+    }
+
     public float GetArtifactStartingValue(ArtifactType ArtifactType, ArtifactsStat ArtifactsStat, Rarity rarity)
     {
         ArtifactMainStatsInfo[] list = GetArtifactMainStatsInfoList(ArtifactType);

@@ -21,7 +21,7 @@ public class ArtifactsManager : MonoBehaviour
     {
         float randomValue = Random.value;
         float probability = 1.0f - a;
-        return randomValue < probability;
+        return randomValue > probability;
     }
 
     private void Awake()
