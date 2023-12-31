@@ -113,7 +113,7 @@ public class Artifacts : UpgradableItems
         }
     }
 
-    private ArtifactWeightManagement.PossibleNumberofStats GetLowestNumberofStats(Rarity rarity)
+    public ArtifactWeightManagement.PossibleNumberofStats GetLowestNumberofStats(Rarity rarity)
     {
         return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetPossibleNumberofStats(rarity);
     }
@@ -194,7 +194,7 @@ public class Artifacts : UpgradableItems
         base.Upgrade();
 
         UpgradeMainStats();
-        if (Level % 4 == 0)
+        if (Level % ArtifactsManager.GetStatsActionConst() == 0)
         {
             if (GetTotalSubstatsDisplay() != GetLowestNumberofStats(rarity).MaxDropValue)
             {

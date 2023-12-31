@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -36,6 +37,8 @@ public class EnhancementManager : MonoBehaviour
 
     [Header("Artifacts Stats")]
     [SerializeField] GameObject[] ArtifactsStatsContainer;
+    [SerializeField] DisplayUpgradePossibleNotification RandomUpgradeStatsTxt;
+    [SerializeField] DisplayUpgradePossibleNotification RandomAddStatsTxt;
 
     // Start is called before the first frame update
     void Start()
@@ -234,6 +237,7 @@ public class EnhancementManager : MonoBehaviour
 
             MaxLevelContent.SetActive(UpgradableItemREF.GetLevel() == CostList.Length);
             EnhancementContent.SetActive(UpgradableItemREF.GetLevel() < CostList.Length);
+            UpdateArtifactStats();
 
             Artifacts selectedartifacts = UpgradableItemREF as Artifacts;
             for (int i = 0; i < ArtifactsStatsContainer.Length; i++)
@@ -254,6 +258,61 @@ public class EnhancementManager : MonoBehaviour
             }
         }
     }
+
+    private int GetTotalNumberofSubStatsUpgrade(Artifacts artifacts)
+    {
+        int totalIncrease = 0;
+
+        for (int i = artifacts.GetLevel(); i <= artifacts.GetLevel() + GetLevelIncrease(); i++)
+        {
+            if (i % ArtifactsManager.GetStatsActionConst() == 0 && i != artifacts.GetLevel())
+            {
+                totalIncrease++;
+            }
+        }
+        return totalIncrease;
+    }
+    private void UpdateArtifactStats()
+    {
+        Artifacts artifacts = GetItemREF() as Artifacts;
+        if (artifacts != null)
+        {
+            RandomUpgradeStatsTxt.UpdateNotification("Randomly upgrades " + ExcludeSubStatsMissing(artifacts) + " bonus stat(s)");
+            RandomUpgradeStatsTxt.gameObject.SetActive(ExcludeSubStatsMissing(artifacts) > 0);
+
+            RandomAddStatsTxt.UpdateNotification("Adds " + NoofMissingStatsReiterate(artifacts) + " new bonus stat(s)");
+            RandomAddStatsTxt.gameObject.SetActive(NoofMissingStatsReiterate(artifacts) > 0 && artifacts.GetTotalSubstatsDisplay() != artifacts.GetLowestNumberofStats(artifacts.GetRarity()).MaxDropValue);
+
+        }
+    }
+
+    private int NoofMissingStatsReiterate(Artifacts artifacts)
+    {
+        int NoOfStatsAction = GetTotalNumberofSubStatsUpgrade(artifacts);
+        int diff = artifacts.GetLowestNumberofStats(artifacts.GetRarity()).MaxDropValue - artifacts.GetTotalSubstatsDisplay();
+        int total = 0;
+
+        for (int i = 0; i <= NoOfStatsAction; i++)
+        {
+            diff -= i;
+
+            if (diff > 0 && NoOfStatsAction != 0)
+            {
+                total++;
+            }
+        }
+
+        return total;
+    }
+
+    private int ExcludeSubStatsMissing(Artifacts artifacts)
+    {
+        int NoOfStatsAction = GetTotalNumberofSubStatsUpgrade(artifacts);
+        int diff = artifacts.GetLowestNumberofStats(artifacts.GetRarity()).MaxDropValue - artifacts.GetTotalSubstatsDisplay();
+
+        return NoOfStatsAction - diff;
+    }
+
 
     private int GetTotalSlots()
     {

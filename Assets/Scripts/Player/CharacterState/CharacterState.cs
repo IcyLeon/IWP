@@ -20,7 +20,7 @@ public class CharacterState
 
     public void Update()
     {
-        Debug.Log(currentState);
+        //Debug.Log(currentState);
         if (currentState != null)
             currentState.Update();
     }

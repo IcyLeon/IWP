@@ -9,9 +9,14 @@ using Random = UnityEngine.Random;
 public class ArtifactsManager : MonoBehaviour
 {
     private static ArtifactsManager instance;
+    private static int StatsActionConst = 4;
     [SerializeField] ExpItemSO expItemSO; // test
     [SerializeField] ArtifactsListInfo artifactsListInfo;
 
+    public static int GetStatsActionConst()
+    {
+        return StatsActionConst;
+    }
     public ArtifactsListInfo GetArtifactsListInfo()
     {
         return artifactsListInfo;
