@@ -219,9 +219,20 @@ public class Artifacts : UpgradableItems
         return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactIncreaseValue(GetArtifactType(), GetStats(idx).GetArtifactsStat(), GetRarity());
     }
 
+    public float GetNextMainStatsValue(int levelIncrease)
+    {
+        if (Stats.Count == 0)
+            return 0f;
+
+        return GetArtifactMainStatsIncreaseRatioValue(0) * levelIncrease + GetStats(0).GetStatsValue();
+    }
+
 
     private void UpgradeMainStats()
     {
+        if (Stats.Count == 0)
+            return;
+
         GetStats(0).SetStatsValue(GetStats(0).GetStatsValue() + GetArtifactMainStatsIncreaseRatioValue(0));
     }
 }

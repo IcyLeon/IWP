@@ -36,3 +36,5 @@ MonoBehaviour:
     artifactPieceName: Circlet of Logos
     artifactIconSprite: {fileID: 21300000, guid: e180bf643c4981645ba51d0a520ebfb5,
       type: 3}
+  ArtifactWeightManagement: {fileID: 11400000, guid: 30a931371093cf947ae9f9b1ae209be1,
+    type: 2}
