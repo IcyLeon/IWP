@@ -14,6 +14,10 @@ public abstract class UpgradableItems : Item
     {
         Level++;
         Level = Mathf.Clamp(Level, 0, MaxLevel);
+    }
+
+    public void CallOnLevelChanged()
+    {
         onLevelChanged?.Invoke();
     }
 

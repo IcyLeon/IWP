@@ -35,11 +35,17 @@ public class DisplayArtifactStats : MonoBehaviour
         }
     }
 
-    public void DisplayIncreaseValueMainStats(int increaselevelPreview)
+    public void DisplayIncreaseValueMainStats(int increaselevelPreview, ArtifactStatsInfo a)
     {
         IncreasePreviewValueContent.SetActive(increaselevelPreview > 0 && artifacts != null);
+        string statsValue = artifacts.GetNextMainStatsValue(increaselevelPreview).ToString();
         if (artifacts != null)
-            ArtifactIncreasePreviewValueText.text = artifacts.GetNextMainStatsValue(increaselevelPreview).ToString();
+        {
+            if (CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat()))
+                ArtifactIncreasePreviewValueText.text = statsValue + "%";
+            else                                        
+                ArtifactIncreasePreviewValueText.text = statsValue;
+        }
     }
 
     private bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)

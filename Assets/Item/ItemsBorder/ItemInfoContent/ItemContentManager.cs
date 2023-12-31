@@ -19,8 +19,24 @@ public class ItemContentManager : MonoBehaviour
             TogglePopup(false);
     }
 
+
+    private void OnDestroy()
+    {
+        UnSubscribeCurrentItem();
+    }
+
+    private void UnSubscribeCurrentItem()
+    {
+        UpgradableItems PreviousUpgradableItems = ItemREF as UpgradableItems;
+        if (PreviousUpgradableItems != null)
+        {
+            PreviousUpgradableItems.onLevelChanged -= onUpgradeLevelChanged;
+        }
+    }
     public void SetItemREF(Item item, ItemTemplate itemsSO)
     {
+        UnSubscribeCurrentItem();
+
         ItemREF = item;
         ItemsSO = itemsSO;
 
@@ -36,6 +52,7 @@ public class ItemContentManager : MonoBehaviour
     {
         DisplayContent();
     }
+
     private void DisplayContent()
     {
         if (ItemREF != null)

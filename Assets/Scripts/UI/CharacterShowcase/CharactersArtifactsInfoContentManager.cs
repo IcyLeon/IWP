@@ -81,7 +81,7 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
 
     void SelectedArtifactsBubbleClick(CurrentCharacterArtifacts cca)
     {
-        MainUI.GetInstance().GetDisplayItemsStatsManager().SetCurrentSelectedItem(cca.GetSelectedArtifactsBubble().GetArtifacts());
+        MainUI.GetInstance().GetDisplayItemsStatsManager().OpenDisplayItemsStatsManager(cca.GetSelectedArtifactsBubble().GetArtifacts());
         GetCharactersShowcaseManager().transform.GetChild(0).gameObject.SetActive(false);
     }
 }

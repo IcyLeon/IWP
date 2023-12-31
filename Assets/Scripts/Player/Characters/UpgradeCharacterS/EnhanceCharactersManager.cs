@@ -11,6 +11,7 @@ public class EnhanceCharactersManager : MonoBehaviour
 {
     [SerializeField] UpgradeCharacterSO UpgradeCharacterSO;
     [SerializeField] GameObject MaxLevelContent;
+    [SerializeField] GameObject EnhancementCanvasInfo;
     [SerializeField] GameObject EnhancementContent;
     [SerializeField] GameObject ButtonMask;
     [SerializeField] Button UpgradeBtn;
@@ -209,7 +210,7 @@ public class EnhanceCharactersManager : MonoBehaviour
     public void OpenEnhanceCharacterCanvas()
     {
         SetExpDisplay();
-        gameObject.SetActive(true);
+        EnhancementCanvasInfo.gameObject.SetActive(true);
     }
 
     private int GetLevelIncrease()
@@ -269,7 +270,7 @@ public class EnhanceCharactersManager : MonoBehaviour
         }
 
         UpdateAmountAddTxt();
-        gameObject.SetActive(false);
+        EnhancementCanvasInfo.SetActive(false);
     }
 
     private IEnumerator UpgradeProgress()

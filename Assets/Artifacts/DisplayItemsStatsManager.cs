@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class DisplayItemsStatsManager : MonoBehaviour
 {
@@ -55,6 +56,13 @@ public class DisplayItemsStatsManager : MonoBehaviour
         ItemButton itemButton = go.GetComponent<ItemButton>();
         itemButton.SetItemsSO(item.GetItemSO());
         itemButton.SetItemREF(item);
+
+        UpgradableItems upgradableItems = item as UpgradableItems;
+        if (upgradableItems != null)
+        {
+            upgradableItems.onLevelChanged += onUpgradeLevelChanged;
+        }
+
         itemButton.onButtonUpdate += GetItemButtonUpdate;
         itemButton.onButtonClick += GetItemSelected;
 
@@ -74,6 +82,12 @@ public class DisplayItemsStatsManager : MonoBehaviour
         ItemButton itemButton = itembutton_Dictionary[item];
         itemButton.onButtonClick -= GetItemSelected;
         itemButton.onButtonUpdate -= GetItemButtonUpdate;
+        UpgradableItems upgradableItems = item as UpgradableItems;
+        if (upgradableItems != null)
+        {
+            upgradableItems.onLevelChanged -= onUpgradeLevelChanged;
+        }
+
         Destroy(itemButton.gameObject);
         itembutton_Dictionary.Remove(item);
     }
@@ -174,6 +188,13 @@ public class DisplayItemsStatsManager : MonoBehaviour
             {
                 if (itemButton != null)
                 {
+                    UpgradableItems upgradableItems = itemPair.Key as UpgradableItems;
+                    if (upgradableItems != null)
+                    {
+                        upgradableItems.onLevelChanged -= onUpgradeLevelChanged;
+                    }
+
+
                     itemButton.onButtonClick -= GetItemSelected;
                     itemButton.onButtonUpdate -= GetItemButtonUpdate;
                     Destroy(itemButton.gameObject);
@@ -236,10 +257,11 @@ public class DisplayItemsStatsManager : MonoBehaviour
         UpdateOutlineSelection();
     }
 
-    private void onItemUpgrade()
+    private void onUpgradeLevelChanged()
     {
-        DisplaySelectedItem();
+        SetCurrentSelectedItem(SelectedItem);
     }
+
     public Item GetItemCurrentSelected()
     {
         return SelectedItem;
@@ -250,9 +272,16 @@ public class DisplayItemsStatsManager : MonoBehaviour
         SelectedItem = item;
         UpdateOutlineSelection();
         GetItemSelected(SelectedItemButton);
-        gameObject.transform.GetChild(0).gameObject.SetActive(true);
     }
 
+    public void OpenDisplayItemsStatsManager(Item item)
+    {
+        gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        if (item != null)
+        {
+            SetCurrentSelectedItem(item);
+        }
+    }
 
     private void UpdateOutlineSelection()
     {

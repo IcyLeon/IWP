@@ -42,9 +42,9 @@ public class Artifacts : UpgradableItems
         HP,
         EM,
         DEF,
-        ER,
         ATK,
         HPPERCENT,
+        ER,
         DEFPERCENT,
         ATKPERCENT,
         CritRate,
@@ -186,6 +186,7 @@ public class Artifacts : UpgradableItems
 
             }
         }
+        CallOnLevelChanged();
     }
 
     public CharacterData GetCharacterEquipped()
