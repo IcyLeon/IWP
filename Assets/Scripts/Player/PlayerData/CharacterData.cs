@@ -57,7 +57,6 @@ public class CharacterData : UpgradableItems
     {
         MaxAscensionLevel = CurrentAscension = PreviewsMaxCapLevel = 0;
         SetItemsSO(playerCharacterSO);
-        CurrentHealth = GetMaxHealth(GetLevel());
         ResetEnergyCost();
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
@@ -65,6 +64,7 @@ public class CharacterData : UpgradableItems
         CurrentElementalBurstEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         Level = 1;
+        CurrentHealth = GetMaxHealth(GetLevel());
         MaxLevel = 20;
         elementalReaction = new ElementalReaction();
     }
@@ -73,8 +73,8 @@ public class CharacterData : UpgradableItems
     {
         MaxAscensionLevel = CurrentAscension = 0;
         SetItemsSO(playerCharacterSO);
-        CurrentHealth = GetMaxHealth(GetLevel());
         Level = level;
+        CurrentHealth = GetMaxHealth(GetLevel());
         CurrentEnergyBurstCost = currentEnergy;
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;

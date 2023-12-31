@@ -2395,7 +2395,8 @@ MonoBehaviour:
   StaminaBarREF: {fileID: 4742724579797639734}
   ElementalDisplayUITransform: {fileID: 4549896843824949836}
   InteractOptionsUI: {fileID: 8471205382528767886}
-  CombatUI: {fileID: 4549896843295635505}
+  HideUIList:
+  - {fileID: 4549896843295635505}
   FallenUI: {fileID: 7703676529245347189}
   MainUIList:
   - {fileID: 5391053180007968831}

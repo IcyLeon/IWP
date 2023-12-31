@@ -11,7 +11,7 @@ public class MainUI : MonoBehaviour
     [SerializeField] StaminaScript StaminaBarREF;
     [SerializeField] Transform ElementalDisplayUITransform;
     [SerializeField] InteractionContentUI InteractOptionsUI;
-    [SerializeField] GameObject CombatUI;
+    [SerializeField] GameObject[] HideUIList;
     [SerializeField] GameObject FallenUI;
     [SerializeField] GameObject[] MainUIList;
     [SerializeField] UpgradeCanvas upgradeCanvas;
@@ -84,7 +84,8 @@ public class MainUI : MonoBehaviour
     private void UpdatePause()
     {
         Paused = isMainUIList();
-        CombatUI.SetActive(!isPaused());
+        foreach(var go in HideUIList)
+            go.SetActive(!isPaused());
 
         if (isPaused() || FallenPanelIsOpen())
             Time.timeScale = 0;

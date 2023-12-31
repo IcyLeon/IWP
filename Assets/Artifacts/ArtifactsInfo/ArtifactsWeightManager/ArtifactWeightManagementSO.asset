@@ -37,7 +37,7 @@ MonoBehaviour:
       - rarity: 4
         increaseValueRatio: 13
         value: 47
-      ArtifactsStat: 0
+      ArtifactsStat: 3
     ArtifactType: 1
   - ArtifactMainStatsInfoList:
     - StartingArtifactStatsHand:
