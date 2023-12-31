@@ -87,9 +87,9 @@ public class CharacterStatsDisplay : MonoBehaviour
                 return "ATK";
             case Artifacts.ArtifactsStat.ATKPERCENT:
                 return "ATK";
-            case Artifacts.ArtifactsStat.CritDamage:
-                return "CRIT Rate";
             case Artifacts.ArtifactsStat.CritRate:
+                return "CRIT Rate";
+            case Artifacts.ArtifactsStat.CritDamage:
                 return "CRIT DMG";
             case Artifacts.ArtifactsStat.DEFPERCENT:
                 return "DEF";

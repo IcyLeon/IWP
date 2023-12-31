@@ -48,7 +48,7 @@ public class DisplayArtifactStats : MonoBehaviour
         }
     }
 
-    private bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)
+    public static bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)
     {
         for (int i = (int)Artifacts.ArtifactsStat.HPPERCENT; i < (int)Artifacts.ArtifactsStat.TOTAL_STATS; i++)
         {

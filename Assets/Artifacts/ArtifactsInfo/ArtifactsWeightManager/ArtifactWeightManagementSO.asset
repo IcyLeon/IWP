@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d1ef5fd67b6124fa0342643046dac0, type: 3}
   m_Name: ArtifactWeightManagementSO
   m_EditorClassIdentifier: 
-  artifactPossibleStatsList:
+  artifactPossibleMainStatsList:
   - ArtifactMainStatsInfoList:
     - StartingArtifactStatsHand:
       - rarity: 2
@@ -224,6 +224,117 @@ MonoBehaviour:
   - Weight: 3
     ArtifactsStat: 8
   - Weight: 3
+    ArtifactsStat: 9
+  artifactPossibleSubStatsList:
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 143.4
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 239
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 298.75
+    ArtifactsStat: 0
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 13.99
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 18.65
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 23.31
+    ArtifactsStat: 1
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 11.11
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 18.52
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 23.15
+    ArtifactsStat: 2
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 9.34
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 15.56
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 19.45
+    ArtifactsStat: 3
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 3.5
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 4.66
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 5.83
+    ArtifactsStat: 4
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 3.89
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 5.18
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 6.48
+    ArtifactsStat: 5
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 4.37
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 5.83
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 7.29
+    ArtifactsStat: 6
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 3.5
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 4.66
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 5.83
+    ArtifactsStat: 7
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 2.33
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 3.11
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 3.89
+    ArtifactsStat: 8
+  - StartingArtifactStatsHand:
+    - rarity: 2
+      increaseValueRatio: 0
+      value: 4.66
+    - rarity: 3
+      increaseValueRatio: 0
+      value: 6.22
+    - rarity: 4
+      increaseValueRatio: 0
+      value: 7.77
     ArtifactsStat: 9
   PossibleNumberofStatsList:
   - rarity: 0

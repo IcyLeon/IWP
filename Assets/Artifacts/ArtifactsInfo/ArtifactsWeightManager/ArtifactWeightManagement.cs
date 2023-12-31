@@ -10,7 +10,6 @@ public class ArtifactWeightManagement : ScriptableObject
     [Serializable]
     public class ArtifactWeight
     {
-
         public int Weight;
         public ArtifactsStat ArtifactsStat;
     }
@@ -38,6 +37,14 @@ public class ArtifactWeightManagement : ScriptableObject
     }
 
     [Serializable]
+    public class ArtifactPossibleSubStats
+    {
+        public StartingArtifactStatsHand[] StartingArtifactStatsHand;
+        public ArtifactsStat ArtifactsStat;
+    }
+
+
+    [Serializable]
     public class PossibleNumberofStats
     {
         public Rarity rarity;
@@ -45,11 +52,30 @@ public class ArtifactWeightManagement : ScriptableObject
         public int MaxDropValue;
     }
 
-    public ArtifactPossibleStats[] artifactPossibleStatsList;
+    public ArtifactPossibleStats[] artifactPossibleMainStatsList;
     public ArtifactWeight[] artifactWeightsList;
+    public ArtifactPossibleSubStats[] artifactPossibleSubStatsList;
     public PossibleNumberofStats[] PossibleNumberofStatsList;
 
-    public PossibleNumberofStats GetPossibleNumberofStatst(Rarity rarity)
+    public float GetHighestPossibleStatsRoll(ArtifactsStat ArtifactsStat, Rarity rarity)
+    {
+        for (int i = 0; i < artifactPossibleSubStatsList.Length; i++)
+        {
+            ArtifactPossibleSubStats ArtifactPossibleSubStats = artifactPossibleSubStatsList[i];
+            if (ArtifactPossibleSubStats.ArtifactsStat == ArtifactsStat)
+            {
+                for(int j = 0; j < ArtifactPossibleSubStats.StartingArtifactStatsHand.Length; j++)
+                {
+                    StartingArtifactStatsHand StartingArtifactStatsHand = ArtifactPossibleSubStats.StartingArtifactStatsHand[j];
+                    if (StartingArtifactStatsHand.rarity == rarity)
+                        return StartingArtifactStatsHand.value;
+                }
+            }
+        }
+        return 0f;
+    }
+
+    public PossibleNumberofStats GetPossibleNumberofStats(Rarity rarity)
     {
         for (int i = 0; i < PossibleNumberofStatsList.Length; i++)
         {
@@ -63,11 +89,11 @@ public class ArtifactWeightManagement : ScriptableObject
 
     public ArtifactMainStatsInfo[] GetArtifactMainStatsInfoList(ArtifactType ArtifactType)
     {
-        for (int i = 0; i < artifactPossibleStatsList.Length; i++)
+        for (int i = 0; i < artifactPossibleMainStatsList.Length; i++)
         {
-            if (artifactPossibleStatsList[i].ArtifactType == ArtifactType)
+            if (artifactPossibleMainStatsList[i].ArtifactType == ArtifactType)
             {
-                return artifactPossibleStatsList[i].ArtifactMainStatsInfoList;
+                return artifactPossibleMainStatsList[i].ArtifactMainStatsInfoList;
             }
         }
         return null;

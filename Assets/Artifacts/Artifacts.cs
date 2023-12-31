@@ -25,6 +25,11 @@ public class ArtifactStatsInfo
     public void SetStatsValue(float value)
     {
         StatsValue = value;
+
+        if (!DisplayArtifactStats.CheckIfInBetweenStats_PERCENT(GetArtifactsStat()))
+        {
+            StatsValue = Mathf.RoundToInt(StatsValue);
+        }
     }
 
     public float GetStatsValue()
@@ -55,6 +60,19 @@ public class Artifacts : UpgradableItems
     private int TotalSubstatsDisplay;
     private List<ArtifactStatsInfo> Stats = new List<ArtifactStatsInfo>();
     private ArtifactsSet ArtifactsSet;
+
+    private float GetStatsPossibleRoll(float highestRoll, int size, float diff)
+    {
+        float[] PossibleRolls = new float[size];
+
+        for (int i = 0; i < PossibleRolls.Length; i++)
+        {
+            PossibleRolls[i] = highestRoll * (1.0f - (i * diff));
+        }
+
+        var randomIdx = Random.Range(0, PossibleRolls.Length);
+        return PossibleRolls[randomIdx];
+    }
 
     public int GetTotalSubstatsDisplay()
     {
@@ -97,7 +115,7 @@ public class Artifacts : UpgradableItems
 
     private ArtifactWeightManagement.PossibleNumberofStats GetLowestNumberofStats(Rarity rarity)
     {
-        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetPossibleNumberofStatst(rarity);
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetPossibleNumberofStats(rarity);
     }
 
     private void GenerateRandomArtifacts(ArtifactsStat[] excludeArtifactsStatsList = null)
@@ -112,6 +130,8 @@ public class Artifacts : UpgradableItems
         } while (CheckIfStatsAlreadyExist(currentArtifactsStatsSelection, excludeArtifactsStatsList));
 
         ArtifactStatsInfo a = new ArtifactStatsInfo(currentArtifactsStatsSelection);
+        float Value = GetStatsPossibleRoll(GetHighestPossibleStatsRoll(a.GetArtifactsStat()), 4, 0.1f);
+        a.SetStatsValue(Value);
         Stats.Add(a);
     }
 
@@ -183,7 +203,10 @@ public class Artifacts : UpgradableItems
             }
             else
             {
-
+                int randomStat = Random.Range(1, Stats.Count);
+                ArtifactStatsInfo a = GetStats(randomStat);
+                float Value = GetStatsPossibleRoll(GetHighestPossibleStatsRoll(a.GetArtifactsStat()), 4, 0.1f);
+                a.SetStatsValue(a.GetStatsValue() + Value);
             }
         }
         CallOnLevelChanged();
@@ -213,7 +236,10 @@ public class Artifacts : UpgradableItems
     {
         return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStartingValue(GetArtifactType(), artifactsStat, GetRarity());
     }
-
+    private float GetHighestPossibleStatsRoll(ArtifactsStat artifactsStat)
+    {
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetHighestPossibleStatsRoll(artifactsStat, GetRarity());
+    }
 
     private float GetArtifactMainStatsIncreaseRatioValue(int idx)
     {
