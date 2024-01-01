@@ -1614,7 +1614,7 @@ MonoBehaviour:
   col: {fileID: 8797749101720193783}
   rb: {fileID: 4265174039889011372}
   NavMeshAgent: {fileID: 1131295460005988015}
-  EnemyValueDropSO: {fileID: 0}
+  EnemyValueDropSO: {fileID: 11400000, guid: cc6969ca1ff7fc6479e368ffe08c5fc2, type: 2}
   FireBallPrefab: {fileID: 8879955223002945827, guid: 51064d8c67c73ee41a6e7110323a0e88,
     type: 3}
   FireEmitter: {fileID: 412224}

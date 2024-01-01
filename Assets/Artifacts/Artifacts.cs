@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
 
 public class ArtifactStatsInfo
@@ -118,16 +117,14 @@ public class Artifacts : UpgradableItems
         return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetPossibleNumberofStats(rarity);
     }
 
-    private void GenerateRandomArtifacts(ArtifactsStat[] excludeArtifactsStatsList = null)
+    private void GenerateRandomArtifacts()
     {
-        var random = new System.Random();
-        int randomIndex;
         ArtifactsStat currentArtifactsStatsSelection;
         do
         {
-            randomIndex = random.Next(0, (int)ArtifactsStat.TOTAL_STATS);
+            int randomIndex = Random.Range(0, (int)ArtifactsStat.TOTAL_STATS);
             currentArtifactsStatsSelection = (ArtifactsStat)randomIndex;
-        } while (CheckIfStatsAlreadyExist(currentArtifactsStatsSelection, excludeArtifactsStatsList));
+        } while (CheckIfStatsAlreadyExist(currentArtifactsStatsSelection));
 
         ArtifactStatsInfo a = new ArtifactStatsInfo(currentArtifactsStatsSelection);
         float Value = GetStatsPossibleRoll(GetHighestPossibleStatsRoll(a.GetArtifactsStat()), 4, 0.1f);
@@ -135,19 +132,8 @@ public class Artifacts : UpgradableItems
         Stats.Add(a);
     }
 
-    private bool CheckIfStatsAlreadyExist(ArtifactsStat currentStat, ArtifactsStat[] excludeArtifactsStatsList = null)
+    private bool CheckIfStatsAlreadyExist(ArtifactsStat currentStat)
     {
-        if (excludeArtifactsStatsList != null)
-        {
-            foreach (var excludeStat in excludeArtifactsStatsList)
-            {
-                if (excludeStat == currentStat)
-                {
-                    return false;
-                }
-            }
-        }
-
         for(int i = 0; i < Stats.Count; i++)
         {
             if (Stats[i].GetArtifactsStat() == currentStat)
