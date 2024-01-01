@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class BaseEnemy : Characters
 {
@@ -20,7 +22,6 @@ public class BaseEnemy : Characters
     protected int Staggering = 1;
     protected int CurrentStaggering;
 
-    // Start is called before the first frame update
     protected override void Start()
     {
         EM = EnemyManager.GetInstance();
@@ -131,7 +132,7 @@ public class BaseEnemy : Characters
         }
     }
 
-    protected void LookAtPlayerXZ()
+    public void LookAtPlayerXZ()
     {
         Vector3 forward = GetPlayerLocation() - transform.position;
         float angle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
@@ -166,6 +167,7 @@ public class BaseEnemy : Characters
         {
             healthBarScript.transform.position = HealthBarPivotParent.position + Vector3.up;
             healthBarScript.SliderInvsibleOnlyFullHealth();
+            healthBarScript.UpdateShield(GetCurrentElementalShield(), 0, GetElementalShield());
 
             if (elementsIndicator)
             {
@@ -176,9 +178,16 @@ public class BaseEnemy : Characters
 
     public override Elements TakeDamage(Vector3 pos, Elements elements, float amt, bool callHitInfo = true)
     {
-        Elements e = base.TakeDamage(pos, elements, amt, callHitInfo);
+        float actualamt = amt;
+        if (GetCurrentElementalShield() > 0) // have to change later since it is hardcoded
+        {
+            actualamt *= 0.3f;
+            SetCurrentElementalShield(GetCurrentElementalShield() - amt);
+        }
 
-        if (elementsIndicator == null)
+        Elements e = base.TakeDamage(pos, elements, actualamt, callHitInfo);
+
+        if (elementsIndicator == null && !BossEnemyType)
         {
             elementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, transform).GetComponent<ElementsIndicator>();
             elementsIndicator.SetCharacters(this);
@@ -186,7 +195,7 @@ public class BaseEnemy : Characters
 
         if (e.GetElements() != Elemental.NONE)
         {
-            ElementalOrb go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, transform.position, Quaternion.identity).GetComponent<ElementalOrb>();
+            ElementalOrb go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, GetPointOfContact(), Quaternion.identity).GetComponent<ElementalOrb>();
             go.SetSource(CharacterManager.GetInstance().GetPlayerManager());
         }
 
@@ -198,17 +207,17 @@ public class BaseEnemy : Characters
 
     }
 
-    protected bool HasReachedTargetLocation(Vector3 target)
+    public bool HasReachedTargetLocation(Vector3 target)
     {
-        if (NavMeshAgent == null)
+        if (GetNavMeshAgent() == null)
             return false;
 
-        return (transform.position - target).magnitude <= NavMeshAgent.stoppingDistance + 0.25f;
+        return (transform.position - target).magnitude <= GetNavMeshAgent().stoppingDistance + 0.25f;
     }
 
     protected void SetRandomDestination()
     {
-        if (NavMeshAgent == null)
+        if (GetNavMeshAgent() == null)
             return;
 
         Vector3 randomPoint = transform.position + new Vector3(Random.Range(-DetectionRange, DetectionRange), 0, Random.Range(-DetectionRange, DetectionRange));
@@ -224,7 +233,7 @@ public class BaseEnemy : Characters
     }
 
 
-    protected Vector3 GetPlayerLocation()
+    public Vector3 GetPlayerLocation()
     {
         if (Target == null)
             return default(Vector3);
@@ -232,7 +241,7 @@ public class BaseEnemy : Characters
         return Target.GetPointOfContact();
     }
 
-    protected bool isInDetectionRange(float range)
+    public bool isInDetectionRange(float range)
     {
         return (transform.position - GetPlayerLocation()).magnitude <= range;
     }
@@ -246,31 +255,34 @@ public class BaseEnemy : Characters
         base.OnDestroy();
         OnElementReactionHit -= ElementReactionHit;
     }
-
-
-    protected void DisableAgent()
+    public NavMeshAgent GetNavMeshAgent()
     {
-        if (NavMeshAgent == null)
+        return NavMeshAgent;
+    }
+
+    public void DisableAgent()
+    {
+        if (GetNavMeshAgent() == null)
             return;
 
-        NavMeshAgent.updatePosition = false;
-        NavMeshAgent.updateRotation = false;
-        NavMeshAgent.velocity = Vector3.zero;
-        if (NavMeshAgent.enabled)
+        GetNavMeshAgent().updatePosition = false;
+        GetNavMeshAgent().updateRotation = false;
+        GetNavMeshAgent().velocity = Vector3.zero;
+        if (GetNavMeshAgent().enabled)
         {
-            NavMeshAgent.isStopped = true;
-            NavMeshAgent.enabled = false;
+            GetNavMeshAgent().isStopped = true;
+            GetNavMeshAgent().enabled = false;
         }
     }
 
-    protected void EnableAgent()
+    public void EnableAgent()
     {
-        if (NavMeshAgent == null)
+        if (GetNavMeshAgent() == null)
             return;
 
-        NavMeshAgent.enabled = true;
-        NavMeshAgent.updatePosition = true;
-        NavMeshAgent.updateRotation = true;
-        NavMeshAgent.isStopped = false;
+        GetNavMeshAgent().enabled = true;
+        GetNavMeshAgent().updatePosition = true;
+        GetNavMeshAgent().updateRotation = true;
+        GetNavMeshAgent().isStopped = false;
     }
 }

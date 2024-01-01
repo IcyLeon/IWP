@@ -21,8 +21,8 @@ public class BossHealthBar : MonoBehaviour
 
         if (healthBarScript)
         {
-            healthBarScript.SetupMinAndMax(0, BaseEnemy.GetMaxHealth());
-            healthBarScript.UpdateHealth(BaseEnemy.GetHealth());
+            healthBarScript.UpdateHealth(BaseEnemy.GetHealth(), 0, BaseEnemy.GetMaxHealth());
+            healthBarScript.UpdateShield(BaseEnemy.GetCurrentElementalShield(), 0, BaseEnemy.GetElementalShield());
             healthBarScript.UpdateLevel(BaseEnemy.GetLevel());
         }
 

@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public enum SceneEnum
 {
     GAME,
-    SHOP
+    SHOP,
+    BOSS
 }
 
 public class SceneManager : MonoBehaviour
@@ -100,6 +101,8 @@ public class SceneManager : MonoBehaviour
                 return "GameScene";
             case SceneEnum.SHOP:
                 return "ShopScene";
+            case SceneEnum.BOSS:
+                return "BossScene";
         }
         return null;
     }

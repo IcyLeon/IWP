@@ -35,8 +35,7 @@ public class PartyInfo : MonoBehaviour
     {
         if (healthBarScript && characterData != null)
         {
-            healthBarScript.SetupMinAndMax(0, characterData.GetMaxHealth(characterData.GetLevel()));
-            healthBarScript.UpdateHealth(characterData.GetHealth());
+            healthBarScript.UpdateHealth(characterData.GetHealth(), 0, characterData.GetMaxHealth(characterData.GetLevel()));
         }
     }
 

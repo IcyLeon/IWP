@@ -33,7 +33,6 @@ public class FriendlyKillerPlacementUI : MonoBehaviour
         if (FriendlyKillerData == null)
             return;
 
-        HealthBarScript.SetupMinAndMax(0f, FriendlyKillerData.GetMaxHealth());
-        HealthBarScript.UpdateHealth(FriendlyKillerData.GetCurrentHealth());
+        HealthBarScript.UpdateHealth(FriendlyKillerData.GetCurrentHealth(), 0f, FriendlyKillerData.GetMaxHealth());
     }
 }

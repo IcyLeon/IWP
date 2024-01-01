@@ -92,8 +92,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         {
             if (friendlyKillerData != null)
             {
-                healthBarScript.SetupMinAndMax(0, friendlyKillerData.GetMaxHealth());
-                healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth());
+                healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth(), 0, friendlyKillerData.GetMaxHealth());
             }
             healthBarScript.gameObject.SetActive(!canBuy && !IsDead());
         }
@@ -139,9 +138,10 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
             elemental = Elemental.NONE;
         }
         Elements e = new Elements(elemental);
+        int dmg = Mathf.RoundToInt(damageAmt);
 
-        GetFriendlyKillerData().SetCurrentHealth(GetFriendlyKillerData().GetCurrentHealth() - damageAmt);
-        AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, damageAmt.ToString());
+        GetFriendlyKillerData().SetCurrentHealth(GetFriendlyKillerData().GetCurrentHealth() - dmg);
+        AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, dmg.ToString());
         UpdateDead();
 
         return e;

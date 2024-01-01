@@ -7,6 +7,11 @@ public class CharacterState
     protected Characters Characters;
 
     protected IState currentState;
+
+    public IState GetCurrentState()
+    {
+        return currentState;
+    }
     public void ChangeState(IState newState)
     {
         if (currentState != null)

@@ -45,13 +45,12 @@ public class Characters : MonoBehaviour, IDamage
     [SerializeField] protected Transform HealthBarPivotParent;
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
-
+    private float CurrentElementalShield;
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
     public onElementReactionHit OnElementReactionHit;
 
     protected Coroutine DieCoroutine;
     protected bool isAttacking;
-
     public CharactersSO GetCharactersSO()
     {
         return CharactersSO;
@@ -64,6 +63,22 @@ public class Characters : MonoBehaviour, IDamage
     public void ResetAttack()
     {
         isAttacking = false;
+    }
+    // Start is called before the first frame update
+
+    public virtual float GetElementalShield()
+    {
+        return 0f;
+    }
+
+    public float GetCurrentElementalShield()
+    {
+        return CurrentElementalShield;
+    }
+    public void SetCurrentElementalShield(float val)
+    {
+        CurrentElementalShield = val;
+        CurrentElementalShield = Mathf.Max(0f, CurrentElementalShield);
     }
 
     public void SetisAttacking(bool value)
@@ -104,8 +119,7 @@ public class Characters : MonoBehaviour, IDamage
     {
         if (healthBarScript)
         {
-            healthBarScript.SetupMinAndMax(0, GetMaxHealth());
-            healthBarScript.UpdateHealth(GetHealth());
+            healthBarScript.UpdateHealth(GetHealth(), 0, GetMaxHealth());
             healthBarScript.UpdateLevel(GetLevel());
         }
         if (Animator)
@@ -149,7 +163,7 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual bool UpdateDie()
     {
-        if (GetHealth() <= 0)
+        if (IsDead())
             return true;
 
         return false;
@@ -170,6 +184,7 @@ public class Characters : MonoBehaviour, IDamage
             elemental = Elemental.NONE;
         }
         Elements e = new Elements(elemental);
+        int DamageValue = Mathf.RoundToInt(amt);
 
         if (GetElementalReaction() != null)
             GetElementalReaction().AddElements(e);
@@ -187,12 +202,16 @@ public class Characters : MonoBehaviour, IDamage
             }
             OnElementReactionHit?.Invoke(ElementalReactionsTrigger);
         }
-        SetHealth(GetHealth() - amt);
+
         if (callHitInfo)
             OnHit(e, this);
         UpdateDie();
-        AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, amt.ToString());
 
+        if (DamageValue > 0)
+        {
+            SetHealth(GetHealth() - DamageValue);
+            AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, DamageValue.ToString());
+        }
         return e;
     }
 

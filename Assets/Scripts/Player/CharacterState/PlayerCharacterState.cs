@@ -16,7 +16,7 @@ public class PlayerCharacterState : CharacterState
 
     protected IPlayerCharactersState GetIPlayerCharactersState()
     {
-        return (IPlayerCharactersState)currentState;
+        return (IPlayerCharactersState)GetCurrentState();
     }
 
     public void UpdateBurst()

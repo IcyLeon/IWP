@@ -9671,7 +9671,6 @@ MonoBehaviour:
   UIContent: {fileID: 200232563780050851}
   BossHealthPrefab: {fileID: 5643054992434516610, guid: 12abc7883794cd64fae845747861b8f2,
     type: 3}
-  HealthBarScript: {fileID: 0}
 --- !u!1 &5408761174214746214
 GameObject:
   m_ObjectHideFlags: 0
