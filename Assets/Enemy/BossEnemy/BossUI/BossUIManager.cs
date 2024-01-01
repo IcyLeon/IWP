@@ -1,20 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BossUIManager : MonoBehaviour
 {
+    private EnemyManager EM;
+    private Dictionary<BossHealthBar, BaseEnemy> BossEnemyUI_Dictionary;
     [SerializeField] GameObject UIContent;
-    [SerializeField] HealthBarScript HealthBarScript;
-    [SerializeField] TextMeshProUGUI EnemyNameTxt;
-    private BaseEnemy BaseEnemy;
+    [SerializeField] GameObject BossHealthPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        BossEnemyUI_Dictionary = new();
+        EM = EnemyManager.GetInstance();
+        EM.OnBossEnemyAdd += OnBossEnemyAdd;
+        EM.OnBossEnemyRemove += OnBossEnemyRemove;
+    }
+
+    private void OnDestroy()
+    {
+        EM.OnBossEnemyAdd -= OnBossEnemyAdd;
+        EM.OnBossEnemyRemove -= OnBossEnemyRemove;
+    }
+
+    private BossHealthBar GetKeyFromValue(BaseEnemy value)
+    {
+        foreach (var pair in BossEnemyUI_Dictionary)
+        {
+            if (pair.Value == value)
+            {
+                return pair.Key;
+            }
+        }
+        return null;
+    }
+
+    void OnBossEnemyRemove(BaseEnemy baseEnemy)
+    {
+        BossHealthBar BHB = GetKeyFromValue(baseEnemy);
+        if (BossEnemyUI_Dictionary.TryGetValue(BHB, out BaseEnemy BE))
+        {
+            BossEnemyUI_Dictionary.Remove(BHB);
+            Destroy(BHB.gameObject);
+        }
+    }
+
+    void OnBossEnemyAdd(BaseEnemy baseEnemy)
+    {
+        if (baseEnemy == null)
+            return;
+
+        BossHealthBar BossHealthBar = Instantiate(BossHealthPrefab, UIContent.transform).GetComponent<BossHealthBar>();
+        BossHealthBar.SetBaseEnemy(baseEnemy);
+        BossEnemyUI_Dictionary.Add(BossHealthBar, baseEnemy);
     }
 
     // Update is called once per frame
@@ -23,22 +65,22 @@ public class BossUIManager : MonoBehaviour
         UpdateContent();
     }
 
-    public void SetBaseEnemy(BaseEnemy e)
-    {
-        BaseEnemy = e;
-    }
 
     public void UpdateContent()
     {
-        if (BaseEnemy == null)
-            return;
-
-        if (HealthBarScript != null)
+        for (int i = BossEnemyUI_Dictionary.Count - 1; i > 0; i--)
         {
-            HealthBarScript.SetupMinAndMax(0, BaseEnemy.GetMaxHealth());
-            HealthBarScript.UpdateHealth(BaseEnemy.GetHealth());
+            KeyValuePair<BossHealthBar, BaseEnemy> keyValuePair = BossEnemyUI_Dictionary.ElementAt(i);
+            if (BossEnemyUI_Dictionary.TryGetValue(keyValuePair.Key, out BaseEnemy BE))
+            {
+                if (BE == null)
+                {
+                    BossEnemyUI_Dictionary.Remove(keyValuePair.Key);
+                    Destroy(keyValuePair.Key.gameObject);
+                }
+            }
         }
 
-        UIContent.SetActive(!BaseEnemy.IsDead());
+        UIContent.SetActive(EM.GetBossEnemyList().Count != 0);
     }
 }

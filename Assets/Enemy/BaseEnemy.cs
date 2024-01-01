@@ -16,7 +16,7 @@ public class BaseEnemy : Characters
     private EnemyManager EM;
     protected Vector3 RamdomDestination;
     [SerializeField] EnemyValue EnemyValueDropSO;
-
+    private BossEnemyType BossEnemyType;
     protected int Staggering = 1;
     protected int CurrentStaggering;
 
@@ -29,7 +29,12 @@ public class BaseEnemy : Characters
         CurrentHealth = GetMaxHealth();
         DetectionRange = 1f;
         Level = 1;
-        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
+
+        BossEnemyType = GetComponent<BossEnemyType>();
+
+        if (!BossEnemyType)
+            healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
+
         elementalReaction = new ElementalReaction();
         OnElementReactionHit += ElementReactionHit;
     }
@@ -161,10 +166,11 @@ public class BaseEnemy : Characters
         {
             healthBarScript.transform.position = HealthBarPivotParent.position + Vector3.up;
             healthBarScript.SliderInvsibleOnlyFullHealth();
-        }
-        if (elementsIndicator)
-        {
-            elementsIndicator.transform.position = HealthBarPivotParent.position + Vector3.up * 1.8f;
+
+            if (elementsIndicator)
+            {
+                elementsIndicator.transform.position = HealthBarPivotParent.position + Vector3.up * 1.8f;
+            }
         }
     }
 

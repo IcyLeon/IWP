@@ -12,8 +12,12 @@ public enum EnemyType
 
 public class EnemyManager : MonoBehaviour
 {
-    public delegate void onEnemyKilled(BaseEnemy enemy);
-    public onEnemyKilled OnEnemyKilled;
+    private List<BaseEnemy> BossEnemyList = new();
+    public delegate void onEnemyChanged(BaseEnemy enemy);
+    public onEnemyChanged OnEnemyKilled;
+    public onEnemyChanged OnBossEnemyAdd;
+    public onEnemyChanged OnBossEnemyRemove;
+
     private static EnemyManager instance;
     private int CurrentWave;
     private int CurrentEnemyDefeated;
@@ -36,6 +40,19 @@ public class EnemyManager : MonoBehaviour
         TotalEnemiesDefeated++;
         InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(enemy.GetDropValue()));
         OnEnemyKilled?.Invoke(enemy);
+    }
+
+    public List<BaseEnemy> GetBossEnemyList()
+    {
+        return BossEnemyList;
+    }
+    public void AddBossToList(BaseEnemy e)
+    {
+        if (e != null)
+        {
+            BossEnemyList.Add(e);
+            OnBossEnemyAdd?.Invoke(e);
+        }
     }
 
     public EnemyInfo GetEnemyInfo(EnemyType type)
@@ -82,6 +99,29 @@ public class EnemyManager : MonoBehaviour
         SetCurrentWave(0);
     }
 
+    private void Update()
+    {
+        UpdateRemoveBossEnemyList();
+    }
+
+    private void UpdateRemoveBossEnemyList()
+    {
+        for (int i = BossEnemyList.Count - 1; i > 0; i--)
+        {
+            if (BossEnemyList[i] == null)
+            {
+                BossEnemyList.RemoveAt(i);
+            }
+            else
+            {
+                if (BossEnemyList[i].IsDead())
+                {
+                    OnBossEnemyRemove?.Invoke(BossEnemyList[i]);
+                    BossEnemyList.RemoveAt(i);
+                }
+            }
+        }
+    }
     public void SetCurrentWave(int value)
     {
         CurrentWave = value;

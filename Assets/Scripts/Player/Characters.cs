@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public interface IDamage {
     Vector3 GetPointOfContact();
@@ -50,9 +51,14 @@ public class Characters : MonoBehaviour, IDamage
 
     protected Coroutine DieCoroutine;
     protected bool isAttacking;
+
+    public CharactersSO GetCharactersSO()
+    {
+        return CharactersSO;
+    }
     protected virtual void Start()
     {
-        BaseMaxHealth = CharactersSO.GetAscensionInfo(0).BaseHP;
+        BaseMaxHealth = GetCharactersSO().GetAscensionInfo(0).BaseHP;
         isAttacking = false;
     }
     public void ResetAttack()
