@@ -4,19 +4,80 @@ using UnityEngine;
 
 public class MageEnemy : BaseEnemy
 {
-    private float OriginalColliderHeight;
     private MageEnemyStateMachine m_StateMachine;
-
-    public CapsuleCollider GetCapsuleCollider()
+    private float FireHitInterval = 0.15f, FireHitIntervalElapsed;
+    [Header("Fire")]
+    [SerializeField] CapsuleCollider FireBreathingCollider;
+    public override bool UpdateDie()
     {
-        return (CapsuleCollider)col;
+        bool isdead = base.UpdateDie();
+        if (isdead)
+        {
+            DisableAgent();
+            if (DieCoroutine == null)
+            {
+                DieCoroutine = StartCoroutine(Disappear());
+            }
+        }
+        return isdead;
     }
 
-    public float GetOriginalColliderHeight()
+    private void TurnOnFireBreathingCollider()
     {
-        return OriginalColliderHeight;
+        GetFireBreathingCollider().enabled = true;
+        FireHitIntervalElapsed = Time.time;
+    }
+    public void TurnOFFireBreathingCollider()
+    {
+        GetFireBreathingCollider().enabled = false;
+        FireHitIntervalElapsed = Time.time;
+    }
+    private void UpdateFireBreathing()
+    {
+        if (!GetFireBreathingCollider().enabled)
+            return;
+
+        Collider[] colliders = Physics.OverlapCapsule(GetFireBreathingCollider().bounds.min,
+                                                      GetFireBreathingCollider().bounds.max,
+                                                      GetFireBreathingCollider().radius,
+                                                      LayerMask.GetMask("Player"));
+
+        foreach (Collider other in colliders)
+        {
+            PlayerCharacters PlayerCharacters = other.GetComponent<PlayerCharacters>();
+            if (PlayerCharacters != null)
+            {
+                if (!PlayerCharacters.GetPlayerManager().IsSkillCasting())
+                {
+                    if (!PlayerCharacters.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
+                    {
+                        PlayerCharacters.TakeDamage(PlayerCharacters.GetPointOfContact(), new Elements(Elemental.FIRE), 100f);
+                        FireHitIntervalElapsed = Time.time;
+                    }
+                }
+            }
+        }
     }
 
+    private void SpawnEnemies()
+    {
+        BossManager BM = BossManager.GetInstance();
+
+        if (BM == null)
+            return;
+
+        for (int i = 0; i < m_StateMachine.MageEnemyData.SpawnEnemiesAmount; i++)
+        {
+            int randomIndex = Random.Range(0, EM.GetEnemyInfosList().Length);
+            EnemyType ET = (EnemyType)randomIndex;
+            BM.SpawnGroundUnitsWithinTerrain(ET);
+        }
+    }
+
+    public CapsuleCollider GetFireBreathingCollider()
+    {
+        return FireBreathingCollider;
+    }
     private void TriggerOnMageStateAnimationTransition()
     {
         m_StateMachine.OnAnimationTransition();
@@ -25,8 +86,8 @@ public class MageEnemy : BaseEnemy
     // Start is called before the first frame update
     protected override void Start()
     {
+        TurnOFFireBreathingCollider();
         m_StateMachine = new MageEnemyStateMachine(this);
-        OriginalColliderHeight = GetCapsuleCollider().height;
         base.Start();
     }
 
@@ -35,6 +96,17 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
+        Debug.Log(m_StateMachine.GetCurrentState());
+        UpdateFireBreathing();
+        Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
+    }
+
+    protected override void UpdateState()
+    {
+        if (NavMeshAgent == null)
+            return;
+
+        Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
     }
 
     public override float GetElementalShield()

@@ -10,9 +10,9 @@ public class InventoryManager : MonoBehaviour {
     private CharacterData currentequipCharacter;
 
     public delegate void OnInventoryListChange(Item item, ItemTemplate itemSO);
-    public OnInventoryListChange OnInventoryItemAdd;
-    public OnInventoryListChange OnInventoryItemRemove;
-    public OnInventoryListChange OnInventoryChanged; // if there is a change in the inventory (be it add or remove for all types of item)
+    public static OnInventoryListChange OnInventoryItemAdd;
+    public static OnInventoryListChange OnInventoryItemRemove;
+    public static OnInventoryListChange OnInventoryChanged; // if there is a change in the inventory (be it add or remove for all types of item)
 
     [SerializeField] PlayerCharacterSO[] startupSOTest;
 

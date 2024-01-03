@@ -21,8 +21,8 @@ public class CurrencyUI : MonoBehaviour
     void Start()
     {
         inventoryManager = InventoryManager.GetInstance();
-        inventoryManager.GetPlayerStats().OnCoinsChanged += OnCoinsChanged;
-        inventoryManager.GetPlayerStats().OnCashChanged += OnCashsChanged;
+        PlayerStats.OnCoinsChanged += OnCoinsChanged;
+        PlayerStats.OnCashChanged += OnCashsChanged;
         OnCoinsChanged();
         OnCashsChanged();
         Init();
@@ -52,10 +52,7 @@ public class CurrencyUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (inventoryManager)
-        {
-            inventoryManager.GetPlayerStats().OnCoinsChanged -= OnCoinsChanged;
-            inventoryManager.GetPlayerStats().OnCashChanged -= OnCashsChanged;
-        }
+        PlayerStats.OnCoinsChanged -= OnCoinsChanged;
+        PlayerStats.OnCashChanged -= OnCashsChanged;
     }
 }

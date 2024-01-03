@@ -74,7 +74,7 @@ public class Kaqing : SwordCharacters
     {
         BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
-        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2.3f, 2.8f, LayerMask.GetMask("Entity"));
+        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2.8f, LayerMask.GetMask("Entity"));
         foreach (Collider other in Colliders)
         {
             IDamage damageObj = other.GetComponent<IDamage>();

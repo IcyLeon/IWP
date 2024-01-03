@@ -18,7 +18,7 @@ public class SceneManager : MonoBehaviour
     private static SceneManager instance;
     [SerializeField] Image ProgressBar;
     [SerializeField] GameObject LoadingCanvas;
-    public event Action OnSceneChanged;
+    public static Action OnSceneChanged;
     private float TargetProgress = 0f;
 
     private void Awake()

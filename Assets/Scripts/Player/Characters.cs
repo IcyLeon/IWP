@@ -132,9 +132,9 @@ public class Characters : MonoBehaviour, IDamage
 
     private void OnAnimatorMove()
     {
-        if (Animator == null) 
-        { 
-            return; 
+        if (Animator == null)
+        {
+            return;
         }
 
         AnimatorMove(Animator.deltaPosition, Animator.rootRotation);
@@ -163,10 +163,7 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual bool UpdateDie()
     {
-        if (IsDead())
-            return true;
-
-        return false;
+        return IsDead();
     }
 
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, bool callHitInfo = true)
@@ -205,13 +202,13 @@ public class Characters : MonoBehaviour, IDamage
 
         if (callHitInfo)
             OnHit(e, this);
-        UpdateDie();
 
         if (DamageValue > 0)
         {
             SetHealth(GetHealth() - DamageValue);
             AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, DamageValue.ToString());
         }
+        UpdateDie();
         return e;
     }
 

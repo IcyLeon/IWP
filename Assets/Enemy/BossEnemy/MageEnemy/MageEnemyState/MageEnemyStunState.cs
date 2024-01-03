@@ -11,7 +11,6 @@ public class MageEnemyStunState : MageEnemyState
     public override void Enter()
     {
         base.Enter();
-        GetMageEnemyStateMachine().GetMageEnemy().GetCapsuleCollider().height = GetMageEnemyStateMachine().MageEnemyData.TargetColliderHeight;
         GetMageEnemyStateMachine().MageEnemyData.CurrentStunElasped = GetMageEnemyStateMachine().MageEnemyData.stunDuration;
         GetMageEnemyStateMachine().MageEnemyData.ShieldStatus = false;
         StartAnimation("isStun");
@@ -20,14 +19,14 @@ public class MageEnemyStunState : MageEnemyState
     public override void Exit()
     {
         base.Exit();
-        GetMageEnemyStateMachine().GetMageEnemy().GetCapsuleCollider().height = GetMageEnemyStateMachine().GetMageEnemy().GetOriginalColliderHeight();
+        GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped = GetMageEnemyStateMachine().MageEnemyData.ShieldCooldown;
         StopAnimation("isStun");
         ResetStunState();
     }
 
     private void ResetStunState()
     {
-        GetMageEnemyStateMachine().MageEnemyData.CurrentStunElasped = 0f;
+        GetMageEnemyStateMachine().MageEnemyData.CurrentStunElasped = GetMageEnemyStateMachine().MageEnemyData.stunDuration;
     }
 
     public override void FixedUpdate()

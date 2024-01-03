@@ -54,7 +54,7 @@ public class Albino : BaseEnemy
         TriggerStaggering(1, state != States.SLAM);
     }
 
-    void UpdateState()
+    protected override void UpdateState()
     {
         if (NavMeshAgent == null)
             return;

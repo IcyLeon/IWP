@@ -54,17 +54,13 @@ public class SlotPopup : MonoBehaviour
             KeyValuePair<Item, ItemButton> itemPair = itembutton_Dictionary.ElementAt(i);
             if (itembutton_Dictionary.TryGetValue(itemPair.Key, out ItemButton itemButton))
             {
-                DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
-
+                DragnDropButton dragnDrop = itemButton.GetComponent<DragnDropButton>();
                 itemButton.onButtonSpawn -= OnItemSpawned;
                 itemButton.onButtonRemoveClick -= OnItemRemove;
                 itemButton.onButtonClick -= GetItemSelected;
-                if (AllowDragnDrop)
-                {
-                    dragnDrop.onBeginDragEvent -= OnBeginDrag;
-                    dragnDrop.onDragEvent -= OnDrag;
-                    dragnDrop.onEndDragEvent -= OnEndDrag;
-                }
+                dragnDrop.onBeginDragEvent -= OnBeginDrag;
+                dragnDrop.onDragEvent -= OnDrag;
+                dragnDrop.onEndDragEvent -= OnEndDrag;
                 Destroy(itemButton.gameObject);
                 itembutton_Dictionary.Remove(itemPair.Key);
             }
@@ -85,7 +81,7 @@ public class SlotPopup : MonoBehaviour
         itemButton.onButtonClick += GetItemSelected;
         if (AllowDragnDrop)
         {
-            DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
+            DragnDropButton dragnDrop = itemButton.GetComponent<DragnDropButton>();
             dragnDrop.parentTransform = transform;
             dragnDrop.onBeginDragEvent += OnBeginDrag;
             dragnDrop.onDragEvent += OnDrag;
@@ -100,13 +96,10 @@ public class SlotPopup : MonoBehaviour
         itemButton.onButtonSpawn -= OnItemSpawned;
         itemButton.onButtonRemoveClick -= OnItemRemove;
         itemButton.onButtonClick -= GetItemSelected;
-        if (AllowDragnDrop)
-        {
-            DragnDrop dragnDrop = itemButton.GetComponent<DragnDrop>();
-            dragnDrop.onBeginDragEvent -= OnBeginDrag;
-            dragnDrop.onDragEvent -= OnDrag;
-            dragnDrop.onEndDragEvent -= OnEndDrag;
-        }
+        DragnDropButton dragnDrop = itemButton.GetComponent<DragnDropButton>();
+        dragnDrop.onBeginDragEvent -= OnBeginDrag;
+        dragnDrop.onDragEvent -= OnDrag;
+        dragnDrop.onEndDragEvent -= OnEndDrag;
         Destroy(itemButton.gameObject);
         itembutton_Dictionary.Remove(item);
     }

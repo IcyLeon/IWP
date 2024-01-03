@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         FriendlyKillerHandler friendlyKillerHandler = FriendlyKillerHandler.GetInstance();
         foreach(FriendlyKillerData f in friendlyKillerHandler.GetFriendlyKillerDataList())
         {
-            Vector3 pos = SpawnRandomlyWithinTerrain();
+            Vector3 pos = EnemyManager.GetRandomPointWithinTerrain(terrain);
             FriendlyKillers friendlyKillers = Instantiate(friendlyKillerHandler.GetFriendlyKillerInfo(f.GetFriendlyKillerSO()).FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>(); ;
             if (friendlyKillers != null)
                 friendlyKillers.SetKillerData(f);
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
         if (Teleporter != null)
             return;
 
-        Teleporter = Instantiate(TeleporterPrefab, SpawnRandomlyWithinTerrain(), Quaternion.identity);
+        Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
         MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
     }
 
@@ -153,28 +153,8 @@ public class GameManager : MonoBehaviour
 
     private void SpawnGroundUnitsWithinTerrain(EnemyType e)
     {
-        Vector3 spawnPosition = SpawnRandomlyWithinTerrain();
-
-        BaseEnemy enemy = Instantiate(EM.GetEnemyInfo(e).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
+        BaseEnemy enemy = EM.SpawnGroundUnitsWithinTerrain(e, terrain);
         CurrentEnemySpawnedList.Add(enemy);
-    }
-
-    private Vector3 SpawnRandomlyWithinTerrain()
-    {
-        TerrainData terrainData = terrain.terrainData;
-        float terrainWidth = terrainData.size.x;
-        float terrainLength = terrainData.size.z;
-        float randomX = Random.Range(0f, terrainWidth);
-        float randomZ = Random.Range(0f, terrainLength);
-        float terrainHeight = terrain.SampleHeight(new Vector3(randomX, 0f, randomZ));
-        Vector3 spawnPosition = new Vector3(randomX, terrainHeight, randomZ);
-
-        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 200.0f, NavMesh.AllAreas))
-        {
-            return hit.position;
-        }
-
-        return default(Vector3);
     }
 
     private void SpawnBoss()

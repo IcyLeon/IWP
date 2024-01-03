@@ -42,6 +42,9 @@ public class BossUIManager : MonoBehaviour
     void OnBossEnemyRemove(BaseEnemy baseEnemy)
     {
         BossHealthBar BHB = GetKeyFromValue(baseEnemy);
+        if (BHB == null)
+            return;
+
         if (BossEnemyUI_Dictionary.TryGetValue(BHB, out BaseEnemy BE))
         {
             BossEnemyUI_Dictionary.Remove(BHB);

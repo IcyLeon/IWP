@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MageEnemyChaseState : MageEnemyState
+public class MageEnemyChaseState : MageEnemyGroundState
 {
     public MageEnemyChaseState(MageEnemyStateMachine MageEnemyStateMachine) : base(MageEnemyStateMachine)
     {
@@ -46,6 +46,8 @@ public class MageEnemyChaseState : MageEnemyState
 
         if (GetMageEnemyStateMachine().GetMageEnemy().HasReachedTargetLocation(GetMageEnemyStateMachine().GetMageEnemy().GetPlayerLocation()))
         {
+            GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyIdleState);
+            return;
         }
 
     }

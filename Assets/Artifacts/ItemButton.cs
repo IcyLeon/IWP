@@ -276,7 +276,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
 
     private void OnDestroy()
     {
-        DragnDrop dragnDrop = GetComponent<DragnDrop>();
+        DragnDropButton dragnDrop = GetComponent<DragnDropButton>();
         dragnDrop.onBeginDragEvent -= OnBeginDrag;
         dragnDrop.onDragEvent -= OnDrag;
         dragnDrop.onEndDragEvent -= OnEndDrag;

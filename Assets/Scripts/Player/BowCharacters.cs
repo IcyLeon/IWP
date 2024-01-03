@@ -146,8 +146,16 @@ public class BowCharacters : PlayerCharacters
 
     public override void SetLookAtTarget()
     {
-        base.SetLookAtTarget();
         Direction = GetPlayerManager().transform.forward;
+        if (NearestTarget != null)
+        {
+            Vector3 lookdir = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            Vector3 forward = lookdir;
+            forward.y = 0;
+            forward.Normalize();
+            LookAtDirection(forward);
+            Direction = lookdir;
+        }
     }
 
     public void DestroyChargeUpEmitter()

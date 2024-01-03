@@ -443,4 +443,8 @@ public class PlayerMovementState : IState
     {
 
     }
+
+    public virtual void OnAnimationEventCustomCall()
+    {
+    }
 }

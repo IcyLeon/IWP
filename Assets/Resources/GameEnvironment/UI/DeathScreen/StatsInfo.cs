@@ -16,8 +16,8 @@ public class StatsInfo : MonoBehaviour
         EnemyManager = EnemyManager.GetInstance();
         InventoryManager = InventoryManager.GetInstance();
         EnemyManager.OnEnemyKilled += UpdateEnemyKilled;
-        InventoryManager.GetPlayerStats().OnCoinsChanged += UpdateCoins;
-        InventoryManager.GetPlayerStats().OnCashChanged += UpdateCash;
+        PlayerStats.OnCoinsChanged += UpdateCoins;
+        PlayerStats.OnCashChanged += UpdateCash;
         UpdateContent();
     }
 
@@ -33,8 +33,8 @@ public class StatsInfo : MonoBehaviour
     private void OnDestroy()
     {
         EnemyManager.OnEnemyKilled -= UpdateEnemyKilled;
-        InventoryManager.GetPlayerStats().OnCoinsChanged -= UpdateCoins;
-        InventoryManager.GetPlayerStats().OnCashChanged -= UpdateCash;
+        PlayerStats.OnCoinsChanged -= UpdateCoins;
+        PlayerStats.OnCashChanged -= UpdateCash;
     }
 
     private void UpdateCoins()

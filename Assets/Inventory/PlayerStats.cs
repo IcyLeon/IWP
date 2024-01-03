@@ -13,9 +13,9 @@ public class PlayerStats
     List<Item> InventoryList;
     public delegate void onPlayerCurrencyChanged();
     public delegate void onPlayerCharactersAdd(CharacterData character);
-    public onPlayerCharactersAdd OnPlayerCharactersAdd;
-    public onPlayerCurrencyChanged OnCoinsChanged;
-    public onPlayerCurrencyChanged OnCashChanged;
+    public static onPlayerCharactersAdd OnPlayerCharactersAdd;
+    public static onPlayerCurrencyChanged OnCoinsChanged;
+    public static onPlayerCurrencyChanged OnCashChanged;
 
     public void AddCharacterToOwnList(CharacterData characterData)
     {
@@ -105,24 +105,28 @@ public class PlayerStats
     public void AddCoins(int val)
     {
         coins += val;
+        coins = Mathf.Max(0, coins);
         OnCoinsChanged?.Invoke();
     }
 
     public void RemoveCoins(int val)
     {
         coins -= val;
+        coins = Mathf.Max(0, coins);
         OnCoinsChanged?.Invoke();
     }
 
     public void AddCash(int val)
     {
         cash += val;
+        cash = Mathf.Max(0, cash);
         OnCashChanged?.Invoke();
     }
 
     public void RemoveCash(int val)
     {
         cash -= val;
+        cash = Mathf.Max(0, cash);
         OnCashChanged?.Invoke();
     }
 }

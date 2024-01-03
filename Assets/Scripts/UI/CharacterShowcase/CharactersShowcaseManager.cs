@@ -33,7 +33,7 @@ public class CharactersShowcaseManager : MonoBehaviour
     {
         charactersDictionary = new();
         inventoryManager = InventoryManager.GetInstance();
-        inventoryManager.GetPlayerStats().OnPlayerCharactersAdd += OnPlayerCharactersAdd;
+        PlayerStats.OnPlayerCharactersAdd += OnPlayerCharactersAdd;
 
         for (int i = 0; i < inventoryManager.GetPlayerStats().GetCharactersOwnedList().Count; i++)
         {

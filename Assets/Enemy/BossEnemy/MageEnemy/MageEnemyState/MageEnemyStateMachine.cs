@@ -8,9 +8,12 @@ public class MageEnemyStateMachine : CharacterState
     public MageEnemyIdleState MageEnemyIdleState { get; }
     public MageEnemyChaseState MageEnemyChaseState { get; }
     public MageEnemyStunState MageEnemyStunState { get; }
-    public MageEnemyShootLaserState MageEnemyShootLaserState { get; }
+    public MageEnemyShootFireState MageEnemyShootFireState { get; }
     public MageEnemySpawnMinionState MageEnemySpawnMinionState { get; }
     public MageEnemyShieldState MageEnemyShieldState { get; }
+    public MageEnemyDeadState MageEnemyDeadState { get; }
+    public MageEnemyBasicAttackState MageEnemyBasicAttackState { get; }
+    public MageEnemyChargeAttackState MageEnemyChargeAttackState { get; }
     public MageEnemy GetMageEnemy()
     {
         return (MageEnemy)Characters;
@@ -18,12 +21,15 @@ public class MageEnemyStateMachine : CharacterState
     public MageEnemyStateMachine(Characters characters) : base(characters)
     {
         MageEnemyData = new MageEnemyData();
-        MageEnemyShootLaserState = new MageEnemyShootLaserState(this);
+        MageEnemyShootFireState = new MageEnemyShootFireState(this);
         MageEnemyIdleState = new MageEnemyIdleState(this);
         MageEnemyChaseState = new MageEnemyChaseState(this);
         MageEnemySpawnMinionState = new MageEnemySpawnMinionState(this);
         MageEnemyStunState = new MageEnemyStunState(this);
         MageEnemyShieldState = new MageEnemyShieldState(this);
+        MageEnemyDeadState = new MageEnemyDeadState(this);
+        MageEnemyBasicAttackState = new MageEnemyBasicAttackState(this);
+        MageEnemyChargeAttackState = new MageEnemyChargeAttackState(this);
         ChangeState(MageEnemyIdleState);
     }
 }

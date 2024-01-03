@@ -50,7 +50,7 @@ public class Spitter : BaseEnemy
         TriggerStaggering(2);
     }
 
-    void UpdateState()
+    protected override void UpdateState()
     {
         if (NavMeshAgent == null)
             return;

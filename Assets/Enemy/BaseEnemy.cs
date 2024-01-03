@@ -13,9 +13,9 @@ public class BaseEnemy : Characters
     protected float DetectionRange;
     private ElementsIndicator elementsIndicator;
     protected float Ratio;
+    protected EnemyManager EM;
     private IDamage Target;
     [SerializeField] protected NavMeshAgent NavMeshAgent;
-    private EnemyManager EM;
     protected Vector3 RamdomDestination;
     [SerializeField] EnemyValue EnemyValueDropSO;
     private BossEnemyType BossEnemyType;
@@ -89,6 +89,11 @@ public class BaseEnemy : Characters
         return nearest;
     }
 
+    protected virtual void UpdateState()
+    {
+
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
@@ -107,7 +112,12 @@ public class BaseEnemy : Characters
 
     public override Vector3 GetPointOfContact()
     {
-        return col.bounds.center;
+        Vector3 temp = transform.position;
+        if (col != null)
+        {
+            temp = col.bounds.center;
+        }
+        return temp;
     }
 
     private void UpdateOutofBound()
@@ -132,17 +142,31 @@ public class BaseEnemy : Characters
         }
     }
 
+    public Vector3 GetTargetDirection()
+    {
+        if (GetPlayerLocation() == default(Vector3))
+            return default(Vector3);
+
+        return GetPlayerLocation() - transform.position;
+    }
+
     public void LookAtPlayerXZ()
     {
-        Vector3 forward = GetPlayerLocation() - transform.position;
+        Vector3 forward = GetTargetDirection();
         float angle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, angle, 0);
+
+        GetRB().rotation = Quaternion.Euler(0, angle, 0);
+    }
+
+    public Rigidbody GetRB()
+    {
+        return rb;
     }
 
 
-    protected IEnumerator Disappear()
+    protected IEnumerator Disappear(float delay = 8f)
     {
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(delay);
         Destroy(gameObject);
     }
 
@@ -212,7 +236,7 @@ public class BaseEnemy : Characters
         if (GetNavMeshAgent() == null)
             return false;
 
-        return (transform.position - target).magnitude <= GetNavMeshAgent().stoppingDistance + 0.25f;
+        return (transform.position - target).magnitude <= GetNavMeshAgent().stoppingDistance + 0.25f; // slide offset to prevent jerking
     }
 
     protected void SetRandomDestination()

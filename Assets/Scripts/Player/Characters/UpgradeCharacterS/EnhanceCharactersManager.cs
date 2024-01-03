@@ -80,7 +80,7 @@ public class EnhanceCharactersManager : MonoBehaviour
     private void SetupMaterialItems()
     {
         IM = InventoryManager.GetInstance();
-        IM.OnInventoryChanged += OnInventoryChanged;
+        InventoryManager.OnInventoryChanged += OnInventoryChanged;
 
         for (int i = 0; i < ExpItemSOList.Length; i++)
         {
@@ -113,7 +113,7 @@ public class EnhanceCharactersManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        IM.OnInventoryChanged -= OnInventoryChanged;
+        InventoryManager.OnInventoryChanged -= OnInventoryChanged;
 
         for(int i = 0; i < itembutton_Dictionary.Count; i++)
         {
