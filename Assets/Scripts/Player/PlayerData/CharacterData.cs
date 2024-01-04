@@ -64,7 +64,7 @@ public class CharacterData : UpgradableItems
         CurrentElementalBurstEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         Level = 1;
-        CurrentHealth = GetMaxHealth(GetLevel());
+        CurrentHealth = GetBaseMaxHealth(GetLevel());
         MaxLevel = 20;
         elementalReaction = new ElementalReaction();
     }
@@ -74,7 +74,7 @@ public class CharacterData : UpgradableItems
         MaxAscensionLevel = CurrentAscension = 0;
         SetItemsSO(playerCharacterSO);
         Level = level;
-        CurrentHealth = GetMaxHealth(GetLevel());
+        CurrentHealth = GetActualMaxHealth(GetLevel());
         CurrentEnergyBurstCost = currentEnergy;
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
@@ -165,7 +165,7 @@ public class CharacterData : UpgradableItems
     public void SetHealth(float Hp)
     {
         CurrentHealth = (int)Hp;
-        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth(GetLevel()));
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetActualMaxHealth(GetLevel()));
     }
 
     public override void Upgrade()
@@ -173,33 +173,55 @@ public class CharacterData : UpgradableItems
         if (Level != MaxLevel)
         {
             base.Upgrade();
-            SetHealth(GetMaxHealth(GetLevel()));
+            SetHealth(GetActualMaxHealth(GetLevel()));
         }
     }
-    public float GetEM(int level)
+    public float GetBaseEM(int level)
     {
         return 0f;
     }
 
-    public float GetDEF(int level)
+    public float GetActualEM(int level)
+    {
+        return GetBaseEM(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.EM);
+    }
+
+
+
+    public float GetBaseDEF(int level)
     {
         if (level < 0)
             level = Mathf.Abs(level);
         return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxDEF - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseDEF) / (GetMaxLevel() - 1)) * (level - 1));
     }
 
-    public int GetATK(int level)
+    public float GetActualDEF(int level)
+    {
+        return GetBaseDEF(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.DEF);
+    }
+
+    public int GetBaseATK(int level)
     {
         if (level < 0)
             level = Mathf.Abs(level);
         return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxATK - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseATK) / (GetMaxLevel() - 1)) * (level - 1));
     }
 
-    public int GetMaxHealth(int level)
+    public float GetActualATK(int level)
+    {
+        return GetBaseATK(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.ATK);
+    }
+
+    public int GetBaseMaxHealth(int level)
     {
         if (level < 0)
             level = Mathf.Abs(level);
         return Mathf.RoundToInt(GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP + ((GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseMaxHP - GetPlayerCharacterSO().GetAscensionInfo(GetCurrentAscension()).BaseHP) / (GetMaxLevel() - 1)) * (level - 1));
+    }
+
+    public float GetActualMaxHealth(int level)
+    {
+        return GetBaseMaxHealth(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.HP);
     }
 
     public override int GetMaxLevel()

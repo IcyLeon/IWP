@@ -75,7 +75,7 @@ Material:
     - _AlphaSrcBlend: 1
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
-    - _BUILTIN_QueueControl: 0
+    - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
     - _BlendMode: 0
     - _ConservativeDepthOffsetEnable: 0
@@ -127,7 +127,7 @@ Material:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Up_Color: {r: 0.23188858, g: 0.23477516, b: 0.254717, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &3425490425373859530
+--- !u!114 &2204948144515311454
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 0
---- !u!114 &7594650898151838133
+--- !u!114 &8582901888075032656
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -67,7 +67,12 @@ public class AssetManager : MonoBehaviour
 
 
     private static AssetManager instance;
-
+    public static bool isInProbabilityRange(float a)
+    {
+        float randomValue = Random.value;
+        float probability = 1.0f - a;
+        return randomValue > probability;
+    }
     public static string CurrencyText(CurrencyType type)
     {
         switch (type)

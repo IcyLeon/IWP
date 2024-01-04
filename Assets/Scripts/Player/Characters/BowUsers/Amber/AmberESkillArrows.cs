@@ -79,7 +79,7 @@ public class AmberESkillArrows : MonoBehaviour
 
     void Explode()
     {
-        Collider[] colliders = Physics.OverlapSphere(rb.position, 3.5f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(rb.position, 3.5f, LayerMask.GetMask("Entity", "BossEntity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             IDamage damageObject = colliders[i].gameObject.GetComponent<IDamage>();

@@ -24,12 +24,12 @@ public class FriendlyKillerData
     {
         return MaxHealth;
     }
-    public float GetCurrentHealth()
+    public float GetHealth()
     {
         return CurrentHealth;
     }
 
-    public void SetCurrentHealth(float CurrentHealth)
+    public void SetHealth(float CurrentHealth)
     {
         this.CurrentHealth = CurrentHealth;
     }

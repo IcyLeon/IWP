@@ -102,7 +102,7 @@ public class Artifacts : UpgradableItems
                 break;
         }
 
-        if (ArtifactsManager.isInProbabilityRange(0.7f))
+        if (AssetManager.isInProbabilityRange(0.66f))
         {
             TotalSubstatsDisplay = GetLowestNumberofStats(rarity).LowestDropValue;
         }
@@ -134,7 +134,7 @@ public class Artifacts : UpgradableItems
 
     private bool CheckIfStatsAlreadyExist(ArtifactsStat currentStat)
     {
-        for(int i = 0; i < Stats.Count; i++)
+        for(int i = 0; i < GetTotalStats(); i++)
         {
             if (Stats[i].GetArtifactsStat() == currentStat)
                 return true;
@@ -189,7 +189,7 @@ public class Artifacts : UpgradableItems
             }
             else
             {
-                int randomStat = Random.Range(1, Stats.Count);
+                int randomStat = Random.Range(1, GetTotalStats());
                 ArtifactStatsInfo a = GetStats(randomStat);
                 float Value = GetStatsPossibleRoll(GetHighestPossibleStatsRoll(a.GetArtifactsStat()), 4, 0.1f);
                 a.SetStatsValue(a.GetStatsValue() + Value);
@@ -213,6 +213,11 @@ public class Artifacts : UpgradableItems
         return Stats[idx];
     }
 
+    public int GetTotalStats()
+    {
+        return Stats.Count;
+    }
+
     public string GetArtifactStatsName(int idx)
     {
         return CharacterStatsDisplay.GetStatsName(GetStats(idx).GetArtifactsStat());
@@ -234,7 +239,7 @@ public class Artifacts : UpgradableItems
 
     public float GetNextMainStatsValue(int levelIncrease)
     {
-        if (Stats.Count == 0)
+        if (GetTotalStats() == 0)
             return 0f;
 
         return GetArtifactMainStatsIncreaseRatioValue(0) * levelIncrease + GetStats(0).GetStatsValue();
@@ -243,7 +248,7 @@ public class Artifacts : UpgradableItems
 
     private void UpgradeMainStats()
     {
-        if (Stats.Count == 0)
+        if (GetTotalStats() == 0)
             return;
 
         GetStats(0).SetStatsValue(GetStats(0).GetStatsValue() + GetArtifactMainStatsIncreaseRatioValue(0));

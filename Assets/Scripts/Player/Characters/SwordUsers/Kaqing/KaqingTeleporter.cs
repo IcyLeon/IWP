@@ -52,7 +52,7 @@ public class KaqingTeleporter : MonoBehaviour
 
     private void TravelDamage()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude * 2f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude * 2f, LayerMask.GetMask("Entity", "BossEntity"));
         for(int i = 0; i < colliders.Length; i++)
         {
             Collider collider = colliders[i];
@@ -60,7 +60,7 @@ public class KaqingTeleporter : MonoBehaviour
             if (damage != null)
             {
                 if (!damage.IsDead())
-                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetATK(Kaqing.GetLevel()));
+                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetActualATK(Kaqing.GetLevel()));
             }
         }
     }

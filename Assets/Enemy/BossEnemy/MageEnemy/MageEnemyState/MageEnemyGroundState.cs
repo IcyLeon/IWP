@@ -14,7 +14,7 @@ public class MageEnemyGroundState : MageEnemyState
 
         if (!isShieldState())
         {
-            if (CanPerformAction())
+            if (CanPerformAction() || GetMageEnemyStateMachine().GetCurrentState() is MageEnemyAttackState)
             {
                 if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus)
                 {
@@ -23,10 +23,27 @@ public class MageEnemyGroundState : MageEnemyState
                         OnShieldChanged();
                         return;
                     }
-                    GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped -= Time.deltaTime;
+                }
+                GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped -= Time.deltaTime;
+
+
+                if (GetMageEnemyStateMachine().GetMageEnemy().GetTotalMageNotDestroyed() == 0 && GetMageEnemyStateMachine().MageEnemyData.ShieldStatus)
+                {
+                    if (GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped <= 0)
+                    {
+                        GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemySpawnCrystalsState);
+                        return;
+                    }
+                    GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped -= Time.deltaTime;
                 }
             }
         }
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        GetMageEnemyStateMachine().MageEnemyData.dampedTargetRotationPassedTime = 0f;
     }
 
     protected void UpdateBasicAttacks()
@@ -39,9 +56,41 @@ public class MageEnemyGroundState : MageEnemyState
 
         if (Time.time - GetMageEnemyStateMachine().MageEnemyData.AttackCurrentElasped > GetMageEnemyStateMachine().MageEnemyData.AttackInterval)
         {
-            GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyChargeAttackState);
+            if (CanShootFlame())
+            {
+                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyShootFireState);
+                GetMageEnemyStateMachine().MageEnemyData.AttackInterval = GetMageEnemyStateMachine().MageEnemyData.GetRandomAttackInterval();
+                GetMageEnemyStateMachine().MageEnemyData.AttackCurrentElasped = Time.time;
+                return;
+            }
+
+            int randomAttack = Random.Range(0, 3);
+            switch(randomAttack)
+            {
+                case 0:
+                    GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyBasicAttackState);
+                    break;
+                case 1:
+                    if (GetMageEnemyStateMachine().MageEnemyData.Phase != MageEnemyData.MagePhase.Phase_2)
+                    {
+                        UpdateBasicAttacks();
+                        return;
+                    }
+                    GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemySpawnMinionState);
+                    break;
+                case 2:
+                    GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyChargeAttackState);
+                    break;
+            }
+
+            GetMageEnemyStateMachine().MageEnemyData.AttackInterval = GetMageEnemyStateMachine().MageEnemyData.GetRandomAttackInterval();
             GetMageEnemyStateMachine().MageEnemyData.AttackCurrentElasped = Time.time;
             return;
         }
+    }
+
+    private bool CanShootFlame()
+    {
+        return AssetManager.isInProbabilityRange(0.35f);
     }
 }

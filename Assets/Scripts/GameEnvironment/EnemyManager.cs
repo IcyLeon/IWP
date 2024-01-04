@@ -5,6 +5,7 @@ using System;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 using UnityEngine.AI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public enum EnemyType
 {
@@ -14,6 +15,7 @@ public enum EnemyType
 
 public class EnemyManager : MonoBehaviour
 {
+    private List<BaseEnemy> CurrentEnemySpawnedList;
     private List<BaseEnemy> BossEnemyList = new();
     public delegate void onEnemyChanged(BaseEnemy enemy);
     public onEnemyChanged OnEnemyKilled;
@@ -61,12 +63,27 @@ public class EnemyManager : MonoBehaviour
         return Vector3.zero;
     }
 
-    public BaseEnemy SpawnGroundUnitsWithinTerrain(EnemyType e, Terrain terrain)
+    public int GetTotalEnemyAliveInList()
+    {
+        int Count = 0;
+        for (int i = 0; i < CurrentEnemySpawnedList.Count; i++)
+        {
+            BaseEnemy enemy = CurrentEnemySpawnedList[i];
+            if (enemy != null)
+            {
+                if (!enemy.IsDead())
+                    Count++;
+            }
+        }
+        return Count;
+    }
+
+    public void SpawnGroundUnitsWithinTerrain(EnemyType e, Terrain terrain)
     {
         Vector3 spawnPosition = GetRandomPointWithinTerrain(terrain);
 
         BaseEnemy enemy = Instantiate(GetEnemyInfo(e).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
-        return enemy;
+        CurrentEnemySpawnedList.Add(enemy);
     }
 
     public void CallOnEnemyKilled(BaseEnemy enemy)
@@ -129,6 +146,8 @@ public class EnemyManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        CurrentEnemySpawnedList = new();
     }
 
     private void Start()
@@ -139,11 +158,26 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateRemoveBossEnemyList();
+        UpdateRemoveEnemyList();
     }
 
-    private void UpdateRemoveBossEnemyList()
+    private void UpdateRemoveEnemyList()
     {
+        for (int i = CurrentEnemySpawnedList.Count - 1; i >= 0; i--)
+        {
+            if (CurrentEnemySpawnedList[i] == null)
+            {
+                CurrentEnemySpawnedList.RemoveAt(i);
+            }
+            else
+            {
+                if (CurrentEnemySpawnedList[i].IsDead())
+                {
+                    CurrentEnemySpawnedList.RemoveAt(i);
+                }
+            }
+        }
+
         for (int i = BossEnemyList.Count - 1; i >= 0; i--)
         {
             if (BossEnemyList[i] == null)

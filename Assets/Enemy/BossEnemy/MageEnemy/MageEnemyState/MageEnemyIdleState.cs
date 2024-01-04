@@ -44,10 +44,7 @@ public class MageEnemyIdleState : MageEnemyGroundState
 
         if (WaitForActionElapsed > WaitForAction)
         {
-            if (!isCloseToPlayer())
-            {
-                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyChaseState);
-            }
+            GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyChaseState);
             return;
         }
         else

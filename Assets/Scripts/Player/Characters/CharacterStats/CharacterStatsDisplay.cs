@@ -9,6 +9,7 @@ public class CharacterStatsDisplay : MonoBehaviour
     [SerializeField] TextMeshProUGUI characterStatsNameText, characterStatsValueText, characterIncreasePreviewValueText;
     [SerializeField] GameObject IncreasePreviewValueContent;
     [SerializeField] bool ShowOnlyBaseStats;
+    [SerializeField] bool ShowIncludeStatsBonusStats;
     private CharacterData characterData;
 
     public void SetCharacterData(CharacterData c)
@@ -30,12 +31,26 @@ public class CharacterStatsDisplay : MonoBehaviour
         if (characterStatsNameText)
             characterStatsNameText.text = GetStatsName(characterStatsType);
 
+        float totalStats;
+        if (!ShowIncludeStatsBonusStats)
+            totalStats = ShowTotalStatsCharactersValue(characterData.GetLevel());
+        else
+            totalStats = ShowTotalStatsCharactersValue(characterData.GetLevel()) + Mathf.RoundToInt(ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, characterStatsType));
+
+        string StatsValue = Mathf.Approximately(totalStats, Mathf.Round(totalStats))
+        ? totalStats.ToString("F0")
+        : totalStats.ToString("F1");
+
         if (characterStatsValueText)
         {
             if (ShowOnlyBaseStats)
+            {
                 characterStatsValueText.text = ShowbaseStatsCharactersValue().ToString();
+            }
             else
-                characterStatsValueText.text = ShowTotalStatsCharactersValue(characterData.GetLevel()).ToString();
+            {
+                characterStatsValueText.text = StatsValue;
+            }
         }
 
     }
@@ -45,13 +60,13 @@ public class CharacterStatsDisplay : MonoBehaviour
         switch (characterStatsType)
         {
             case Artifacts.ArtifactsStat.HP:
-                return characterData.GetMaxHealth(level);
+                return characterData.GetBaseMaxHealth(level);
             case Artifacts.ArtifactsStat.EM:
-                return characterData.GetEM(level);
+                return characterData.GetBaseEM(level);
             case Artifacts.ArtifactsStat.DEF:
-                return characterData.GetDEF(level);
+                return characterData.GetBaseDEF(level);
             case Artifacts.ArtifactsStat.ATK:
-                return characterData.GetATK(level);
+                return characterData.GetBaseATK(level);
         }
         return 0f;
     }

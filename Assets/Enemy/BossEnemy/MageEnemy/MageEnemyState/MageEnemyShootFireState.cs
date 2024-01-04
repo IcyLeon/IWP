@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MageEnemyShootFireState : MageEnemyGroundState
+public class MageEnemyShootFireState : MageEnemyAttackState
 {
 
     public MageEnemyShootFireState(MageEnemyStateMachine MageEnemyStateMachine) : base(MageEnemyStateMachine)
@@ -12,25 +12,19 @@ public class MageEnemyShootFireState : MageEnemyGroundState
     public override void Enter()
     {
         base.Enter();
-        StartAnimation("isShooting");
+        StartAnimation("isBreathingFire");
     }
 
     public override void Exit()
     {
         base.Exit();
-        StopAnimation("isShooting");
+        StopAnimation("isBreathingFire");
         GetMageEnemyStateMachine().GetMageEnemy().TurnOFFireBreathingCollider();
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-    }
-
-    public override void OnAnimationTransition()
-    {
-        base.OnAnimationTransition();
-        OnIdleState();
     }
 
     public override void Update()
@@ -49,10 +43,5 @@ public class MageEnemyShootFireState : MageEnemyGroundState
             OnIdleState();
             return;
         }
-    }
-
-    private void OnIdleState()
-    {
-        GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyIdleState);
     }
 }

@@ -1221,7 +1221,7 @@ GameObject:
   - component: {fileID: 410695672762724629}
   - component: {fileID: 1002647185652568759}
   - component: {fileID: 5740191625167085291}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Mage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1253,7 +1253,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139696}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 79b50b34e44b5fd4db1cdc9535a3c86b, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 1420a40f7b2cd1341944b103718427f4, type: 3}
   m_Controller: {fileID: 9100000, guid: e029e430e913b374387843833ab0b593, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 1
@@ -1284,6 +1284,8 @@ MonoBehaviour:
   rb: {fileID: 410695672762724629}
   NavMeshAgent: {fileID: 5740191625167085291}
   EnemyValueDropSO: {fileID: 11400000, guid: 2b4c69c0e0f950e4ea16a8316dc25cd9, type: 2}
+  MageCrystalsOrbPrefab: {fileID: 361770228318018255, guid: fe76a9c3568a40848bb5531830726c68,
+    type: 3}
   FireBreathingCollider: {fileID: 7215919457913779573}
 --- !u!114 &1312825824173150283
 MonoBehaviour:

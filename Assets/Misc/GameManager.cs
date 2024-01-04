@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameSpawnInfo[] GameSpawnInfoList;
     [SerializeField] GameSpawnInfo[] BossSpawnInfoList;
     [SerializeField] Terrain terrain;
-    private List<BaseEnemy> CurrentEnemySpawnedList;
     private EnemyManager EM;
     private int MaxEnemyInScene = 25;
     private static GameManager instance;
@@ -39,7 +38,6 @@ public class GameManager : MonoBehaviour
         EM = EnemyManager.GetInstance();
         assetManager = AssetManager.GetInstance();
         EM.OnEnemyKilled += OnEnemyKilled;
-        CurrentEnemySpawnedList = new();
         isCompleted = false;
         TotalEnemyInWave = 0;
         LoadKillersAroundTerrain();
@@ -123,38 +121,17 @@ public class GameManager : MonoBehaviour
         WaveSpawnCoroutine = StartCoroutine(WaveSpawnDelay(enemyType, delay));
     }
 
-    private int GetTotalEnemyAlive()
-    {
-        int Count = 0;
-        for(int i = 0; i < CurrentEnemySpawnedList.Count; i++)
-        {
-            BaseEnemy enemy = CurrentEnemySpawnedList[i];
-            if (enemy != null)
-            {
-                if (!enemy.IsDead())
-                    Count++;
-            }
-        }
-        return Count;
-    }
-
     private IEnumerator WaveSpawnDelay(EnemyType enemyType, float sec)
     {
-        while (GetTotalEnemyAlive() >= MaxEnemyInScene || GetTotalEnemyAlive() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
+        while (EM.GetTotalEnemyAliveInList() >= MaxEnemyInScene || EM.GetTotalEnemyAliveInList() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
         {
             yield return null;
         }
 
         yield return new WaitForSeconds(sec);
 
-        SpawnGroundUnitsWithinTerrain(enemyType);
+        EM.SpawnGroundUnitsWithinTerrain(enemyType, terrain);
         WaveSpawn(enemyType, sec);
-    }
-
-    private void SpawnGroundUnitsWithinTerrain(EnemyType e)
-    {
-        BaseEnemy enemy = EM.SpawnGroundUnitsWithinTerrain(e, terrain);
-        CurrentEnemySpawnedList.Add(enemy);
     }
 
     private void SpawnBoss()
@@ -171,19 +148,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RemoveInactive();
         UpdateWave();
-    }
-
-    private void RemoveInactive()
-    {
-        for (int i = CurrentEnemySpawnedList.Count - 1; i > 0; i--)
-        {
-            if (CurrentEnemySpawnedList[i] == null)
-            {
-                CurrentEnemySpawnedList.RemoveAt(i);
-            }
-        }
     }
 
     public static GameManager GetInstance()

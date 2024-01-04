@@ -10,6 +10,10 @@ public class MageEnemyAttackState : MageEnemyGroundState
     public override void Enter()
     {
         base.Enter();
+
+        Vector3 targetdir = GetMageEnemyStateMachine().GetMageEnemy().GetTargetDirection();
+        targetdir.y = 0f;
+        UpdateTargetRotation_Instant(Quaternion.LookRotation(targetdir));
     }
 
     public override void Exit()

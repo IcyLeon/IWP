@@ -20,7 +20,7 @@ public class SwordCharacters : PlayerCharacters
     {
         BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(GetSwordModel().GetSlashPivot());
-        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity"));
+        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2f, LayerMask.GetMask("Entity", "BossEntity"));
         foreach (Collider other in Colliders)
         {
             IDamage damageObj = other.GetComponent<IDamage>();
@@ -77,7 +77,7 @@ public class SwordCharacters : PlayerCharacters
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetATK(GetCharacterData().GetLevel()));
+                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetActualATK(GetCharacterData().GetLevel()));
             }
         }
         return colliders;

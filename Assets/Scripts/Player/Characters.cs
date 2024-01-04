@@ -4,11 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public interface IDamage {
     Vector3 GetPointOfContact();
     bool IsDead();
+    public void SetHealth(float val);
+    public float GetHealth();
+
+    public float GetMaxHealth();
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, bool callHitInfo = true);
 }
 
@@ -164,6 +167,65 @@ public class Characters : MonoBehaviour, IDamage
     public virtual bool UpdateDie()
     {
         return IsDead();
+    }
+
+
+    protected IDamage[] GetAllNearestCharacters(Vector3 currentPos, float range, LayerMask mask)
+    {
+        Collider[] colliders = Physics.OverlapSphere(currentPos, range, mask);
+        List<IDamage> colliderCopy = new List<IDamage>();
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            IDamage c = colliders[i].GetComponent<IDamage>();
+            if (c != null)
+            {
+                Vector3 dir = currentPos - c.GetPointOfContact();
+                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, ~LayerMask.GetMask("Entity", "Ignore Raycast", "BossEntity"), QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.collider.GetComponent<PlayerCharacters>() == null)
+                    {
+                        continue;
+                    }
+                }
+
+                if (c.IsDead() && i < colliderCopy.Count)
+                {
+                    continue;
+                }
+
+                colliderCopy.Add(c);
+            }
+        }
+        return colliderCopy.ToArray();
+    }
+
+    protected IDamage GetNearestCharacters(Vector3 currentPos, float range, LayerMask mask)
+    {
+        IDamage[] colliders = GetAllNearestCharacters(currentPos, range, mask);
+        if (colliders.Length == 0)
+            return null;
+
+        List<IDamage> colliderCopy = new List<IDamage>(colliders);
+
+        IDamage nearestCollider = colliderCopy[0];
+
+        for (int i = colliderCopy.Count - 1; i >= 0; i--)
+        {
+            IDamage c = colliderCopy[i];
+            if (c != null)
+            {
+                float dist1 = Vector3.Distance(c.GetPointOfContact(), currentPos);
+                float dist2 = Vector3.Distance(nearestCollider.GetPointOfContact(), currentPos);
+
+                if (dist1 <= dist2)
+                {
+                    nearestCollider = colliderCopy[i];
+                }
+            }
+        }
+
+        return nearestCollider;
     }
 
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, bool callHitInfo = true)

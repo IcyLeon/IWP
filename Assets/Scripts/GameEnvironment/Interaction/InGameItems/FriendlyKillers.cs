@@ -92,7 +92,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         {
             if (friendlyKillerData != null)
             {
-                healthBarScript.UpdateHealth(friendlyKillerData.GetCurrentHealth(), 0, friendlyKillerData.GetMaxHealth());
+                healthBarScript.UpdateHealth(GetHealth(), 0, GetMaxHealth());
             }
             healthBarScript.gameObject.SetActive(!canBuy && !IsDead());
         }
@@ -117,10 +117,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     public virtual bool IsDead()
     {
-        if (GetFriendlyKillerData() == null)
-            return true;
-
-        return GetFriendlyKillerData().GetCurrentHealth() <= 0 && !canBuy;
+        return GetHealth() <= 0 && !canBuy;
     }
 
     public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, bool callHitInfo = true)
@@ -140,7 +137,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         Elements e = new Elements(elemental);
         int dmg = Mathf.RoundToInt(damageAmt);
 
-        GetFriendlyKillerData().SetCurrentHealth(GetFriendlyKillerData().GetCurrentHealth() - dmg);
+        SetHealth(GetFriendlyKillerData().GetHealth() - dmg);
         AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, dmg.ToString());
         UpdateDead();
 
@@ -223,4 +220,27 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         return nearestCollider;
     }
 
+    public void SetHealth(float val)
+    {
+        if (GetFriendlyKillerData() == null)
+            return;
+
+        GetFriendlyKillerData().SetHealth(GetFriendlyKillerData().GetHealth() - val);
+    }
+
+    public float GetHealth()
+    {
+        if (GetFriendlyKillerData() == null)
+            return 0f;
+
+        return GetFriendlyKillerData().GetHealth();
+    }
+
+    public float GetMaxHealth()
+    {
+        if (GetFriendlyKillerData() == null)
+            return 1f;
+
+        return GetFriendlyKillerData().GetMaxHealth();
+    }
 }

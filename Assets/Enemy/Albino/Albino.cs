@@ -227,6 +227,20 @@ public class Albino : BaseEnemy
 
         return normal.normalized;
     }
+
+    private void IgnorePlayerCollision(bool ignore = true)
+    {
+        Collider thisCollider = GetCollider();
+        int layerToIgnore = LayerMask.NameToLayer("Player");
+
+        Collider[] collidersToIgnore = Physics.OverlapSphere(thisCollider.bounds.center, thisCollider.bounds.extents.magnitude, 1 << layerToIgnore, QueryTriggerInteraction.Ignore);
+
+        foreach (Collider collider in collidersToIgnore)
+        {
+            Physics.IgnoreCollision(thisCollider, collider, ignore);
+        }
+    }
+
     private IEnumerator StartSlamAttack()
     {
         Vector3 SavePosition = GetPlayerLocation();
@@ -237,7 +251,7 @@ public class Albino : BaseEnemy
         if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack)
         {
             state = States.CHASE;
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), false);
+            IgnorePlayerCollision();
             Animator.SetTrigger("Cancel");
             SlamCoroutine = null;
         }
@@ -253,7 +267,7 @@ public class Albino : BaseEnemy
             groundPos.y = hit.point.y;
         }
 
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), true);
+        IgnorePlayerCollision(false);
         float elapsed = 0f;
         float duration = 0.6f;
 

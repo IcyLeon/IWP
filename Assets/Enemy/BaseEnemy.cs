@@ -113,11 +113,16 @@ public class BaseEnemy : Characters
     public override Vector3 GetPointOfContact()
     {
         Vector3 temp = transform.position;
-        if (col != null)
+        if (GetCollider() != null)
         {
-            temp = col.bounds.center;
+            temp = GetCollider().bounds.center;
         }
         return temp;
+    }
+
+    public Collider GetCollider()
+    {
+        return col;
     }
 
     private void UpdateOutofBound()

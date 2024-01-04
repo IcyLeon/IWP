@@ -22,13 +22,6 @@ public class ArtifactsManager : MonoBehaviour
         return artifactsListInfo;
     }
 
-    public static bool isInProbabilityRange(float a)
-    {
-        float randomValue = Random.value;
-        float probability = 1.0f - a;
-        return randomValue > probability;
-    }
-
     private void Awake()
     {
         if (instance == null)
@@ -66,6 +59,52 @@ public class ArtifactsManager : MonoBehaviour
             InventoryManager.GetInstance().AddItems(ExpItem);
         }
 
+    }
+
+    public float GetTotalArtifactValueStatsIncludePercentageAndBaseStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
+    {
+        if (characterData == null)
+            return 0f;
+
+        switch (artifactsStat)
+        {
+            case Artifacts.ArtifactsStat.HPPERCENT:
+            case Artifacts.ArtifactsStat.HP:
+                return (characterData.GetBaseATK(characterData.GetLevel()) * GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.HPPERCENT) * 0.01f) + GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.HP);
+            case Artifacts.ArtifactsStat.DEFPERCENT:
+            case Artifacts.ArtifactsStat.DEF:
+                return (characterData.GetBaseDEF(characterData.GetLevel()) * GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.DEFPERCENT) * 0.01f) + GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.DEF);
+            case Artifacts.ArtifactsStat.ATKPERCENT:
+            case Artifacts.ArtifactsStat.ATK:
+                return (characterData.GetBaseATK(characterData.GetLevel()) * GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.ATKPERCENT) * 0.01f) + GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.ATK);
+        }
+
+        return GetTotalArtifactValueStats(characterData, artifactsStat);
+    }
+    public float GetTotalArtifactValueStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
+    {
+        float total = 0f;
+        InventoryManager IM = InventoryManager.GetInstance();
+
+        if (IM == null || characterData == null)
+            return total;
+
+        for (int i = 0; i < characterData.GetEquippedArtifactsList().Count; i++)
+        {
+            Artifacts artifacts = characterData.GetEquippedArtifactsList()[i];
+            if (artifacts != null)
+            {
+                for (int j = 0; j < artifacts.GetTotalStats(); j++)
+                {
+                    if (artifacts.GetStats(j).GetArtifactsStat() == artifactsStat)
+                    {
+                        total += artifacts.GetStats(j).GetStatsValue();
+                    }
+                }
+            }
+        }
+
+        return total;
     }
 
     public Artifacts AddArtifactsToInventory(ArtifactType type, ArtifactsSet artifactSet, Rarity rarity)

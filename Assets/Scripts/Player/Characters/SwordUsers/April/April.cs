@@ -52,7 +52,7 @@ public class April : SwordCharacters
 
     private void DamageEnemies()
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position, 2.8f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position, 2.8f, LayerMask.GetMask("Entity", "BossEntity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             IDamage dmg = colliders[i].GetComponent<IDamage>();
@@ -129,7 +129,7 @@ public class April : SwordCharacters
 
     private void SetMarkersOnEnemy()
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerOffsetPosition().position, GetPlayerCharacterState().GetPlayerCharacters().GetUltiRange(), LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerOffsetPosition().position, GetPlayerCharacterState().GetPlayerCharacters().GetUltiRange(), LayerMask.GetMask("Entity", "BossEntity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             IDamage dmg = colliders[i].GetComponent<IDamage>();

@@ -89,7 +89,7 @@ public class PlayerManager : MonoBehaviour
             actualamt = 1f;
 
         c.SetHealth(c.GetHealth() + (int)actualamt);
-        if (c.GetHealth() < c.GetMaxHealth(c.GetLevel()))
+        if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()))
         {
             AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
             if (c == inventoryManager.GetCurrentEquipCharacterData())
@@ -167,7 +167,7 @@ public class PlayerManager : MonoBehaviour
             actualamt = 1f;
 
         c.SetHealth(c.GetHealth() + (int)actualamt);
-        if (c.GetHealth() < c.GetMaxHealth(c.GetLevel()))
+        if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()))
             AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
     }
 

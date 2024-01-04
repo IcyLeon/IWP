@@ -13,7 +13,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     protected bool isBurstActive;
     private Coroutine CameraZoomAndPosOffsetCoroutine;
     [SerializeField] CinemachineVirtualCamera BurstCamera;
-    protected Characters NearestTarget;
+    protected IDamage NearestTarget;
     protected float Range = 1f, UltiRange = 1f;
     protected PlayerCharacterState PlayerCharacterState;
 
@@ -100,63 +100,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
         return base.IsDead();
     }
-
-    private Collider[] GetAllNearestCharacters(float range)
-    {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().transform.position, range, LayerMask.GetMask("Entity"));
-        List<Collider> colliderCopy = new List<Collider>(colliders);
-        for (int i = colliderCopy.Count - 1; i >= 0; i--)
-        {
-            Characters c = colliderCopy[i].GetComponent<Characters>();
-            if (c != null)
-            {
-                Vector3 dir = GetPlayerManager().GetPlayerOffsetPosition().position - c.GetPointOfContact();
-                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-                {
-                    if (hit.collider.GetComponent<PlayerCharacters>() == null)
-                    {
-                        colliderCopy.RemoveAt(i);
-                    }
-                }
-
-                if (c.IsDead() && i < colliderCopy.Count)
-                {
-                    colliderCopy.RemoveAt(i);
-                }
-
-            }
-        }
-        return colliderCopy.ToArray();
-    }
-
-    public Characters GetNearestCharacters(float range)
-    {
-        Collider[] colliders = GetAllNearestCharacters(range);
-        if (colliders.Length == 0)
-            return null;
-
-        List<Collider> colliderCopy = new List<Collider>(colliders);
-
-        Collider nearestCollider = colliderCopy[0];
-
-        for (int i = colliderCopy.Count - 1; i >= 0; i--)
-        {
-            Characters c = colliderCopy[i].GetComponent<Characters>();
-            if (c != null)
-            {
-                float dist1 = Vector3.Distance(c.GetPointOfContact(), GetPlayerManager().transform.position);
-                float dist2 = Vector3.Distance(nearestCollider.GetComponent<Characters>().GetPointOfContact(), GetPlayerManager().transform.position);
-
-                if (dist1 <= dist2)
-                {
-                    nearestCollider = colliderCopy[i];
-                }
-            }
-        }
-
-        return nearestCollider.GetComponent<Characters>();
-    }
-
     public override int GetLevel()
     {
         if (characterData == null)
@@ -178,7 +121,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null)
             return base.GetMaxHealth();
 
-        return characterData.GetMaxHealth(characterData.GetLevel());
+        return characterData.GetActualMaxHealth(characterData.GetLevel());
     }
 
     public override float GetATK()
@@ -186,7 +129,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null)
             return base.GetATK();
 
-        return characterData.GetATK(characterData.GetLevel());
+        return characterData.GetActualATK(characterData.GetLevel());
     }
 
     public override void SetHealth(float val)
@@ -202,7 +145,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null)
             return base.GetDEF();
 
-        return characterData.GetDEF(characterData.GetLevel());
+        return characterData.GetActualDEF(characterData.GetLevel());
     }
 
     public PlayerManager GetPlayerManager()
@@ -265,7 +208,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager().isDeadState())
             return;
 
-        NearestTarget = GetNearestCharacters(Range);
+        NearestTarget = GetNearestCharacters(GetPlayerManager().GetPlayerOffsetPosition().position, Range, LayerMask.GetMask("Entity", "BossEntity"));
 
         if (GetElementalReaction().GetElementList().Count != 0)
         {

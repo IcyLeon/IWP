@@ -44,7 +44,7 @@ public class Turret : FriendlyKillers
 
     private bool TargetStillInRange(Collider target)
     {
-        Collider[] AllTargetsAvailable = GetAllNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity"));
+        Collider[] AllTargetsAvailable = GetAllNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity", "BossEntity"));
 
         if (AllTargetsAvailable.Length == 0)
             return false;
@@ -86,7 +86,7 @@ public class Turret : FriendlyKillers
 
         if (!TargetStillInRange(Target))
         {
-            Target = GetNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity"));
+            Target = GetNearestIDamage(TurretRotationPivot.position, GetDetectionRange(), LayerMask.GetMask("Entity", "BossEntity"));
         }
 
         if (Target == null)

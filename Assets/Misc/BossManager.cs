@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
@@ -8,10 +9,9 @@ public class BossManager : MonoBehaviour
     private EnemyManager EM;
     [SerializeField] Terrain terrain;
 
-    public BaseEnemy SpawnGroundUnitsWithinTerrain(EnemyType e)
+    public void SpawnGroundUnitsWithinTerrain(EnemyType e)
     {
-        BaseEnemy enemy = EM.SpawnGroundUnitsWithinTerrain(e, terrain);
-        return enemy;
+        EM.SpawnGroundUnitsWithinTerrain(e, terrain);
     }
 
 

@@ -60,7 +60,7 @@ public class KaqingBurstState : SwordElementalBurstState
 
     private void BurstAreaDamage(Vector3 pos)
     {
-        Collider[] colliders = Physics.OverlapSphere(pos, GetKaqingState().GetKaqing().GetUltiRange(), LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(pos, GetKaqingState().GetKaqing().GetUltiRange(), LayerMask.GetMask("Entity", "BossEntity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             Collider collider = colliders[i];

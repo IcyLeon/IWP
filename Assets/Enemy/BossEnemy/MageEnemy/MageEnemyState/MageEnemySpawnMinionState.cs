@@ -12,6 +12,7 @@ public class MageEnemySpawnMinionState : MageEnemyState
     {
         base.Enter();
         StartAnimation("isCalling");
+        AssetManager.GetInstance().OpenMessageNotification("The mage is calling for reinforcement");
     }
 
     public override void Exit()

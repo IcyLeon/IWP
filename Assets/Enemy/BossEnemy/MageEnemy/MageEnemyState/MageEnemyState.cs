@@ -59,7 +59,16 @@ public class MageEnemyState : IState
 
         rb.MoveRotation(targetRotation);
     }
+    public void UpdateTargetRotation_Instant(Quaternion quaternion)
+    {
+        SetTargetRotation(quaternion);
 
+        GetMageEnemyStateMachine().MageEnemyData.CurrentTargetRotation = GetMageEnemyStateMachine().MageEnemyData.Target_Rotation;
+
+        Quaternion targetRotation = Quaternion.Euler(0f, GetMageEnemyStateMachine().MageEnemyData.CurrentTargetRotation.eulerAngles.y, 0f);
+        rb.MoveRotation(targetRotation);
+
+    }
     protected void SetTargetRotation(Quaternion quaternion)
     {
         GetMageEnemyStateMachine().MageEnemyData.Target_Rotation = quaternion;

@@ -22,7 +22,7 @@ public class HealthBarScript : MonoBehaviour
 
         if (HealthTextDisplay)
         {
-            HealthTextDisplay.text = slider.value.ToString() + "/" + slider.maxValue.ToString();
+            HealthTextDisplay.text = Mathf.RoundToInt(slider.value).ToString() + "/" + Mathf.RoundToInt(slider.maxValue).ToString();
         }
     }
 

@@ -21,6 +21,7 @@ public class MageEnemyStunState : MageEnemyState
         base.Exit();
         GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped = GetMageEnemyStateMachine().MageEnemyData.ShieldCooldown;
         StopAnimation("isStun");
+        GetMageEnemyStateMachine().MageEnemyData.Phase = MageEnemyData.MagePhase.Phase_2;
         ResetStunState();
     }
 
