@@ -31,14 +31,25 @@ public class MageEnemyData
     public float CrystalsCoreSpawnDuration = 15f;
     public float CrystalsCoreSpawnElasped = 0f;
 
+    public float TakeOffCooldown = 15f;
+    public float TakeOffElapsed = 0f;
+
+    public float FireBallSpawnDuration = 3.5f;
+    public float FireBallSpawnElapsed = 0f;
+
     public float timeToReachTargetRotation { get; } = 0.14f;
     public float dampedTargetRotationCurrentVelocity;
     public float dampedTargetRotationPassedTime;
     public Quaternion CurrentTargetRotation, Target_Rotation;
 
+
+    public int NoOfFireball = 5;
+
     public MageEnemyData()
     {
         ShieldCurrentElasped = ShieldCooldown;
+        TakeOffElapsed = TakeOffCooldown;
+        FireBallSpawnElapsed = FireBallSpawnDuration;
         CrystalsCoreSpawnElasped = GetRandomSpawnCrystalsInterval();
         Phase = MagePhase.Phase_1;
         AttackInterval = GetRandomAttackInterval();

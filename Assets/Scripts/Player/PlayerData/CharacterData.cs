@@ -221,7 +221,18 @@ public class CharacterData : UpgradableItems
 
     public float GetActualATK(int level)
     {
-        return GetBaseATK(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.ATK);
+        int CritCoeficient;
+        float CritDmgValue = ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.CritDamage);
+        float CritRateValue = ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.CritRate);
+        CritCoeficient = 1;
+        if (!AssetManager.isInProbabilityRange(CritRateValue * 0.01f))
+        {
+            CritDmgValue = 0f;
+            CritCoeficient = 0;
+        }
+
+        float atkValue = GetBaseATK(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.ATK);
+        return atkValue + atkValue * (1 + CritDmgValue * 0.01f) * CritCoeficient;
     }
 
     public int GetBaseMaxHealth(int level)

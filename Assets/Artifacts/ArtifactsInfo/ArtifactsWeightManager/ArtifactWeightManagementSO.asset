@@ -43,13 +43,13 @@ MonoBehaviour:
     - StartingArtifactStatsHand:
       - rarity: 2
         increaseValueRatio: 1.5
-        value: 5.2
+        value: 5.8
       - rarity: 3
         increaseValueRatio: 1.8
-        value: 6.3
+        value: 7
       - rarity: 4
         increaseValueRatio: 2
-        value: 7
+        value: 7.8
       ArtifactsStat: 5
     - StartingArtifactStatsHand:
       - rarity: 2
@@ -86,27 +86,27 @@ MonoBehaviour:
       ArtifactsStat: 1
     - StartingArtifactStatsHand:
       - rarity: 2
-        increaseValueRatio: 1.7
-        value: 5.8
+        increaseValueRatio: 1.5
+        value: 5.2
       - rarity: 3
+        increaseValueRatio: 1.8
+        value: 6.3
+      - rarity: 4
         increaseValueRatio: 2
         value: 7
-      - rarity: 4
-        increaseValueRatio: 2.2
-        value: 7.8
-      ArtifactsStat: 3
+      ArtifactsStat: 4
     ArtifactType: 2
   - ArtifactMainStatsInfoList:
     - StartingArtifactStatsHand:
       - rarity: 2
         increaseValueRatio: 1.5
-        value: 5.2
+        value: 5.8
       - rarity: 3
         increaseValueRatio: 1.8
-        value: 6.3
+        value: 7
       - rarity: 4
         increaseValueRatio: 2
-        value: 7
+        value: 7.8
       ArtifactsStat: 5
     - StartingArtifactStatsHand:
       - rarity: 2
@@ -141,8 +141,6 @@ MonoBehaviour:
         increaseValueRatio: 7.9
         value: 28
       ArtifactsStat: 1
-    ArtifactType: 3
-  - ArtifactMainStatsInfoList:
     - StartingArtifactStatsHand:
       - rarity: 2
         increaseValueRatio: 1.5
@@ -153,7 +151,9 @@ MonoBehaviour:
       - rarity: 4
         increaseValueRatio: 2
         value: 7
-      ArtifactsStat: 5
+      ArtifactsStat: 4
+    ArtifactType: 3
+  - ArtifactMainStatsInfoList:
     - StartingArtifactStatsHand:
       - rarity: 2
         increaseValueRatio: 1.5
@@ -209,6 +209,17 @@ MonoBehaviour:
         increaseValueRatio: 2.7
         value: 9.3
       ArtifactsStat: 9
+    - StartingArtifactStatsHand:
+      - rarity: 2
+        increaseValueRatio: 1.5
+        value: 5.2
+      - rarity: 3
+        increaseValueRatio: 1.8
+        value: 6.3
+      - rarity: 4
+        increaseValueRatio: 2
+        value: 7
+      ArtifactsStat: 4
     ArtifactType: 4
   artifactWeightsList:
   - Weight: 6

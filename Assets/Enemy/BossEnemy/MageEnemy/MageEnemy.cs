@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static CurrentCharacterArtifacts;
+using UnityEngine.UIElements;
 
 public class MageEnemy : BaseEnemy
 {
@@ -10,6 +12,9 @@ public class MageEnemy : BaseEnemy
     private float FireHitInterval = 0.15f, FireHitIntervalElapsed;
     [Header("Fire")]
     [SerializeField] CapsuleCollider FireBreathingCollider;
+    [SerializeField] GameObject FireBallPrefab;
+    [SerializeField] Transform FireBallPivotTransform;
+
     private List<MageOrb> MageOrbList;
     private Coroutine MageCrystalCoreCoroutine;
     private GameObject CrystalsParent;
@@ -141,8 +146,23 @@ public class MageEnemy : BaseEnemy
         UpdateFireBreathing();
         UpdateMageOrbList();
         Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
+        Animator.SetBool("Airborne", IsAirborne());
     }
 
+    private void SpawnFireBalls()
+    { 
+        for (int i = 0; i < m_StateMachine.MageEnemyData.NoOfFireball; i++)
+        {
+            MageFireBall f = Instantiate(FireBallPrefab, FireBallPivotTransform).GetComponent<MageFireBall>();
+            Vector2 dir = Quaternion.Euler(0, 0, Mathf.Rad2Deg * ((Mathf.PI / m_StateMachine.MageEnemyData.NoOfFireball) * (i * 2f))) * FireBallPivotTransform.transform.right;
+            f.transform.localPosition = dir.normalized * 100f;
+        }
+    }
+
+    private bool IsAirborne()
+    {
+        return m_StateMachine.GetCurrentState() is MageEnemyAirborneState;
+    }
     public int GetTotalMageNotDestroyed()
     {
         return MageOrbList.Count;

@@ -90,10 +90,7 @@ public class MageEnemyState : IState
 
         if (GetMageEnemyStateMachine().MageEnemyData.ShieldStatus && GetMageEnemyStateMachine().GetMageEnemy().GetCurrentElementalShield() <= 0)
         {
-            if (CanPerformAction())
-            {
-                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyStunState);
-            }
+            GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyStunState);
             return;
         }
     }

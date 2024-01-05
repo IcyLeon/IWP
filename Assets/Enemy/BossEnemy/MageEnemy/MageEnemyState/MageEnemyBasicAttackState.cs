@@ -24,10 +24,6 @@ public class MageEnemyBasicAttackState : MageEnemyAttackState
         base.FixedUpdate();
     }
 
-    public override void OnAnimationTransition()
-    {
-        base.OnAnimationTransition();
-    }
     public override void Update()
     {
         base.Update();

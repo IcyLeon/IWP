@@ -35,9 +35,4 @@ public class MageEnemyShieldState : MageEnemyState
         GetMageEnemyStateMachine().GetMageEnemy().SetCurrentElementalShield(GetMageEnemyStateMachine().GetMageEnemy().GetElementalShield());
         GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyIdleState);
     }
-
-    public override void Update()
-    {
-        //base.Update();
-    }
 }

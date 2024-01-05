@@ -40,7 +40,8 @@ public class MageEnemyIdleState : MageEnemyGroundState
 
         Vector3 targetdir = GetMageEnemyStateMachine().GetMageEnemy().GetTargetDirection();
         targetdir.y = 0f;
-        SetTargetRotation(Quaternion.LookRotation(targetdir));
+        if (targetdir != default(Vector3))
+            SetTargetRotation(Quaternion.LookRotation(targetdir));
 
         if (WaitForActionElapsed > WaitForAction)
         {
