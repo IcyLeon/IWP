@@ -7,24 +7,19 @@ public class PartyManager : MonoBehaviour
 {
     [SerializeField] GameObject PartyInfoPrefab;
     private Dictionary<CharacterData, PartyInfo> PlayerCharacterDisplay_Dictionary;
-    private CharacterManager characterManager;
-    private InventoryManager inventoryManager;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         PlayerCharacterDisplay_Dictionary = new();
-        characterManager = CharacterManager.GetInstance();
-        characterManager.OnSpawnCharacters += OnSpawnCharacters;
-        inventoryManager = InventoryManager.GetInstance();
+        CharacterManager.OnSpawnCharacters += OnSpawnCharacters;
     }
 
     private void OnDestroy()
     {
-        characterManager.OnSpawnCharacters -= OnSpawnCharacters;
+        CharacterManager.OnSpawnCharacters -= OnSpawnCharacters;
     }
 
-    void OnSpawnCharacters()
+    void OnSpawnCharacters(List<CharacterData> CharacterDataList)
     {
         for (int i = PlayerCharacterDisplay_Dictionary.Count - 1; i > 0; i--)
         {
@@ -37,9 +32,9 @@ public class PartyManager : MonoBehaviour
         }
         PlayerCharacterDisplay_Dictionary.Clear();
 
-        for(int i = 0; i < inventoryManager.GetCharactersOwnedList().Count; i++)
+        for(int i = 0; i < CharacterDataList.Count; i++)
         {
-            CharacterData characterData = inventoryManager.GetCharactersOwnedList()[i];
+            CharacterData characterData = CharacterDataList[i];
             PartyInfo partyInfo = Instantiate(PartyInfoPrefab, transform).GetComponent<PartyInfo>();
             partyInfo.SetCharacterData(characterData);
             partyInfo.SetKeyText((i + 1).ToString());

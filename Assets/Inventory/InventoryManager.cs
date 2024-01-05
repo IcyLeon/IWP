@@ -21,7 +21,7 @@ public class InventoryManager : MonoBehaviour {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -30,25 +30,21 @@ public class InventoryManager : MonoBehaviour {
 
         PlayerStats = new PlayerStats();
         EquipCharactersDatalist = new List<CharacterData>();
-
-
-
+    }
+    void Start()
+    {
         for (int i = 0; i < startupSOTest.Length; i++)
         {
             CharacterData characterData = new CharacterData(true, startupSOTest[i]);
             AddCharacterDataToOwnList(characterData);
         }
         SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
-    }
 
+        CharacterManager.GetInstance().SpawnCharacters(GetCharactersOwnedList());
+    }
     public static InventoryManager GetInstance()
     {
         return instance;
-    }
-
-    private void Start()
-    {   
-        CharacterManager.GetInstance().SpawnCharacters(GetCharactersOwnedList());
     }
 
     public List<CharacterData> GetCharactersOwnedList()

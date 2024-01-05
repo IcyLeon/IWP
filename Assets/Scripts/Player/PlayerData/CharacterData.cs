@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterData : UpgradableItems
 {
+    private float PreviousHealthRatio;
     private float CurrentHealth;
     private float CurrentEnergyBurstCost;
     private float EnergyBurstCost;
@@ -65,6 +66,7 @@ public class CharacterData : UpgradableItems
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         Level = 1;
         CurrentHealth = GetBaseMaxHealth(GetLevel());
+        SetPreviousHealthRatio(GetHealth() / GetActualMaxHealth(GetLevel()));
         MaxLevel = 20;
         elementalReaction = new ElementalReaction();
     }
@@ -75,6 +77,7 @@ public class CharacterData : UpgradableItems
         SetItemsSO(playerCharacterSO);
         Level = level;
         CurrentHealth = GetActualMaxHealth(GetLevel());
+        SetPreviousHealthRatio(GetHealth() / GetActualMaxHealth(GetLevel()));
         CurrentEnergyBurstCost = currentEnergy;
         ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
         ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
@@ -168,6 +171,15 @@ public class CharacterData : UpgradableItems
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetActualMaxHealth(GetLevel()));
     }
 
+    public void SetPreviousHealthRatio(float Ratio) // just to store ratio
+    {
+        PreviousHealthRatio = Ratio;
+    }
+
+    public float GetPreviousHealthRatio()
+    {
+        return PreviousHealthRatio;
+    }
     public override void Upgrade()
     {
         if (Level != MaxLevel)

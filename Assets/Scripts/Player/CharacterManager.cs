@@ -17,7 +17,7 @@ public class CharacterManager : MonoBehaviour
     private static CharacterManager instance;
     [SerializeField] List<CharacterInfo> charactersInfo = new();
     private PlayerManager playerManager;
-    public event Action OnSpawnCharacters;
+    public static Action<List<CharacterData>> OnSpawnCharacters = delegate { };
 
     private void Awake()
     {
@@ -74,6 +74,7 @@ public class CharacterManager : MonoBehaviour
             CurrentCharacter.SetCharacterData(ChararacterDataList[i]);
             GetPlayerManager().AddPlayerCharactersList(CurrentCharacter);
         }
-        OnSpawnCharacters?.Invoke();
+        Debug.Log("Character Spawned");
+        OnSpawnCharacters?.Invoke(ChararacterDataList);
     }
 }

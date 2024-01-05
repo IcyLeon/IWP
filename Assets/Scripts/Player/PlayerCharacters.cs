@@ -39,6 +39,13 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return PlayerCharacterState;
     }
 
+    public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, bool callHitInfo = true)
+    {
+        if (characterData != null)
+            characterData.SetPreviousHealthRatio(characterData.GetHealth() / characterData.GetActualMaxHealth(characterData.GetLevel()));
+
+        return base.TakeDamage(pos, elementsREF, amt, callHitInfo);
+    }
     public CinemachineVirtualCamera GetBurstCamera()
     {
         return BurstCamera;
@@ -251,7 +258,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
         return GetPlayerManager().GetPlayerController().GetRayPositionAll3D(origin, direction, maxdistance);
     }
-
 
     private void SetTargetRotation(Quaternion quaternion)
     {
