@@ -19,8 +19,13 @@ public class MainUI : MonoBehaviour
     [SerializeField] GameObject ItemBag;
     private List<ArrowIndicator> ArrowIndicatorList;
     [SerializeField] GameObject BlueEffectObject;
+
     private bool Paused;
 
+    public void SetPaused(bool val)
+    {
+        Paused = val;
+    }
     public static void SetProgressUpgrades(Slider slider, float min, float max)
     {
         slider.minValue = min;
@@ -83,11 +88,10 @@ public class MainUI : MonoBehaviour
 
     private void UpdatePause()
     {
-        Paused = isMainUIList();
         foreach(var go in HideUIList)
-            go.SetActive(!isPaused());
+            go.SetActive(Time.timeScale != 0);
 
-        if (isPaused() || FallenPanelIsOpen())
+        if (FallenPanelIsOpen() || isMainUIList() || isPaused())
             Time.timeScale = 0;
         else
             Time.timeScale = 1;

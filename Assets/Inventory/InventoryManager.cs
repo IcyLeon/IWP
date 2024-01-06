@@ -13,9 +13,14 @@ public class InventoryManager : MonoBehaviour {
     public static OnInventoryListChange OnInventoryItemAdd;
     public static OnInventoryListChange OnInventoryItemRemove;
     public static OnInventoryListChange OnInventoryChanged; // if there is a change in the inventory (be it add or remove for all types of item)
+    public static Action<List<Item>> OnItemGiveToPlayer = delegate { };
 
     [SerializeField] PlayerCharacterSO[] startupSOTest;
 
+    public static void OnCallGivePlayerItems(List<Item> ItemList)
+    {
+        OnItemGiveToPlayer?.Invoke(ItemList);
+    }
     private void Awake()
     {
         if (instance == null)
@@ -31,6 +36,9 @@ public class InventoryManager : MonoBehaviour {
         PlayerStats = new PlayerStats();
         EquipCharactersDatalist = new List<CharacterData>();
     }
+
+
+
     void Start()
     {
         for (int i = 0; i < startupSOTest.Length; i++)

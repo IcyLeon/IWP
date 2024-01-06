@@ -205,8 +205,11 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
                 itemTemplate = DisplayitemTemplate;
             }
 
-            itemSprite = itemTemplate.ItemSprite;
-            SetDisplayStars(itemTemplate.Rarity);
+            if (itemTemplate)
+            {
+                itemSprite = itemTemplate.ItemSprite;
+                SetDisplayStars(itemTemplate.Rarity);
+            }
         }
 
         ItemImage.sprite = itemSprite;

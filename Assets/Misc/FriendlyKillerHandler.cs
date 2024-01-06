@@ -15,8 +15,8 @@ public class FriendlyKillerHandler : MonoBehaviour
     private int MaxKillers = 3;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
-    public OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
-    public OnFriendlyKillersDataChanged OnFriendlyKillersDataRemove;
+    public static OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
+    public static OnFriendlyKillersDataChanged OnFriendlyKillersDataRemove;
     private static FriendlyKillerHandler instance;
 
     private void Awake()
@@ -32,6 +32,17 @@ public class FriendlyKillerHandler : MonoBehaviour
         }
 
         FriendlyKillerDataList = new();
+    }
+
+    public void LoadKillersAroundTerrain(Terrain terrain)
+    {
+        foreach (FriendlyKillerData f in GetFriendlyKillerDataList())
+        {
+            Vector3 pos = EnemyManager.GetRandomPointWithinTerrain(terrain);
+            FriendlyKillers friendlyKillers = Instantiate(GetFriendlyKillerInfo(f.GetFriendlyKillerSO()).FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>();
+            if (friendlyKillers != null)
+                friendlyKillers.SetKillerData(f);
+        }
     }
 
     public FriendlyKillerInfo GetFriendlyKillerInfo(FriendlyKillerSO fSO)

@@ -23,7 +23,7 @@ public class HealthBarScript : MonoBehaviour
 
     public void SetElementsIndicator(IDamage IDamage)
     {
-        if (GetElementsIndicator() == null)
+        if (GetElementsIndicator() == null && ElementsIndicatorTransform)
         {
             ElementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, ElementsIndicatorTransform).GetComponent<ElementsIndicator>();
             GetElementsIndicator().transform.SetAsLastSibling();
@@ -33,9 +33,10 @@ public class HealthBarScript : MonoBehaviour
     }
     public void UpdateHealth(float HealthVal, float min, float max)
     {
-        slider.value = HealthVal;
         slider.minValue = min;
         slider.maxValue = max;
+
+        slider.value = HealthVal;
 
         if (HealthTextDisplay)
         {

@@ -20,27 +20,42 @@ public class BaseEnemy : Characters
     private BossEnemyType BossEnemyType;
     protected int Staggering = 1;
     protected int CurrentStaggering;
+    private int Level, MaxLevel;
 
     protected override void Start()
     {
         EM = EnemyManager.GetInstance();
-        base.Start();
         CurrentStaggering = 0;
-        CurrentHealth = GetMaxHealth();
         DetectionRange = 1f;
-        Level = 1;
         BossEnemyType = GetComponent<BossEnemyType>();
+        MaxLevel = 50;
+        Level = GetRandomLevel();
 
         if (!BossEnemyType)
         {
             healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
             healthBarScript.transform.SetParent(HealthBarPivotParent, true);
             healthBarScript.transform.localPosition = HealthBarPivotParent.localPosition + Vector3.up * 200f;
+            healthBarScript.Init(true, false);
         }
 
         elementalReaction = new ElementalReaction();
+        base.Start();
     }
 
+    protected int GetMaxLevel()
+    {
+        return MaxLevel;
+    }
+    private int GetRandomLevel()
+    {
+        int CurrentWave = EM.GetCurrentWave();
+        int actualLevel = Random.Range(CurrentWave - 3, CurrentWave + 1);
+        actualLevel = Mathf.Clamp(actualLevel, 1, GetMaxLevel());
+
+        return actualLevel;
+    }
+    
     public float GetDropValue()
     {
         if (EnemyValueDropSO == null)
@@ -48,6 +63,16 @@ public class BaseEnemy : Characters
 
         return EnemyValueDropSO.BaseDropValue * (GetLevel() - 1) + EnemyValueDropSO.BaseDropValue * (Random.Range(0.5f, 1.5f));
     }
+    public override float GetATK()
+    {
+        return Mathf.RoundToInt(GetCharactersSO().GetAscensionInfo(0).BaseATK + ((GetCharactersSO().GetAscensionInfo(0).BaseMaxATK - GetCharactersSO().GetAscensionInfo(0).BaseATK) / (GetMaxLevel() - 1)) * (GetLevel() - 1));
+    }
+
+    public override float GetMaxHealth()
+    {
+        return Mathf.RoundToInt(GetCharactersSO().GetAscensionInfo(0).BaseHP + ((GetCharactersSO().GetAscensionInfo(0).BaseMaxHP - GetCharactersSO().GetAscensionInfo(0).BaseHP) / (GetMaxLevel() - 1)) * (GetLevel() - 1));
+    }
+
 
     private IDamage[] GetAllFriendlyAllies()
     {
@@ -58,7 +83,19 @@ public class BaseEnemy : Characters
             IDamage damage = goList[i].GetComponent<IDamage>();
             if (damage != null)
             {
-                goCopy.Add(damage);
+                if (!damage.IsDead())
+                {
+                    IInteract interact = goList[i].GetComponent<IInteract>();
+                    if (interact == null)
+                    {
+                        goCopy.Add(damage);
+                    }
+                    else
+                    {
+                        if (!interact.CanInteract())
+                            goCopy.Add(damage);
+                    }
+                }
             }
         }
         return goCopy.ToArray();
@@ -90,6 +127,11 @@ public class BaseEnemy : Characters
         return nearest;
     }
 
+    public override int GetLevel()
+    {
+        return Level;
+    }
+
     protected virtual void UpdateState()
     {
 
@@ -98,10 +140,7 @@ public class BaseEnemy : Characters
     // Update is called once per frame
     protected override void Update()
     {
-        if (Target == null)
-        {
-            Target = GetNearestPlayerObject();
-        }
+        Target = GetNearestPlayerObject();
         base.Update();
         UpdateHealthBar();
 
@@ -197,6 +236,7 @@ public class BaseEnemy : Characters
         if (healthBarScript)
         {
             healthBarScript.SliderInvsibleOnlyFullHealth();
+            healthBarScript.UpdateLevel(GetLevel());
             healthBarScript.UpdateShield(GetCurrentElementalShield(), 0, GetElementalShield());
         }
     }
@@ -264,10 +304,6 @@ public class BaseEnemy : Characters
     public bool isInDetectionRange(float range)
     {
         return (transform.position - GetPlayerLocation()).magnitude <= range;
-    }
-    public override float GetMaxHealth()
-    {
-        return BaseMaxHealth * (1 + Ratio);
     }
 
     public NavMeshAgent GetNavMeshAgent()

@@ -17,9 +17,9 @@ MonoBehaviour:
   ItemSprite: {fileID: 0}
   Rarity: 0
   AscensionInfoList:
-  - BaseHP: 2500
-    BaseATK: 36
-    BaseDEF: 28
-    BaseMaxHP: 0
-    BaseMaxATK: 0
-    BaseMaxDEF: 0
+  - BaseHP: 800
+    BaseATK: 28
+    BaseDEF: 20
+    BaseMaxHP: 8500
+    BaseMaxATK: 380
+    BaseMaxDEF: 383

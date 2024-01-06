@@ -9,17 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a47102e57592a94abc9d25cd725a33d, type: 3}
-  m_Name: SpitterSO
+  m_Script: {fileID: 11500000, guid: 5cd81c8c978483049a0699473385dde4, type: 3}
+  m_Name: FlowerTreeBloom
   m_EditorClassIdentifier: 
-  ItemName: Spitter
+  ItemName: Tree Bloom
   ItemDesc: 
-  ItemSprite: {fileID: 0}
+  ItemSprite: {fileID: 21300000, guid: 0601f01bb197513429322e8b14da934c, type: 3}
   Rarity: 0
-  AscensionInfoList:
-  - BaseHP: 500
-    BaseATK: 46
-    BaseDEF: 25
-    BaseMaxHP: 6800
-    BaseMaxATK: 250
-    BaseMaxDEF: 100

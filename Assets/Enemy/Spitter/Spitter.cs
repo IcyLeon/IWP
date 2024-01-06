@@ -153,13 +153,11 @@ public class Spitter : BaseEnemy
         Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player"));
         for (int i = 0; i < Colliders.Length; i++)
         {
-            PlayerCharacters pc = Colliders[i].GetComponent<PlayerCharacters>();
+            IDamage pc = Colliders[i].GetComponent<IDamage>();
             if (pc != null)
             {
-                if (pc.GetBurstActive())
-                    return;
-                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f, this);
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK(), this);
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
                 Destroy(hitEffect.gameObject, hitEffect.main.duration);
             }
         }

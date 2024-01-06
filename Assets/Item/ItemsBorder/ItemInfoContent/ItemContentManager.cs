@@ -12,6 +12,7 @@ public class ItemContentManager : MonoBehaviour
     [SerializeField] LockItem LockButton;
     private Item ItemREF;
     private ItemTemplate ItemsSO;
+    private bool DisableLockButtonStatus = false;
 
     private void Start()
     {
@@ -66,12 +67,19 @@ public class ItemContentManager : MonoBehaviour
 
         ItemSprite.sprite = ItemsSO.ItemSprite;
         ItemContentDisplay.RefreshItemContentDisplay(ItemREF, ItemsSO);
-        LockButton.SetItemREF(ItemREF);
+        if (!DisableLockButtonStatus)
+            LockButton.SetItemREF(ItemREF);
 
         TogglePopup(ItemREF != null || ItemsSO != null);
     }
     public void TogglePopup(bool active)
     {
         gameObject.SetActive(active);
+    }
+
+    public void DisableLockButton()
+    {
+        DisableLockButtonStatus = true;
+        LockButton.gameObject.SetActive(false);
     }
 }

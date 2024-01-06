@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 public class Albino : BaseEnemy
 {
     public enum States
@@ -228,19 +227,6 @@ public class Albino : BaseEnemy
         return normal.normalized;
     }
 
-    private void IgnorePlayerCollision(bool ignore = true)
-    {
-        Collider thisCollider = GetCollider();
-        int layerToIgnore = LayerMask.NameToLayer("Player");
-
-        Collider[] collidersToIgnore = Physics.OverlapSphere(thisCollider.bounds.center, thisCollider.bounds.extents.magnitude, 1 << layerToIgnore, QueryTriggerInteraction.Ignore);
-
-        foreach (Collider collider in collidersToIgnore)
-        {
-            Physics.IgnoreCollision(thisCollider, collider, ignore);
-        }
-    }
-
     private IEnumerator StartSlamAttack()
     {
         Vector3 SavePosition = GetPlayerLocation();
@@ -251,14 +237,14 @@ public class Albino : BaseEnemy
         if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack)
         {
             state = States.CHASE;
-            IgnorePlayerCollision();
+            col.isTrigger = false;
             Animator.SetTrigger("Cancel");
             SlamCoroutine = null;
         }
         Animator.SetTrigger("Jump");
         SetisAttacking(true);
-
         yield return new WaitUntil(() => JumpOnAir);
+        col.isTrigger = true;
 
         SavePosition = GetPlayerLocation();
         Vector3 groundPos = SavePosition;
@@ -267,7 +253,6 @@ public class Albino : BaseEnemy
             groundPos.y = hit.point.y;
         }
 
-        IgnorePlayerCollision(false);
         float elapsed = 0f;
         float duration = 0.6f;
 
@@ -283,7 +268,7 @@ public class Albino : BaseEnemy
 
         while (true)
         {
-            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 1f, ~LayerMask.GetMask("Player")))
+            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 1f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
             {
                 SlamAreaDamage();
                 break;
@@ -291,8 +276,7 @@ public class Albino : BaseEnemy
             rb.AddForce(Vector3.down * 1000f * Time.deltaTime);
             yield return null;
         }
-
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Entity"), LayerMask.NameToLayer("Player"), false);
+        col.isTrigger = false;
         Animator.SetTrigger("Slam");
         JumpOnAir = false;
         yield return new WaitForSeconds(0.25f);
@@ -333,13 +317,11 @@ public class Albino : BaseEnemy
         Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player"));
         for (int i = 0; i < Colliders.Length; i++)
         {
-            PlayerCharacters pc = Colliders[i].GetComponent<PlayerCharacters>();
+            IDamage pc = Colliders[i].GetComponent<IDamage>();
             if (pc != null)
             {
-                if (pc.GetBurstActive())
-                    return;
-                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f, this);
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK(), this);
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
                 Destroy(hitEffect.gameObject, hitEffect.main.duration);
             }
         }

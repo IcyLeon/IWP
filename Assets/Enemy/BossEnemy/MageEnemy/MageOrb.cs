@@ -94,7 +94,7 @@ public class MageOrb : MonoBehaviour, IDamage
 
         if (IsDead())
         {
-            Destroy(gameObject);
+            DestroyOrb();
         }
     }
 

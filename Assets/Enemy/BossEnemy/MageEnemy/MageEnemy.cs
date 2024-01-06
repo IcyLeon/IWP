@@ -61,16 +61,13 @@ public class MageEnemy : BaseEnemy
 
         foreach (Collider other in colliders)
         {
-            PlayerCharacters PlayerCharacters = other.GetComponent<PlayerCharacters>();
-            if (PlayerCharacters != null)
+            IDamage PlayerREF = other.GetComponent<IDamage>();
+            if (PlayerREF != null)
             {
-                if (!PlayerCharacters.GetPlayerManager().IsSkillCasting())
+                if (!PlayerREF.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
                 {
-                    if (!PlayerCharacters.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
-                    {
-                        PlayerCharacters.TakeDamage(PlayerCharacters.GetPointOfContact(), new Elements(Elemental.FIRE), 100f, this);
-                        FireHitIntervalElapsed = Time.time;
-                    }
+                    PlayerREF.TakeDamage(PlayerREF.GetPointOfContact(), new Elements(Elemental.FIRE), 100f, this);
+                    FireHitIntervalElapsed = Time.time;
                 }
             }
         }
@@ -143,7 +140,7 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
-        Debug.Log(m_StateMachine.GetCurrentState());
+        //Debug.Log(m_StateMachine.GetCurrentState());
         UpdateFireBreathing();
         UpdateMageOrbList();
         UpdateMageFireBallList();

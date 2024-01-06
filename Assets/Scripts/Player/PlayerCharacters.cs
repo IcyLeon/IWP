@@ -41,6 +41,9 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
+        if (GetPlayerManager().IsSkillCasting())
+            return null;
+
         if (characterData != null)
             characterData.SetPreviousHealthRatio(characterData.GetHealth() / characterData.GetActualMaxHealth(characterData.GetLevel()));
 

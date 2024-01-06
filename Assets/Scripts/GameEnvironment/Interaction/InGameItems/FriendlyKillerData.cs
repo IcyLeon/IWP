@@ -29,9 +29,10 @@ public class FriendlyKillerData
         return CurrentHealth;
     }
 
-    public void SetHealth(float CurrentHealth)
+    public void SetHealth(float val)
     {
-        this.CurrentHealth = CurrentHealth;
+        CurrentHealth = val;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
     }
 
     public float GetDetectionRange()

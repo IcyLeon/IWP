@@ -37,12 +37,7 @@ public interface ISkillsBurstManager
 
 public class Characters : MonoBehaviour, IDamage
 {
-    protected float BaseMaxHealth;
     protected float CurrentHealth;
-    protected float BaseATK;
-    protected float BaseDEF;
-    protected float BaseEM;
-    protected int Level;
 
     [SerializeField] protected CharactersSO CharactersSO;
     [SerializeField] protected Animator Animator;
@@ -61,7 +56,7 @@ public class Characters : MonoBehaviour, IDamage
     }
     protected virtual void Start()
     {
-        BaseMaxHealth = GetCharactersSO().GetAscensionInfo(0).BaseHP;
+        SetHealth(GetMaxHealth());
         isAttacking = false;
     }
     public void ResetAttack()
@@ -267,9 +262,10 @@ public class Characters : MonoBehaviour, IDamage
         if (callHitInfo)
             OnHit(e, this);
 
+        SetHealth(GetHealth() - DamageValue);
+
         if (DamageValue > 0)
         {
-            SetHealth(GetHealth() - DamageValue);
             AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, DamageValue.ToString());
         }
         UpdateDie();
@@ -294,22 +290,23 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual int GetLevel()
     {
-        return Level;
+        return 1;
     }
 
     public virtual float GetATK()
     {
-        return BaseATK;
+        return 0f;
     }
 
     public virtual float GetDEF()
     {
-        return BaseDEF;
+        return 0f;
     }
 
     public virtual void SetHealth(float val)
     {
         CurrentHealth = val;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
     }
 
     protected virtual void OnDestroy()

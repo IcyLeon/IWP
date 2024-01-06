@@ -21,7 +21,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject DamageText;
     [SerializeField] GameObject WorldText;
     [SerializeField] GameObject SlashPrefab;
-
+    [SerializeField] GameObject ObtainUIPrefab;
     public GameObject SwitchCharacterParticlesEffect;
     public GameObject PlungeParticlesEffect;
 
@@ -116,6 +116,11 @@ public class AssetManager : MonoBehaviour
     public static AssetManager GetInstance()
     {
         return instance;
+    }
+
+    public void SpawnObtainedUI()
+    {
+        GameObject go = Instantiate(ObtainUIPrefab, GetCanvasGO().transform);
     }
 
     public void SpawnDash(Vector3 pos, Quaternion rot)

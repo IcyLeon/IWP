@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateControls()
     {
-        if (mainUI.isPaused() || Input.GetKey(KeyCode.LeftAlt) || mainUI.FallenPanelIsOpen())
+        if (Time.timeScale == 0 || Input.GetKey(KeyCode.LeftAlt) || mainUI.FallenPanelIsOpen())
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;

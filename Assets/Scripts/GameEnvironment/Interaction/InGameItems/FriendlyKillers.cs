@@ -14,7 +14,6 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     [SerializeField] protected Animator animator;
     private FriendlyKillerData friendlyKillerData;
     protected HealthBarScript healthBarScript;
-    public event Action OnDead;
     public delegate void onElementReactionHit(ElementalReactionsTrigger e);
     public onElementReactionHit OnElementReactionHit;
     private bool canBuy;
@@ -92,7 +91,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         {
             if (friendlyKillerData != null)
             {
-                healthBarScript.UpdateHealth(GetHealth(), 0, GetMaxHealth());
+                healthBarScript.UpdateHealth(GetHealth(), 0f, GetMaxHealth());
             }
             healthBarScript.gameObject.SetActive(!canBuy && !IsDead());
         }
@@ -103,7 +102,6 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         if (IsDead())
         {
             FriendlyKillerHandler.GetInstance().RemoveKillerToList(friendlyKillerData);
-            friendlyKillerData = null;
             if (animator != null)
             {
                 if (Characters.ContainsParam(animator, "Deactivated"))
@@ -112,6 +110,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                 }
             }
             GameObject go = Instantiate(AssetManager.GetInstance().FirePrefab, transform.position, Quaternion.identity);
+            friendlyKillerData = null;
         }
     }
 
@@ -137,7 +136,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         Elements e = new Elements(elemental);
         int dmg = Mathf.RoundToInt(damageAmt);
 
-        SetHealth(GetFriendlyKillerData().GetHealth() - dmg);
+        SetHealth(GetHealth() - dmg);
         AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, dmg.ToString());
         UpdateDead();
 
@@ -225,7 +224,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         if (GetFriendlyKillerData() == null)
             return;
 
-        GetFriendlyKillerData().SetHealth(GetFriendlyKillerData().GetHealth() - val);
+        GetFriendlyKillerData().SetHealth(val);
     }
 
     public float GetHealth()

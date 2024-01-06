@@ -8,7 +8,7 @@ public class Amber : BowCharacters, ICoordinateAttack
 {
     [SerializeField] Transform CoordinateAttackPivot;
     private float CoodinateTimerElapsed;
-    private int SkillsArrows = 4;
+    private int SkillsArrows = 3;
     private float nextFire;
     [SerializeField] GameObject AmberAuraBurstPrefab;
     private ParticleSystem BurstAura;

@@ -11,12 +11,12 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     public class GameSpawnInfo
     {
-        public CharactersSO[] IntroduceEnemySO;
+        public GameObject[] IntroduceItem;
         public int Wave;
     }
     [SerializeField] GameObject TeleporterPrefab;
     [SerializeField] GameSpawnInfo[] GameSpawnInfoList;
-    [SerializeField] GameSpawnInfo[] BossSpawnInfoList;
+    [SerializeField] GameSpawnInfo[] FriendKillerSpawnInfoList;
     [SerializeField] Terrain terrain;
     private EnemyManager EM;
     private static GameManager instance;
@@ -39,19 +39,7 @@ public class GameManager : MonoBehaviour
         EM.OnEnemyKilled += OnEnemyKilled;
         isCompleted = false;
         TotalEnemyInWave = 0;
-        LoadKillersAroundTerrain();
-    }
-
-    private void LoadKillersAroundTerrain()
-    {
-        FriendlyKillerHandler friendlyKillerHandler = FriendlyKillerHandler.GetInstance();
-        foreach(FriendlyKillerData f in friendlyKillerHandler.GetFriendlyKillerDataList())
-        {
-            Vector3 pos = EnemyManager.GetRandomPointWithinTerrain(terrain);
-            FriendlyKillers friendlyKillers = Instantiate(friendlyKillerHandler.GetFriendlyKillerInfo(f.GetFriendlyKillerSO()).FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>(); ;
-            if (friendlyKillers != null)
-                friendlyKillers.SetKillerData(f);
-        }
+        FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
     }
 
     private void OnEnemyKilled(BaseEnemy enemy)

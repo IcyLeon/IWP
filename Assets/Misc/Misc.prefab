@@ -95,6 +95,8 @@ MonoBehaviour:
     type: 3}
   SlashPrefab: {fileID: 3850188118278125534, guid: 7e7f04c10d088b44ca6d0c6ef88359db,
     type: 3}
+  ObtainUIPrefab: {fileID: 3980544537206367828, guid: f3fae7695615d3b4494ff0578ae51bea,
+    type: 3}
   SwitchCharacterParticlesEffect: {fileID: 2605316480486226868, guid: 114ab6919cf39484e946697e02cfa078,
     type: 3}
   PlungeParticlesEffect: {fileID: 6328723616113637957, guid: 880c4759aea1a0d48bd71fc63717d792,
@@ -175,13 +177,10 @@ MonoBehaviour:
   elementalReactionsInfo:
   - elementals: 0100000002000000
     elementalReactionState: 1
-    ReactionMultiplier: 2
   - elementals: 0100000003000000
     elementalReactionState: 0
-    ReactionMultiplier: 0
   - elementals: 0200000003000000
     elementalReactionState: 2
-    ReactionMultiplier: 0
   elementalColorSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}
 --- !u!114 &2142344314217808489
 MonoBehaviour:
