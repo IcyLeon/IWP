@@ -5,16 +5,11 @@ using UnityEngine;
 
 public class ElementalReaction
 {
-    private GameObject source;
     private List<Elements> ElementsList;
     private ElementalReactionsManager elementalReactionsManager;
     public delegate void OnElementChanged(bool isChanged);
     public OnElementChanged onElementChanged;
 
-    public void SetSource(GameObject go)
-    {
-        source = go;
-    }
     public void UpdateElementsList()
     {
         for (int i = 0; i < ElementsList.Count; i++)
@@ -40,7 +35,7 @@ public class ElementalReaction
         return elementalReactionsManager.GetElementalReactionState(Elementals);
     }
 
-    public ElementalReactionsTrigger GetElementalReactionsTrigger(Vector3 position)
+    public ElementalReactionsTrigger GetElementalReactionsTrigger(Vector3 position, IDamage source, IDamage target)
     {
         ElementalReactionsInfo ElementalReactionsInfo = GetElementalReactionsInfo(GetElementList());
         if (ElementalReactionsInfo == null)
@@ -49,7 +44,16 @@ public class ElementalReaction
         ElementalReactionsTrigger trigger = new ElementalReactionsTrigger();
         trigger.SetERState(ElementalReactionsInfo.elementalReactionState);
 
+        float damage = trigger.CalculateERDamage(source);
+        int ActualDmg = Mathf.RoundToInt(damage);
+        target.SetHealth(target.GetHealth() - ActualDmg);
+
+        if (damage > 0)
+            AssetManager.GetInstance().SpawnWorldText_ElementalReaction(position, trigger.GetERState(), ActualDmg.ToString());
+
         AssetManager.GetInstance().SpawnWorldText_ElementalReaction(position, trigger.GetERState(), ElementalReactionsManager.GetInstance().GetElementalReactionText(trigger.GetERState()));
+
+
         GetElementList().Clear();
 
         return trigger;

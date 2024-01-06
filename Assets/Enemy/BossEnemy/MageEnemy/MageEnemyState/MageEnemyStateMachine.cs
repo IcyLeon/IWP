@@ -18,6 +18,7 @@ public class MageEnemyStateMachine : CharacterState
     public MageEnemyAirborneIdleState MageEnemyAirborneIdleState { get; }
     public MageEnemyTakeOffState MageEnemyTakeOffState { get; }
     public MageEnemyAirborneFireballAttackState MageEnemyAirborneFireballAttackState { get; }
+    public MageEnemyLandingState MageEnemyLandingState { get; }
     public MageEnemy GetMageEnemy()
     {
         return (MageEnemy)Characters;
@@ -38,6 +39,7 @@ public class MageEnemyStateMachine : CharacterState
         MageEnemyTakeOffState = new MageEnemyTakeOffState(this);
         MageEnemyAirborneIdleState = new MageEnemyAirborneIdleState(this);
         MageEnemyAirborneFireballAttackState = new MageEnemyAirborneFireballAttackState(this);
+        MageEnemyLandingState = new MageEnemyLandingState(this);
         ChangeState(MageEnemyIdleState);
     }
 }

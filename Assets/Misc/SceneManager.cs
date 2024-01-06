@@ -20,7 +20,7 @@ public class SceneManager : MonoBehaviour
     [SerializeField] GameObject LoadingCanvas;
     public static Action OnSceneChanged;
     private float TargetProgress = 0f;
-
+    private SceneEnum currentScene;
     private void Awake()
     {
         if (instance == null)
@@ -43,6 +43,12 @@ public class SceneManager : MonoBehaviour
     {
         //StartCoroutine(LoadSceneAsync(GetSceneName(scene)));
         LoadSceneAsync(GetSceneName(scene));
+        currentScene = scene;
+    }
+
+    public SceneEnum GetCurrentScene()
+    {
+        return currentScene;
     }
 
     private async void LoadSceneAsync(string sceneName)

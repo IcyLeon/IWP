@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class MageOrb : MonoBehaviour, IDamage
 {
-    private float BaseMaxHealth = 1000;
+    private float BaseMaxHealth = 200;
     private float CurrentHealth;
     private HealthBarScript healthBarScript;
     [SerializeField] Collider Collider;
     private bool TimesUp;
+    [SerializeField] GameObject DestroyedExplosionPrefab;
+    [SerializeField] Transform HealthBarPivotParent;
     private Elemental Elemental;
 
     public float GetHealth()
@@ -41,7 +43,7 @@ public class MageOrb : MonoBehaviour, IDamage
         CurrentHealth = val;
     }
 
-    public Elements TakeDamage(Vector3 position, Elements elementsREF, float damageAmt, bool callHitInfo = true)
+    public Elements TakeDamage(Vector3 position, Elements elementsREF, float damageAmt, IDamage source, bool callHitInfo = true)
     {
         if (IsDead() || TimesUp)
             return null;
@@ -68,13 +70,17 @@ public class MageOrb : MonoBehaviour, IDamage
     {
         TimesUp = false;
         SetHealth(BaseMaxHealth);
-        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
+
+        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
+        healthBarScript.transform.SetParent(HealthBarPivotParent, true);
+
     }
 
-    void OnDestroy()
+    void DestroyOrb()
     {
-        if (healthBarScript)
-            Destroy(healthBarScript.gameObject);
+        ParticleSystem PS = Instantiate(DestroyedExplosionPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(PS.gameObject, PS.main.duration);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -85,6 +91,11 @@ public class MageOrb : MonoBehaviour, IDamage
             healthBarScript.UpdateHealth(GetHealth(), 0f, GetMaxHealth());
             healthBarScript.SliderInvsibleOnlyFullHealth();
         }
+
+        if (IsDead())
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerStay(Collider Collider)
@@ -93,7 +104,22 @@ public class MageOrb : MonoBehaviour, IDamage
 
         if (mageOrb != null && TimesUp)
         {
-            Destroy(gameObject);
+            DestroyOrb();
         }
+    }
+
+    public ElementalReaction GetElementalReaction()
+    {
+        return null;
+    }
+
+    public float GetATK()
+    {
+        return 0f;
+    }
+
+    public float GetEM()
+    {
+        return 0f;
     }
 }

@@ -82,7 +82,7 @@ public class MageEnemyGroundState : MageEnemyState
                     GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyBasicAttackState);
                     break;
                 case 1:
-                    if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus)
+                    if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus || !GetMageEnemyStateMachine().GetMageEnemy().CanSpawnReinforcement())
                     {
                         UpdateBasicAttacks();
                         return;

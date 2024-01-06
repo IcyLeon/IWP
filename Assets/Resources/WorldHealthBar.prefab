@@ -32,7 +32,7 @@ RectTransform:
   - {fileID: 5592254144852944822}
   - {fileID: 1873325833359800663}
   m_Father: {fileID: 7889705618107512166}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -200,6 +200,7 @@ MonoBehaviour:
   allyColor:
     serializedVersion: 2
     rgba: 0
+  ElementsIndicatorTransform: {fileID: 0}
 --- !u!1 &1190762281006439343
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,8 +654,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 80}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 150, y: 85}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!223 &5210161820736409845
 Canvas:
   m_ObjectHideFlags: 0
@@ -698,7 +699,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &7200612809027885833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,6 +740,7 @@ MonoBehaviour:
   allyColor:
     serializedVersion: 2
     rgba: 4280539031
+  ElementsIndicatorTransform: {fileID: 7889705618107512166}
 --- !u!114 &7044075676779004091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -781,8 +783,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8971298808180000546}
   - {fileID: 5831441970166201315}
+  - {fileID: 8971298808180000546}
   m_Father: {fileID: 7271572412432153732}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -808,15 +810,15 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 5
+  m_ChildAlignment: 7
+  m_Spacing: 8
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!114 &7426346298640251231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,7 +844,7 @@ GameObject:
   - component: {fileID: 8971298808180000546}
   - component: {fileID: 3215817929571471624}
   - component: {fileID: 6969361332126365596}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -862,7 +864,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7889705618107512166}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

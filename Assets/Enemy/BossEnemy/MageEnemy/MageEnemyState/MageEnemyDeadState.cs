@@ -10,6 +10,7 @@ public class MageEnemyDeadState : MageEnemyState
     public override void Enter()
     {
         base.Enter();
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().useGravity = true;
         StartAnimation("isDead");
     }
 

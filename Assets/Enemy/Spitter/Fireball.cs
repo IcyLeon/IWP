@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Fireball : MonoBehaviour
 {
+    private IDamage source;
+
+    public void SetSource(IDamage source)
+    {
+        this.source = source;
+    }
     void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, 1.5f, LayerMask.GetMask("Player"));
@@ -13,7 +19,7 @@ public class Fireball : MonoBehaviour
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.FIRE), 100f);
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.FIRE), 100f, source);
 
                 //Debug.Log(damageObject);
             }

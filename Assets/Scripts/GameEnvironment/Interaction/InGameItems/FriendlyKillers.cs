@@ -120,7 +120,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         return GetHealth() <= 0 && !canBuy;
     }
 
-    public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, bool callHitInfo = true)
+    public virtual Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, IDamage source, bool callHitInfo = true)
     {
         if (IsDead() || canBuy)
             return null;
@@ -242,5 +242,20 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
             return 1f;
 
         return GetFriendlyKillerData().GetMaxHealth();
+    }
+
+    public ElementalReaction GetElementalReaction()
+    {
+        return null;
+    }
+
+    public float GetATK()
+    {
+        return 0f;
+    }
+
+    public float GetEM()
+    {
+        return 0f;
     }
 }

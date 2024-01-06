@@ -24,17 +24,17 @@ public class MageEnemyData
     public float CurrentStunElasped = 0f;
     public float stunDuration = 6f;
 
-    public int SpawnEnemiesAmount = 3;
+    public int SpawnEnemiesAmount = 2;
 
-    public float CrystalsCoreStayDuration = 8f;
+    public float CrystalsCoreStayDuration = 15f;
     public float CrystalsCoreStayElasped = 0f;
-    public float CrystalsCoreSpawnDuration = 15f;
+    public float CrystalsCoreSpawnDuration = 30f;
     public float CrystalsCoreSpawnElasped = 0f;
 
     public float TakeOffCooldown = 15f;
     public float TakeOffElapsed = 0f;
 
-    public float FireBallSpawnDuration = 3.5f;
+    public float FireBallSpawnDuration = 1f;
     public float FireBallSpawnElapsed = 0f;
 
     public float timeToReachTargetRotation { get; } = 0.14f;
@@ -43,7 +43,7 @@ public class MageEnemyData
     public Quaternion CurrentTargetRotation, Target_Rotation;
 
 
-    public int NoOfFireball = 5;
+    public int NoOfFireball = 6;
 
     public MageEnemyData()
     {

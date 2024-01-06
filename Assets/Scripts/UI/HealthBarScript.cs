@@ -13,7 +13,24 @@ public class HealthBarScript : MonoBehaviour
     [SerializeField] GameObject UiContent;
     [SerializeField] Color32 enemyColor;
     [SerializeField] Color32 allyColor;
+    [SerializeField] Transform ElementsIndicatorTransform;
+    private ElementsIndicator ElementsIndicator;
 
+    public ElementsIndicator GetElementsIndicator()
+    {
+        return ElementsIndicator;
+    }
+
+    public void SetElementsIndicator(IDamage IDamage)
+    {
+        if (GetElementsIndicator() == null)
+        {
+            ElementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, ElementsIndicatorTransform).GetComponent<ElementsIndicator>();
+            GetElementsIndicator().transform.SetAsLastSibling();
+        }
+
+        GetElementsIndicator().SetIDamage(IDamage);
+    }
     public void UpdateHealth(float HealthVal, float min, float max)
     {
         slider.value = HealthVal;

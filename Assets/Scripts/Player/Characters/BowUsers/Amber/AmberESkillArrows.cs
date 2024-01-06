@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class AmberESkillArrows : MonoBehaviour
 {
-    private CharacterData Amber;
+    private PlayerCharacters Amber;
+    private CharacterData AmberCharacterData;
     private IDamage target;
     [SerializeField] Rigidbody rb;
     private Vector3 FocalPointPos;
@@ -30,9 +31,10 @@ public class AmberESkillArrows : MonoBehaviour
         Destroy(gameObject, 5f);
     }
 
-    public void SetCharacterData(CharacterData characterData)
+    public void SetCharacterData(PlayerCharacters PlayerCharacters)
     {
-        Amber = characterData;
+        Amber = PlayerCharacters;
+        AmberCharacterData = PlayerCharacters.GetCharacterData();
     }
 
     private IEnumerator Moving()
@@ -86,7 +88,7 @@ public class AmberESkillArrows : MonoBehaviour
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Amber.GetPlayerCharacterSO().Elemental), 10f);
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(AmberCharacterData.GetPlayerCharacterSO().Elemental), AmberCharacterData.GetActualATK(AmberCharacterData.GetLevel()), Amber);
             }
         }
 

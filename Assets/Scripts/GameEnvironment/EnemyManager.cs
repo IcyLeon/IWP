@@ -21,7 +21,7 @@ public class EnemyManager : MonoBehaviour
     public onEnemyChanged OnEnemyKilled;
     public onEnemyChanged OnBossEnemyAdd;
     public onEnemyChanged OnBossEnemyRemove;
-
+    private SceneManager SceneManager;
     private static EnemyManager instance;
     private int CurrentWave;
     private int CurrentEnemyDefeated;
@@ -62,11 +62,33 @@ public class EnemyManager : MonoBehaviour
         // If no valid point is found, return Vector3.zero or some other default value
         return Vector3.zero;
     }
+    private int GetMaxEnemyInScene()
+    {
+        SceneManager sm = SceneManager.GetInstance();
 
+        switch (sm.GetCurrentScene())
+        {
+            case SceneEnum.BOSS:
+                return 5;
+            case SceneEnum.GAME:
+                return 20;
+        }
+        return 0;
+    }
+
+    public bool HasReachSpawnLimit()
+    {
+        return GetTotalCurrentEnemySpawnedList() >= GetMaxEnemyInScene();
+    }
+
+    public int GetTotalCurrentEnemySpawnedList()
+    {
+        return CurrentEnemySpawnedList.Count;
+    }
     public int GetTotalEnemyAliveInList()
     {
         int Count = 0;
-        for (int i = 0; i < CurrentEnemySpawnedList.Count; i++)
+        for (int i = 0; i < GetTotalCurrentEnemySpawnedList(); i++)
         {
             BaseEnemy enemy = CurrentEnemySpawnedList[i];
             if (enemy != null)
@@ -152,6 +174,7 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
+        SceneManager = SceneManager.GetInstance();
         ResetTotalEnemiesDefeated();
         SetCurrentWave(0);
     }
@@ -163,7 +186,7 @@ public class EnemyManager : MonoBehaviour
 
     private void UpdateRemoveEnemyList()
     {
-        for (int i = CurrentEnemySpawnedList.Count - 1; i >= 0; i--)
+        for (int i = GetTotalCurrentEnemySpawnedList() - 1; i >= 0; i--)
         {
             if (CurrentEnemySpawnedList[i] == null)
             {

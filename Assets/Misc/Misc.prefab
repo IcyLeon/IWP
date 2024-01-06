@@ -175,10 +175,13 @@ MonoBehaviour:
   elementalReactionsInfo:
   - elementals: 0100000002000000
     elementalReactionState: 1
+    ReactionMultiplier: 2
   - elementals: 0100000003000000
     elementalReactionState: 0
+    ReactionMultiplier: 0
   - elementals: 0200000003000000
     elementalReactionState: 2
+    ReactionMultiplier: 0
   elementalColorSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}
 --- !u!114 &2142344314217808489
 MonoBehaviour:

@@ -34,7 +34,7 @@ public class Turret : FriendlyKillers
     private void Fire()
     {
         IDamage targetIDamage = Target.GetComponent<IDamage>();
-        targetIDamage.TakeDamage(targetIDamage.GetPointOfContact(), new Elements(Elemental.NONE), GetDamage());
+        targetIDamage.TakeDamage(targetIDamage.GetPointOfContact(), new Elements(Elemental.NONE), GetDamage(), this);
     }
 
     public override Vector3 GetPointOfContact()

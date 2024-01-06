@@ -158,7 +158,7 @@ public class Spitter : BaseEnemy
             {
                 if (pc.GetBurstActive())
                     return;
-                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f);
+                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f, this);
                 ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, pc.GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
                 Destroy(hitEffect.gameObject, hitEffect.main.duration);
             }
@@ -189,8 +189,8 @@ public class Spitter : BaseEnemy
     private void ShootFireBall()
     {
         Vector3 dir = (GetPlayerLocation() - FireEmitter.position).normalized;
-        GameObject FireBall = Instantiate(FireBallPrefab, FireEmitter.position, Quaternion.identity);
-        Rigidbody r = FireBall.GetComponent<Rigidbody>();
+        Fireball fireBall = Instantiate(FireBallPrefab, FireEmitter.position, Quaternion.identity).GetComponent<Fireball>();
+        Rigidbody r = fireBall.GetComponent<Rigidbody>();
         r.velocity = dir * 10f;
         CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.6f);
     }

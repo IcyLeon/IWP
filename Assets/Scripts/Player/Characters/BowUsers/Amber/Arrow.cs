@@ -6,7 +6,8 @@ public class Arrow : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
     private Elements elements;
-    private CharacterData BowCharacters;
+    private PlayerCharacters BowCharacters;
+    private CharacterData BowCharactersData;
     private float FlightTime = 10f;
 
     // Start is called before the first frame update
@@ -64,7 +65,7 @@ public class Arrow : MonoBehaviour
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharacters.GetActualATK(BowCharacters.GetLevel()));
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharactersData.GetActualATK(BowCharacters.GetLevel()), BowCharacters);
             }
 
             ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
@@ -73,8 +74,9 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    public void SetCharacterData(CharacterData characterData)
+    public void SetCharacterData(PlayerCharacters PlayerCharacters)
     {
-        BowCharacters = characterData;
+        BowCharacters = PlayerCharacters;
+        BowCharactersData = PlayerCharacters.GetCharacterData();
     }
 }

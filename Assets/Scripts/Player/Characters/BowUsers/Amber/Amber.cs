@@ -42,7 +42,7 @@ public class Amber : BowCharacters, ICoordinateAttack
         for (int i = 0; i < SkillsArrows; i++)
         {
             AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
-            eSkillArrows.SetCharacterData(GetCharacterData());
+            eSkillArrows.SetCharacterData(this);
             eSkillArrows.GetRB().velocity = GetShootPositionAndDirection(i);
             eSkillArrows.SetFocalPointContact(targetPos, NearestTarget);
         }
@@ -142,7 +142,7 @@ public class Amber : BowCharacters, ICoordinateAttack
             CoordinateAttack ca = Instantiate(AssetManager.GetInstance().CoordinateAttackPrefab, CoordinateAttackPivot.position, Quaternion.identity).GetComponent<CoordinateAttack>();
             Vector3 randomDirection = AssetManager.RandomVectorInCone(Vector3.up, 90f);
             ca.transform.position += randomDirection * Random.Range(0.5f, 1f);
-            ca.SetCharacterData(GetCharacterData());
+            ca.SetCharacterData(this);
             ca.SetTargetPos(targetPos, NearestTarget, GetPlayerManager().transform.forward * 10f);
         }
     }

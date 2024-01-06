@@ -55,8 +55,8 @@ public class ArtifactsManager : MonoBehaviour
 
             Type ItemType = expItemSO.GetTypeREF();
             object instance = Activator.CreateInstance(ItemType, true, expItemSO);
-            ConsumableItemForbiddenInInventory ExpItem = (ConsumableItemForbiddenInInventory)instance;
-            InventoryManager.GetInstance().AddItems(ExpItem);
+            Item item = (Item)instance;
+            InventoryManager.GetInstance().AddItems(item);
         }
 
     }

@@ -39,12 +39,12 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return PlayerCharacterState;
     }
 
-    public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, bool callHitInfo = true)
+    public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
         if (characterData != null)
             characterData.SetPreviousHealthRatio(characterData.GetHealth() / characterData.GetActualMaxHealth(characterData.GetLevel()));
 
-        return base.TakeDamage(pos, elementsREF, amt, callHitInfo);
+        return base.TakeDamage(pos, elementsREF, amt, source, callHitInfo);
     }
     public CinemachineVirtualCamera GetBurstCamera()
     {
@@ -139,6 +139,14 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return characterData.GetActualATK(characterData.GetLevel());
     }
 
+    public override float GetEM()
+    {
+        if (characterData == null)
+            return base.GetEM();
+
+        return characterData.GetActualEM(characterData.GetLevel());
+    }
+
     public override void SetHealth(float val)
     {
         if (characterData == null)
@@ -221,8 +229,9 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         {
             if (GetElementsIndicator() == null)
             {
-                SetElementsIndicator(Instantiate(AssetManager.GetInstance().ElementalContainerUIPrefab, MainUI.GetInstance().GetElementalDisplayUITransform()).GetComponent<ElementsIndicator>());
-                GetElementsIndicator().SetCharacters(this);
+                ElementsIndicator EI = Instantiate(AssetManager.GetInstance().ElementalContainerUIPrefab, MainUI.GetInstance().GetElementalDisplayUITransform()).GetComponent<ElementsIndicator>();
+                SetElementsIndicator(EI);
+                GetElementsIndicator().SetIDamage(this);
             }
         }
         else

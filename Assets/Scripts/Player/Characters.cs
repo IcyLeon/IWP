@@ -10,9 +10,11 @@ public interface IDamage {
     bool IsDead();
     public void SetHealth(float val);
     public float GetHealth();
-
+    public ElementalReaction GetElementalReaction();
     public float GetMaxHealth();
-    Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, bool callHitInfo = true);
+    public float GetATK();
+    public float GetEM();
+    Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, IDamage source, bool callHitInfo = true);
 }
 
 public interface ICoordinateAttack
@@ -49,8 +51,7 @@ public class Characters : MonoBehaviour, IDamage
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
     private float CurrentElementalShield;
-    public delegate void onElementReactionHit(ElementalReactionsTrigger e);
-    public onElementReactionHit OnElementReactionHit;
+
 
     protected Coroutine DieCoroutine;
     protected bool isAttacking;
@@ -170,7 +171,7 @@ public class Characters : MonoBehaviour, IDamage
     }
 
 
-    protected IDamage[] GetAllNearestCharacters(Vector3 currentPos, float range, LayerMask mask)
+    public IDamage[] GetAllNearestCharacters(Vector3 currentPos, float range, LayerMask mask)
     {
         Collider[] colliders = Physics.OverlapSphere(currentPos, range, mask);
         List<IDamage> colliderCopy = new List<IDamage>();
@@ -189,7 +190,7 @@ public class Characters : MonoBehaviour, IDamage
                     }
                 }
 
-                if (c.IsDead() && i < colliderCopy.Count)
+                if (c.IsDead())
                 {
                     continue;
                 }
@@ -228,7 +229,7 @@ public class Characters : MonoBehaviour, IDamage
         return nearestCollider;
     }
 
-    public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, bool callHitInfo = true)
+    public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
         if (IsDead())
             return null;
@@ -248,7 +249,7 @@ public class Characters : MonoBehaviour, IDamage
         if (GetElementalReaction() != null)
             GetElementalReaction().AddElements(e);
 
-        ElementalReactionsTrigger ElementalReactionsTrigger = GetElementalReaction().GetElementalReactionsTrigger(pos);
+        ElementalReactionsTrigger ElementalReactionsTrigger = GetElementalReaction().GetElementalReactionsTrigger(pos, source, this);
         if (ElementalReactionsTrigger != null)
         {
             switch(ElementalReactionsTrigger.GetERState())
@@ -257,9 +258,10 @@ public class Characters : MonoBehaviour, IDamage
                     GetRB().AddForce((pos - transform.position).normalized * 2f + Vector3.up * 1f, ForceMode.Impulse);
                     break;
                 case ElementalReactionState.MELT:
+                    
                     break;
             }
-            OnElementReactionHit?.Invoke(ElementalReactionsTrigger);
+
         }
 
         if (callHitInfo)
@@ -317,5 +319,10 @@ public class Characters : MonoBehaviour, IDamage
     public virtual Vector3 GetPointOfContact()
     {
         return default(Vector3);
+    }
+
+    public virtual float GetEM()
+    {
+        return 0f;
     }
 }

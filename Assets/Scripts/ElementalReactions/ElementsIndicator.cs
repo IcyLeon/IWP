@@ -8,18 +8,18 @@ public class ElementsIndicator : MonoBehaviour
     [SerializeField] Transform ElementParent;
     [SerializeField] GameObject ElementImagePrefab;
     [SerializeField] CanvasGroup CanvasGroup;
-    private Characters Characters;
+    private IDamage IDamage;
     private Coroutine FadeOutCoroutine;
 
     private void Update()
     {
-        if (Characters == null)
+        if (IDamage == null)
         {
             FadeOut();
         }
         else
         {
-            if (Characters.GetElementalReaction().GetElementList().Count == 0)
+            if (IDamage.GetElementalReaction().GetElementList().Count == 0)
             {
                 FadeOut();
             }
@@ -59,16 +59,19 @@ public class ElementsIndicator : MonoBehaviour
         }
     }
 
-    public void SetCharacters(Characters characters)
+    public void SetIDamage(IDamage IDamage)
     {
-        Characters = characters;
-        Characters.GetElementalReaction().onElementChanged += OnElementChanged;
-        OnElementChanged(true);
+        this.IDamage = IDamage;
+        if (IDamage.GetElementalReaction() != null)
+        {
+            IDamage.GetElementalReaction().onElementChanged += OnElementChanged;
+            OnElementChanged(true);
+        }
     }
 
     private void OnElementChanged(bool isChanged)
     {
-        if (Characters != null && isChanged) {
+        if (IDamage != null && isChanged) {
             if (FadeOutCoroutine != null)
             {
                 StopCoroutine(FadeOutCoroutine);
@@ -78,16 +81,19 @@ public class ElementsIndicator : MonoBehaviour
             foreach(RectTransform GO in ElementParent)
                 Destroy(GO.gameObject);
 
-            for (int i = 0; i < Characters.GetElementalReaction().GetElementList().Count; i++)
+            if (IDamage.GetElementalReaction() != null)
             {
-                Elements e = Characters.GetElementalReaction().GetElementList()[i];
-                ElementalColorSO.ElementalInfo ElementalInfo = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(e.GetElements());
-
-                if (ElementalInfo != null)
+                for (int i = 0; i < IDamage.GetElementalReaction().GetElementList().Count; i++)
                 {
-                    GameObject go = Instantiate(ElementImagePrefab, ElementParent);
-                    go.GetComponent<Image>().sprite = ElementalInfo.ElementSprite;
-                    StartCoroutine(FadeInAnimation());
+                    Elements e = IDamage.GetElementalReaction().GetElementList()[i];
+                    ElementalColorSO.ElementalInfo ElementalInfo = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(e.GetElements());
+
+                    if (ElementalInfo != null)
+                    {
+                        GameObject go = Instantiate(ElementImagePrefab, ElementParent);
+                        go.GetComponent<Image>().sprite = ElementalInfo.ElementSprite;
+                        StartCoroutine(FadeInAnimation());
+                    }
                 }
             }
         }
@@ -95,11 +101,13 @@ public class ElementsIndicator : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Characters != null)
+        if (IDamage != null)
         {
             foreach (Transform GO in ElementParent)
                 Destroy(GO.gameObject);
-            Characters.GetElementalReaction().onElementChanged -= OnElementChanged;
+
+            if (IDamage.GetElementalReaction() != null)
+                IDamage.GetElementalReaction().onElementChanged -= OnElementChanged;
         }
     }
 }

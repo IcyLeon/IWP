@@ -7,7 +7,7 @@ public class CoordinateAttack : MonoBehaviour
     private Vector3 targetPos;
     private Vector3 vel;
     private IDamage target;
-    private CharacterData characterData;
+    private PlayerCharacters playerCharacters;
     [SerializeField] Transform EmitterPivot;
     [SerializeField] ParticleSystem PS;
 
@@ -28,14 +28,14 @@ public class CoordinateAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         AmberESkillArrows eSkillArrows = Instantiate(AssetManager.GetInstance().ESkillArrowsPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<AmberESkillArrows>();
-        eSkillArrows.SetCharacterData(characterData);
+        eSkillArrows.SetCharacterData(playerCharacters);
         eSkillArrows.GetRB().velocity = vel;
         eSkillArrows.GetRB().transform.rotation = Quaternion.LookRotation(eSkillArrows.GetRB().velocity);
         eSkillArrows.SetFocalPointContact(targetPos, target);
     }
 
-    public void SetCharacterData(CharacterData characterData)
+    public void SetCharacterData(PlayerCharacters playerCharacters)
     {
-        this.characterData = characterData;
+        this.playerCharacters = playerCharacters;
     }
 }

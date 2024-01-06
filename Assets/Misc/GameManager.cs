@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameSpawnInfo[] BossSpawnInfoList;
     [SerializeField] Terrain terrain;
     private EnemyManager EM;
-    private int MaxEnemyInScene = 25;
     private static GameManager instance;
     private int TotalEnemyInWave;
     private Coroutine WaveSpawnCoroutine;
@@ -123,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaveSpawnDelay(EnemyType enemyType, float sec)
     {
-        while (EM.GetTotalEnemyAliveInList() >= MaxEnemyInScene || EM.GetTotalEnemyAliveInList() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
+        while (EM.HasReachSpawnLimit() || EM.GetTotalEnemyAliveInList() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
         {
             yield return null;
         }

@@ -11,6 +11,7 @@ public class MageEnemyStunState : MageEnemyState
     public override void Enter()
     {
         base.Enter();
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().useGravity = true;
         GetMageEnemyStateMachine().MageEnemyData.CurrentStunElasped = GetMageEnemyStateMachine().MageEnemyData.stunDuration;
         GetMageEnemyStateMachine().MageEnemyData.ShieldStatus = false;
         StartAnimation("isStun");

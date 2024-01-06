@@ -11,7 +11,6 @@ public class BaseEnemy : Characters
     [SerializeField] protected Collider col;
     [SerializeField] protected Rigidbody rb;
     protected float DetectionRange;
-    private ElementsIndicator elementsIndicator;
     protected float Ratio;
     protected EnemyManager EM;
     private IDamage Target;
@@ -30,14 +29,16 @@ public class BaseEnemy : Characters
         CurrentHealth = GetMaxHealth();
         DetectionRange = 1f;
         Level = 1;
-
         BossEnemyType = GetComponent<BossEnemyType>();
 
         if (!BossEnemyType)
-            healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
+        {
+            healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
+            healthBarScript.transform.SetParent(HealthBarPivotParent, true);
+            healthBarScript.transform.localPosition = HealthBarPivotParent.localPosition + Vector3.up * 200f;
+        }
 
         elementalReaction = new ElementalReaction();
-        OnElementReactionHit += ElementReactionHit;
     }
 
     public float GetDropValue()
@@ -181,10 +182,11 @@ public class BaseEnemy : Characters
         if (isdead)
         {
             if (healthBarScript)
+            {
+                if (healthBarScript.GetElementsIndicator() != null)
+                    Destroy(healthBarScript.GetElementsIndicator().gameObject);
                 Destroy(healthBarScript.gameObject);
-            if (elementsIndicator)
-                Destroy(elementsIndicator.gameObject);
-
+            }
             EM.CallOnEnemyKilled(this);
         }
         return isdead;
@@ -194,18 +196,12 @@ public class BaseEnemy : Characters
     {
         if (healthBarScript)
         {
-            healthBarScript.transform.position = HealthBarPivotParent.position + Vector3.up;
             healthBarScript.SliderInvsibleOnlyFullHealth();
             healthBarScript.UpdateShield(GetCurrentElementalShield(), 0, GetElementalShield());
-
-            if (elementsIndicator)
-            {
-                elementsIndicator.transform.position = HealthBarPivotParent.position + Vector3.up * 1.8f;
-            }
         }
     }
 
-    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt, bool callHitInfo = true)
+    public override Elements TakeDamage(Vector3 pos, Elements elements, float amt, IDamage source, bool callHitInfo = true)
     {
         float actualamt = amt;
         if (GetCurrentElementalShield() > 0) // have to change later since it is hardcoded
@@ -214,12 +210,12 @@ public class BaseEnemy : Characters
             SetCurrentElementalShield(GetCurrentElementalShield() - amt);
         }
 
-        Elements e = base.TakeDamage(pos, elements, actualamt, callHitInfo);
+        Elements e = base.TakeDamage(pos, elements, actualamt, source, callHitInfo);
 
-        if (elementsIndicator == null && !BossEnemyType)
+        if (healthBarScript && !BossEnemyType)
         {
-            elementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, transform).GetComponent<ElementsIndicator>();
-            elementsIndicator.SetCharacters(this);
+            if (healthBarScript.GetElementsIndicator() == null)
+                healthBarScript.SetElementsIndicator(this);
         }
 
         if (e.GetElements() != Elemental.NONE)
@@ -229,11 +225,6 @@ public class BaseEnemy : Characters
         }
 
         return e;
-    }
-
-    protected virtual void ElementReactionHit(ElementalReactionsTrigger e)
-    {
-
     }
 
     public bool HasReachedTargetLocation(Vector3 target)
@@ -279,11 +270,6 @@ public class BaseEnemy : Characters
         return BaseMaxHealth * (1 + Ratio);
     }
 
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        OnElementReactionHit -= ElementReactionHit;
-    }
     public NavMeshAgent GetNavMeshAgent()
     {
         return NavMeshAgent;

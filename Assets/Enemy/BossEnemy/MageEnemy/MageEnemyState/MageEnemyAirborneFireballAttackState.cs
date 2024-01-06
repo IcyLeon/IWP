@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MageEnemyAirborneFireballAttackState : MageEnemyAirborneAttackState
 {
+    private float WaitTillTransitDuration = 2f, WaitTillTransitElapsed;
+    private bool FireBallLaunched;
     public MageEnemyAirborneFireballAttackState(MageEnemyStateMachine MageEnemyStateMachine) : base(MageEnemyStateMachine)
     {
     }
@@ -11,6 +13,8 @@ public class MageEnemyAirborneFireballAttackState : MageEnemyAirborneAttackState
     public override void Enter()
     {
         base.Enter();
+        FireBallLaunched = false;
+        WaitTillTransitElapsed = WaitTillTransitDuration;
         StartAnimation("isSpawningProjectiles");
     }
 
@@ -28,10 +32,21 @@ public class MageEnemyAirborneFireballAttackState : MageEnemyAirborneAttackState
         if (targetdir != default(Vector3))
             SetTargetRotation(Quaternion.LookRotation(targetdir));
 
-
-
+        if (CanTransit() && FireBallLaunched)
+        {
+            if (WaitTillTransitElapsed <= 0)
+            {
+                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyLandingState);
+                return;
+            }
+            WaitTillTransitElapsed -= Time.deltaTime;
+        }
     }
 
+    private bool CanTransit()
+    {
+        return GetMageEnemyStateMachine().GetMageEnemy().GetTotalMageFireBall() == 0;
+    }
     public override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -42,5 +57,6 @@ public class MageEnemyAirborneFireballAttackState : MageEnemyAirborneAttackState
     {
         base.OnAnimationTransition();
         StopAnimation("isSpawningProjectiles");
+        FireBallLaunched = true;
     }
 }

@@ -37,7 +37,7 @@ public class SwordCharacters : PlayerCharacters
 
                     ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
                     Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), GetATK());
+                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), GetATK(), this);
                 }
             }
         }
@@ -77,7 +77,7 @@ public class SwordCharacters : PlayerCharacters
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetActualATK(GetCharacterData().GetLevel()));
+                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetActualATK(GetCharacterData().GetLevel()), this);
             }
         }
         return colliders;
@@ -87,7 +87,7 @@ public class SwordCharacters : PlayerCharacters
     {
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, damage.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(hitEffect.gameObject, hitEffect.main.duration);
-        damage.TakeDamage(damage.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), GetATK());
+        damage.TakeDamage(damage.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), GetATK(), this);
     }
 
     public override void LaunchBasicAttack()

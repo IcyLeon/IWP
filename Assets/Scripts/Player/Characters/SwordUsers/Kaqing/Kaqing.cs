@@ -91,7 +91,7 @@ public class Kaqing : SwordCharacters
 
                     ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
                     Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), 150f);
+                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), 150f, this);
                 }
             }
         }
@@ -207,7 +207,7 @@ public class Kaqing : SwordCharacters
     {
         KaqingTeleporter Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<KaqingTeleporter>();
         Orb.SetElements(new Elements(GetPlayersSO().Elemental));
-        Orb.SetCharacterData(GetCharacterData());
+        Orb.SetCharacterData(this);
         Orb.SetTargetLoc(ElementalHitPos);
         Orb.OnDestroyOrb += OnDestroyOrb;
         GetKaqingState().KaqingData.kaqingTeleporter = Orb;

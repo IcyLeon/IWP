@@ -59,7 +59,7 @@ public class April : SwordCharacters
             if (dmg != null)
             {
                 if (!dmg.IsDead())
-                    dmg.TakeDamage(dmg.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 50);
+                    dmg.TakeDamage(dmg.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 50, this);
             }
         }
         ParticleSystem ps = Instantiate(ShieldExplosion, GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
@@ -162,7 +162,7 @@ public class April : SwordCharacters
         {
             if (d.Value != null)
                 if (!d.Value.IsDead() && d.Value != m.GetIDamageObj())
-                    d.Value.TakeDamage(d.Value.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.1f * GetMaxHealth() + 95f, false);
+                    d.Value.TakeDamage(d.Value.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.1f * GetMaxHealth() + 95f, this, false);
         }
     }
 

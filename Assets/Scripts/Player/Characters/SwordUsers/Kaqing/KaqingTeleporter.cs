@@ -6,7 +6,7 @@ using UnityEngine;
 public class KaqingTeleporter : MonoBehaviour
 {
     private Elements elements;
-    private CharacterData Kaqing;
+    private PlayerCharacters Kaqing;
     private bool EnergyOrbMoving;
     private Vector3 TargetLoc;
 
@@ -46,7 +46,7 @@ public class KaqingTeleporter : MonoBehaviour
         }
         TravelDamage();
         yield return new WaitForSeconds(0.1f);
-        Destroy(gameObject, Kaqing.GetPlayerCharacterSO().ElementalSkillsTimer);
+        Destroy(gameObject, Kaqing.GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
         EnergyOrbMoving = false;
     }
 
@@ -60,12 +60,12 @@ public class KaqingTeleporter : MonoBehaviour
             if (damage != null)
             {
                 if (!damage.IsDead())
-                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetActualATK(Kaqing.GetLevel()));
+                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetATK(), Kaqing);
             }
         }
     }
 
-    public void SetCharacterData(CharacterData characterData)
+    public void SetCharacterData(PlayerCharacters characterData)
     {
         Kaqing = characterData;
     }

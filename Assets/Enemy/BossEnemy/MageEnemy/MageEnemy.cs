@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static CurrentCharacterArtifacts;
-using UnityEngine.UIElements;
 
 public class MageEnemy : BaseEnemy
 {
@@ -14,7 +12,7 @@ public class MageEnemy : BaseEnemy
     [SerializeField] CapsuleCollider FireBreathingCollider;
     [SerializeField] GameObject FireBallPrefab;
     [SerializeField] Transform FireBallPivotTransform;
-
+    private List<MageFireBall> MageFireBallList = new();
     private List<MageOrb> MageOrbList;
     private Coroutine MageCrystalCoreCoroutine;
     private GameObject CrystalsParent;
@@ -70,7 +68,7 @@ public class MageEnemy : BaseEnemy
                 {
                     if (!PlayerCharacters.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
                     {
-                        PlayerCharacters.TakeDamage(PlayerCharacters.GetPointOfContact(), new Elements(Elemental.FIRE), 100f);
+                        PlayerCharacters.TakeDamage(PlayerCharacters.GetPointOfContact(), new Elements(Elemental.FIRE), 100f, this);
                         FireHitIntervalElapsed = Time.time;
                     }
                 }
@@ -87,9 +85,12 @@ public class MageEnemy : BaseEnemy
 
         for (int i = 0; i < m_StateMachine.MageEnemyData.SpawnEnemiesAmount; i++)
         {
-            int randomIndex = Random.Range(0, EM.GetEnemyInfosList().Length);
-            EnemyType ET = (EnemyType)randomIndex;
-            BM.SpawnGroundUnitsWithinTerrain(ET);
+            if (CanSpawnReinforcement())
+            {
+                int randomIndex = Random.Range(0, EM.GetEnemyInfosList().Length);
+                EnemyType ET = (EnemyType)randomIndex;
+                BM.SpawnGroundUnitsWithinTerrain(ET);
+            }
         }
     }
 
@@ -142,20 +143,44 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
-        //Debug.Log(m_StateMachine.GetCurrentState());
+        Debug.Log(m_StateMachine.GetCurrentState());
         UpdateFireBreathing();
         UpdateMageOrbList();
+        UpdateMageFireBallList();
         Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
         Animator.SetBool("Airborne", IsAirborne());
+    }
+
+    public bool CanSpawnReinforcement()
+    {
+        return !EM.HasReachSpawnLimit();
+    }
+    public int GetTotalMageFireBall()
+    {
+        return MageFireBallList.Count;
     }
 
     private void SpawnFireBalls()
     { 
         for (int i = 0; i < m_StateMachine.MageEnemyData.NoOfFireball; i++)
         {
-            MageFireBall f = Instantiate(FireBallPrefab, FireBallPivotTransform).GetComponent<MageFireBall>();
-            Vector2 dir = Quaternion.Euler(0, 0, Mathf.Rad2Deg * ((Mathf.PI / m_StateMachine.MageEnemyData.NoOfFireball) * (i * 2f))) * FireBallPivotTransform.transform.right;
-            f.transform.localPosition = dir.normalized * 100f;
+            MageFireBall f = Instantiate(FireBallPrefab).GetComponent<MageFireBall>();
+            Vector3 dir = Quaternion.Euler(0, 0, Mathf.Rad2Deg * ((Mathf.PI / m_StateMachine.MageEnemyData.NoOfFireball) * (i * 2f))) * Vector3.right;
+            f.transform.SetParent(FireBallPivotTransform, true);
+            f.transform.localPosition = dir.normalized * 150f;
+            f.Init(1f + (i * 0.65f), this);
+            MageFireBallList.Add(f);
+        }
+    }
+
+    private void UpdateMageFireBallList()
+    {
+        for (int i = MageFireBallList.Count - 1; i >= 0; i--)
+        {
+            if (MageFireBallList[i] == null)
+            {
+                MageFireBallList.RemoveAt(i);
+            }
         }
     }
 
@@ -237,14 +262,14 @@ public class MageEnemy : BaseEnemy
             CrystalsCoreElasped += Time.deltaTime;
             yield return null;
         }
-        NukePlayer(CrystalsParent.transform.position);
+        NukePlayer(CrystalsParent.transform.position, 100f, 1000f);
         m_StateMachine.MageEnemyData.CrystalsCoreStayElasped = m_StateMachine.MageEnemyData.CrystalsCoreStayDuration;
         MageCrystalCoreCoroutine = null;
     }
 
-    private void NukePlayer(Vector3 TargetPos)
+    public void NukePlayer(Vector3 TargetPos, float range, float dmg)
     {
-        IDamage[] AllNearestPlayer = GetAllNearestCharacters(TargetPos, 100f, LayerMask.GetMask("Player"));
+        IDamage[] AllNearestPlayer = GetAllNearestCharacters(TargetPos, range, LayerMask.GetMask("Player"));
         for (int i = 0; i < AllNearestPlayer.Length; i++)
         {
             IDamage d = AllNearestPlayer[i];
@@ -252,7 +277,7 @@ public class MageEnemy : BaseEnemy
             {
                 if (!d.IsDead())
                 {
-                    d.TakeDamage(d.GetPointOfContact(), new Elements(Elemental.FIRE), 1000f);
+                    d.TakeDamage(d.GetPointOfContact(), new Elements(Elemental.FIRE), dmg, this);
                 }
             }
         }

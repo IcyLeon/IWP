@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 public class DamageText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI DamageTextTMP;
@@ -18,7 +16,7 @@ public class DamageText : MonoBehaviour
     {
         RT = GetComponent<RectTransform>();
         vel = Vector2.zero;
-        Offset = Vector3.one * 0.35f;
+        Offset = Vector3.one * 1.5f;
         canvasGroup.alpha = 0f;
     }
     // Start is called before the first frame update

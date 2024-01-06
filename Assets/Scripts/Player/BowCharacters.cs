@@ -45,7 +45,7 @@ public class BowCharacters : PlayerCharacters
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(ShootElemental));
-        ArrowFire.SetCharacterData(GetCharacterData());
+        ArrowFire.SetCharacterData(this);
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
 
         if (!GetPlayerManager().IsAiming())
