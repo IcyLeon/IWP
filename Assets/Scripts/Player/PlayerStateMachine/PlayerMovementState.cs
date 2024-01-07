@@ -276,7 +276,7 @@ public class PlayerMovementState : IState
             return false;
 
 
-        int layerMask = Physics.DefaultRaycastLayers;
+        int layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
         bool isGrounded = Physics.CheckSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
         return isGrounded;

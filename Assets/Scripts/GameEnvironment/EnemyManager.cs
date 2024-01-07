@@ -5,13 +5,7 @@ using System;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 using UnityEngine.AI;
-using static UnityEngine.EventSystems.EventTrigger;
 
-public enum EnemyType
-{
-    ALBINO,
-    SPITTER
-}
 
 public class EnemyManager : MonoBehaviour
 {
@@ -30,14 +24,7 @@ public class EnemyManager : MonoBehaviour
     public Action OnEnemyDefeatedChange;
     public Action OnEnemyWaveChange;
 
-    [System.Serializable]
-    public class EnemyInfo
-    {
-        public EnemyType enemyType;
-        public GameObject EnemyPrefab;
-    }
-
-    [SerializeField] EnemyInfo[] EnemyInfoList;
+    [SerializeField] EnemyInfo EnemyInfoSO;
 
     public static Vector3 GetRandomPointWithinTerrain(Terrain terrain)
     {
@@ -76,9 +63,9 @@ public class EnemyManager : MonoBehaviour
         return 0;
     }
 
-    public bool HasReachSpawnLimit()
+    public bool HasNotReachSpawnLimit()
     {
-        return GetTotalCurrentEnemySpawnedList() >= GetMaxEnemyInScene();
+        return GetTotalCurrentEnemySpawnedList() < GetMaxEnemyInScene();
     }
 
     public int GetTotalCurrentEnemySpawnedList()
@@ -100,11 +87,15 @@ public class EnemyManager : MonoBehaviour
         return Count;
     }
 
-    public void SpawnGroundUnitsWithinTerrain(EnemyType e, Terrain terrain)
+    public EnemyInfo GetEnemyInfo()
+    {
+        return EnemyInfoSO;
+    }
+    public void SpawnGroundUnitsWithinTerrain(CharactersSO charactersSO, Terrain terrain)
     {
         Vector3 spawnPosition = GetRandomPointWithinTerrain(terrain);
 
-        BaseEnemy enemy = Instantiate(GetEnemyInfo(e).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
+        BaseEnemy enemy = Instantiate(EnemyInfoSO.GetEnemyContent(charactersSO).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
         CurrentEnemySpawnedList.Add(enemy);
     }
 
@@ -128,19 +119,6 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public EnemyInfo[] GetEnemyInfosList()
-    {
-        return EnemyInfoList;
-    }
-    public EnemyInfo GetEnemyInfo(EnemyType type)
-    {
-        for (int i = 0; i < EnemyInfoList.Length; i++)
-        {
-            if (type == EnemyInfoList[i].enemyType)
-                return EnemyInfoList[i];
-        }
-        return null;
-    }
 
     public static EnemyManager GetInstance()
     {
@@ -182,6 +160,17 @@ public class EnemyManager : MonoBehaviour
     private void Update()
     {
         UpdateRemoveEnemyList();
+    }
+
+    public void DestroyAllEnemies()
+    {
+        for (int i = GetTotalCurrentEnemySpawnedList() - 1; i >= 0; i--)
+        {
+            if (CurrentEnemySpawnedList[i] != null)
+            {
+                CurrentEnemySpawnedList[i].SetHealth(0);
+            }
+        }
     }
 
     private void UpdateRemoveEnemyList()

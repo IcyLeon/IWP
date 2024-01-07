@@ -17,7 +17,8 @@ public class MageEnemyData
 
     public int NoOfCrystalsOrb = 2;
 
-    public float AttackInterval = 1.5f;
+    private float OriginalAttackInterval = 1.5f;
+    public float AttackInterval;
     public float AttackCurrentElasped = 0f;
     public int CurrentAttackIndex = 1;
 
@@ -28,7 +29,8 @@ public class MageEnemyData
 
     public float CrystalsCoreStayDuration = 15f;
     public float CrystalsCoreStayElasped = 0f;
-    public float CrystalsCoreSpawnDuration = 30f;
+    public float CrystalsCoreSpawnDuration;
+    private float OriginalCrystalsCoreSpawnDuration = 20f;
     public float CrystalsCoreSpawnElasped = 0f;
 
     public float TakeOffCooldown = 15f;
@@ -50,20 +52,21 @@ public class MageEnemyData
         ShieldCurrentElasped = ShieldCooldown;
         TakeOffElapsed = TakeOffCooldown;
         FireBallSpawnElapsed = FireBallSpawnDuration;
-        CrystalsCoreSpawnElasped = GetRandomSpawnCrystalsInterval();
+        CrystalsCoreSpawnDuration = GetRandomSpawnCrystalsInterval();
+        CrystalsCoreSpawnElasped = CrystalsCoreSpawnDuration;
         Phase = MagePhase.Phase_1;
         AttackInterval = GetRandomAttackInterval();
     }
 
     public float GetRandomAttackInterval()
     {
-        float AttackOpp = Random.Range(AttackInterval - 1f, AttackInterval + 1f);
+        float AttackOpp = Random.Range(OriginalAttackInterval - 1f, OriginalAttackInterval + 1f);
         return AttackOpp;
     }
 
     public float GetRandomSpawnCrystalsInterval()
     {
-        float AttackOpp = Random.Range(CrystalsCoreSpawnDuration - 3f, CrystalsCoreSpawnDuration + 5f);
+        float AttackOpp = Random.Range(OriginalCrystalsCoreSpawnDuration - 3f, OriginalCrystalsCoreSpawnDuration + 5f);
         return AttackOpp;
     }
 }

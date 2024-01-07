@@ -7,6 +7,7 @@ public class MageEnemy : BaseEnemy
 {
     private MageEnemyStateMachine m_StateMachine;
     [SerializeField] GameObject MageCrystalsOrbPrefab;
+    [SerializeField] ParticleSystem FlameEffect;
     private float FireHitInterval = 0.15f, FireHitIntervalElapsed;
     [Header("Fire")]
     [SerializeField] CapsuleCollider FireBreathingCollider;
@@ -16,6 +17,18 @@ public class MageEnemy : BaseEnemy
     private List<MageOrb> MageOrbList;
     private Coroutine MageCrystalCoreCoroutine;
     private GameObject CrystalsParent;
+    private bool ChargeAttackEnable;
+    private Dictionary<Collider, bool> ChargeColliderList = new();
+
+    private void TurnOnChargeAttackStatus()
+    {
+        ChargeAttackEnable = true;
+    }
+    private void TurnOffChargeAttackStatus()
+    {
+        ChargeAttackEnable = false;
+        ChargeColliderList.Clear();
+    }
 
     public Transform[] GetAllCrystalsLocation()
     {
@@ -42,13 +55,48 @@ public class MageEnemy : BaseEnemy
     private void TurnOnFireBreathingCollider()
     {
         GetFireBreathingCollider().enabled = true;
+        FlameEffect.Play();
         FireHitIntervalElapsed = Time.time;
     }
     public void TurnOFFireBreathingCollider()
     {
         GetFireBreathingCollider().enabled = false;
+        FlameEffect.Stop();
         FireHitIntervalElapsed = Time.time;
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (m_StateMachine.GetCurrentState() is not MageEnemyChargeAttackState)
+            return;
+
+        if (!ChargeAttackEnable)
+            return;
+
+        if (!ChargeColliderList.TryGetValue(collision.collider, out bool value))
+        {
+            PlayerCharacters pc = collision.collider.GetComponent<PlayerCharacters>();
+            if (pc != null)
+            {
+                Vector3 ForceDir = (pc.GetPointOfContact() - GetPointOfContact()).normalized * 20f;
+                pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
+                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 1.8f, this);
+            }
+            ChargeColliderList.Add(collision.collider, true);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (ChargeColliderList.TryGetValue(collision.collider, out bool value))
+        {
+            ChargeColliderList.Remove(collision.collider);
+        }
+    }
+
+
+
+
     private void UpdateFireBreathing()
     {
         if (!GetFireBreathingCollider().enabled)
@@ -66,7 +114,7 @@ public class MageEnemy : BaseEnemy
             {
                 if (!PlayerREF.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
                 {
-                    PlayerREF.TakeDamage(PlayerREF.GetPointOfContact(), new Elements(Elemental.FIRE), 100f, this);
+                    PlayerREF.TakeDamage(PlayerREF.GetPointOfContact(), new Elements(Elemental.FIRE), GetATK() * 0.45f, this);
                     FireHitIntervalElapsed = Time.time;
                 }
             }
@@ -84,9 +132,8 @@ public class MageEnemy : BaseEnemy
         {
             if (CanSpawnReinforcement())
             {
-                int randomIndex = Random.Range(0, EM.GetEnemyInfosList().Length);
-                EnemyType ET = (EnemyType)randomIndex;
-                BM.SpawnGroundUnitsWithinTerrain(ET);
+                int randomIndex = Random.Range(0, EM.GetEnemyInfo().GetEnemyContentList().Length);
+                BM.SpawnGroundUnitsWithinTerrain(EM.GetEnemyInfo().GetEnemyContentList()[randomIndex].EnemySO);
             }
         }
     }
@@ -150,7 +197,7 @@ public class MageEnemy : BaseEnemy
 
     public bool CanSpawnReinforcement()
     {
-        return !EM.HasReachSpawnLimit();
+        return EM.HasNotReachSpawnLimit();
     }
     public int GetTotalMageFireBall()
     {
@@ -266,10 +313,10 @@ public class MageEnemy : BaseEnemy
 
     public void NukePlayer(Vector3 TargetPos, float range, float dmg)
     {
-        IDamage[] AllNearestPlayer = GetAllNearestCharacters(TargetPos, range, LayerMask.GetMask("Player"));
+        Collider[] AllNearestPlayer = Physics.OverlapSphere(TargetPos, range, LayerMask.GetMask("Player"));
         for (int i = 0; i < AllNearestPlayer.Length; i++)
         {
-            IDamage d = AllNearestPlayer[i];
+            IDamage d = AllNearestPlayer[i].GetComponent<IDamage>();
             if (d != null)
             {
                 if (!d.IsDead())

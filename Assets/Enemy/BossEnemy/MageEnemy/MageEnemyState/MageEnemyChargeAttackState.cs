@@ -32,7 +32,6 @@ public class MageEnemyChargeAttackState : MageEnemyAttackState
     public override void Update()
     {
         base.Update();
-
-        UpdateAttackState("ChargeAttack");
+        //UpdateAttackState("ChargeAttack");
     }
 }

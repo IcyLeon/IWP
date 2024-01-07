@@ -146,14 +146,14 @@ public class AssetManager : MonoBehaviour
             Destroy(PopupPanel.gameObject);
 
         PopupPanel = Instantiate(PopupPanelPrefab, GetCanvasGO().transform).GetComponent<PopupPanel>();
-        PopupPanel.transform.SetAsLastSibling();
+        PopupPanel.transform.SetAsFirstSibling();
         PopupPanel.SetMessage(text);
     }
 
     public void OpenMessageNotification(string text)
     {
         MessageNotification m = Instantiate(MessageNotificationPrefab, GetCanvasGO().transform).GetComponent<MessageNotification>();
-        m.transform.SetAsLastSibling();
+        m.transform.SetAsFirstSibling();
         m.SetMessage(text);
     }
 

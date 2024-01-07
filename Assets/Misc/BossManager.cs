@@ -9,13 +9,25 @@ public class BossManager : MonoBehaviour
     private static BossManager instance;
     private EnemyManager EM;
     private Coroutine SpawningCoroutine;
-    private bool isCompleted;
     [SerializeField] Terrain terrain;
     [SerializeField] GameObject TreePrefab;
+    [SerializeField] GameObject TeleporterPrefab;
+    private GameObject Teleporter;
 
-    public void SpawnGroundUnitsWithinTerrain(EnemyType e)
+    public void SpawnGroundUnitsWithinTerrain(CharactersSO charactersSO)
     {
-        EM.SpawnGroundUnitsWithinTerrain(e, terrain);
+        EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
+    }
+
+    private void OnWaveComplete()
+    {
+        if (Teleporter != null)
+            return;
+
+        Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
+        MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
+
+        EM.SetCurrentWave(EM.GetCurrentWave() + 1);
     }
 
     private bool IsAllBossAreDead()
@@ -48,24 +60,28 @@ public class BossManager : MonoBehaviour
 
     void UpdateState()
     {
-        if (SpawningCoroutine == null && IsAllBossAreDead())
+        if (IsAllBossAreDead())
         {
-            SpawningCoroutine = StartCoroutine(SpawningOfTree());
+            if (SpawningCoroutine == null)
+                SpawningCoroutine = StartCoroutine(SpawningOfTree());
         }
     }
 
+
     private IEnumerator SpawningOfTree()
     {
+        EM.DestroyAllEnemies();
+        OnWaveComplete();
+
         yield return new WaitForSeconds(3f);
 
         Bounds terrainBounds = terrain.terrainData.bounds;
         Vector3 terrainCenter = terrainBounds.center;
 
-        if (NavMesh.SamplePosition(terrainCenter, out NavMeshHit hit, 10f, NavMesh.AllAreas))
-        {
-            Vector3 middlePosition = hit.position;
-            GameObject tree = Instantiate(TreePrefab, middlePosition, Quaternion.identity);
-        }
+
+        float terrainHeight = terrain.SampleHeight(new Vector3(terrainCenter.x, 0f, terrainCenter.z));
+        Vector3 spawnPosition = new Vector3(terrainCenter.x, terrainHeight, terrainCenter.z);
+        GameObject tree = Instantiate(TreePrefab, spawnPosition, Quaternion.identity);
 
     }
 }

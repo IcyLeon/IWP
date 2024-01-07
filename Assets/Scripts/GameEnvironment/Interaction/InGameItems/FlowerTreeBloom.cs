@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental;
 using UnityEngine;
-using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 public class FlowerTreeBloom : MonoBehaviour, IInteract
@@ -47,7 +45,6 @@ public class FlowerTreeBloom : MonoBehaviour, IInteract
                     Type ItemType = itemTemplate.GetTypeREF();
                     object instance = Activator.CreateInstance(ItemType, true, itemTemplate);
                     Item itemREF = (Item)instance;
-                    InventoryManager.GetInstance().AddItems(itemREF);
                     itemsList.Add(itemREF);
                     break;
                 case ArtifactsListInfo artifactsListInfo:

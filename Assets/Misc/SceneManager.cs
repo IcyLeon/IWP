@@ -15,6 +15,8 @@ public enum SceneEnum
 
 public class SceneManager : MonoBehaviour
 {
+    private Dictionary<string, SceneEnum> sceneNameToEnum = new();
+
     private static SceneManager instance;
     [SerializeField] Image ProgressBar;
     [SerializeField] GameObject LoadingCanvas;
@@ -32,6 +34,18 @@ public class SceneManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Initialize the reverse mapping
+        foreach (SceneEnum sceneEnum in Enum.GetValues(typeof(SceneEnum)))
+        {
+            string sceneName = GetSceneName(sceneEnum);
+            sceneNameToEnum.Add(sceneName, sceneEnum);
+        }
+    }
+    private void Start()
+    {
+        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        currentScene = GetSceneEnum(currentSceneName);
     }
 
     public static SceneManager GetInstance()
@@ -111,5 +125,16 @@ public class SceneManager : MonoBehaviour
                 return "BossScene";
         }
         return null;
+    }
+
+    private SceneEnum GetSceneEnum(string sceneName)
+    {
+        if (sceneNameToEnum.ContainsKey(sceneName))
+        {
+            return sceneNameToEnum[sceneName];
+        }
+
+        Debug.LogError("SceneEnum not found for scene name: " + sceneName);
+        return SceneEnum.GAME;
     }
 }

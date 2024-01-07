@@ -5539,6 +5539,7 @@ MonoBehaviour:
     Wave: 3
   FriendKillerSpawnInfoList: []
   terrain: {fileID: 1000677424}
+  tempcharactersSO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
 --- !u!4 &499438441
 Transform:
   m_ObjectHideFlags: 0

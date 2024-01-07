@@ -30,18 +30,6 @@ public class MageEnemyShootFireState : MageEnemyAttackState
     public override void Update()
     {
         base.Update();
-        TransitToIdleState();
-    }
-
-    private void TransitToIdleState() // prevent getting stuck at that animation
-    {
-        if (!GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("Flame"))
-            return;
-
-        if (GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-        {
-            OnIdleState();
-            return;
-        }
+        UpdateAttackState("isBreathingFire");
     }
 }

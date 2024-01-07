@@ -6,7 +6,23 @@ using System;
 [CreateAssetMenu(fileName = "FoodData", menuName = "ScriptableObjects/FoodSO")]
 public class FoodData : ItemTemplate
 {
-    public float Heal;
+    public enum FoodType
+    {
+        BUFF,
+        RESTORE_HEALTH,
+        REVIVAL
+    }
+    [System.Serializable]
+    public class StatsBoostInfo {
+        public Artifacts.ArtifactsStat artifactsStat;
+        public float boostValue;
+    }
+
+    [SerializeField] FoodType foodType;
+    public float InstantHeal;
+    public float ReviveCharacterHP;
+    public StatsBoostInfo[] StatsBoostInfoList;
+    public float Duration;
 
     public override Type GetTypeREF()
     {

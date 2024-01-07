@@ -94,7 +94,7 @@ MonoBehaviour:
   CharactersSO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
   Animator: {fileID: 9545436}
   Model: {fileID: 189936}
-  HealthBarPivotParent: {fileID: 419222}
+  HealthBarPivotParent: {fileID: 7383274449593521668}
   col: {fileID: 5367633756893768036}
   rb: {fileID: 2741243841039659890}
   NavMeshAgent: {fileID: 7081428479805541896}
@@ -1691,6 +1691,7 @@ Transform:
   - {fileID: 421932}
   - {fileID: 417016}
   - {fileID: 469246}
+  - {fileID: 7383274449593521668}
   m_Father: {fileID: 404322}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 3.0713344e-14, y: -2.8792397e-17, z: -21.304216}
@@ -2587,6 +2588,37 @@ Transform:
   m_Father: {fileID: 414466}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -0.36854813, y: 0.023836007, z: -12.891971}
+--- !u!1 &6578788594737100843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7383274449593521668}
+  m_Layer: 6
+  m_Name: HealthPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7383274449593521668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578788594737100843}
+  m_LocalRotation: {x: 0.0000000064146515, y: -0.000000001030209, z: 0.3885437, w: 0.92143035}
+  m_LocalPosition: {x: -131.46063, y: 124.443726, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 419222}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8978563994521263301
 GameObject:
   m_ObjectHideFlags: 0

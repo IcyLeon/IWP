@@ -48,7 +48,7 @@ public class MessageNotification : MonoBehaviour
             Destroy(gameObject);
         }
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSecondsRealtime(2.5f);
         StartCoroutine(AnimatePopup(false));
     }
 }

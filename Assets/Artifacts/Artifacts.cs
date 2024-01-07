@@ -102,6 +102,8 @@ public class Artifacts : UpgradableItems
                 break;
         }
 
+        GenerateArtifactStats(); // main stats
+
         if (AssetManager.isInProbabilityRange(0.66f))
         {
             TotalSubstatsDisplay = GetLowestNumberofStats(rarity).LowestDropValue;
@@ -153,12 +155,15 @@ public class Artifacts : UpgradableItems
 
     public ArtifactType GetArtifactType()
     {
-        ArtifactsSO artifactsSO = ItemsSO as ArtifactsSO;
-        if (artifactsSO == null)
+        if (GetArtifactsSO() == null)
             return default(ArtifactType);
-        return artifactsSO.artifactType;
+        return GetArtifactsSO().artifactType;
     }
 
+    public ArtifactsSO GetArtifactsSO()
+    {
+        return ItemsSO as ArtifactsSO;
+    }
     public void GenerateMainArtifactStats()
     {
         int randomIndex = Random.Range(0, AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactMainStatsInfoList(GetArtifactType()).Length);

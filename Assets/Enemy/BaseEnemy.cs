@@ -30,12 +30,11 @@ public class BaseEnemy : Characters
         BossEnemyType = GetComponent<BossEnemyType>();
         MaxLevel = 50;
         Level = GetRandomLevel();
-
         if (!BossEnemyType)
         {
             healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
             healthBarScript.transform.SetParent(HealthBarPivotParent, true);
-            healthBarScript.transform.localPosition = HealthBarPivotParent.localPosition + Vector3.up * 200f;
+            healthBarScript.transform.localPosition = HealthBarPivotParent.localPosition;
             healthBarScript.Init(true, false);
         }
 

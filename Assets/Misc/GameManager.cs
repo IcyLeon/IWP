@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     private bool isCompleted;
     private GameObject Teleporter;
 
+    [SerializeField] CharactersSO tempcharactersSO;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -80,13 +82,11 @@ public class GameManager : MonoBehaviour
             return;
 
         EM.SetCurrentWave(EM.GetCurrentWave() + 1);
-        if (EM.GetCurrentWave() % 5 == 0)
-            SpawnBoss();
 
         assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Incoming!");
         TotalEnemyInWave = CalculateHowManyToSpawn();
         EM.SetEnemiesCount(TotalEnemyInWave);
-        WaveSpawn(EnemyType.ALBINO, 0);
+        WaveSpawn(tempcharactersSO, 0);
     }
 
     private void OnWaveComplete()
@@ -98,32 +98,27 @@ public class GameManager : MonoBehaviour
         MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
     }
 
-    private void WaveSpawn(EnemyType enemyType, float delay)
+    private void WaveSpawn(CharactersSO charactersSO, float delay)
     {
         if (WaveSpawnCoroutine != null)
         {
             StopCoroutine(WaveSpawnCoroutine);
         }
 
-        WaveSpawnCoroutine = StartCoroutine(WaveSpawnDelay(enemyType, delay));
+        WaveSpawnCoroutine = StartCoroutine(WaveSpawnDelay(charactersSO, delay));
     }
 
-    private IEnumerator WaveSpawnDelay(EnemyType enemyType, float sec)
+    private IEnumerator WaveSpawnDelay(CharactersSO charactersSO, float sec)
     {
-        while (EM.HasReachSpawnLimit() || EM.GetTotalEnemyAliveInList() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
+        while (!EM.HasNotReachSpawnLimit() || EM.GetTotalEnemyAliveInList() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
         {
             yield return null;
         }
 
         yield return new WaitForSeconds(sec);
 
-        EM.SpawnGroundUnitsWithinTerrain(enemyType, terrain);
-        WaveSpawn(enemyType, sec);
-    }
-
-    private void SpawnBoss()
-    {
-
+        EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
+        WaveSpawn(charactersSO, sec);
     }
 
     public int CalculateHowManyToSpawn()

@@ -80447,7 +80447,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5666666
+  - time: 2.2333333
+    functionName: TriggerOnMageStateAnimationTransition
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.6666667
     functionName: TriggerOnMageStateAnimationTransition
     data: 
     objectReferenceParameter: {fileID: 0}

@@ -35,7 +35,7 @@ public class MageFireBall : MonoBehaviour
 
     private void DestroyFireBall()
     {
-        MageEnemy.NukePlayer(rb.position, 5f, 100f);
+        MageEnemy.NukePlayer(rb.position, 3f, MageEnemy.GetATK() * 1.55f);
         ParticleSystem PS = Instantiate(ExplosionPSPrefab, rb.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(PS.gameObject, PS.main.duration);
 

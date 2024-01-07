@@ -47,6 +47,8 @@ public class ObtainedItemsUI : MonoBehaviour
         for (int i = 0; i < ItemList.Count; i++)
         {
             Item item = ItemList[i];
+            InventoryManager.GetInstance().AddItems(item);
+
             ItemButton itemButton = Instantiate(AssetManager.GetInstance().ItemBorderPrefab, ItemQualityParentTransform).GetComponent<ItemButton>();
             itemButton.SetItemsSO(item.GetItemSO());
             itemButton.SetItemREF(item);

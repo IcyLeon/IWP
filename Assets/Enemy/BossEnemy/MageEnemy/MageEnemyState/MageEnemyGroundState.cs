@@ -12,7 +12,7 @@ public class MageEnemyGroundState : MageEnemyState
     {
         base.Update();
 
-        if (CanPerformAction() || GetMageEnemyStateMachine().GetCurrentState() is MageEnemyAttackState)
+        if (CanPerformAction())
         {
             if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus)
             {

@@ -13,12 +13,14 @@ public class PlayerPlungeState : PlayerAirborneState
         base.Enter();
         ResetVelocity();
         rb.useGravity = false;
+        GetPlayerState().GetPlayerController().GetCapsuleCollider().isTrigger = true;
         StartAnimation("isPlunging");
     }
     public override void Exit()
     {
         base.Exit();
         rb.useGravity = true;
+        GetPlayerState().GetPlayerController().GetCapsuleCollider().isTrigger = false;
         OnPlungeAttack();
         StopAnimation("isPlunging");
     }

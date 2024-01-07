@@ -34,10 +34,10 @@ public class MageEnemyAttackState : MageEnemyGroundState
 
     protected void UpdateAttackState(string name)
     {
-        GetMageEnemyStateMachine().MageEnemyData.AttackCurrentElasped = Time.time;
-
-        if (!GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetCurrentAnimatorStateInfo(0).IsName(name))
+        if (!GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetBool(name))
             return;
+
+        GetMageEnemyStateMachine().MageEnemyData.AttackCurrentElasped = Time.time;
 
         if (GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
         {
@@ -49,6 +49,7 @@ public class MageEnemyAttackState : MageEnemyGroundState
 
     protected void OnIdleState()
     {
-        GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyIdleState);
+        if (GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyAirborneState)
+            GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyIdleState);
     }
 }

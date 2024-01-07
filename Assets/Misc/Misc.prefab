@@ -194,11 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 933a4ba6bf00f444c9f0f2b74480a1db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyInfoList:
-  - enemyType: 0
-    EnemyPrefab: {fileID: 100720, guid: 8252519d2c6fd014bb5f75765a8c4fda, type: 3}
-  - enemyType: 1
-    EnemyPrefab: {fileID: 170346, guid: 88e480c990c9d6a458b5fc85fe1da2aa, type: 3}
+  EnemyInfoSO: {fileID: 11400000, guid: a1918c48828b847458e2b2728e1bb70a, type: 2}
 --- !u!114 &3147508860641607269
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -42,15 +42,8 @@ public class ArtifactsManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            AddArtifactsToInventory(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
-            AddArtifactsToInventory(ArtifactType.CIRCLET, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.ThreeStar);
-            AddArtifactsToInventory(ArtifactType.GOBLET, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.ThreeStar);
-            AddArtifactsToInventory(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.ThreeStar);
-            AddArtifactsToInventory(ArtifactType.PLUME, ArtifactsSet.THUNDERING_FURY, Rarity.ThreeStar);
-            AddArtifactsToInventory(ArtifactType.FLOWER, ArtifactsSet.THUNDERING_FURY, Rarity.FourStar);
-            AddArtifactsToInventory(ArtifactType.SANDS, ArtifactsSet.THUNDERING_FURY, Rarity.ThreeStar);
-            AddArtifactsToInventory(ArtifactType.GOBLET, ArtifactsSet.THUNDERING_FURY, Rarity.ThreeStar);
-
+            Artifacts artifacts = AddArtifactsToInventory(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+            InventoryManager.GetInstance().AddItems(artifacts);
 
 
             Type ItemType = expItemSO.GetTypeREF();
@@ -117,9 +110,6 @@ public class ArtifactsManager : MonoBehaviour
             Type ItemType = artifactsSO.GetTypeREF();
             object instance = Activator.CreateInstance(ItemType, artifactSet, rarity, artifactsSO, true);
             Artifacts artifacts = (Artifacts)instance;
-
-            artifacts.GenerateArtifactStats();
-            InventoryManager.GetInstance().AddItems(artifacts);
             return artifacts;
         }
         return null;
