@@ -112,6 +112,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8172815035096013775}
+  FireAreaOfEffectPrefab: {fileID: 1949552378025990013, guid: 4e48bc4f552f5a94da40431c5ff9da0b,
+    type: 3}
   ExplosionPSPrefab: {fileID: 5911502358899225721, guid: 590ff0f24b73e064eb6c8b0735088438,
     type: 3}
 --- !u!54 &8172815035096013775
@@ -127,6 +129,6 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1

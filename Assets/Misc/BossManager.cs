@@ -26,8 +26,6 @@ public class BossManager : MonoBehaviour
 
         Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
         MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
-
-        EM.SetCurrentWave(EM.GetCurrentWave() + 1);
     }
 
     private bool IsAllBossAreDead()
@@ -50,6 +48,8 @@ public class BossManager : MonoBehaviour
     {
         EM = EnemyManager.GetInstance();
         FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
+
+        EM.SetCurrentWave(EM.GetCurrentWave() + 1);
     }
 
     // Update is called once per frame
@@ -77,10 +77,10 @@ public class BossManager : MonoBehaviour
 
         Bounds terrainBounds = terrain.terrainData.bounds;
         Vector3 terrainCenter = terrainBounds.center;
-
-
-        float terrainHeight = terrain.SampleHeight(new Vector3(terrainCenter.x, 0f, terrainCenter.z));
+        Vector3 localTerrainCenter = terrain.transform.InverseTransformPoint(terrainCenter);
+        float terrainHeight = terrain.SampleHeight(localTerrainCenter);
         Vector3 spawnPosition = new Vector3(terrainCenter.x, terrainHeight, terrainCenter.z);
+
         GameObject tree = Instantiate(TreePrefab, spawnPosition, Quaternion.identity);
 
     }

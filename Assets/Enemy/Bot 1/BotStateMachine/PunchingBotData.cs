@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PunchingBotData
 {
-    public float AttackInterval = 0.5f;
+    public float OriginalAttackInterval = 0.4f, AttackInterval;
     public float AttackCurrentElasped = 0f;
 
     public float timeToReachTargetRotation { get; } = 0.14f;
@@ -19,7 +19,7 @@ public class PunchingBotData
 
     public float GetRandomAttackInterval()
     {
-        float AttackOpp = Random.Range(AttackInterval - 0.35f, AttackInterval + 0.2f);
+        float AttackOpp = Random.Range(OriginalAttackInterval - 0.2f, OriginalAttackInterval + 0.2f);
         return AttackOpp;
     }
 

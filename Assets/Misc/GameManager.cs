@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         if (Time.timeScale == 0)
             return;
 
-        if (EM.GetCurrentWave() != 0)
+        if (EM.GetCurrentWave() != 0 && EM.GetEnemiesCount() != 0)
         {
             if (EM.GetCurrentEnemyDefeated() < TotalEnemyInWave)
             {

@@ -83,18 +83,16 @@ public class BaseEnemy : Characters
             IDamage damage = goList[i].GetComponent<IDamage>();
             if (damage != null)
             {
-                if (!damage.IsDead())
+
+                IInteract interact = goList[i].GetComponent<IInteract>();
+                if (interact == null)
                 {
-                    IInteract interact = goList[i].GetComponent<IInteract>();
-                    if (interact == null)
-                    {
+                    goCopy.Add(damage);
+                }
+                else
+                {
+                    if (!interact.CanInteract())
                         goCopy.Add(damage);
-                    }
-                    else
-                    {
-                        if (!interact.CanInteract())
-                            goCopy.Add(damage);
-                    }
                 }
             }
         }

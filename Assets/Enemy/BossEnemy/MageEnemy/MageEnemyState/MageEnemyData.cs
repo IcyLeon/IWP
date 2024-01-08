@@ -27,10 +27,10 @@ public class MageEnemyData
 
     public int SpawnEnemiesAmount = 2;
 
-    public float CrystalsCoreStayDuration = 15f;
+    public float CrystalsCoreStayDuration = 30f;
     public float CrystalsCoreStayElasped = 0f;
     public float CrystalsCoreSpawnDuration;
-    private float OriginalCrystalsCoreSpawnDuration = 20f;
+    private float OriginalCrystalsCoreSpawnDuration = 25f;
     public float CrystalsCoreSpawnElasped = 0f;
 
     public float TakeOffCooldown = 15f;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MageEnemySpawnCrystalsState : MageEnemyState
+public class MageEnemySpawnCrystalsState : MageEnemyAttackState
 {
     public MageEnemySpawnCrystalsState(MageEnemyStateMachine MageEnemyStateMachine) : base(MageEnemyStateMachine)
     {

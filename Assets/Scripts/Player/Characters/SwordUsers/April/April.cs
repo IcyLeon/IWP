@@ -147,7 +147,7 @@ public class April : SwordCharacters
         if (m != null)
         {
             if (GetPlayerManager().GetAliveCharacters() != null)
-                GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), 25f);
+                GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), GetDEF() * 0.35f);
 
             if (e.GetElements() != Elemental.NONE)
             {

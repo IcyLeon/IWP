@@ -13,8 +13,10 @@ public class MageEnemy : BaseEnemy
     [SerializeField] CapsuleCollider FireBreathingCollider;
     [SerializeField] GameObject FireBallPrefab;
     [SerializeField] Transform FireBallPivotTransform;
+    [SerializeField] MageEnemyPunch m_PunchCollider;
     private List<MageFireBall> MageFireBallList = new();
-    private List<MageOrb> MageOrbList;
+    private List<MageOrb> MageOrbList = new();
+    private List<FireAreaOfEffect> FireAreaOfEffectList = new();
     private Coroutine MageCrystalCoreCoroutine;
     private GameObject CrystalsParent;
     private bool ChargeAttackEnable;
@@ -30,6 +32,11 @@ public class MageEnemy : BaseEnemy
         ChargeColliderList.Clear();
     }
 
+    public void AddToFireAreaOfEffectList(FireAreaOfEffect FireAreaOfEffect)
+    {
+        FireAreaOfEffectList.Add(FireAreaOfEffect);
+    }
+
     public Transform[] GetAllCrystalsLocation()
     {
         return CrystalsParent.GetComponentsInChildren<Transform>()
@@ -37,12 +44,23 @@ public class MageEnemy : BaseEnemy
             .ToArray();
     }
 
+    private void DestroyAllFireEffect()
+    {
+        for (int i = 0; i < FireAreaOfEffectList.Count; i++)
+        {
+            if (FireAreaOfEffectList[i] != null)
+            {
+                Destroy(FireAreaOfEffectList[i].gameObject);
+            }
+        }
+    }
     public override bool UpdateDie()
     {
         bool isdead = base.UpdateDie();
         if (isdead)
         {
             DestroyAllOrb();
+            DestroyAllFireEffect();
             DisableAgent();
             if (DieCoroutine == null)
             {
@@ -78,12 +96,17 @@ public class MageEnemy : BaseEnemy
             PlayerCharacters pc = collision.collider.GetComponent<PlayerCharacters>();
             if (pc != null)
             {
-                Vector3 ForceDir = (pc.GetPointOfContact() - GetPointOfContact()).normalized * 20f;
+                Vector3 ForceDir = (pc.GetPointOfContact() - GetPointOfContact()).normalized * 15f;
                 pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
                 pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 1.8f, this);
             }
             ChargeColliderList.Add(collision.collider, true);
         }
+    }
+
+    private void WackPlayer()
+    {
+        m_PunchCollider.WackPlayer();
     }
 
     private void OnCollisionExit(Collision collision)
@@ -114,7 +137,7 @@ public class MageEnemy : BaseEnemy
             {
                 if (!PlayerREF.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
                 {
-                    PlayerREF.TakeDamage(PlayerREF.GetPointOfContact(), new Elements(Elemental.FIRE), GetATK() * 0.45f, this);
+                    PlayerREF.TakeDamage(PlayerREF.GetPointOfContact(), new Elements(Elemental.FIRE), GetATK() * 0.35f, this);
                     FireHitIntervalElapsed = Time.time;
                 }
             }
@@ -154,7 +177,6 @@ public class MageEnemy : BaseEnemy
         CrystalsParent = GameObject.FindGameObjectWithTag("MageEntityTargetLocation");
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("BossEntity"), LayerMask.NameToLayer("Entity"));
         m_StateMachine = new MageEnemyStateMachine(this);
-        MageOrbList = new();
         base.Start();
     }
 
@@ -187,7 +209,7 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
-        //Debug.Log(m_StateMachine.GetCurrentState());
+        Debug.Log(m_StateMachine.GetCurrentState());
         UpdateFireBreathing();
         UpdateMageOrbList();
         UpdateMageFireBallList();
@@ -219,6 +241,14 @@ public class MageEnemy : BaseEnemy
 
     private void UpdateMageFireBallList()
     {
+        for (int i = FireAreaOfEffectList.Count - 1; i >= 0; i--)
+        {
+            if (FireAreaOfEffectList[i] == null)
+            {
+                FireAreaOfEffectList.RemoveAt(i);
+            }
+        }
+
         for (int i = MageFireBallList.Count - 1; i >= 0; i--)
         {
             if (MageFireBallList[i] == null)

@@ -91,7 +91,8 @@ public class Kaqing : SwordCharacters
 
                     ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
                     Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), 150f, this);
+                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), GetATK() * 1.35f, this);
+                    GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
                 }
             }
         }

@@ -5,12 +5,18 @@ using UnityEngine;
 public class PunchingBot : BaseEnemy
 {
     private PunchingBotStateMachine m_StateMachine;
+    [SerializeField] PunchingBotPunchCollider m_PunchCollider;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         m_StateMachine = new PunchingBotStateMachine(this);
         base.Start();
+    }
+
+    private void WackPlayer()
+    {
+        m_PunchCollider.WackPlayer();
     }
 
     // Update is called once per frame
@@ -30,7 +36,6 @@ public class PunchingBot : BaseEnemy
             if (DieCoroutine == null)
             {
                 DieCoroutine = StartCoroutine(Disappear());
-                EM.EnemyDropRandomItem(CharactersSO, GetPointOfContact());
             }
         }
         return isdead;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MageFireBall : MonoBehaviour
@@ -9,6 +10,7 @@ public class MageFireBall : MonoBehaviour
     private MageEnemy MageEnemy;
     [SerializeField] Rigidbody rb;
     private float Speed = 30f;
+    [SerializeField] GameObject FireAreaOfEffectPrefab;
     [SerializeField] GameObject ExplosionPSPrefab;
 
     public void Init(float timer, MageEnemy mageEnemy)
@@ -35,10 +37,9 @@ public class MageFireBall : MonoBehaviour
 
     private void DestroyFireBall()
     {
-        MageEnemy.NukePlayer(rb.position, 3f, MageEnemy.GetATK() * 1.55f);
+        MageEnemy.NukePlayer(rb.position, 2.5f, MageEnemy.GetATK() * 0.75f);
         ParticleSystem PS = Instantiate(ExplosionPSPrefab, rb.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(PS.gameObject, PS.main.duration);
-
         Destroy(gameObject);
     }
 
@@ -60,9 +61,14 @@ public class MageFireBall : MonoBehaviour
         if (other.isTrigger || !MoveToTarget)
             return;
 
-        if (other.GetComponent<BaseEnemy>() != null)
+        if (other.GetComponent<IDamage>() != null)
             return;
 
+        Vector3 position = other.ClosestPointOnBounds(transform.position);
+        position.y += 0.01f;
+        FireAreaOfEffect FireAreaOfEffect = Instantiate(FireAreaOfEffectPrefab, position, FireAreaOfEffectPrefab.transform.localRotation).GetComponent<FireAreaOfEffect>();
+        FireAreaOfEffect.Init(MageEnemy);
+        MageEnemy.AddToFireAreaOfEffectList(FireAreaOfEffect);
         DestroyFireBall();
     }
 

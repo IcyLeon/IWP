@@ -63,6 +63,20 @@ public class BowCharacters : PlayerCharacters
         BasicAttackTrigger();
     }
 
+    protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
+    {
+        Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
+        foreach (Collider collider in colliders)
+        {
+            IDamage damageObject = collider.gameObject.GetComponent<IDamage>();
+            if (damageObject != null)
+            {
+                if (!damageObject.IsDead())
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 3.5f, this);
+            }
+        }
+        return colliders;
+    }
 
     public override void LaunchBasicAttack()
     {

@@ -29,7 +29,7 @@ public class PlayerPlungeState : PlayerAirborneState
         Vector3 hitpos = GetCapsuleCollider().bounds.center + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f);
         GetPlayerState().GetPlayerController().CallPlungeAtk(hitpos);
         
-        GetPlayerState().GetPlayerController().GetCameraManager().CameraShake(2.5f, 2.5f, 1.5f);
+        GetPlayerState().GetPlayerController().GetCameraManager().CameraShake(3.5f, 3.5f, 1.5f);
     }
 
     public override void OnAnimationTransition()
@@ -39,7 +39,7 @@ public class PlayerPlungeState : PlayerAirborneState
 
     public override void FixedUpdate()
     {
-        Float();
+        Float(true);
         if (rb.useGravity)
         {
             rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
@@ -51,7 +51,7 @@ public class PlayerPlungeState : PlayerAirborneState
     public override void Update()
     {
         base.Update();
-        if (IsTouchingTerrain())
+        if (IsTouchingTerrain(true))
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
             return;

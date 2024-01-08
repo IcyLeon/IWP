@@ -10,8 +10,8 @@ public class MageEnemyTakeOffState : MageEnemyAirborneState
 
     public override void Enter()
     {
-        StartAnimation("isTakingOff");
         base.Enter();
+        StartAnimation("isTakingOff");
         GetMageEnemyStateMachine().MageEnemyData.TakeOffElapsed = GetMageEnemyStateMachine().MageEnemyData.TakeOffCooldown;
     }
 

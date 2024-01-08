@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MageEnemySpawnMinionState : MageEnemyState
+public class MageEnemySpawnMinionState : MageEnemyAttackState
 {
     public MageEnemySpawnMinionState(MageEnemyStateMachine MageEnemyStateMachine) : base(MageEnemyStateMachine)
     {

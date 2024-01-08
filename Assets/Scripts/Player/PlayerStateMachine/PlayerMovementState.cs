@@ -145,7 +145,7 @@ public class PlayerMovementState : IState
         return slopeSpeedModifier;
     }
 
-    protected void Float()
+    protected void Float(bool ignoreEnemies = false)
     {
         if (rb == null)
             return;
@@ -153,11 +153,16 @@ public class PlayerMovementState : IState
         if (GetPlayerState().GetPlayerController().GetResizeableCollider() == null || GetCapsuleCollider() == null)
             return;
 
+        LayerMask layerMask = Physics.DefaultRaycastLayers;
+
+        if (ignoreEnemies)
+            layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
+
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
 
         Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
 
-        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Entity", "BossEntity"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, layerMask, QueryTriggerInteraction.Ignore))
         {
             float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 
@@ -186,7 +191,7 @@ public class PlayerMovementState : IState
         }
         else
         {
-            if (!IsTouchingTerrain())
+            if (!IsTouchingTerrain(ignoreEnemies))
                 return;
 
             float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - GetPlayerState().PlayerData.HitDistance;
@@ -270,13 +275,17 @@ public class PlayerMovementState : IState
         rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
-    protected bool IsTouchingTerrain()
+    protected bool IsTouchingTerrain(bool ignoreEnemies = false)
     {
         if (rb == null || GetCapsuleCollider() == null)
             return false;
 
 
-        int layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
+        LayerMask layerMask = Physics.DefaultRaycastLayers;
+
+        if (ignoreEnemies)
+            layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
+
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
         bool isGrounded = Physics.CheckSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
         return isGrounded;

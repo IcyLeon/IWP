@@ -184,7 +184,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual Collider[] PlungeAttackGroundHit(Vector3 HitPos)
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().transform.position, 5f, LayerMask.GetMask("Entity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPointOfContact(), 5f, LayerMask.GetMask("Entity", "BossEntity"));
 
         AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
 

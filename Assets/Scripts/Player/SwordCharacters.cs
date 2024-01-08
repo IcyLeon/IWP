@@ -38,6 +38,7 @@ public class SwordCharacters : PlayerCharacters
                     ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
                     Destroy(hitEffect.gameObject, hitEffect.main.duration);
                     damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), GetATK(), this);
+                    GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
                 }
             }
         }
@@ -77,7 +78,7 @@ public class SwordCharacters : PlayerCharacters
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(collider.transform.position, new Elements(CurrentElement), GetCharacterData().GetActualATK(GetCharacterData().GetLevel()), this);
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(CurrentElement), GetATK() * 3.5f, this);
             }
         }
         return colliders;
