@@ -29,6 +29,9 @@ public class BowCharacters : PlayerCharacters
     {
         base.Update();
 
+        if (Time.timeScale == 0)
+            return;
+
         if (Animator)
         {
             Animator.SetFloat("AimVelocityX", GetPlayerManager().GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
@@ -63,6 +66,9 @@ public class BowCharacters : PlayerCharacters
 
     public override void LaunchBasicAttack()
     {
+        if (Time.timeScale == 0)
+            return;
+
         if (Time.time - LastClickedTime > AttackRate)
         {
             SetLookAtTarget();
@@ -136,6 +142,9 @@ public class BowCharacters : PlayerCharacters
 
     public void InitHitPos_Aim()
     {
+        if (Time.timeScale == 0)
+            return;
+
         if (CrossHair == null)
             CrossHair = AssetManager.GetInstance().SpawnCrossHair();
 

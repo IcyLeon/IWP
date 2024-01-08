@@ -91,13 +91,91 @@ public class EnemyManager : MonoBehaviour
     {
         return EnemyInfoSO;
     }
-    public void SpawnGroundUnitsWithinTerrain(CharactersSO charactersSO, Terrain terrain)
+    public BaseEnemy SpawnGroundUnitsWithinTerrain(CharactersSO charactersSO, Terrain terrain)
     {
         Vector3 spawnPosition = GetRandomPointWithinTerrain(terrain);
 
         BaseEnemy enemy = Instantiate(EnemyInfoSO.GetEnemyContent(charactersSO).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
         CurrentEnemySpawnedList.Add(enemy);
+        return enemy;
     }
+
+    public void EnemyDropRandomItem(CharactersSO charactersSO, Vector3 SpawnPosition)
+    {
+        List<Item> itemsList = new();
+        EnemyContent enemyContent = EnemyInfoSO.GetEnemyContent(charactersSO);
+        int amtToDrop = Random.Range(0, enemyContent.MaxItemToGive + 1);
+        int currentAmt = 0;
+        ArtifactsManager AM = ArtifactsManager.GetInstance();
+
+        do
+        {
+            int random = Random.Range(0, enemyContent.PossibleItemsList.Length);
+            ScriptableObject item = enemyContent.PossibleItemsList[random];
+            if (item == null)
+                continue;
+
+            switch (item)
+            {
+                case ItemTemplate itemTemplate:
+                    Type ItemType = itemTemplate.GetTypeREF();
+                    object instance = Activator.CreateInstance(ItemType, true, itemTemplate);
+                    Item itemREF = (Item)instance;
+                    itemsList.Add(itemREF);
+                    break;
+                case ArtifactsListInfo artifactsListInfo:
+                    int randomArtifactsInfo = Random.Range(0, artifactsListInfo.artifactsInfo.Length);
+                    ArtifactsInfo artifactsInfo = artifactsListInfo.artifactsInfo[randomArtifactsInfo];
+                    if (artifactsInfo != null)
+                    {
+                        int randomArtifactsSO = Random.Range(0, artifactsInfo.artifactSOList.Length);
+                        ArtifactsSO artifactsSO = artifactsInfo.artifactSOList[randomArtifactsSO];
+
+                        Rarity randomRarity = Rarity.ThreeStar;
+                        if (AssetManager.isInProbabilityRange(0.1f))
+                        {
+                            randomRarity = Rarity.FiveStar;
+                        }
+                        else
+                        {
+                            if (AssetManager.isInProbabilityRange(0.75f))
+                            {
+                                randomRarity = Rarity.ThreeStar;
+                            }
+                            else
+                            {
+                                randomRarity = Rarity.FourStar;
+                            }
+                        }
+                        Artifacts artifact = AM.CreateArtifact(artifactsSO.artifactType, artifactsInfo.ArtifactSet, randomRarity);
+                        itemsList.Add(artifact);
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+            currentAmt++;
+
+        } while (currentAmt < amtToDrop);
+
+        SpawnItemDropGO(itemsList, SpawnPosition);
+    }
+
+    private void SpawnItemDropGO(List<Item> ItemList, Vector3 pos)
+    {
+        AssetManager AM = AssetManager.GetInstance();
+        if (ItemList == null)
+            return;
+
+        for (int i = 0; i < ItemList.Count; i++)
+        {
+            Item item = ItemList[i];
+            AM.SpawnItemDrop(item, pos);
+        }
+    }
+
 
     public void CallOnEnemyKilled(BaseEnemy enemy)
     {

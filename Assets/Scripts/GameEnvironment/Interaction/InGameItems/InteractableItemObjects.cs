@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class InteractableItemObjects : MonoBehaviour, IInteract
 {
-    private ItemTemplate itemsSO;
+    private Item ItemREF;
 
-    public void SetItemsSO(ItemTemplate itemTemplate)
+    public void SetItemsREF(Item ItemREF)
     {
-        itemsSO = itemTemplate;
+        this.ItemREF = ItemREF;
     }
+
 
     public bool CanInteract()
     {
@@ -19,31 +20,36 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
 
     public Sprite GetInteractionSprite()
     {
-        if (itemsSO == null)
+        if (ItemREF == null)
             return null;
 
-        return itemsSO.ItemSprite;
+        return ItemREF.GetItemSO().ItemSprite;
+    }
+
+    private void Start()
+    {
+        Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Entity"));
+        Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("BossEntity"));
     }
 
     public void Interact()
     {
-        if (itemsSO == null)
-            return;
+        InventoryManager IM = InventoryManager.GetInstance();
 
-        Type ItemType = itemsSO.GetTypeREF();
-        object instance = Activator.CreateInstance(ItemType, true, itemsSO);
-        Item item = (Item)instance;
-        InventoryManager.GetInstance().AddItems(item);
+        if (ItemREF != null)
+        {
+            IM.AddItems(ItemREF);
+        }
 
         Destroy(gameObject);
     }
 
     public string InteractMessage()
     {
-        if (itemsSO == null)
+        if (ItemREF == null)
             return "Unknown item";
 
-        return itemsSO.ItemName;
+        return ItemREF.GetItemSO().ItemName;
     }
 
     public void OnInteractExit(IInteract interactComponent)

@@ -8,7 +8,7 @@ public class MageEnemy : BaseEnemy
     private MageEnemyStateMachine m_StateMachine;
     [SerializeField] GameObject MageCrystalsOrbPrefab;
     [SerializeField] ParticleSystem FlameEffect;
-    private float FireHitInterval = 0.15f, FireHitIntervalElapsed;
+    private float FireHitInterval = 0.05f, FireHitIntervalElapsed;
     [Header("Fire")]
     [SerializeField] CapsuleCollider FireBreathingCollider;
     [SerializeField] GameObject FireBallPrefab;

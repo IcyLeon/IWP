@@ -102,8 +102,6 @@ public class Artifacts : UpgradableItems
                 break;
         }
 
-        GenerateArtifactStats(); // main stats
-
         if (AssetManager.isInProbabilityRange(0.66f))
         {
             TotalSubstatsDisplay = GetLowestNumberofStats(rarity).LowestDropValue;
@@ -112,6 +110,8 @@ public class Artifacts : UpgradableItems
         {
             TotalSubstatsDisplay = GetLowestNumberofStats(rarity).MaxDropValue;
         }
+
+        GenerateArtifactStats(); // main stats
     }
 
     public ArtifactWeightManagement.PossibleNumberofStats GetLowestNumberofStats(Rarity rarity)

@@ -10,7 +10,6 @@ public class FoodData : ItemTemplate
     {
         BUFF,
         RESTORE_HEALTH,
-        REVIVAL
     }
     [System.Serializable]
     public class StatsBoostInfo {
@@ -18,9 +17,8 @@ public class FoodData : ItemTemplate
         public float boostValue;
     }
 
-    [SerializeField] FoodType foodType;
+    [SerializeField] FoodType foodType; // Ignore if it is Revive Food
     public float InstantHeal;
-    public float ReviveCharacterHP;
     public StatsBoostInfo[] StatsBoostInfoList;
     public float Duration;
 
@@ -35,6 +33,18 @@ public class FoodData : ItemTemplate
     }
     public override string GetItemType()
     {
-        return "Food";
+        return GetFoodTypeString(foodType);
+    }
+
+    protected string GetFoodTypeString(FoodType f)
+    {
+        switch(f)
+        {
+            case FoodType.BUFF:
+                return "ATK-Boosting Dishes";
+            case FoodType.RESTORE_HEALTH:
+                return "Recovery Dishes";
+        }
+        return "Unknown Dish";
     }
 }

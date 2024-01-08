@@ -70,17 +70,17 @@ public class PunchingBotIdle : PunchingBotState
 
         if (Time.time - GetPunchingBotStateMachine().PunchingBotData.AttackCurrentElasped > GetPunchingBotStateMachine().PunchingBotData.AttackInterval)
         {
-            int randomAttack = Random.Range(0, 3);
-            switch (randomAttack)
-            {
-                case 0:
-                    GetPunchingBotStateMachine().ChangeState(GetPunchingBotStateMachine().PunchingBotPunchState);
-                    break;
-                case 1:
-                    GetPunchingBotStateMachine().ChangeState(GetPunchingBotStateMachine().PunchingBotShootState);
-                    break;
-            }
-
+            //int randomAttack = Random.Range(0, 3);
+            //switch (randomAttack)
+            //{
+            //    case 0:
+            //        GetPunchingBotStateMachine().ChangeState(GetPunchingBotStateMachine().PunchingBotPunchState);
+            //        break;
+            //    case 1:
+            //        GetPunchingBotStateMachine().ChangeState(GetPunchingBotStateMachine().PunchingBotShootState);
+            //        break;
+            //}
+            GetPunchingBotStateMachine().ChangeState(GetPunchingBotStateMachine().PunchingBotPunchState);
             GetPunchingBotStateMachine().PunchingBotData.AttackInterval = GetPunchingBotStateMachine().PunchingBotData.GetRandomAttackInterval();
             GetPunchingBotStateMachine().PunchingBotData.AttackCurrentElasped = Time.time;
             return;

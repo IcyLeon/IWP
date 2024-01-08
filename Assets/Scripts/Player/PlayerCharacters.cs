@@ -217,6 +217,9 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     {
         base.Update();
 
+        if (Time.timeScale == 0)
+            return;
+
         if (GetPlayerManager() == null)
             return;
 

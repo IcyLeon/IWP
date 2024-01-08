@@ -71,7 +71,7 @@ public class FlowerTreeBloom : MonoBehaviour, IInteract
                                 randomRarity = Rarity.FourStar;
                             }
                         }
-                        Artifacts artifact = AM.AddArtifactsToInventory(artifactsSO.artifactType, artifactsInfo.ArtifactSet, randomRarity);
+                        Artifacts artifact = AM.CreateArtifact(artifactsSO.artifactType, artifactsInfo.ArtifactSet, randomRarity);
                         itemsList.Add(artifact);
                     }    
 

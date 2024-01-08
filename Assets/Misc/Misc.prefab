@@ -140,6 +140,8 @@ MonoBehaviour:
     type: 3}
   FirePrefab: {fileID: 1725317912486240, guid: e55149ba6f4d00741984987e258c3378, type: 3}
   DashPrefab: {fileID: 1323289336355826, guid: a121bb87e6018d44aa0b155f855fc31a, type: 3}
+  InteractableItemObjectPrefab: {fileID: 1824939335436124101, guid: b1073bf75462461469291bb217b671d9,
+    type: 3}
 --- !u!114 &461240154166491133
 MonoBehaviour:
   m_ObjectHideFlags: 0

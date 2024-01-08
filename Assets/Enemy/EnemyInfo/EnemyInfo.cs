@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class EnemyContent
+{
+    public ScriptableObject[] PossibleItemsList;
+    public CharactersSO EnemySO;
+    public GameObject EnemyPrefab;
+    public int MaxItemToGive;
+}
+
 [CreateAssetMenu(fileName = "EnemyInfoSO", menuName = "ScriptableObjects/EnemyInfoSO")]
 public class EnemyInfo : ScriptableObject
 {
-    [System.Serializable]
-    public class EnemyContent
-    {
-        public ScriptableObject[] PossibleItemsList;
-        public CharactersSO EnemySO;
-        public GameObject EnemyPrefab;
-        public int MaxItemToGive;
-    }
     [SerializeField] EnemyContent[] EnemyContentList;
 
     public EnemyContent[] GetEnemyContentList()

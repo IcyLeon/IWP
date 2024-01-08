@@ -97,7 +97,10 @@ public class PlayerController : MonoBehaviour
             return;
 
         UpdateControls();
-        playerState.Update();
+        if (Time.timeScale != 0)
+        {
+            playerState.Update();
+        }
     }
 
     public CapsuleCollider GetCapsuleCollider()
@@ -157,11 +160,9 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             return;
         }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         if (GetPlayerManager().GetAliveCharacters() == null)
             return;

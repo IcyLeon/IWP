@@ -26,7 +26,8 @@ public class Objectives : MonoBehaviour
     }
     void OnEnemyDefeatedChange()
     {
-        StartCoroutine(UpdateDefeated());
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(UpdateDefeated());
     }
 
     IEnumerator UpdateDefeated()

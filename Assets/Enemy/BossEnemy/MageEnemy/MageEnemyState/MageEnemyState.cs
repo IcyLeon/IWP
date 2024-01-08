@@ -69,6 +69,11 @@ public class MageEnemyState : IState
         rb.MoveRotation(targetRotation);
 
     }
+
+    protected bool isAirborne()
+    {
+        return GetMageEnemyStateMachine().GetCurrentState() is MageEnemyAirborneState;
+    }
     protected void SetTargetRotation(Quaternion quaternion)
     {
         GetMageEnemyStateMachine().MageEnemyData.Target_Rotation = quaternion;

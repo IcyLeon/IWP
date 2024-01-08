@@ -97,7 +97,7 @@ public class MainUI : MonoBehaviour
             Time.timeScale = 1;
 
         if (BlueEffectObject)
-            BlueEffectObject.SetActive(isPaused());
+            BlueEffectObject.SetActive(isPaused() || Time.timeScale == 0);
     }
 
     public bool isPaused()

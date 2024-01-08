@@ -92,6 +92,9 @@ public class SwordCharacters : PlayerCharacters
 
     public override void LaunchBasicAttack()
     {
+        if (Time.timeScale == 0)
+            return;
+
         if (Time.time - LastClickedTime >= 1f)
         {
             ResetBasicAttacks();

@@ -30,6 +30,7 @@ public class PunchingBot : BaseEnemy
             if (DieCoroutine == null)
             {
                 DieCoroutine = StartCoroutine(Disappear());
+                EM.EnemyDropRandomItem(CharactersSO, GetPointOfContact());
             }
         }
         return isdead;

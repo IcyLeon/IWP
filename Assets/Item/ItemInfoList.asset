@@ -16,11 +16,11 @@ MonoBehaviour:
   - rarity: 0
     rarityborderimage: {fileID: 21300000, guid: 6414e3e2b3d02e34abfb4c82542cd131,
       type: 3}
-    ItemCardImage: {fileID: 21300000, guid: 761a578f9d802bb4a9b80810bd5f8a9c, type: 3}
+    ItemCardImage: {fileID: 21300000, guid: 11c8f9a5194e67e42a175653e8cdd32d, type: 3}
   - rarity: 1
     rarityborderimage: {fileID: 21300000, guid: 2ca8da9eba84fed4c83d79ef37fd09ab,
       type: 3}
-    ItemCardImage: {fileID: 21300000, guid: 761a578f9d802bb4a9b80810bd5f8a9c, type: 3}
+    ItemCardImage: {fileID: 21300000, guid: ace3edbc2554a7d45968044241e1a43c, type: 3}
   - rarity: 2
     rarityborderimage: {fileID: 21300000, guid: 022778f9133aec0428ecfa6c0b7d48ff,
       type: 3}

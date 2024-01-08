@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using static UnityEngine.EventSystems.EventTrigger;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -117,8 +118,15 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(sec);
 
-        EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
+        BaseEnemy enemy = EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
+        enemy.OnDeadEvent += OnDead;
         WaveSpawn(charactersSO, sec);
+    }
+
+    private void OnDead(BaseEnemy e)
+    {
+        EM.EnemyDropRandomItem(e.GetCharactersSO(), e.GetPointOfContact());
+        e.OnDeadEvent -= OnDead;
     }
 
     public int CalculateHowManyToSpawn()

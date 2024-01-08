@@ -44,10 +44,11 @@ public class ObtainedItemsUI : MonoBehaviour
 
     private void OnItemGiveToPlayer(List<Item> ItemList)
     {
+        InventoryManager IM = InventoryManager.GetInstance();
         for (int i = 0; i < ItemList.Count; i++)
         {
             Item item = ItemList[i];
-            InventoryManager.GetInstance().AddItems(item);
+            IM.AddItems(item);
 
             ItemButton itemButton = Instantiate(AssetManager.GetInstance().ItemBorderPrefab, ItemQualityParentTransform).GetComponent<ItemButton>();
             itemButton.SetItemsSO(item.GetItemSO());

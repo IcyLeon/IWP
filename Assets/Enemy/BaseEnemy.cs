@@ -21,6 +21,7 @@ public class BaseEnemy : Characters
     protected int Staggering = 1;
     protected int CurrentStaggering;
     private int Level, MaxLevel;
+    public Action<BaseEnemy> OnDeadEvent = delegate { };
 
     protected override void Start()
     {
@@ -224,8 +225,10 @@ public class BaseEnemy : Characters
                 if (healthBarScript.GetElementsIndicator() != null)
                     Destroy(healthBarScript.GetElementsIndicator().gameObject);
                 Destroy(healthBarScript.gameObject);
+
+                EM.CallOnEnemyKilled(this);
+                OnDeadEvent?.Invoke(this);
             }
-            EM.CallOnEnemyKilled(this);
         }
         return isdead;
     }
@@ -245,7 +248,7 @@ public class BaseEnemy : Characters
         float actualamt = amt;
         if (GetCurrentElementalShield() > 0) // have to change later since it is hardcoded
         {
-            actualamt *= 0.3f;
+            actualamt *= 0.15f;
             SetCurrentElementalShield(GetCurrentElementalShield() - amt);
         }
 

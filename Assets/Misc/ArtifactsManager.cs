@@ -42,7 +42,7 @@ public class ArtifactsManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            Artifacts artifacts = AddArtifactsToInventory(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+            Artifacts artifacts = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
             InventoryManager.GetInstance().AddItems(artifacts);
 
 
@@ -100,7 +100,7 @@ public class ArtifactsManager : MonoBehaviour
         return total;
     }
 
-    public Artifacts AddArtifactsToInventory(ArtifactType type, ArtifactsSet artifactSet, Rarity rarity)
+    public Artifacts CreateArtifact(ArtifactType type, ArtifactsSet artifactSet, Rarity rarity)
     {
         ArtifactsInfo artifactsinfo = GetArtifactsInfo(artifactSet);
 

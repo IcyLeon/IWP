@@ -6,6 +6,17 @@ public class Fireball : MonoBehaviour
 {
     private IDamage source;
 
+    private void Start()
+    {
+        StartCoroutine(Timeout());
+    }
+
+    private IEnumerator Timeout()
+    {
+        yield return new WaitForSeconds(5f);
+        Explode();
+    }
+
     public void SetSource(IDamage source)
     {
         this.source = source;

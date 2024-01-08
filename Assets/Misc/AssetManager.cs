@@ -65,6 +65,8 @@ public class AssetManager : MonoBehaviour
     [Header("Dash")]
     [SerializeField] GameObject DashPrefab;
 
+    [Header("Dash")]
+    [SerializeField] GameObject InteractableItemObjectPrefab;
 
     private static AssetManager instance;
     public static bool isInProbabilityRange(float a)
@@ -97,6 +99,23 @@ public class AssetManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
+
+    public void SpawnItemDrop(Item item, Vector3 spawnPos, ItemTemplate itemTemplate = null) // if item/existing item is null, use itemtemplate to spawn a new item
+    {
+        InteractableItemObjects itemGO = Instantiate(InteractableItemObjectPrefab, spawnPos, Quaternion.identity).GetComponent<InteractableItemObjects>();
+        Item ItemREF = null;
+        if (item == null)
+        {
+            Type ItemType = itemTemplate.GetTypeREF();
+            object instance = Activator.CreateInstance(ItemType, true, itemTemplate);
+            ItemREF = (Item)instance;
+        }
+        else
+        {
+            ItemREF = item;
+        }
+        itemGO.SetItemsREF(ItemREF);
     }
 
     public GameObject SpawnCrossHair()
