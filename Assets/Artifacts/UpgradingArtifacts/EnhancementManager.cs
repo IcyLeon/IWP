@@ -36,7 +36,7 @@ public class EnhancementManager : MonoBehaviour
     private UpgradeCanvas upgradeCanvas;
 
     [Header("Artifacts Stats")]
-    [SerializeField] GameObject[] ArtifactsStatsContainer;
+    [SerializeField] GameObject ArtifactsStatsContainer;
     [SerializeField] DisplayUpgradePossibleNotification RandomUpgradeStatsTxt;
     [SerializeField] DisplayUpgradePossibleNotification RandomAddStatsTxt;
 
@@ -240,21 +240,29 @@ public class EnhancementManager : MonoBehaviour
             UpdateArtifactStats();
 
             Artifacts selectedartifacts = UpgradableItemREF as Artifacts;
-            for (int i = 0; i < ArtifactsStatsContainer.Length; i++)
+            int i = 0;
+            foreach (var stats in ArtifactsStatsContainer.GetComponentsInChildren<DisplayArtifactStats>(true))
             {
-                DisplayArtifactStats stats = ArtifactsStatsContainer[i].GetComponent<DisplayArtifactStats>();
                 if (stats != null)
                 {
-                    if (i <= selectedartifacts.GetTotalSubstatsDisplay())
+                    if (selectedartifacts != null)
                     {
-                        stats.DisplayArtifactsStat(selectedartifacts.GetArtifactStatsName(i), selectedartifacts.GetStats(i), selectedartifacts);
-                        if (i == 0)
-                            stats.DisplayIncreaseValueMainStats(GetLevelIncrease(), selectedartifacts.GetStats(i));
-                        stats.gameObject.SetActive(true);
+                        if (i <= selectedartifacts.GetTotalSubstatsDisplay())
+                        {
+                            stats.DisplayArtifactsStat(selectedartifacts.GetArtifactStatsName(i), selectedartifacts.GetStats(i), selectedartifacts);
+
+                            if (i == 0)
+                                stats.DisplayIncreaseValueMainStats(GetLevelIncrease(), selectedartifacts.GetStats(i));
+                        }
+
+                        stats.gameObject.SetActive(i <= selectedartifacts.GetTotalSubstatsDisplay());
                     }
                     else
+                    {
                         stats.gameObject.SetActive(false);
+                    }
                 }
+                i++;
             }
         }
     }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,12 +17,11 @@ public class ItemContentDisplay : MonoBehaviour
     [SerializeField] TextMeshProUGUI ArtifactSetText;
     [SerializeField] TextMeshProUGUI Artifact2PieceText;
     [SerializeField] TextMeshProUGUI Artifact4PieceText;
-    [SerializeField] GameObject[] ArtifactsStatsContainer;
+    [SerializeField] GameObject ArtifactsStatsContainer;
     [SerializeField] GameObject ArtifactSetInfo;
 
     [Header("Common Item Info Content")]
     [SerializeField] Transform StarsTransformParent;
-
 
     void ShowArtifactsItemContent(UpgradableItems UpgradableItems, ItemTemplate itemsSO)
     {
@@ -31,9 +29,10 @@ public class ItemContentDisplay : MonoBehaviour
         ArtifactsSO artifactsSO = itemsSO as ArtifactsSO;
         ArtifactsInfo artifactsInfo = ArtifactsManager.GetInstance().GetArtifactsInfo(artifactsSO);
 
-        for (int i = 0; i < ArtifactsStatsContainer.Length; i++)
+        int i = 0;
+
+        foreach(var stats in ArtifactsStatsContainer.GetComponentsInChildren<DisplayArtifactStats>(true))
         {
-            DisplayArtifactStats stats = ArtifactsStatsContainer[i].GetComponent<DisplayArtifactStats>();
             if (stats != null)
             {
                 if (artifacts != null)
@@ -49,6 +48,7 @@ public class ItemContentDisplay : MonoBehaviour
                     stats.gameObject.SetActive(false);
                 }
             }
+            i++;
         }
 
         ArtifactSetInfo.SetActive(artifactsSO != null && artifactsInfo != null);

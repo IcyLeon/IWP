@@ -26,7 +26,7 @@ public class ItemContentManager : MonoBehaviour
         UnSubscribeCurrentItem();
     }
 
-    private void UnSubscribeCurrentItem()
+    public void UnSubscribeCurrentItem()
     {
         UpgradableItems PreviousUpgradableItems = ItemREF as UpgradableItems;
         if (PreviousUpgradableItems != null)

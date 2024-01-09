@@ -32,7 +32,7 @@ public class InventoryUIManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        for (int i = itembutton_Dictionary.Count - 1; i > 0; i--)
+        for (int i = itembutton_Dictionary.Count - 1; i >= 0; i--)
         {
             KeyValuePair<Item, ItemButton> itemPair = itembutton_Dictionary.ElementAt(i);
             if (itembutton_Dictionary.TryGetValue(itemPair.Key, out ItemButton itemButton))

@@ -19,8 +19,8 @@ public class MageEnemyAirborneState : MageEnemyState
     {
         base.Update();
 
-        if (!isAttackState() && GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyLandingState &&
-            GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyTakeOffState)
+        if (!isAttackState() && IsNotInTransitioningInBetweenAirborneandGround() && 
+            GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyAirborneFireballAttackState)
         {
             if (GetMageEnemyStateMachine().MageEnemyData.FireBallSpawnElapsed <= 0)
             {
@@ -29,6 +29,12 @@ public class MageEnemyAirborneState : MageEnemyState
             }
             GetMageEnemyStateMachine().MageEnemyData.FireBallSpawnElapsed -= Time.deltaTime;
         }
+    }
+
+    protected bool IsNotInTransitioningInBetweenAirborneandGround()
+    {
+        return GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyLandingState &&
+            GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyTakeOffState;
     }
 
     protected bool isAttackState()

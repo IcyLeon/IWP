@@ -209,7 +209,7 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
-        Debug.Log(m_StateMachine.GetCurrentState());
+        //Debug.Log(m_StateMachine.GetCurrentState());
         UpdateFireBreathing();
         UpdateMageOrbList();
         UpdateMageFireBallList();

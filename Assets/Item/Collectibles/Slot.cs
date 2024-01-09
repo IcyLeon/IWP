@@ -64,6 +64,12 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
         }
     }
 
+    private void OnDestroy()
+    {
+        if (itembutton)
+            itembutton.onButtonSpawn -= OnItemSpawned;
+    }
+
     public ItemButton GetItemButton()
     {
         return itembutton;

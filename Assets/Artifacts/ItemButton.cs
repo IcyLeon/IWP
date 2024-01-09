@@ -225,9 +225,12 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     }
 
     void IToggle.ToggleSelection(bool toggle)
-    {
-        OutlineAnimation.gameObject.SetActive(toggle);
-        Outline.gameObject.SetActive(toggle);
+    {   
+        if (OutlineAnimation)
+            OutlineAnimation.gameObject.SetActive(toggle);
+
+        if (Outline)
+            Outline.gameObject.SetActive(toggle);
 
         if (!toggle)
         {

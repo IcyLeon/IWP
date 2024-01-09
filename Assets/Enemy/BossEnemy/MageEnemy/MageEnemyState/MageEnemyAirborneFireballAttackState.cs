@@ -15,6 +15,7 @@ public class MageEnemyAirborneFireballAttackState : MageEnemyAirborneAttackState
         base.Enter();
         FireBallLaunched = false;
         WaitTillTransitElapsed = WaitTillTransitDuration;
+        GetMageEnemyStateMachine().MageEnemyData.FireBallSpawnElapsed = GetMageEnemyStateMachine().MageEnemyData.FireBallSpawnDuration;
         StartAnimation("isSpawningProjectiles");
     }
 

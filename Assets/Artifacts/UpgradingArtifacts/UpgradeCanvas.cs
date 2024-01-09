@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +21,11 @@ public class UpgradeCanvas : MonoBehaviour
     public SlotPopup SlotPopup
     {
         get { return slotPopup; }
+    }
+
+    private void OnDestroy()
+    {
+        ItemContentManager.UnSubscribeCurrentItem();
     }
 
     // Update is called once per frame
