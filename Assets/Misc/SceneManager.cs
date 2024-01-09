@@ -23,6 +23,7 @@ public class SceneManager : MonoBehaviour
     public static Action OnSceneChanged;
     private float TargetProgress = 0f;
     private SceneEnum currentScene;
+
     private void Awake()
     {
         if (instance == null)
@@ -67,11 +68,12 @@ public class SceneManager : MonoBehaviour
 
     private async void LoadSceneAsync(string sceneName)
     {
+        MainUI mainUI = MainUI.GetInstance();
         AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
         asyncOperation.allowSceneActivation = false;
         LoadingCanvas.SetActive(true);
         ProgressBar.fillAmount = TargetProgress = 0f;
-
+        mainUI.SetPaused(true);
         do
         {
             await Task.Delay(500);
@@ -83,14 +85,14 @@ public class SceneManager : MonoBehaviour
         asyncOperation.allowSceneActivation = true;
         await Task.Delay(100);
 
+        mainUI.SetPaused(false);
         LoadingCanvas.SetActive(false);
-
         OnSceneChanged?.Invoke();
     }
 
     private void Update()
     {
-        ProgressBar.fillAmount = Mathf.MoveTowards(ProgressBar.fillAmount, TargetProgress, Time.deltaTime * 2f);
+        ProgressBar.fillAmount = Mathf.MoveTowards(ProgressBar.fillAmount, TargetProgress, Time.unscaledDeltaTime * 2f);
     }
 
     //private IEnumerator LoadSceneAsync(string sceneName)

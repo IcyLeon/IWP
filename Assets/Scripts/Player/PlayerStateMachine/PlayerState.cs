@@ -36,13 +36,13 @@ public class PlayerState
     {
         if (currentState != null)
         {
-            GetPlayerController().GetPlayerManager().onCharacterChange -= OnCharacterChange;
+            PlayerManager.onCharacterChange -= OnCharacterChange;
             currentState.Exit();
         }
 
         currentState = newState;
 
-        GetPlayerController().GetPlayerManager().onCharacterChange += OnCharacterChange;
+        PlayerManager.onCharacterChange += OnCharacterChange;
 
         currentState.Enter();
     }

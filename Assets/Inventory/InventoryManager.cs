@@ -8,19 +8,21 @@ public class InventoryManager : MonoBehaviour {
     private PlayerStats PlayerStats;
     private List<CharacterData> EquipCharactersDatalist;
     private CharacterData currentequipCharacter;
+    private GadgetItem currentGadgetItem;
 
     public delegate void OnInventoryListChange(Item item, ItemTemplate itemSO);
     public static OnInventoryListChange OnInventoryItemAdd;
     public static OnInventoryListChange OnInventoryItemRemove;
     public static OnInventoryListChange OnInventoryChanged; // if there is a change in the inventory (be it add or remove for all types of item)
     public static Action<List<Item>> OnItemGiveToPlayer = delegate { };
-
+    
     [SerializeField] PlayerCharacterSO[] startupSOTest;
 
     public static void OnCallGivePlayerItems(List<Item> ItemList)
     {
         OnItemGiveToPlayer?.Invoke(ItemList);
     }
+
     private void Awake()
     {
         if (instance == null)
@@ -47,8 +49,6 @@ public class InventoryManager : MonoBehaviour {
             AddCharacterDataToOwnList(characterData);
         }
         SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
-
-        CharacterManager.GetInstance().SpawnCharacters(GetCharactersOwnedList());
     }
     public static InventoryManager GetInstance()
     {
@@ -99,6 +99,23 @@ public class InventoryManager : MonoBehaviour {
             return 0;
 
         return GetPlayerStats().CountNumberOfItems(itemSOREF);
+    }
+
+    public List<T> GetItemListOfType<T>()
+    {
+        List<T> tempList = new();
+
+        if (PlayerStats == null)
+            return null;
+
+        foreach (var item in GetINVList())
+        {
+            if (item is T typedItem)
+            {
+                tempList.Add(typedItem);
+            }
+        }
+        return tempList;
     }
 
     public List<Item> GetINVList()

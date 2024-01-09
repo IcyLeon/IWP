@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shop : MonoBehaviour, IInteract
 {
     [SerializeField] GameObject ShopUI;
-    public void Interact()
+    public void Interact(PlayerManager PM)
     {
         ShopUI.SetActive(!ShopUI.activeSelf);
     }

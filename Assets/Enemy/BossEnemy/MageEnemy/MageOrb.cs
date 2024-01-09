@@ -122,4 +122,9 @@ public class MageOrb : MonoBehaviour, IDamage
     {
         return 0f;
     }
+
+    public object GetSource()
+    {
+        return this;
+    }
 }

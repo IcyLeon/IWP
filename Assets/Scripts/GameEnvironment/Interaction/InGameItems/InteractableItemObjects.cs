@@ -32,7 +32,7 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
         Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("BossEntity"));
     }
 
-    public void Interact()
+    public void Interact(PlayerManager PM)
     {
         InventoryManager IM = InventoryManager.GetInstance();
 

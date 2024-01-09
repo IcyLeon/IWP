@@ -65,14 +65,14 @@ public class CharacterManager : MonoBehaviour
         return instance;
     }
 
-    public void SpawnCharacters(List<CharacterData> ChararacterDataList)
+    public void SpawnCharacters(List<CharacterData> ChararacterDataList, PlayerManager PM)
     {
         for (int i = 0; i < ChararacterDataList.Count; i++)
         {
             CharacterInfo characterInfo = GetCharacterInfo(ChararacterDataList[i].GetItemSO() as PlayerCharacterSO);
             PlayerCharacters CurrentCharacter = Instantiate(characterInfo.CharacterPrefab, GetPlayerManager().transform).GetComponent<PlayerCharacters>();
             CurrentCharacter.SetCharacterData(ChararacterDataList[i]);
-            GetPlayerManager().AddPlayerCharactersList(CurrentCharacter);
+            PM.AddPlayerCharactersList(CurrentCharacter);
         }
         Debug.Log("Character Spawned");
         OnSpawnCharacters?.Invoke(ChararacterDataList);

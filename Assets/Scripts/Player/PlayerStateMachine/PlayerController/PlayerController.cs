@@ -20,17 +20,18 @@ public class PlayerController : MonoBehaviour
     private PlayerState playerState;
 
     public delegate bool OnElemental();
-    public event OnElemental OnElementalSkillHold;
-    public event OnElemental OnElementalSkillTrigger;
-    public event OnElemental OnElementalBurstTrigger;
-    public event Action OnInteract;
-    public event Action OnChargeHold;
-    public event Action OnChargeTrigger;
+    public static OnElemental OnElementalSkillHold;
+    public static OnElemental OnElementalSkillTrigger;
+    public static OnElemental OnElementalBurstTrigger;
+    public static Action OnInteract;
+    public static Action OnGadgetUse;
+    public static Action OnChargeHold;
+    public static Action OnChargeTrigger;
     public delegate Collider[] onPlungeAttack(Vector3 HitGroundPos);
-    public event onPlungeAttack OnPlungeAttack;
+    public static onPlungeAttack OnPlungeAttack;
     public delegate void onNumsKeyInput(float val);
-    public onNumsKeyInput OnNumsKeyInput;
-    public onNumsKeyInput OnScroll;
+    public static onNumsKeyInput OnNumsKeyInput;
+    public static onNumsKeyInput OnScroll;
     private ResizeableCollider resizeableCollider;
     private MainUI mainUI;
 
@@ -60,6 +61,7 @@ public class PlayerController : MonoBehaviour
         lockMovement = LockMovement.Enable;
         playerManager = GetComponent<PlayerManager>();
         playerState = new PlayerState(this);
+        PlayerManager.onCharacterChange += RecalculateSize;
     }
 
     // Start is called before the first frame update
@@ -67,8 +69,11 @@ public class PlayerController : MonoBehaviour
     {
         mainUI = MainUI.GetInstance();
         resizeableCollider = GetComponent<ResizeableCollider>();
-        RecalculateSize(null);
-        GetPlayerManager().onCharacterChange += RecalculateSize;
+    }
+
+    private void OnDestroy()
+    {
+        PlayerManager.onCharacterChange -= RecalculateSize;
     }
 
     public MainUI GetMainUI()
@@ -180,6 +185,8 @@ public class PlayerController : MonoBehaviour
             OnElementalSkillTrigger?.Invoke();
         else if (Input.GetKey(KeyCode.Q))
             OnElementalBurstTrigger?.Invoke();
+        else if (Input.GetKey(KeyCode.Z))
+            OnGadgetUse?.Invoke();
         else if (Input.GetMouseButton(0))
             OnChargeHold?.Invoke();
         else if (Input.GetMouseButtonUp(0))

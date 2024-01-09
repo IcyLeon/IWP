@@ -96,9 +96,12 @@ public class MageEnemy : BaseEnemy
             PlayerCharacters pc = collision.collider.GetComponent<PlayerCharacters>();
             if (pc != null)
             {
-                Vector3 ForceDir = (pc.GetPointOfContact() - GetPointOfContact()).normalized * 15f;
-                pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
-                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 1.8f, this);
+                Elements hitElement = pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 1.8f, this);
+                if (hitElement != null)
+                {
+                    Vector3 ForceDir = (pc.GetPointOfContact() - GetPointOfContact()).normalized * 15f;
+                    pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
+                }
             }
             ChargeColliderList.Add(collision.collider, true);
         }
@@ -209,7 +212,7 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
-        //Debug.Log(m_StateMachine.GetCurrentState());
+        Debug.Log(m_StateMachine.GetCurrentState());
         UpdateFireBreathing();
         UpdateMageOrbList();
         UpdateMageFireBallList();

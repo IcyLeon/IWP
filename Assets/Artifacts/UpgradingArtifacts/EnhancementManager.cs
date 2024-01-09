@@ -601,7 +601,7 @@ public class EnhancementManager : MonoBehaviour
 
     private void GetRandomsItemButton()
     {
-        List<Item> itemsList = new List<Item>(InventoryManager.GetInstance().GetINVList());
+        List<Item> itemsList = new List<Item>(InventoryManager.GetInstance().GetItemListOfType<Item>());
 
         for (int i = 0; i < itemsList.Count; i++)
         {

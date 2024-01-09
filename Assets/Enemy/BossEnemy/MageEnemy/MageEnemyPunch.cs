@@ -37,12 +37,15 @@ public class MageEnemyPunch : MonoBehaviour
             if (PunchColliderList.TryGetValue(PunchColliderkeyValuePair.Key, out bool value))
             {
                 PlayerCharacters pc = PunchColliderkeyValuePair.Key.GetComponent<PlayerCharacters>();
-                Vector3 ForceDir = HeadPivot.transform.forward * 20f;
-                pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
-                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), MageEnemy.GetATK(), MageEnemy);
+                Elements hitElement = pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), MageEnemy.GetATK(), MageEnemy);
+                if (hitElement != null)
+                {
+                    Vector3 ForceDir = HeadPivot.transform.forward * 15f;
+                    pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
 
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, pc.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
-                Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, pc.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
+                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                }
 
             }
         }

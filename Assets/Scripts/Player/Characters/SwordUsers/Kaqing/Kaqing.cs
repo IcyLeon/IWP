@@ -46,7 +46,7 @@ public class Kaqing : SwordCharacters
         UltiRange = 8f;
         ElementalHitPos = Vector3.zero;
         CurrentElement = Elemental.NONE;
-        GetPlayerManager().onCharacterChange += onCharacterChange;
+        PlayerManager.onCharacterChange += onCharacterChange;
     }
 
     private void onCharacterChange(CharacterData characterData)
@@ -57,7 +57,7 @@ public class Kaqing : SwordCharacters
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        GetPlayerManager().onCharacterChange -= onCharacterChange;
+        PlayerManager.onCharacterChange -= onCharacterChange;
     }
     public override void SpawnSlash()
     {

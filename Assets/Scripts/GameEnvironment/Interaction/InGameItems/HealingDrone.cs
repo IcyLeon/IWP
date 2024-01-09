@@ -73,12 +73,12 @@ public class HealingDrone : FriendlyKillers
         }
         base.UpdateDead();
     }
-    protected override void PurchaseAction()
+    protected override void PurchaseAction(PlayerManager PM)
     {
         if (CanInteract())
         {
             HealPS = Instantiate(HealPrefab, transform);
         }
-        base.PurchaseAction();
+        base.PurchaseAction(PM);
     }
 }

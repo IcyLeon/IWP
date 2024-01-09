@@ -14,6 +14,7 @@ public interface IDamage {
     public float GetMaxHealth();
     public float GetATK();
     public float GetEM();
+    public object GetSource();
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, IDamage source, bool callHitInfo = true);
 }
 
@@ -325,5 +326,10 @@ public class Characters : MonoBehaviour, IDamage
     public virtual float GetEM()
     {
         return 0f;
+    }
+
+    public virtual object GetSource()
+    {
+        return this;
     }
 }

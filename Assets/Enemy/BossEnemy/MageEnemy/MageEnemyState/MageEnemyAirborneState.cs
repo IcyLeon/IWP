@@ -19,8 +19,7 @@ public class MageEnemyAirborneState : MageEnemyState
     {
         base.Update();
 
-        if (!isAttackState() && IsNotInTransitioningInBetweenAirborneandGround() && 
-            GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyAirborneFireballAttackState)
+        if (!isAttackState() && IsNotInTransitioningInBetweenAirborneandGround())
         {
             if (GetMageEnemyStateMachine().MageEnemyData.FireBallSpawnElapsed <= 0)
             {

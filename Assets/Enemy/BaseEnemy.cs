@@ -260,8 +260,12 @@ public class BaseEnemy : Characters
 
         if (e.GetElements() != Elemental.NONE)
         {
-            ElementalOrb go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, GetPointOfContact(), Quaternion.identity).GetComponent<ElementalOrb>();
-            go.SetSource(CharacterManager.GetInstance().GetPlayerManager());
+            PlayerManager PM = (PlayerManager)source.GetSource();
+            if (PM != null)
+            {
+                ElementalOrb go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, GetPointOfContact(), Quaternion.identity).GetComponent<ElementalOrb>();
+                go.SetSource(PM);
+            }
         }
 
         return e;

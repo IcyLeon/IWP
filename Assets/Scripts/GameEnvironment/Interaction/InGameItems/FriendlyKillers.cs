@@ -35,7 +35,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         friendlyKillerData = f;
         if (GetFriendlyKillerData() != null)
         {
-            PurchaseAction();
+            PurchaseAction(GetOwner());
         }
     }
 
@@ -62,9 +62,9 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         return canBuy;
     }
 
-    protected override void PurchaseAction()
+    protected override void PurchaseAction(PlayerManager PM)
     {
-        base.PurchaseAction();
+        base.PurchaseAction(PM);
 
         if (canBuy)
         {
@@ -77,7 +77,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
             }
             if (GetFriendlyKillerData() == null)
             {
-                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO());
+                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO(), PM);
                 FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
             }
             canBuy = false;
@@ -256,5 +256,10 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     public float GetEM()
     {
         return 0f;
+    }
+
+    public object GetSource()
+    {
+        return friendlyKillerData.GetOwner();
     }
 }

@@ -18,8 +18,7 @@ public class PlayerManager : MonoBehaviour
     private CharacterManager characterManager;
     private SceneManager SceneManager;
     public delegate void OnCharacterChange(CharacterData characterData);
-    public OnCharacterChange onCharacterChange;
-
+    public static OnCharacterChange onCharacterChange;
     public delegate void OnEntityHit(Elements e, IDamage IDamage);
     public static OnEntityHit onEntityHitSendInfo;
 
@@ -42,8 +41,9 @@ public class PlayerManager : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         playerController = GetComponent<PlayerController>();
-
+        PlayerController.OnGadgetUse += OnGadgetUse;
         characterManager = CharacterManager.GetInstance();
+        SceneManager.OnSceneChanged += OnSceneChanged;
         characterManager.SetPlayerManager(this);
     }
 
@@ -52,23 +52,25 @@ public class PlayerManager : MonoBehaviour
         inventoryManager = InventoryManager.GetInstance();
         staminaManager = StaminaManager.GetInstance();
         SceneManager = SceneManager.GetInstance();
-        SceneManager.OnSceneChanged += OnSceneChanged;
         SubscribeToKeyInputs();
         StartCoroutine(SpawnInitDelay());
     }
 
+    private void OnGadgetUse()
+    {
+
+    }
     private IEnumerator SpawnInitDelay()
     {
         yield return null;
+        characterManager.SpawnCharacters(GetCharactersOwnedList(), this);
         SwapCharacters(inventoryManager.GetCurrentEquipCharacterData());
     }
 
     private void OnSceneChanged()
     {
         PlayerCharactersList.Clear();
-        characterManager.SpawnCharacters(GetCharactersOwnedList());
         SubscribeToKeyInputs();
-        SwapCharacters(inventoryManager.GetCurrentEquipCharacterData());
     }
 
     public void AddPlayerCharactersList(PlayerCharacters pc)
@@ -126,6 +128,22 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public CharacterData GetDeadCharacter()
+    {
+        List<PlayerCharacters> PlayerCharacerListCopy = new(PlayerCharactersList);
+        for (int i = PlayerCharacerListCopy.Count - 1; i >= 0; i--)
+        {
+            if (!PlayerCharacerListCopy[i].IsDead())
+            {
+                PlayerCharacerListCopy.RemoveAt(i);
+            }
+        }
+
+        if (PlayerCharacerListCopy.Count > 0)
+            return PlayerCharacerListCopy[0].GetCharacterData();
+
+        return null;
+    }
 
     public CharacterData GetAliveCharacters()
     {
@@ -173,15 +191,13 @@ public class PlayerManager : MonoBehaviour
 
     private void SubscribeToKeyInputs()
     {
-        if (playerController)
-            playerController.OnNumsKeyInput += SwapCharactersControls;
+        PlayerController.OnNumsKeyInput += SwapCharactersControls;
     }
 
     private void OnDestroy()
     {
-        if (playerController)
-            playerController.OnNumsKeyInput -= SwapCharactersControls;
-
+        PlayerController.OnNumsKeyInput -= SwapCharactersControls;
+        PlayerController.OnGadgetUse -= OnGadgetUse;
         SceneManager.OnSceneChanged -= OnSceneChanged;
     }
 

@@ -50,6 +50,8 @@ public class BossManager : MonoBehaviour
         FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
 
         EM.SetCurrentWave(EM.GetCurrentWave() + 1);
+
+
     }
 
     // Update is called once per frame
@@ -75,11 +77,11 @@ public class BossManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        Bounds terrainBounds = terrain.terrainData.bounds;
-        Vector3 terrainCenter = terrainBounds.center;
-        Vector3 localTerrainCenter = terrain.transform.InverseTransformPoint(terrainCenter);
-        float terrainHeight = terrain.SampleHeight(localTerrainCenter);
-        Vector3 spawnPosition = new Vector3(terrainCenter.x, terrainHeight, terrainCenter.z);
+        Vector3 terrainSize = terrain.terrainData.size;
+        Vector3 terrainPosition = terrain.GetPosition();
+        Vector3 middlePosition = terrainPosition + terrainSize / 2f;
+        float terrainHeight = terrain.SampleHeight(middlePosition);
+        Vector3 spawnPosition = new Vector3(middlePosition.x, terrainHeight, middlePosition.z);
 
         GameObject tree = Instantiate(TreePrefab, spawnPosition, Quaternion.identity);
 

@@ -15,7 +15,7 @@ public class Teleporter : MonoBehaviour, IInteract
 
     [SerializeField] SceneEnum scene;
 
-    public void Interact()
+    public void Interact(PlayerManager PM)
     {
         sceneManager.ChangeScene(scene);
     }

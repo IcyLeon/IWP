@@ -19,15 +19,29 @@ public class SkillsManager : MonoBehaviour
     [SerializeField] Sprite ElementalBurstBackgroundSprite_Default;
     [SerializeField] Image BurstFill;
 
+    [Header("Elemental Burst")]
+    [SerializeField] CanvasGroup GadgetBackgroundCanvasGroup;
+    [SerializeField] Image GadgetSkillSprite;
+    [SerializeField] TextMeshProUGUI GadgetSkillCooldownTxt;
+    [SerializeField] TextMeshProUGUI AmtTxt;
+
     private CharacterData PlayerCharacterData;
+    private GadgetItem CurrentGadgetItem;
     private ElementalReactionsManager elementalReactionsManager;
 
+    private void Awake()
+    {
+        PlayerManager.onCharacterChange += OnCharacterSwitch;
+    }
     // Start is called before the first frame update
     void Start()
     {
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
-        CharacterManager.GetInstance().GetPlayerManager().onCharacterChange += OnCharacterSwitch;
-        OnCharacterSwitch(InventoryManager.GetInstance().GetCurrentEquipCharacterData());
+    }
+
+    private void OnDestroy()
+    {
+        PlayerManager.onCharacterChange -= OnCharacterSwitch;
     }
 
     // Update is called once per frame

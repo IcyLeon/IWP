@@ -21,33 +21,21 @@ public class EnemyManager : MonoBehaviour
     private int CurrentEnemyDefeated;
     private int TotalEnemies;
     private int TotalEnemiesDefeated;
-    public Action OnEnemyDefeatedChange;
-    public Action OnEnemyWaveChange;
+    public static Action OnEnemyDefeatedChange;
+    public static Action OnEnemyWaveChange;
 
     [SerializeField] EnemyInfo EnemyInfoSO;
 
     public static Vector3 GetRandomPointWithinTerrain(Terrain terrain)
     {
-        // Use terrain bounds for more accurate random points
-        Bounds terrainBounds = terrain.GetComponent<Collider>().bounds;
-
-        float randomX = Random.Range(terrainBounds.min.x, terrainBounds.max.x);
-        float randomZ = Random.Range(terrainBounds.min.z, terrainBounds.max.z);
-
-        // Ensure the Y position is correctly sampled from the terrain
+        Vector3 terrainPosition = terrain.GetPosition();
+        Vector3 terrainSize = terrain.terrainData.size;
+        float randomX = Random.Range(terrainPosition.x, terrainPosition.x + terrainSize.x);
+        float randomZ = Random.Range(terrainPosition.z, terrainPosition.z + terrainSize.z);
         float terrainHeight = terrain.SampleHeight(new Vector3(randomX, 0f, randomZ));
+        Vector3 randomTerrainPosition = new Vector3(randomX, terrainHeight, randomZ);
 
-        // Adjust the spawn position to be above the terrain surface
-        Vector3 spawnPosition = new Vector3(randomX, terrainHeight, randomZ);
-
-        // Use NavMesh.SamplePosition to get a valid point on the NavMesh
-        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 200.0f, NavMesh.AllAreas))
-        {
-            return hit.position;
-        }
-
-        // If no valid point is found, return Vector3.zero or some other default value
-        return Vector3.zero;
+        return randomTerrainPosition;
     }
     private int GetMaxEnemyInScene()
     {

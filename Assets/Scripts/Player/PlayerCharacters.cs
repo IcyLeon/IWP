@@ -17,6 +17,10 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     protected float Range = 1f, UltiRange = 1f;
     protected PlayerCharacterState PlayerCharacterState;
 
+    public override object GetSource()
+    {
+        return PlayerManager;
+    }
     public virtual void OnEntityHitSendInfo(Elements e, IDamage d)
     {
 
@@ -378,13 +382,13 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     private void OnEnable()
     {
         PlayerManager = transform.root.GetComponent<PlayerManager>();
-        GetPlayerManager().GetPlayerController().OnElementalSkillHold += ElementalSkillHold;
-        GetPlayerManager().GetPlayerController().OnElementalBurstTrigger += ElementalBurstTrigger;
-        GetPlayerManager().GetPlayerController().OnElementalSkillTrigger += ElementalSkillTrigger;
-        GetPlayerManager().GetPlayerController().OnChargeHold += ChargeHold;
-        GetPlayerManager().GetPlayerController().OnChargeTrigger += ChargeTrigger;
-        GetPlayerManager().GetPlayerController().OnPlungeAttack += PlungeAttackGroundHit;
-        GetPlayerManager().onCharacterChange += OnCharacterChanged;
+        PlayerController.OnElementalSkillHold += ElementalSkillHold;
+        PlayerController.OnElementalBurstTrigger += ElementalBurstTrigger;
+        PlayerController.OnElementalSkillTrigger += ElementalSkillTrigger;
+        PlayerController.OnChargeHold += ChargeHold;
+        PlayerController.OnChargeTrigger += ChargeTrigger;
+        PlayerController.OnPlungeAttack += PlungeAttackGroundHit;
+        PlayerManager.onCharacterChange += OnCharacterChanged;
     }
 
     protected void BasicAttackTrigger()
@@ -410,16 +414,13 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     private void DisableInputs()
     {
-        if (GetPlayerManager() == null)
-            return;
-
-        GetPlayerManager().GetPlayerController().OnElementalSkillHold -= ElementalSkillHold;
-        GetPlayerManager().GetPlayerController().OnElementalBurstTrigger -= ElementalBurstTrigger;
-        GetPlayerManager().GetPlayerController().OnElementalSkillTrigger -= ElementalSkillTrigger;
-        GetPlayerManager().GetPlayerController().OnChargeHold -= ChargeHold;
-        GetPlayerManager().GetPlayerController().OnChargeTrigger -= ChargeTrigger;
-        GetPlayerManager().GetPlayerController().OnPlungeAttack -= PlungeAttackGroundHit;
-        GetPlayerManager().onCharacterChange -= OnCharacterChanged;
+        PlayerController.OnElementalSkillHold -= ElementalSkillHold;
+        PlayerController.OnElementalBurstTrigger -= ElementalBurstTrigger;
+        PlayerController.OnElementalSkillTrigger -= ElementalSkillTrigger;
+        PlayerController.OnChargeHold -= ChargeHold;
+        PlayerController.OnChargeTrigger -= ChargeTrigger;
+        PlayerController.OnPlungeAttack -= PlungeAttackGroundHit;
+        PlayerManager.onCharacterChange -= OnCharacterChanged;
     }
 
     public void TriggerOnAnimationTransition()

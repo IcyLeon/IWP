@@ -16,6 +16,7 @@ public class CharacterData : UpgradableItems
     private int CurrentAscension;
     private ElementalReaction elementalReaction;
     private List<Artifacts> EquippedArtifacts = new List<Artifacts>();
+    private List<Food> FoodBuffList = new List<Food>();
 
     public int GetCurrentAscension()
     {
@@ -24,6 +25,34 @@ public class CharacterData : UpgradableItems
     public List<Artifacts> GetEquippedArtifactsList()
     {
         return EquippedArtifacts;
+    }
+    private List<Food> GetFoodBuffList()
+    {
+        return FoodBuffList;
+    }
+
+    public void ConsumeFood(Food food)
+    {
+        Food existFood = CheckIfFoodTypeExist(food);
+        if (existFood == null)
+        {
+            FoodBuffList.Add(food);
+        }
+        else
+        {
+        }
+    }
+
+    private Food CheckIfFoodTypeExist(Food food)
+    {
+        for (int i = 0; i < GetFoodBuffList().Count; i++)
+        {
+            if (GetFoodBuffList()[i].GetItemSO() == food.GetItemSO())
+            {
+                return GetFoodBuffList()[i];
+            }
+        }
+        return null;
     }
 
     public Artifacts CheckIfArtifactTypeExist(ArtifactType artifacttype)
@@ -53,6 +82,22 @@ public class CharacterData : UpgradableItems
         return EnergyBurstCost;
     }
 
+    private void UpdateFoodList()
+    {
+        for (int i = FoodBuffList.Count - 1; i >= 0; i--)
+        {
+            Food food = FoodBuffList[i];
+            if (food != null)
+            {
+                if (food.isFoodBuffEnds())
+                {
+                    FoodBuffList.RemoveAt(i);
+                    return;
+                }
+                food.Update();
+            }
+        }
+    }
     public CharacterData(bool isNew, PlayerCharacterSO playerCharacterSO) : base(isNew, playerCharacterSO)
     {
         MaxAscensionLevel = CurrentAscension = 0;
@@ -109,6 +154,8 @@ public class CharacterData : UpgradableItems
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
+
+        UpdateFoodList();
 
         if (IsDead())
         {

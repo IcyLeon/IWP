@@ -9,6 +9,7 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
     [SerializeField] protected Transform WorldTextPivotTransform;
     [SerializeField] protected PurchaseableObjectSO PurchaseableObjectSO;
     private AssetManager assetManager;
+    private PlayerManager PM;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -40,6 +41,15 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
         return GetPurchaseableObjectSO().PurchaseableObjectSprite;
     }
 
+    protected void SetOwner(PlayerManager PM)
+    {
+        this.PM = PM;
+    }
+
+    protected PlayerManager GetOwner()
+    {
+        return PM;
+    }
     public virtual int GetCost()
     {
         if (GetPurchaseableObjectSO() == null)
@@ -53,15 +63,15 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
         return PurchaseableObjectSO;
     }
 
-    protected virtual void PurchaseAction()
+    protected virtual void PurchaseAction(PlayerManager PM)
     {
     }
 
-    public void Interact()
+    public void Interact(PlayerManager PM)
     {
         if (isPurchaseable())
         {
-            PurchaseAction();
+            PurchaseAction(PM);
             InventoryManager.GetInstance().RemoveCurrency(PurchaseableType, GetCost());
         }
         else

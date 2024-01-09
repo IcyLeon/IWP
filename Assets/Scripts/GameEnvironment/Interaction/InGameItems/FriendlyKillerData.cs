@@ -7,15 +7,21 @@ public class FriendlyKillerData
     private float CurrentHealth;
     private float MaxHealth;
     private float DetectionRange;
+    private PlayerManager Owner;
     private FriendlyKillerSO FriendlyKillerSOREF;
 
-    public FriendlyKillerData(FriendlyKillerSO FriendlyKillerSO)
+    public FriendlyKillerData(FriendlyKillerSO FriendlyKillerSO, PlayerManager owner)
     {
         FriendlyKillerSOREF = FriendlyKillerSO;
         MaxHealth = GetFriendlyKillerSO().BaseMaxHealth;
         CurrentHealth = MaxHealth;
+        Owner = owner;
     }
 
+    public PlayerManager GetOwner()
+    {
+        return Owner;
+    }
     public FriendlyKillerSO GetFriendlyKillerSO()
     {
         return FriendlyKillerSOREF;

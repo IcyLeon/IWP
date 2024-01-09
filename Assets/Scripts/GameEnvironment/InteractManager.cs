@@ -7,7 +7,7 @@ using UnityEngine;
 public interface IInteract
 {
     bool CanInteract();
-    void Interact();
+    void Interact(PlayerManager PM);
     string InteractMessage();
     void OnInteractUpdate(IInteract interactComponent);
     void OnInteractExit(IInteract interactComponent);
@@ -28,8 +28,8 @@ public class InteractManager : MonoBehaviour
     void Start()
     {
         playerController = GetComponent<PlayerController>();
-        playerController.OnInteract += InteractObj;
-        playerController.OnScroll += Scroll;
+        PlayerController.OnInteract += InteractObj;
+        PlayerController.OnScroll += Scroll;
         CurrentIdx = -1;
         mainUI = MainUI.GetInstance();
         InteractOptionList = new();
@@ -83,11 +83,8 @@ public class InteractManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (playerController)
-        {
-            playerController.OnInteract -= InteractObj;
-            playerController.OnScroll -= Scroll;
-        }
+        PlayerController.OnInteract -= InteractObj;
+        PlayerController.OnScroll -= Scroll;
     }
 
     private IEnumerator UpdateInteractObj()
@@ -165,7 +162,7 @@ public class InteractManager : MonoBehaviour
         IInteract interactObj = InteractOptionList[CurrentIdx].GetIInferact();
         if (interactObj != null)
         {
-            interactObj.Interact();
+            interactObj.Interact(playerController.GetPlayerManager());
         }
     }
 

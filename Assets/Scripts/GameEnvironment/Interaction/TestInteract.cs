@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestInteract : MonoBehaviour, IInteract
 {
-    public void Interact()
+    public void Interact(PlayerManager PM)
     {
         Debug.Log(InteractMessage());
     }

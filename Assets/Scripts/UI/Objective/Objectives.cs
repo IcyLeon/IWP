@@ -9,36 +9,32 @@ public class Objectives : MonoBehaviour
     [SerializeField] TextMeshProUGUI DefeatedTxt;
     private EnemyManager EM;
 
+    private void Awake()
+    {
+        EnemyManager.OnEnemyWaveChange += OnEnemyWaveChange;
+    }
     // Start is called before the first frame update
     void Start()
     {
         EM = EnemyManager.GetInstance();
-        EM.OnEnemyDefeatedChange += OnEnemyDefeatedChange;
-        EM.OnEnemyWaveChange += OnEnemyWaveChange;
-        OnEnemyDefeatedChange();
-        OnEnemyWaveChange();
     }
 
     void OnEnemyWaveChange()
     {
         WavesTxt.text = "Wave: " + EM.GetCurrentWave();
-        StartCoroutine(UpdateDefeated());
     }
     void OnEnemyDefeatedChange()
     {
-        if (gameObject.activeInHierarchy)
-            StartCoroutine(UpdateDefeated());
+        DefeatedTxt.text = "Enemy Defeated: " + EM.GetCurrentEnemyDefeated() + "/" + EM.GetEnemiesCount();
     }
 
-    IEnumerator UpdateDefeated()
+    private void Update()
     {
-        yield return null;
-        DefeatedTxt.text = "Enemy Defeated: " + EM.GetCurrentEnemyDefeated() + "/" + EM.GetEnemiesCount();
+        OnEnemyDefeatedChange();
     }
 
     private void OnDestroy()
     {
-        EM.OnEnemyDefeatedChange -= OnEnemyDefeatedChange;
-        EM.OnEnemyWaveChange -= OnEnemyWaveChange;
+        EnemyManager.OnEnemyWaveChange -= OnEnemyWaveChange;
     }
 }

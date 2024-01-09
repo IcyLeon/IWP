@@ -26,7 +26,7 @@ public class FlowerTreeBloom : MonoBehaviour, IInteract
         return ItemsSO.ItemSprite;
     }
 
-    public void Interact()
+    public void Interact(PlayerManager PM)
     {
         List<Item> itemsList = new();
         ArtifactsManager AM = ArtifactsManager.GetInstance();
