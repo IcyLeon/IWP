@@ -110,7 +110,7 @@ public class BaseEnemy : Characters
         return goCopy.ToArray();
     }
 
-    protected override void OnHit(Elements e, IDamage d)
+    protected override void HitEvent(Elements e, IDamage d)
     {
         PlayerManager.CallEntityHitSendInfo(e, d);
     }
@@ -231,8 +231,6 @@ public class BaseEnemy : Characters
         {
             if (healthBarScript)
             {
-                if (healthBarScript.GetElementsIndicator() != null)
-                    Destroy(healthBarScript.GetElementsIndicator().gameObject);
                 Destroy(healthBarScript.gameObject);
 
                 EM.CallOnEnemyKilled(this);

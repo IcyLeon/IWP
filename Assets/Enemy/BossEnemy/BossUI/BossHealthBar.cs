@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static DragnDropButton;
 
 public class BossHealthBar : MonoBehaviour
 {
@@ -11,13 +12,19 @@ public class BossHealthBar : MonoBehaviour
     public void SetBaseEnemy(BaseEnemy enemy)
     {
         BaseEnemy = enemy;
+        if (BaseEnemy != null)
+        {
+            BaseEnemy.OnHit += HitEvent;
+            BaseEnemy.OnDeadEvent += OnDeadEvent;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (BaseEnemy == null)
+        if (BaseEnemy == null) {
             return;
+        }
 
         if (healthBarScript)
         {
@@ -28,5 +35,29 @@ public class BossHealthBar : MonoBehaviour
 
 
         EnemyNameTxt.text = BaseEnemy.GetCharactersSO().ItemName;
+    }
+
+    void HitEvent(Elements e, Characters c)
+    {
+        if (healthBarScript)
+        {
+            if (healthBarScript.GetElementsIndicator() == null)
+                healthBarScript.SetElementsIndicator(BaseEnemy);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (BaseEnemy)
+        {
+            BaseEnemy.OnHit -= HitEvent;
+            BaseEnemy.OnDeadEvent -= OnDeadEvent;
+        }
+    }
+
+    void OnDeadEvent(BaseEnemy e)
+    {
+        e.OnHit -= HitEvent;
+        e.OnDeadEvent -= OnDeadEvent;
     }
 }

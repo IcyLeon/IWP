@@ -18,9 +18,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3599e6fe12ab2c149a3272aaab4f09cc, type: 2}
     - {fileID: 11400000, guid: 581eb018cbf165848b553d94bab31b49, type: 2}
     - {fileID: 11400000, guid: 3ae1aa8cfa5d346489fd6ff4b5e9c8a0, type: 2}
+    - {fileID: 11400000, guid: 87977df504e45f34384b877062244f1b, type: 2}
     EnemySO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
     EnemyPrefab: {fileID: 100720, guid: 8252519d2c6fd014bb5f75765a8c4fda, type: 3}
-    MaxItemToGive: 3
+    MaxItemToGive: 2
   - PossibleItemsList:
     - {fileID: 11400000, guid: e4a08a69655b3e246b8a3b12de45f174, type: 2}
     - {fileID: 11400000, guid: 3599e6fe12ab2c149a3272aaab4f09cc, type: 2}
@@ -33,7 +34,10 @@ MonoBehaviour:
   - PossibleItemsList:
     - {fileID: 11400000, guid: 8ee57fc8cbe590e49b6944642b9acd9a, type: 2}
     - {fileID: 11400000, guid: 87977df504e45f34384b877062244f1b, type: 2}
+    - {fileID: 11400000, guid: 3599e6fe12ab2c149a3272aaab4f09cc, type: 2}
+    - {fileID: 11400000, guid: 3ae1aa8cfa5d346489fd6ff4b5e9c8a0, type: 2}
+    - {fileID: 11400000, guid: 581eb018cbf165848b553d94bab31b49, type: 2}
     EnemySO: {fileID: 11400000, guid: 51fbb7eade2f2db4ca572735df86710b, type: 2}
     EnemyPrefab: {fileID: 6857184180266605566, guid: 4aa44f76b0aca114981414f13c62e403,
       type: 3}
-    MaxItemToGive: 3
+    MaxItemToGive: 2

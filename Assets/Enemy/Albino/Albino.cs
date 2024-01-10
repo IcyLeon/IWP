@@ -44,12 +44,12 @@ public class Albino : BaseEnemy
         UpdateState();
     }
 
-    protected override void OnHit(Elements e, IDamage dmg)
+    protected override void HitEvent(Elements e, IDamage dmg)
     {
         if (state == States.PATROL)
             state = States.CHASE;
 
-        base.OnHit(e, dmg);
+        base.HitEvent(e, dmg);
         TriggerStaggering(1, state != States.SLAM);
     }
 

@@ -146,11 +146,6 @@ public class MainUI : MonoBehaviour
         }
     }
 
-    public Transform GetElementalDisplayUITransform()
-    {
-        return ElementalDisplayUITransform;
-    }
-
     public HealthBarScript GetPlayerHealthBar()
     {
         return PlayerHealthBarREF;

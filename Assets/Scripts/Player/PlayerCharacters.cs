@@ -97,16 +97,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         this.characterData = characterData;
     }
 
-    private ElementsIndicator GetElementsIndicator()
-    {
-        return PlayerManager.GetElementsIndicator();
-    }
-
-    private void SetElementsIndicator(ElementsIndicator ElementsIndicator)
-    {
-        PlayerManager.SetElementsIndicator(ElementsIndicator);
-    }
-
     public override bool IsDead()
     {
         if (GetCharacterData() != null)
@@ -216,6 +206,14 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
             CameraZoomAndPosOffsetCoroutine = StartCoroutine(UpdateDefaultPosOffsetAndZoomAnim(delay));
     }
 
+    public void ResetElementsIndicator()
+    {
+        if (healthBarScript)
+        {
+            healthBarScript.SetElementsIndicator(null);
+        }
+
+    }
     // Update is called once per frame
     protected override void Update()
     {
@@ -235,20 +233,16 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
         NearestTarget = GetNearestCharacters(GetPlayerManager().GetPlayerOffsetPosition().position, Range, LayerMask.GetMask("Entity", "BossEntity"));
 
-        if (GetElementalReaction().GetElementList().Count != 0)
+        if (healthBarScript)
         {
-            if (GetElementsIndicator() == null)
+            if (GetElementalReaction().GetElementList().Count != 0)
             {
-                ElementsIndicator EI = Instantiate(AssetManager.GetInstance().ElementalContainerUIPrefab, MainUI.GetInstance().GetElementalDisplayUITransform()).GetComponent<ElementsIndicator>();
-                SetElementsIndicator(EI);
-                GetElementsIndicator().SetIDamage(this);
+                if (healthBarScript.GetElementsIndicator() == null)
+                    healthBarScript.SetElementsIndicator(this);
             }
-        }
-        else
-        {
-            if (GetElementsIndicator() != null)
+            else
             {
-                Destroy(GetElementsIndicator().gameObject);
+                ResetElementsIndicator();
             }
         }
 

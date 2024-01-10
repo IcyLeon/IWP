@@ -47,6 +47,7 @@ public class Characters : MonoBehaviour, IDamage
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
     private float CurrentElementalShield;
+    public Action<Elements, Characters> OnHit = delegate { };
 
 
     protected Coroutine DieCoroutine;
@@ -59,6 +60,7 @@ public class Characters : MonoBehaviour, IDamage
     {
         SetHealth(GetMaxHealth());
         isAttacking = false;
+        OnHit += HitEvent;
     }
     public void ResetAttack()
     {
@@ -265,7 +267,7 @@ public class Characters : MonoBehaviour, IDamage
         }
 
         if (callHitInfo)
-            OnHit(e, this);
+            OnHit?.Invoke(e, this);
 
         SetHealth(GetHealth() - DamageValue);
 
@@ -277,7 +279,7 @@ public class Characters : MonoBehaviour, IDamage
         return e;
     }
 
-    protected virtual void OnHit(Elements e, IDamage d)
+    protected virtual void HitEvent(Elements e, IDamage d)
     {
 
     }
@@ -316,6 +318,7 @@ public class Characters : MonoBehaviour, IDamage
 
     protected virtual void OnDestroy()
     {
+        OnHit -= HitEvent;
     }
 
     public virtual Vector3 GetPointOfContact()

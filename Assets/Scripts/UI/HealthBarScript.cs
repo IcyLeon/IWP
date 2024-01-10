@@ -23,6 +23,15 @@ public class HealthBarScript : MonoBehaviour
 
     public void SetElementsIndicator(IDamage IDamage)
     {
+        if (IDamage == null)
+        {
+            if (GetElementsIndicator() != null)
+            {
+                Destroy(GetElementsIndicator().gameObject);
+            }
+            return;
+        }
+
         if (GetElementsIndicator() == null && ElementsIndicatorTransform)
         {
             ElementsIndicator = Instantiate(AssetManager.GetInstance().ElementalContainerPrefab, ElementsIndicatorTransform).GetComponent<ElementsIndicator>();

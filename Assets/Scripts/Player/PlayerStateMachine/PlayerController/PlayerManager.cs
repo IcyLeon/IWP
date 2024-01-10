@@ -12,7 +12,6 @@ public class PlayerManager : MonoBehaviour
     private List<PlayerCharacters> PlayerCharactersList = new();
     private PlayerCharacters CurrentCharacter;
     private PlayerController playerController;
-    private ElementsIndicator elementsIndicator;
 
     private StaminaManager staminaManager;
     private InventoryManager inventoryManager;
@@ -130,11 +129,6 @@ public class PlayerManager : MonoBehaviour
         AssetManager.GetInstance().SpawnParticlesEffect(GetPlayerCharacter(cd.GetPlayerCharacterSO()).transform.position, AssetManager.GetInstance().SwitchCharacterParticlesEffect);
     }
 
-    public ElementsIndicator GetElementsIndicator()
-    {
-        return elementsIndicator;
-    }
-
     public List<CharacterData> GetCharactersOwnedList()
     {
         return inventoryManager.GetCharactersOwnedList();
@@ -179,11 +173,6 @@ public class PlayerManager : MonoBehaviour
             return PlayerCharacerListCopy[0].GetCharacterData();
 
         return null;
-    }
-
-    public void SetElementsIndicator(ElementsIndicator ElementsIndicator)
-    {
-        elementsIndicator = ElementsIndicator;
     }
 
     public void ResetAllEnergy()
@@ -393,13 +382,11 @@ public class PlayerManager : MonoBehaviour
 
             playerCharacters.SetCharacterData(characterData);
             playerCharacters.ResetAttack();
+            playerCharacters.ResetElementsIndicator();
             inventoryManager.SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(playerCharacters);
             playerCharacters.gameObject.SetActive(true);
 
-            if (GetElementsIndicator() != null)
-                Destroy(GetElementsIndicator().gameObject);
-       
             if (showeffects)
                 CharacterChange(characterData);
 
