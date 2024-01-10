@@ -8,7 +8,7 @@ public class InventoryManager : MonoBehaviour {
     private PlayerStats PlayerStats;
     private List<CharacterData> EquipCharactersDatalist;
     private CharacterData currentequipCharacter;
-    private GadgetItem currentGadgetItem;
+    private GadgetItem currentEquipGadgetItem;
 
     public delegate void OnInventoryListChange(Item item, ItemTemplate itemSO);
     public static OnInventoryListChange OnInventoryItemAdd;
@@ -17,10 +17,19 @@ public class InventoryManager : MonoBehaviour {
     public static Action<List<Item>> OnItemGiveToPlayer = delegate { };
     
     [SerializeField] PlayerCharacterSO[] startupSOTest;
+    [SerializeField] GadgetItemSO GadgetItemSO;
 
     public static void OnCallGivePlayerItems(List<Item> ItemList)
     {
         OnItemGiveToPlayer?.Invoke(ItemList);
+    }
+
+    public static Item CreateItem(ItemTemplate itemSO)
+    {
+        Type ItemType = itemSO.GetTypeREF();
+        object instance = Activator.CreateInstance(ItemType, true, itemSO);
+        Item item = (Item)instance;
+        return item;
     }
 
     private void Awake()
@@ -49,7 +58,23 @@ public class InventoryManager : MonoBehaviour {
             AddCharacterDataToOwnList(characterData);
         }
         SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
+
+
+        GadgetItem item = CreateItem(GadgetItemSO) as GadgetItem;
+        AddItems(item);
+        SetCurrentGadgetItemEquipped(item);
     }
+
+    public void SetCurrentGadgetItemEquipped(GadgetItem gadgetItem)
+    {
+        currentEquipGadgetItem = gadgetItem;
+    }
+
+    public GadgetItem GetCurrentGadgetItem()
+    {
+        return currentEquipGadgetItem;
+    }
+
     public static InventoryManager GetInstance()
     {
         return instance;

@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class GadgetItem : Item
 {
-    public Action<GadgetItem> OnGadgetUse = delegate { };
     public GadgetItem(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
     }
 
     public virtual void UseGadget()
     {
-        OnGadgetUse?.Invoke(this);
+    }
+
+    public virtual void Update()
+    {
+
     }
 }

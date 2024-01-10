@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,11 +17,13 @@ public class PlayerManager : MonoBehaviour
     private StaminaManager staminaManager;
     private InventoryManager inventoryManager;
     private CharacterManager characterManager;
-    private SceneManager SceneManager;
     public delegate void OnCharacterChange(CharacterData characterData);
     public static OnCharacterChange onCharacterChange;
     public delegate void OnEntityHit(Elements e, IDamage IDamage);
     public static OnEntityHit onEntityHitSendInfo;
+    public static Action<GadgetItem> OnGadgetItemChange = delegate { };
+
+    private GadgetItem currentEquipGadgetItem;
 
     public static void CallEntityHitSendInfo(Elements e, IDamage IDamage)
     {
@@ -44,27 +47,43 @@ public class PlayerManager : MonoBehaviour
         PlayerController.OnGadgetUse += OnGadgetUse;
         characterManager = CharacterManager.GetInstance();
         SceneManager.OnSceneChanged += OnSceneChanged;
+
         characterManager.SetPlayerManager(this);
     }
+
+    public void SetCurrentGadgetItemEquipped(GadgetItem gadgetItem)
+    {
+        if (inventoryManager == null)
+            return;
+
+        inventoryManager.SetCurrentGadgetItemEquipped(gadgetItem);
+        currentEquipGadgetItem = inventoryManager.GetCurrentGadgetItem();
+        OnGadgetItemChange?.Invoke(gadgetItem);
+    }
+
 
     private void Start()
     {
         inventoryManager = InventoryManager.GetInstance();
         staminaManager = StaminaManager.GetInstance();
-        SceneManager = SceneManager.GetInstance();
         SubscribeToKeyInputs();
         StartCoroutine(SpawnInitDelay());
     }
 
     private void OnGadgetUse()
     {
-
+        GadgetItem gadgetItem = inventoryManager.GetCurrentGadgetItem();
+        if (gadgetItem != null)
+        {
+            gadgetItem.UseGadget();
+        }
     }
     private IEnumerator SpawnInitDelay()
     {
         yield return null;
         characterManager.SpawnCharacters(GetCharactersOwnedList(), this);
         SwapCharacters(inventoryManager.GetCurrentEquipCharacterData());
+        SetCurrentGadgetItemEquipped(inventoryManager.GetCurrentGadgetItem());
     }
 
     private void OnSceneChanged()
@@ -78,7 +97,7 @@ public class PlayerManager : MonoBehaviour
         PlayerCharactersList.Add(pc);
     }
 
-    public void HealCharacter(CharacterData c, float amt)
+    public void HealCharacter(CharacterData c, float amt, bool showtext = true)
     {
         if (c == null)
             return;
@@ -91,7 +110,7 @@ public class PlayerManager : MonoBehaviour
             actualamt = 1f;
 
         c.SetHealth(c.GetHealth() + (int)actualamt);
-        if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()))
+        if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()) && showtext)
         {
             AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
             if (c == inventoryManager.GetCurrentEquipCharacterData())
@@ -175,7 +194,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void HealCharacterBruteForce(CharacterData c, float amt)
+    public void HealCharacterBruteForce(CharacterData c, float amt, bool showtext = true)
     {
         if (c == null)
             return;
@@ -185,7 +204,7 @@ public class PlayerManager : MonoBehaviour
             actualamt = 1f;
 
         c.SetHealth(c.GetHealth() + (int)actualamt);
-        if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()))
+        if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()) && showtext)
             AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
     }
 
@@ -260,9 +279,17 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
         UpdateOutofBound();
+        UpdateGadget();
         UpdateCharacterData();
     }
 
+    private void UpdateGadget()
+    {
+        if (currentEquipGadgetItem == null)
+            return;
+
+        currentEquipGadgetItem.Update();
+    }
     private void UpdateCharacterData()
     {
         if (inventoryManager == null)

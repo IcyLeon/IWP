@@ -2348,7 +2348,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 91a77e26f491a91489d36e4cfed49599, type: 2}
   m_sharedMaterial: {fileID: 3612584417579126279, guid: 91a77e26f491a91489d36e4cfed49599,
@@ -3912,6 +3912,7 @@ MonoBehaviour:
   ElementalSkillBackgroundCanvasGroup: {fileID: 4549896843499194649}
   ElementalSkillSprite: {fileID: 4549896844696804555}
   ElementalSkillCooldownTxt: {fileID: 4549896843970284914}
+  ElementalSkillContent: {fileID: 4549896843502711840}
   ElementalBurstBackgroundCanvasGroup: {fileID: 4549896844594784142}
   BurstSkillCooldownTxt: {fileID: 4549896843647067746}
   ElementalBurstImage: {fileID: 4549896844351812515}
@@ -3919,6 +3920,13 @@ MonoBehaviour:
   ElementalBurstBackgroundSprite_Default: {fileID: 21300000, guid: 66611879f59d137469ee39363c46fb28,
     type: 3}
   BurstFill: {fileID: 4549896843553624907}
+  ElementalBurstContent: {fileID: 4549896843555544795}
+  GadgetBackgroundCanvasGroup: {fileID: 3035448513623056357}
+  GadgetSkillSprite: {fileID: 258914723709066083}
+  GadgetSkillCooldownTxt: {fileID: 0}
+  AmtTxt: {fileID: 1957940559533348908}
+  AmtContent: {fileID: 5737400834454451359}
+  GadgetContent: {fileID: 4193364483668634804}
 --- !u!1 &4549896844351812526
 GameObject:
   m_ObjectHideFlags: 0
@@ -9509,8 +9517,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -2.5}
-  m_SizeDelta: {x: -115, y: -115}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -100, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4549896844940188416
 CanvasRenderer:
@@ -12585,7 +12593,7 @@ GameObject:
   - component: {fileID: 1851680405215561863}
   - component: {fileID: 258914723709066083}
   m_Layer: 5
-  m_Name: ESkillIcon
+  m_Name: GadgetIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

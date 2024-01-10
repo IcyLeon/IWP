@@ -33,18 +33,11 @@ public class FoodData : ItemTemplate
     }
     public override string GetItemType()
     {
-        return GetFoodTypeString(foodType);
+        return "Food";
     }
 
-    protected string GetFoodTypeString(FoodType f)
+    public FoodType GetFoodType()
     {
-        switch(f)
-        {
-            case FoodType.BUFF:
-                return "ATK-Boosting Dishes";
-            case FoodType.RESTORE_HEALTH:
-                return "Recovery Dishes";
-        }
-        return "Unknown Dish";
+        return foodType;
     }
 }

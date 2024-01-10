@@ -43,6 +43,17 @@ public class BaseEnemy : Characters
         base.Start();
     }
 
+    protected virtual void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.GetComponent<IDamage>() == null)
+            return;
+
+        if (!IsDead())
+            return;
+
+        Physics.IgnoreCollision(collision.collider, col);
+    }
+
     protected int GetMaxLevel()
     {
         return MaxLevel;

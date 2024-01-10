@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class Teleporter : MonoBehaviour, IInteract
 {
+    private EnemyManager EnemyManager;
     private SceneManager sceneManager;
 
     public void Start()
     {
         sceneManager = SceneManager.GetInstance();
+        EnemyManager = EnemyManager.GetInstance();
     }
 
 
@@ -17,8 +19,17 @@ public class Teleporter : MonoBehaviour, IInteract
 
     public void Interact(PlayerManager PM)
     {
+        if (scene == SceneEnum.GAME)
+        {
+            int CurrentWave = EnemyManager.GetCurrentWave();
+            if (CurrentWave % 4 == 0 && CurrentWave != 0)
+            {
+                scene = SceneEnum.BOSS;
+            }
+        }
         sceneManager.ChangeScene(scene);
     }
+
 
     public string InteractMessage()
     {

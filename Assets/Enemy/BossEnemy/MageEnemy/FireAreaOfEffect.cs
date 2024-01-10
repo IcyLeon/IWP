@@ -6,7 +6,7 @@ public class FireAreaOfEffect : MonoBehaviour
 {
     private float FireInterval = 0.45f, FireIntervalElasped = 0;
     private MageEnemy MageEnemy;
-    private float Timer = 80;
+    private float Timer = 180;
 
     public void Init(MageEnemy m)
     {

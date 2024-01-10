@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c989609c8ba935b4692504e994eee7a5, type: 3}
+  m_Name: FoodGadgetItemSO
+  m_EditorClassIdentifier: 
+  ItemName: NRE (Menu 30)
+  ItemDesc: A handy meal-in-a-pouch that can transform most foods into instandtly
+    absorbable nutritional matter. Despite the fact that it can greatly increase
+    the efficiency of nutritional intake, most knights aren't too keen to put their
+    food in it...
+  ItemSprite: {fileID: 21300000, guid: 3086d66a563317b40a20a20da2c64ac0, type: 3}
+  Rarity: 3

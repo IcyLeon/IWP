@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
 
     public int CalculateHowManyToSpawn()
     {
-        int BaseRate = 1;
+        int BaseRate = 3;
         return Mathf.RoundToInt(BaseRate + EM.GetCurrentWave() * (EM.GetCurrentWave() - 1) + BaseRate);
     }
 

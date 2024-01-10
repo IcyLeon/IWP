@@ -1,14 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "ReviveFoodData", menuName = "ScriptableObjects/ReviveFoodSO")]
 public class ReviveFoodSO : FoodData
 {
     public float ReviveCharacterHP;
     public float AdditionalRecoveryHeal;
 
-    public override string GetItemType()
+    public override Type GetTypeREF()
     {
-        return "Recovery Dishes";
+        return typeof(ReviveFood);
     }
 }
+

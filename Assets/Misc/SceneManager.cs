@@ -56,7 +56,6 @@ public class SceneManager : MonoBehaviour
 
     public void ChangeScene(SceneEnum scene)
     {
-        //StartCoroutine(LoadSceneAsync(GetSceneName(scene)));
         LoadSceneAsync(GetSceneName(scene));
         currentScene = scene;
     }

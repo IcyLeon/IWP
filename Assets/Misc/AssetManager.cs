@@ -107,9 +107,8 @@ public class AssetManager : MonoBehaviour
         Item ItemREF = null;
         if (item == null)
         {
-            Type ItemType = itemTemplate.GetTypeREF();
-            object instance = Activator.CreateInstance(ItemType, true, itemTemplate);
-            ItemREF = (Item)instance;
+            Item newItem = InventoryManager.CreateItem(itemTemplate);
+            ItemREF = newItem;
         }
         else
         {

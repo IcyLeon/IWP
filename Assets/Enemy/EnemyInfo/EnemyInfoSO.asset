@@ -26,12 +26,14 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3599e6fe12ab2c149a3272aaab4f09cc, type: 2}
     - {fileID: 11400000, guid: 581eb018cbf165848b553d94bab31b49, type: 2}
     - {fileID: 11400000, guid: 3ae1aa8cfa5d346489fd6ff4b5e9c8a0, type: 2}
+    - {fileID: 11400000, guid: 8ee57fc8cbe590e49b6944642b9acd9a, type: 2}
     EnemySO: {fileID: 11400000, guid: 1ac715383908fa94d9da61a60cbb739c, type: 2}
     EnemyPrefab: {fileID: 170346, guid: 88e480c990c9d6a458b5fc85fe1da2aa, type: 3}
     MaxItemToGive: 2
   - PossibleItemsList:
     - {fileID: 11400000, guid: 8ee57fc8cbe590e49b6944642b9acd9a, type: 2}
+    - {fileID: 11400000, guid: 87977df504e45f34384b877062244f1b, type: 2}
     EnemySO: {fileID: 11400000, guid: 51fbb7eade2f2db4ca572735df86710b, type: 2}
     EnemyPrefab: {fileID: 6857184180266605566, guid: 4aa44f76b0aca114981414f13c62e403,
       type: 3}
-    MaxItemToGive: 2
+    MaxItemToGive: 3

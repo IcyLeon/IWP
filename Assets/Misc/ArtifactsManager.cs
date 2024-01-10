@@ -46,9 +46,7 @@ public class ArtifactsManager : MonoBehaviour
             InventoryManager.GetInstance().AddItems(artifacts);
 
 
-            Type ItemType = expItemSO.GetTypeREF();
-            object instance = Activator.CreateInstance(ItemType, true, expItemSO);
-            Item item = (Item)instance;
+            Item item = InventoryManager.CreateItem(expItemSO);
             InventoryManager.GetInstance().AddItems(item);
         }
 

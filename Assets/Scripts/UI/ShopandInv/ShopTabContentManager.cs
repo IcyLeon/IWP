@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class ShopTabContentManager : MonoBehaviour
 {
     [Header("Tab Toggle")]
+    [SerializeField] ScrollRect ScrollRect;
     [SerializeField] ToggleGroup TabToggleGroup;
     [SerializeField] GameObject[] TabContent;
     [SerializeField] Color32 SelectedColor, DefaultColor;
@@ -46,6 +47,7 @@ public class ShopTabContentManager : MonoBehaviour
             return;
 
         TabContent[idx].gameObject.SetActive(TabToggleGroupList[idx].isOn);
+        ScrollRect.content = TabContent[idx].GetComponent<RectTransform>();
         Toggle(TabToggleGroupList[idx]);
     }
 

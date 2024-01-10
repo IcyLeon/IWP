@@ -69,6 +69,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f4ffa19c8df97334091979fa976d3ae0, type: 2}
   - {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
   - {fileID: 11400000, guid: 1f82e998edf14f041978ed9b72e14bc4, type: 2}
+  GadgetItemSO: {fileID: 11400000, guid: 9b3a304c107d8de4e83016574df877eb, type: 2}
 --- !u!114 &2296422559368538025
 MonoBehaviour:
   m_ObjectHideFlags: 0

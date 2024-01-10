@@ -147,7 +147,7 @@ public class April : SwordCharacters
         if (m != null)
         {
             if (GetPlayerManager().GetAliveCharacters() != null)
-                GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), GetDEF() * 0.35f);
+                GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), 25f + GetDEF() * 0.35f);
 
             if (e.GetElements() != Elemental.NONE)
             {
@@ -162,7 +162,7 @@ public class April : SwordCharacters
         {
             if (d.Value != null)
                 if (!d.Value.IsDead() && d.Value != m.GetIDamageObj())
-                    d.Value.TakeDamage(d.Value.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.1f * GetMaxHealth() + 95f, this, false);
+                    d.Value.TakeDamage(d.Value.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.15f * GetMaxHealth() + 75f, this, false);
         }
     }
 

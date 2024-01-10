@@ -177,6 +177,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
             OnInteract?.Invoke();
+        else if (Input.GetKeyUp(KeyCode.Z))
+            OnGadgetUse?.Invoke();
         else if (GetInputNums() != -1)
             OnNumsKeyInput?.Invoke(GetInputNums());
         else if (Input.GetKey(KeyCode.E))
@@ -185,8 +187,6 @@ public class PlayerController : MonoBehaviour
             OnElementalSkillTrigger?.Invoke();
         else if (Input.GetKey(KeyCode.Q))
             OnElementalBurstTrigger?.Invoke();
-        else if (Input.GetKey(KeyCode.Z))
-            OnGadgetUse?.Invoke();
         else if (Input.GetMouseButton(0))
             OnChargeHold?.Invoke();
         else if (Input.GetMouseButtonUp(0))

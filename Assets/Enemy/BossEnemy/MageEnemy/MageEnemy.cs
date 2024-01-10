@@ -83,8 +83,10 @@ public class MageEnemy : BaseEnemy
         FireHitIntervalElapsed = Time.time;
     }
 
-    private void OnCollisionStay(Collision collision)
+    protected override void OnCollisionStay(Collision collision)
     {
+        base.OnCollisionStay(collision);
+
         if (m_StateMachine.GetCurrentState() is not MageEnemyChargeAttackState)
             return;
 

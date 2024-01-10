@@ -17,8 +17,13 @@ public class GadgetConsumableItem : GadgetItem
         {
             amount -= val;
         }
-    } 
+        amount = Mathf.Max(0, amount);
+    }
 
+    public int GetAmount()
+    {
+        return amount;
+    }
     public GadgetConsumableItem(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
     }

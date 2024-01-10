@@ -25,25 +25,27 @@ public class Food : ConsumableItem
         {
             if (amount > 0)
             {
-                if (characterData != null)
+                if (GetCharacterData() != null)
                 {
-                    characterData.ConsumeFood(this);
+                    ConsumeFood(this);
                 }
                 base.Use(Useamount);
             }
         }
     }
 
-    private void SetCharacterData(CharacterData cd)
+    protected virtual void ConsumeFood(Food food)
+    {
+        GetCharacterData().ConsumeFood(this);
+    }
+
+    public void SetCharacterData(CharacterData cd)
     {
         characterData = cd;
     }
-    private bool isRevivalFood()
+    public CharacterData GetCharacterData()
     {
-        if (GetItemSO() == null)
-            return false;
-
-        return GetItemSO() is ReviveFoodSO;
+        return characterData;
     }
 
     public FoodData GetFoodData()

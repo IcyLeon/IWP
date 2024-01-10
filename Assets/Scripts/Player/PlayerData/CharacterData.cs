@@ -33,6 +33,8 @@ public class CharacterData : UpgradableItems
 
     public void ConsumeFood(Food food)
     {
+        CharacterData c = food.GetCharacterData();
+
         Food existFood = CheckIfFoodTypeExist(food);
         if (existFood == null)
         {

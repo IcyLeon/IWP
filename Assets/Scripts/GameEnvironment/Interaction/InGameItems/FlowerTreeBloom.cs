@@ -42,9 +42,7 @@ public class FlowerTreeBloom : MonoBehaviour, IInteract
             switch (item)
             {
                 case ItemTemplate itemTemplate:
-                    Type ItemType = itemTemplate.GetTypeREF();
-                    object instance = Activator.CreateInstance(ItemType, true, itemTemplate);
-                    Item itemREF = (Item)instance;
+                    Item itemREF = InventoryManager.CreateItem(itemTemplate);
                     itemsList.Add(itemREF);
                     break;
                 case ArtifactsListInfo artifactsListInfo:

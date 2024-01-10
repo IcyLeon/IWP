@@ -14,7 +14,7 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
     public void SetItemREF(Item item)
     {
         itemREF = item;
-        if (itemREF == null || !(itemREF is UpgradableItems))
+        if (itemREF == null || (itemREF is not UpgradableItems && itemREF is not GadgetItem))
         {
             gameObject.SetActive(false);
             return;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour, IInteract
 {
+    [SerializeField] Sprite ShopIcon;
     [SerializeField] GameObject ShopUI;
     public void Interact(PlayerManager PM)
     {
@@ -29,6 +30,6 @@ public class Shop : MonoBehaviour, IInteract
 
     public Sprite GetInteractionSprite()
     {
-        return null;
+        return ShopIcon;
     }
 }

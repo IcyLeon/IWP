@@ -21,10 +21,15 @@ public class Objectives : MonoBehaviour
 
     void OnEnemyWaveChange()
     {
+        if (EM == null)
+            return;
+
         WavesTxt.text = "Wave: " + EM.GetCurrentWave();
     }
     void OnEnemyDefeatedChange()
     {
+        if (EM == null)
+            return;
         DefeatedTxt.text = "Enemy Defeated: " + EM.GetCurrentEnemyDefeated() + "/" + EM.GetEnemiesCount();
     }
 

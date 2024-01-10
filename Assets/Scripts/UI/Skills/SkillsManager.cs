@@ -10,6 +10,7 @@ public class SkillsManager : MonoBehaviour
     [SerializeField] CanvasGroup ElementalSkillBackgroundCanvasGroup;
     [SerializeField] Image ElementalSkillSprite;
     [SerializeField] TextMeshProUGUI ElementalSkillCooldownTxt;
+    [SerializeField] GameObject ElementalSkillContent;
 
     [Header("Elemental Burst")]
     [SerializeField] CanvasGroup ElementalBurstBackgroundCanvasGroup;
@@ -18,20 +19,24 @@ public class SkillsManager : MonoBehaviour
     [SerializeField] Image ElementalBurstSkillSprite;
     [SerializeField] Sprite ElementalBurstBackgroundSprite_Default;
     [SerializeField] Image BurstFill;
+    [SerializeField] GameObject ElementalBurstContent;
 
-    [Header("Elemental Burst")]
+    [Header("Gadget")]
     [SerializeField] CanvasGroup GadgetBackgroundCanvasGroup;
     [SerializeField] Image GadgetSkillSprite;
     [SerializeField] TextMeshProUGUI GadgetSkillCooldownTxt;
     [SerializeField] TextMeshProUGUI AmtTxt;
+    [SerializeField] GameObject AmtContent;
+    [SerializeField] GameObject GadgetContent;
 
-    private CharacterData PlayerCharacterData;
     private GadgetItem CurrentGadgetItem;
+    private CharacterData CurrentPlayerCharacterData;
     private ElementalReactionsManager elementalReactionsManager;
 
     private void Awake()
     {
         PlayerManager.onCharacterChange += OnCharacterSwitch;
+        PlayerManager.OnGadgetItemChange += OnGadgetItemChange;
     }
     // Start is called before the first frame update
     void Start()
@@ -39,49 +44,97 @@ public class SkillsManager : MonoBehaviour
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
     }
 
+    private void OnGadgetItemChange(GadgetItem GadgetItem)
+    {
+        CurrentGadgetItem = GadgetItem;
+    }
+
     private void OnDestroy()
     {
         PlayerManager.onCharacterChange -= OnCharacterSwitch;
+        PlayerManager.OnGadgetItemChange -= OnGadgetItemChange;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (PlayerCharacterData != null)
+        UpdateElementalSkill();
+        UpdateElementalBurst();
+        UpdateGadget();
+    }
+
+    private void UpdateGadget()
+    {
+        GadgetContent.SetActive(CurrentGadgetItem != null);
+        if (CurrentGadgetItem == null)
         {
-            UpdateElementalSkill();
-            UpdateElementalBurst();
+            return;
         }
 
+        AmtContent.SetActive(CurrentGadgetItem is GadgetConsumableItem);
+
+        switch (CurrentGadgetItem)
+        {
+            case GadgetConsumableItem GadgetConsumableItem:
+                switch (GadgetConsumableItem)
+                {
+                    case FoodGadget foodGadget:
+                        if (foodGadget.GetCurrentFood() != null)
+                        {
+                            GadgetSkillSprite.sprite = foodGadget.GetCurrentFood().GetItemSO().ItemSprite;
+                        }
+                        GadgetSkillSprite.enabled = foodGadget.GetCurrentFood() != null;
+                        break;
+                }
+                AmtTxt.text = GadgetConsumableItem.GetAmount().ToString();
+                break;
+            default:
+                GadgetSkillSprite.sprite = CurrentGadgetItem.GetItemSO().ItemSprite;
+                break;
+        }
     }
 
     private void UpdateElementalBurst()
     {
-        if (PlayerCharacterData.CanTriggerBurstSKillCost())
-            ElementalBurstImage.sprite = elementalReactionsManager.GetElementalColorSO().GetElementalInfo(PlayerCharacterData.GetPlayerCharacterSO().Elemental).ElementBurstBackground;
+        ElementalBurstContent.SetActive(CurrentPlayerCharacterData != null);
+        if (CurrentPlayerCharacterData == null)
+        {
+            return;
+        }
+
+        if (CurrentPlayerCharacterData.CanTriggerBurstSKillCost())
+            ElementalBurstImage.sprite = elementalReactionsManager.GetElementalColorSO().GetElementalInfo(CurrentPlayerCharacterData.GetPlayerCharacterSO().Elemental).ElementBurstBackground;
         else
             ElementalBurstImage.sprite = ElementalBurstBackgroundSprite_Default;
 
-        if (PlayerCharacterData.CanTriggerBurstSKill() && PlayerCharacterData.CanTriggerBurstSKillCost())
+        if (CurrentPlayerCharacterData.CanTriggerBurstSKill() && CurrentPlayerCharacterData.CanTriggerBurstSKillCost())
             ElementalBurstBackgroundCanvasGroup.alpha = 1f;
         else
             ElementalBurstBackgroundCanvasGroup.alpha = 0.5f;
 
-        BurstFill.gameObject.SetActive(!PlayerCharacterData.CanTriggerBurstSKillCost());
 
         if (GetPlayerCharacterSO())
         {
             ElementalBurstSkillSprite.sprite = GetPlayerCharacterSO().ElementalBurstSprite;
         }
-        BurstSkillCooldownTxt.text = PlayerCharacterData.GetCurrentElementalBurstCooldown().ToString("0.0") + "s";
-        BurstFill.fillAmount = PlayerCharacterData.GetCurrentEnergyBurstCost() / PlayerCharacterData.GetEnergyBurstCost();
-        BurstSkillCooldownTxt.gameObject.SetActive(!PlayerCharacterData.CanTriggerBurstSKill());
+
+        BurstSkillCooldownTxt.text = CurrentPlayerCharacterData.GetCurrentElementalBurstCooldown().ToString("0.0") + "s";
+        BurstFill.fillAmount = CurrentPlayerCharacterData.GetCurrentEnergyBurstCost() / CurrentPlayerCharacterData.GetEnergyBurstCost();
+        BurstSkillCooldownTxt.gameObject.SetActive(!CurrentPlayerCharacterData.CanTriggerBurstSKill());
+        BurstFill.gameObject.SetActive(!CurrentPlayerCharacterData.CanTriggerBurstSKillCost());
+
     }
 
     private void UpdateElementalSkill()
     {
-        ElementalSkillCooldownTxt.text = PlayerCharacterData.GetCurrentElementalSkillCooldown().ToString("0.0") + "s";
-        if (PlayerCharacterData.CanTriggerESKill())
+        ElementalSkillContent.SetActive(CurrentPlayerCharacterData != null);
+        if (CurrentPlayerCharacterData == null)
+        {
+            return;
+        }
+
+        ElementalSkillCooldownTxt.text = CurrentPlayerCharacterData.GetCurrentElementalSkillCooldown().ToString("0.0") + "s";
+        if (CurrentPlayerCharacterData.CanTriggerESKill())
             ElementalSkillBackgroundCanvasGroup.alpha = 1f;
         else
             ElementalSkillBackgroundCanvasGroup.alpha = 0.5f;
@@ -90,19 +143,19 @@ public class SkillsManager : MonoBehaviour
         {
             ElementalSkillSprite.sprite = GetPlayerCharacterSO().ElementalSkillSprite;
         }
-        ElementalSkillCooldownTxt.gameObject.SetActive(!PlayerCharacterData.CanTriggerESKill());
+        ElementalSkillCooldownTxt.gameObject.SetActive(!CurrentPlayerCharacterData.CanTriggerESKill());
     }
 
-    void OnCharacterSwitch(CharacterData PlayerCharacterData)
+    void OnCharacterSwitch(CharacterData CurrentPlayerCharacterData)
     {
-        this.PlayerCharacterData = PlayerCharacterData;
+        this.CurrentPlayerCharacterData = CurrentPlayerCharacterData;
     }
 
     private PlayerCharacterSO GetPlayerCharacterSO()
     {
-        if (PlayerCharacterData == null)
+        if (CurrentPlayerCharacterData == null)
             return null;
 
-        return PlayerCharacterData.GetItemSO() as PlayerCharacterSO;
+        return CurrentPlayerCharacterData.GetItemSO() as PlayerCharacterSO;
     }
 }
