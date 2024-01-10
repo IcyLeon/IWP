@@ -39,11 +39,11 @@ public class MageEnemyAttackState : MageEnemyGroundState
 
         GetMageEnemyStateMachine().MageEnemyData.AttackCurrentElasped = Time.time;
 
-        if (GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-        {
-            OnIdleState();
-            return;
-        }
+        //if (GetMageEnemyStateMachine().GetMageEnemy().GetAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+        //{
+        //    OnIdleState();
+        //    return;
+        //}
 
     }
 
