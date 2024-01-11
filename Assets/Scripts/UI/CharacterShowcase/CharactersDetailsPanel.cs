@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,8 @@ public class CharactersDetailsPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI CharacterEXP;
     [SerializeField] Slider ExpSlider;
     [SerializeField] UpgradeCharacterSO UpgradeCharacterSO;
-    [SerializeField] CharacterStatsDisplay[] CharacterStatsDisplayList;
+    [SerializeField] GameObject CharacterStatsDisplayContent;
+    private CharacterStatsDisplay[] CharacterStatsDisplayList;
     private CharacterData characterData;
 
     public void Start()
@@ -23,6 +25,7 @@ public class CharactersDetailsPanel : MonoBehaviour
     public void Init(CharacterData c)
     {
         characterData = c;
+        CharacterStatsDisplayList = CharacterStatsDisplayContent.GetComponentsInChildren<CharacterStatsDisplay>(true);
         if (characterData != null)
         {
             foreach (var CharacterStatsDisplay in CharacterStatsDisplayList)

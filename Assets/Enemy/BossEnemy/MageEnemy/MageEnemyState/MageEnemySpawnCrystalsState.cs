@@ -19,7 +19,7 @@ public class MageEnemySpawnCrystalsState : MageEnemyAttackState
     {
         base.Exit();
         StopAnimation("isSpawnOrb");
-        AssetManager.GetInstance().OpenMessageNotification("The mage is spawning energy cores, destroy them quickly");
+        AssetManager.GetInstance().OpenMessageNotification("The mage spawn energy cores, destroy them quickly");
     }
 
     public override void FixedUpdate()

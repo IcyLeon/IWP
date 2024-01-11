@@ -65,8 +65,9 @@ public class AssetManager : MonoBehaviour
     [Header("Dash")]
     [SerializeField] GameObject DashPrefab;
 
-    [Header("Dash")]
+    [Header("InteractableItemObject")]
     [SerializeField] GameObject InteractableItemObjectPrefab;
+    [SerializeField] GameObject ItemCollectedUIPrefab;
 
     private static AssetManager instance;
     public static bool isInProbabilityRange(float a)
@@ -121,6 +122,14 @@ public class AssetManager : MonoBehaviour
     {
         GameObject go = Instantiate(CrossHair, GetCanvasGO().transform);
         return go;
+    }
+
+    public ItemCollectedUI SpawnItemCollectedUI(ItemTemplate itemTemplate)
+    {
+        ItemCollectedUI ItemCollectedUI = Instantiate(ItemCollectedUIPrefab, GetCanvasGO().transform).GetComponent<ItemCollectedUI>();
+        ItemCollectedUI.Init(itemTemplate);
+        ItemCollectedUI.transform.SetAsFirstSibling();
+        return ItemCollectedUI;
     }
 
     public GameObject GetDragItem()

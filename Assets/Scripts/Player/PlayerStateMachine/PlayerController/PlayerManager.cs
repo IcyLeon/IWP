@@ -16,11 +16,12 @@ public class PlayerManager : MonoBehaviour
     private StaminaManager staminaManager;
     private InventoryManager inventoryManager;
     private CharacterManager characterManager;
-    public delegate void OnCharacterChange(CharacterData characterData);
+    public delegate void OnCharacterChange(CharacterData characterData, PlayerCharacters playerCharacters);
     public static OnCharacterChange onCharacterChange;
     public delegate void OnEntityHit(Elements e, IDamage IDamage);
     public static OnEntityHit onEntityHitSendInfo;
     public static Action<GadgetItem> OnGadgetItemChange = delegate { };
+    private ItemCollectedUI ItemCollectedUI;
 
     private GadgetItem currentEquipGadgetItem;
 
@@ -39,6 +40,16 @@ public class PlayerManager : MonoBehaviour
         return PlayerElementalSkillandBurstManager;
     }
 
+    public void SpawnItemCollectedUI(ItemTemplate itemSO)
+    {
+        AssetManager AM = AssetManager.GetInstance();
+        if (ItemCollectedUI != null)
+        {
+            Destroy(ItemCollectedUI.gameObject);
+        }
+
+        ItemCollectedUI = AM.SpawnItemCollectedUI(itemSO);
+    }
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -391,7 +402,7 @@ public class PlayerManager : MonoBehaviour
                 CharacterChange(characterData);
 
             inventoryManager.SetCurrentEquipCharacter(characterData);
-            onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData());
+            onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData(), CurrentCharacter);
         }
     }
 

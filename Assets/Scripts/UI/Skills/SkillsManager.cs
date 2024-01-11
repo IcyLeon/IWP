@@ -29,6 +29,9 @@ public class SkillsManager : MonoBehaviour
     [SerializeField] GameObject AmtContent;
     [SerializeField] GameObject GadgetContent;
 
+    [Header("Aim")]
+    [SerializeField] GameObject AimContent;
+
     private GadgetItem CurrentGadgetItem;
     private CharacterData CurrentPlayerCharacterData;
     private ElementalReactionsManager elementalReactionsManager;
@@ -146,9 +149,11 @@ public class SkillsManager : MonoBehaviour
         ElementalSkillCooldownTxt.gameObject.SetActive(!CurrentPlayerCharacterData.CanTriggerESKill());
     }
 
-    void OnCharacterSwitch(CharacterData CurrentPlayerCharacterData)
+    void OnCharacterSwitch(CharacterData CurrentPlayerCharacterData, PlayerCharacters playerCharacters)
     {
         this.CurrentPlayerCharacterData = CurrentPlayerCharacterData;
+
+        AimContent.SetActive(playerCharacters is BowCharacters);
     }
 
     private PlayerCharacterSO GetPlayerCharacterSO()

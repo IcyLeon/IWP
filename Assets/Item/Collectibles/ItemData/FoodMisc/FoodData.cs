@@ -21,6 +21,7 @@ public class FoodData : ItemTemplate
     public float InstantHeal;
     public StatsBoostInfo[] StatsBoostInfoList;
     public float Duration;
+    public string[] FoodStatsInfo;
 
     public override Type GetTypeREF()
     {

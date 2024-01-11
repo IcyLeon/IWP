@@ -16,6 +16,7 @@ public class ItemTemplate : ScriptableObject
     public string ItemName;
     [TextAreaAttribute]
     public string ItemDesc;
+    public string SummaryItemDesc;
     public Sprite ItemSprite;
     public Rarity Rarity;
 

@@ -37,22 +37,24 @@ public class CharacterStatsDisplay : MonoBehaviour
         else
             totalStats = ShowTotalStatsCharactersValue(characterData.GetLevel()) + Mathf.RoundToInt(ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, characterStatsType));
 
-        string StatsValue = Mathf.Approximately(totalStats, Mathf.Round(totalStats))
-        ? totalStats.ToString("F0")
-        : totalStats.ToString("F1");
-
+        string StatsValue;
         if (characterStatsValueText)
         {
             if (ShowOnlyBaseStats)
             {
-                characterStatsValueText.text = ShowbaseStatsCharactersValue().ToString();
+                float baseStat = ShowbaseStatsCharactersValue();
+                StatsValue = Mathf.Approximately(baseStat, Mathf.Round(baseStat))
+                ? baseStat.ToString("F0")
+                : baseStat.ToString("F1");
             }
             else
             {
-                characterStatsValueText.text = StatsValue;
+                StatsValue = Mathf.Approximately(totalStats, Mathf.Round(totalStats))
+                ? totalStats.ToString("F0")
+                : totalStats.ToString("F1");
             }
+            characterStatsValueText.text = StatsValue;
         }
-
     }
 
     private float ShowTotalStatsCharactersValue(int level)

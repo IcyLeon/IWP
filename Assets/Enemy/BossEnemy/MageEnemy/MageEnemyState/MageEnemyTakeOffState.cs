@@ -26,8 +26,4 @@ public class MageEnemyTakeOffState : MageEnemyAirborneState
         base.Exit();
         StopAnimation("isTakingOff");
     }
-
-    public override void Update()
-    {
-    }
 }

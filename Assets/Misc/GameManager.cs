@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
         assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Incoming!");
         TotalEnemyInWave = CalculateHowManyToSpawn();
         EM.SetEnemiesCount(TotalEnemyInWave);
-        WaveSpawn(tempcharactersSO, 0);
+        WaveSpawn(tempcharactersSO, 1);
     }
 
     private void OnWaveComplete()

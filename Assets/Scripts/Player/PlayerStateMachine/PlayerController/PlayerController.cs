@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         return mainUI;
     }
 
-    private void RecalculateSize(CharacterData characterData)
+    private void RecalculateSize(CharacterData characterData, PlayerCharacters playerCharacters)
     {
         resizeableCollider.Resize();
     }

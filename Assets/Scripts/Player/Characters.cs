@@ -275,7 +275,6 @@ public class Characters : MonoBehaviour, IDamage
         {
             AssetManager.GetInstance().SpawnWorldText_Elemental(pos, elemental, DamageValue.ToString());
         }
-        UpdateDie();
         return e;
     }
 
@@ -314,6 +313,8 @@ public class Characters : MonoBehaviour, IDamage
     {
         CurrentHealth = val;
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
+        if (GetHealth() <= 0)
+            UpdateDie();
     }
 
     protected virtual void OnDestroy()

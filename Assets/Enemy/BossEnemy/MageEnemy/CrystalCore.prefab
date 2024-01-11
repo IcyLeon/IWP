@@ -116,6 +116,8 @@ MonoBehaviour:
   DestroyedExplosionPrefab: {fileID: 5514247125125722303, guid: 1e6e3fcba0ebdda4bbff368c640db525,
     type: 3}
   HealthBarPivotParent: {fileID: 6834034323849308798}
+  LineRendererPrefab: {fileID: 5741767689826894581, guid: b27bae7a554c375409e3df37c5504ec2,
+    type: 3}
 --- !u!54 &7448327742072016041
 Rigidbody:
   m_ObjectHideFlags: 0

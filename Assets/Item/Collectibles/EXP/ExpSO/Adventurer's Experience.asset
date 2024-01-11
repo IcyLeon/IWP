@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemName: Adventurer's Experience
   ItemDesc: Adventurer's Experience is a Character EXP Material that provides 5,000
     Character EXP to increase a character's level.
+  SummaryItemDesc: Gives 5000 Character EXP to increase a character's level.
   ItemSprite: {fileID: 21300000, guid: ef270cf86d5a0a24cb7391452cd113b2, type: 3}
   Rarity: 2
   ExpAmount: 5000

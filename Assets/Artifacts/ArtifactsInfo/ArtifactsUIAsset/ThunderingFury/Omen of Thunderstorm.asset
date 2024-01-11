@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemName: Omen of Thunderstorm
   ItemDesc: A ceremonial cup that holds the blood of the innocent. It is brimming
     with the thundering fury of the prayers that echo within.
+  SummaryItemDesc: A buff piece to enhance your characters
   ItemSprite: {fileID: 21300000, guid: 4443aa2f56794de429849b3e1b2e1698, type: 3}
   Rarity: 0
   artifactType: 3

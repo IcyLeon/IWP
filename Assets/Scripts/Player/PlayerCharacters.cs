@@ -401,7 +401,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         DisableInputs();
     }
 
-    protected virtual void OnCharacterChanged(CharacterData c)
+    protected virtual void OnCharacterChanged(CharacterData c, PlayerCharacters playerCharacters)
     {
         UpdateDefaultPosOffsetAndZoom(0f);
     }

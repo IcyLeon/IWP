@@ -11,6 +11,7 @@ public class PartyInfo : MonoBehaviour
     [SerializeField] Image PartyIconImage;
     [SerializeField] HealthBarScript healthBarScript;
     [SerializeField] TextMeshProUGUI KeyText;
+    [SerializeField] Material materialInstance;
     private CharacterData characterData;
 
     public void SetKeyText(string t)
@@ -23,6 +24,7 @@ public class PartyInfo : MonoBehaviour
         {
             PartyName.text = characterData.GetPlayerCharacterSO().ItemName;
             PartyIconImage.sprite = characterData.GetPlayerCharacterSO().PartyIcon;
+            PartyIconImage.material = Instantiate(materialInstance);
         }
     }
     // Update is called once per frame
@@ -33,12 +35,24 @@ public class PartyInfo : MonoBehaviour
 
     void UpdateHealthDisplay()
     {
-        if (healthBarScript && characterData != null)
+        if (characterData != null)
         {
-            healthBarScript.UpdateHealth(characterData.GetHealth(), 0, characterData.GetActualMaxHealth(characterData.GetLevel()));
+            if (healthBarScript)
+            {
+                healthBarScript.UpdateHealth(characterData.GetHealth(), 0, characterData.GetActualMaxHealth(characterData.GetLevel()));
+            }
+
+            if (characterData.IsDead())
+                SetGrayScale(0);
+            else
+                SetGrayScale(1);
         }
     }
 
+    private void SetGrayScale(float val)
+    {
+        PartyIconImage.material.SetFloat("_Scale", val);
+    }
     public void SetCharacterData(CharacterData c)
     {
         characterData = c;

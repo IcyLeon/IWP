@@ -14,12 +14,14 @@ public class MageEnemy : BaseEnemy
     [SerializeField] GameObject FireBallPrefab;
     [SerializeField] Transform FireBallPivotTransform;
     [SerializeField] MageEnemyPunch m_PunchCollider;
+    [SerializeField] Transform MiddlePositionTransform;
     private List<MageFireBall> MageFireBallList = new();
     private List<MageOrb> MageOrbList = new();
     private List<FireAreaOfEffect> FireAreaOfEffectList = new();
     private Coroutine MageCrystalCoreCoroutine;
     private GameObject CrystalsParent;
     private bool ChargeAttackEnable;
+    private float BaseShield = 1500f;
     private Dictionary<Collider, bool> ChargeColliderList = new();
 
     private void TurnOnChargeAttackStatus()
@@ -203,6 +205,7 @@ public class MageEnemy : BaseEnemy
                 idx -= totalLocation;
 
             MageOrb MO = Instantiate(MageCrystalsOrbPrefab, GetAllCrystalsLocation()[idx].position, Quaternion.identity).GetComponent<MageOrb>();
+            MO.Init(this, false);
             MageOrbList.Add(MO);
             idx++;
         }
@@ -263,6 +266,11 @@ public class MageEnemy : BaseEnemy
         }
     }
 
+    public Vector3 GetMiddleTargetPosition()
+    {
+        return MiddlePositionTransform.position;
+    }
+
     private bool IsAirborne()
     {
         return m_StateMachine.GetCurrentState() is MageEnemyAirborneState;
@@ -294,7 +302,7 @@ public class MageEnemy : BaseEnemy
 
         int total = GetTotalMageNotDestroyed();
 
-        if (total > 0)
+        if (total > 1)
         {
             if (m_StateMachine.MageEnemyData.CrystalsCoreStayElasped <= 0)
             {
@@ -321,7 +329,7 @@ public class MageEnemy : BaseEnemy
         {
             if (MageOrbList[i] != null)
             {
-                MageOrbList[i].SetTimesUp(true);
+                MageOrbList[i].Init(this, true);
                 initialPositions[i] = MageOrbList[i].transform.position;
             }
         }
@@ -373,7 +381,7 @@ public class MageEnemy : BaseEnemy
 
     public override float GetElementalShield()
     {
-        return 5000f;
+        return BaseShield + BaseShield * (GetLevel() - 1) * 0.65f;
     }
 
     private void FixedUpdate()

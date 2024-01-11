@@ -12,7 +12,11 @@ public class MageOrb : MonoBehaviour, IDamage
     private bool TimesUp;
     [SerializeField] GameObject DestroyedExplosionPrefab;
     [SerializeField] Transform HealthBarPivotParent;
-    private Elemental Elemental;
+    [SerializeField] LineRenderer LineRendererPrefab;
+    private float HealingMageIntervalElapsed, HealingMageInterval = 0.75f;
+    private float HealAmount;
+    private LineRenderer HealingLineRenderer;
+    private MageEnemy MageEnemy;
 
     public float GetHealth()
     {
@@ -24,8 +28,13 @@ public class MageOrb : MonoBehaviour, IDamage
         return BaseMaxHealth;
     }
 
-    public void SetTimesUp(bool val)
+    public void Init(MageEnemy ME, bool val)
     {
+        MageEnemy = ME;
+        HealAmount = MageEnemy.GetMaxHealth() * 0.01f;
+        HealingLineRenderer = Instantiate(LineRendererPrefab, transform);
+        HealingLineRenderer.useWorldSpace = true;
+        HealingLineRenderer.positionCount = 2;
         TimesUp = val;
     }
     public Vector3 GetPointOfContact()
@@ -91,12 +100,36 @@ public class MageOrb : MonoBehaviour, IDamage
             healthBarScript.UpdateHealth(GetHealth(), 0f, GetMaxHealth());
             healthBarScript.SliderInvsibleOnlyFullHealth();
         }
+        if (!TimesUp)
+        {
+            if (!IsDead()) {
+                if (Time.time - HealingMageIntervalElapsed > HealingMageInterval)
+                {
+                    MageEnemy.SetHealth(MageEnemy.GetHealth() + HealAmount);
+                    HealingMageIntervalElapsed = Time.time;
+                }
+            }
+        }
+        UpdateLineRenderer();
 
         if (IsDead())
         {
             DestroyOrb();
         }
     }
+
+    private void UpdateLineRenderer()
+    {
+        if (HealingLineRenderer && TimesUp)
+        {
+            Destroy(HealingLineRenderer.gameObject);
+            return;
+        }
+
+        HealingLineRenderer.SetPosition(0, transform.position);
+        HealingLineRenderer.SetPosition(1, MageEnemy.GetMiddleTargetPosition());
+    }
+
 
     private void OnTriggerStay(Collider Collider)
     {

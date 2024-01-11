@@ -613,6 +613,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 475036}
+  - {fileID: 566803982426547957}
   m_Father: {fileID: 492012}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1294,6 +1295,7 @@ MonoBehaviour:
     type: 3}
   FireBallPivotTransform: {fileID: 3084710222963050521}
   m_PunchCollider: {fileID: 354780462360015967}
+  MiddlePositionTransform: {fileID: 566803982426547957}
 --- !u!114 &1312825824173150283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,7 +1322,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 1
 --- !u!136 &1002647185652568759
 CapsuleCollider:
@@ -4164,6 +4166,37 @@ Transform:
   - {fileID: 413492}
   m_Father: {fileID: 474478}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1086760543707075712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 566803982426547957}
+  m_Layer: 6
+  m_Name: MiddlePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &566803982426547957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086760543707075712}
+  m_LocalRotation: {x: -0.027726524, y: -0.706563, z: -0.027726524, w: 0.706563}
+  m_LocalPosition: {x: -54.234585, y: -10.866254, z: -0.000011920932}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 464764}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1588090601997826614
 GameObject:

@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemName: Royal Silver Urn
   ItemDesc: An ornamental urn that once belonged to the old aristocrats of Mondstadt.
     Mournful winds seem to echo within its empty interior.
+  SummaryItemDesc: A buff piece to enhance your characters
   ItemSprite: {fileID: 21300000, guid: 41f528ef84bf13f428e8f19c217338e2, type: 3}
   Rarity: 0
   artifactType: 3

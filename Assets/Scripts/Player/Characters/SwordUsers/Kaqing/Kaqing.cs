@@ -46,19 +46,14 @@ public class Kaqing : SwordCharacters
         UltiRange = 8f;
         ElementalHitPos = Vector3.zero;
         CurrentElement = Elemental.NONE;
-        PlayerManager.onCharacterChange += onCharacterChange;
     }
 
-    private void onCharacterChange(CharacterData characterData)
+    protected override void OnCharacterChanged(CharacterData characterData, PlayerCharacters playerCharacters)
     {
+        base.OnCharacterChanged(characterData, playerCharacters);
         GetModel().SetActive(true);
     }
 
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        PlayerManager.onCharacterChange -= onCharacterChange;
-    }
     public override void SpawnSlash()
     {
         if (GetCurrentSwordElemental() == Elemental.NONE)

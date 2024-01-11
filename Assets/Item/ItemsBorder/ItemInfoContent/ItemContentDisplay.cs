@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +12,20 @@ public class ItemContentDisplay : MonoBehaviour
     [SerializeField] TextMeshProUGUI ItemTypeText;    
     [SerializeField] TextMeshProUGUI ItemDescText;
     [Header("Upgradable Content")]
-    [SerializeField] GameObject LevelBackground;
     [SerializeField] TextMeshProUGUI UpgradableLevelText;
+    [SerializeField] GameObject UpgradableContent;
+
     [Header("Artifacts Content")]
     [SerializeField] TextMeshProUGUI ArtifactSetText;
     [SerializeField] TextMeshProUGUI Artifact2PieceText;
     [SerializeField] TextMeshProUGUI Artifact4PieceText;
     [SerializeField] GameObject ArtifactsStatsContainer;
-    [SerializeField] GameObject ArtifactSetInfo;
+    [SerializeField] GameObject ArtifactsContent;
+    [SerializeField] GameObject ArtifactsStatsContent;
+    [SerializeField] GameObject ArtifactsSets;
+
+    [Header("Food Info Content")]
+    [SerializeField] GameObject FoodsContent;
 
     [Header("Common Item Info Content")]
     [SerializeField] Transform StarsTransformParent;
@@ -28,6 +35,13 @@ public class ItemContentDisplay : MonoBehaviour
         Artifacts artifacts = UpgradableItems as Artifacts;
         ArtifactsSO artifactsSO = itemsSO as ArtifactsSO;
         ArtifactsInfo artifactsInfo = ArtifactsManager.GetInstance().GetArtifactsInfo(artifactsSO);
+
+        ArtifactsStatsContent.SetActive(artifacts != null);
+        ArtifactsSets.SetActive(artifactsSO != null && artifactsInfo != null);
+        ArtifactsContent.SetActive(ArtifactsSets.activeSelf);
+
+        if (artifactsSO == null || artifactsInfo == null)
+            return;
 
         int i = 0;
 
@@ -51,11 +65,6 @@ public class ItemContentDisplay : MonoBehaviour
             i++;
         }
 
-        ArtifactSetInfo.SetActive(artifactsSO != null && artifactsInfo != null);
-
-        if (artifactsSO == null || artifactsInfo == null)
-            return;
-
         if (ArtifactSetText)
             ArtifactSetText.text = artifactsInfo.ArtifactsSetName + ":";
         if (Artifact2PieceText)
@@ -76,11 +85,35 @@ public class ItemContentDisplay : MonoBehaviour
 
     private void ShowUpgradableItemContent(UpgradableItems UpgradableItems)
     {
+        UpgradableContent.SetActive(UpgradableItems != null);
+        if (UpgradableItems == null)
+            return;
+
         if (UpgradableLevelText)
         {
-            LevelBackground.SetActive(UpgradableItems != null);
-            if (UpgradableItems != null)
-                UpgradableLevelText.text = "+" + UpgradableItems.GetLevel().ToString();
+            UpgradableLevelText.text = "+" + UpgradableItems.GetLevel().ToString();
+        }
+
+    }
+
+    private void ShowFoodItemContent(FoodData FoodDataSO)
+    {
+        FoodsContent.SetActive(FoodDataSO != null);
+        if (FoodDataSO == null)
+            return;
+        int i = 0;
+
+        foreach (var stats in FoodsContent.GetComponentsInChildren<DisplayFoodStatsInfo>(true))
+        {
+            if (stats != null)
+            {
+                if (i < FoodDataSO.FoodStatsInfo.Length)
+                {
+                    stats.DisplayFoodsStat(FoodDataSO.FoodStatsInfo[i]);
+                }
+                stats.gameObject.SetActive(i < FoodDataSO.FoodStatsInfo.Length);
+            }
+            i++;
         }
     }
 
@@ -90,6 +123,7 @@ public class ItemContentDisplay : MonoBehaviour
         ShowCommonItemContent(itemsSO);
         ShowUpgradableItemContent(UpgradableItemREF);
         ShowArtifactsItemContent(UpgradableItemREF, itemsSO);
+        ShowFoodItemContent(itemsSO as FoodData);
 
         if (StarsTransformParent)
         {

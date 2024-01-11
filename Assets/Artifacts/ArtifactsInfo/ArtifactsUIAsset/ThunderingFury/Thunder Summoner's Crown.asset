@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemName: Thunder Summoner's Crown
   ItemDesc: A crown once worn by an ancient shaman who worshiped the Thunderbird.
     The capricious beast remained unmoved by the shaman's devotion.
+  SummaryItemDesc: A buff piece to enhance your characters
   ItemSprite: {fileID: 21300000, guid: ac19737857725ef4ba4c6809e927c28d, type: 3}
   Rarity: 0
   artifactType: 4

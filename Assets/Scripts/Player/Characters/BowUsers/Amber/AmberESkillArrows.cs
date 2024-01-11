@@ -98,12 +98,19 @@ public class AmberESkillArrows : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerCharacters player = other.transform.GetComponent<PlayerCharacters>();
+        PlayerCharacters player = other.GetComponent<PlayerCharacters>();
+        IDamage damageObject = other.GetComponent<IDamage>();
 
-        if (player == null)
+        if (player == null && (!other.isTrigger || damageObject != null))
         {
-            if (other.isTrigger)
-                return;
+            if (damageObject != null)
+            {
+                if (damageObject.IsDead())
+                {
+                    Physics.IgnoreCollision(GetComponent<Collider>(), other);
+                    return;
+                }
+            }
 
             Explode();
             Destroy(gameObject);

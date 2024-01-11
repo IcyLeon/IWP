@@ -313,14 +313,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 6563428177265620365}
+  shieldSlider: {fileID: 0}
   HealthTextDisplay: {fileID: 0}
   LevelTextDisplay: {fileID: 0}
+  UiContent: {fileID: 0}
   enemyColor:
     serializedVersion: 2
     rgba: 4284046079
   allyColor:
     serializedVersion: 2
     rgba: 4280539031
+  ElementsIndicatorTransform: {fileID: 0}
 --- !u!1 &6563428177265620366
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,6 +916,7 @@ MonoBehaviour:
   PartyIconImage: {fileID: 4459782952787198671}
   healthBarScript: {fileID: 4647646192827770159}
   KeyText: {fileID: 8561806408851792942}
+  materialInstance: {fileID: 2100000, guid: cec40a457032fb0498ac74e7d20a5d6c, type: 2}
 --- !u!1 &8356918198613317525
 GameObject:
   m_ObjectHideFlags: 0

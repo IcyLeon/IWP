@@ -199,9 +199,9 @@ public class BowCharacters : PlayerCharacters
             Destroy(CrossHair);
     }
 
-    protected override void OnCharacterChanged(CharacterData c)
+    protected override void OnCharacterChanged(CharacterData c, PlayerCharacters playerCharacters)
     {
-        base.OnCharacterChanged(c);
+        base.OnCharacterChanged(c, playerCharacters);
         DestroyCrossHair();
     }
     protected override void OnDisable()

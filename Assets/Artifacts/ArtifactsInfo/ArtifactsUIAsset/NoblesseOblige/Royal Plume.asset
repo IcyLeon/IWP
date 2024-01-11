@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemName: Royal Plume
   ItemDesc: A feathered hat accessory worn by the old aristocrats of Mondstadt on
     hunts. It still stands proudly as if no time has passed.
+  SummaryItemDesc: A buff piece to enhance your characters
   ItemSprite: {fileID: 21300000, guid: f1e3df6240509fc4bbdf6e5947e6d522, type: 3}
   Rarity: 0
   artifactType: 1

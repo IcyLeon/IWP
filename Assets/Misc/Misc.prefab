@@ -143,6 +143,8 @@ MonoBehaviour:
   DashPrefab: {fileID: 1323289336355826, guid: a121bb87e6018d44aa0b155f855fc31a, type: 3}
   InteractableItemObjectPrefab: {fileID: 1824939335436124101, guid: b1073bf75462461469291bb217b671d9,
     type: 3}
+  ItemCollectedUIPrefab: {fileID: 6841693788689771850, guid: 9db65f4574fff4946a2a81d935910add,
+    type: 3}
 --- !u!114 &461240154166491133
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ public class LockItem : MonoBehaviour
     public void SetItemREF(Item item)
     {
         ItemREF = item;
-        if (ItemREF == null || !(ItemREF is UpgradableItems))
+        if (ItemREF == null || (ItemREF is not UpgradableItems))
         {
             gameObject.SetActive(false);
             return;

@@ -94,7 +94,7 @@ public class PlayerState
         ChangeState(playerIdleState);
     }
 
-    private void OnCharacterChange(CharacterData cd)
+    private void OnCharacterChange(CharacterData cd, PlayerCharacters playerCharacters)
     {
         ChangeState(playerIdleState);
     }
