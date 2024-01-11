@@ -84,7 +84,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ArrowIndicatorPrefab: {fileID: 2323810554564742662, guid: 7221a6e0411a50a4c9f2f6f145be4514,
     type: 3}
-  InfomationPanel: {fileID: 0}
+  FoodPanelPrefab: {fileID: 2084348654273748578, guid: afb7a1d985df67b419ebd81b294428e1,
+    type: 3}
   PopupPanelPrefab: {fileID: 3193795201106008823, guid: 10ed41f61657aee41a51b8f8fe4a1866,
     type: 3}
   MessageNotificationPrefab: {fileID: 6404873394866577276, guid: 43f193ab9a840114e85666e41ce68b21,

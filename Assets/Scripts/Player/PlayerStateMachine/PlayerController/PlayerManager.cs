@@ -285,7 +285,7 @@ public class PlayerManager : MonoBehaviour
 
     private void UpdateGadget()
     {
-        if (currentEquipGadgetItem == null)
+        if (currentEquipGadgetItem == null || Time.timeScale == 0)
             return;
 
         currentEquipGadgetItem.Update();

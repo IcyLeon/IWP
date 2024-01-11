@@ -21,7 +21,7 @@ public class MageEnemy : BaseEnemy
     private Coroutine MageCrystalCoreCoroutine;
     private GameObject CrystalsParent;
     private bool ChargeAttackEnable;
-    private float BaseShield = 1500f;
+    private float BaseShield = 2500f;
     private Dictionary<Collider, bool> ChargeColliderList = new();
 
     private void TurnOnChargeAttackStatus()
@@ -381,7 +381,7 @@ public class MageEnemy : BaseEnemy
 
     public override float GetElementalShield()
     {
-        return BaseShield + BaseShield * (GetLevel() - 1) * 0.65f;
+        return BaseShield + BaseShield * (GetLevel() - 1) * 0.45f;
     }
 
     private void FixedUpdate()

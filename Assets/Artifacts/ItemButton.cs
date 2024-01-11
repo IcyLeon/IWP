@@ -148,7 +148,11 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
             switch (GetItemREF())
             {
                 case UpgradableItems upgradableItems:
-                    SetDisplayText("+" + upgradableItems.GetLevel());
+                    if (upgradableItems is not CharacterData)
+                        SetDisplayText("+" + upgradableItems.GetLevel());
+                    else
+                        SetDisplayText("Lv. " + upgradableItems.GetLevel());
+
                     break;
                 case ConsumableItem consumableItem:
                     SetDisplayText(consumableItem.GetAmount().ToString());

@@ -14,9 +14,12 @@ public class AssetManager : MonoBehaviour
 {
     [SerializeField] GameObject ArrowIndicatorPrefab;
 
-    [SerializeField] MessagePanel InfomationPanel;
+    [Header("Panels")]
+    [SerializeField] GameObject FoodPanelPrefab;
     [SerializeField] GameObject PopupPanelPrefab;
     [SerializeField] GameObject MessageNotificationPrefab;
+
+    [Header("Others")]
     [SerializeField] ItemsList itemlisttemplate;
     [SerializeField] GameObject DamageText;
     [SerializeField] GameObject WorldText;
@@ -86,6 +89,13 @@ public class AssetManager : MonoBehaviour
                 return "Cash";
         }
         return "???";
+    }
+
+    public void SpawnFoodPanel(Food FoodREF)
+    {
+        FoodPanel FoodPanel = Instantiate(FoodPanelPrefab, GetCanvasGO().transform).GetComponent<FoodPanel>();
+        FoodPanel.SetFoodREF(FoodREF);
+        FoodPanel.transform.SetAsLastSibling();
     }
 
     // Start is called before the first frame update

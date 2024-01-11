@@ -30,6 +30,14 @@ public class UseItem : MonoBehaviour, IPointerClickHandler
         if (consumableItem == null)
             return;
 
-        consumableItem.Use(1);
+        switch(consumableItem)
+        {
+            case Food food:
+                AssetManager.GetInstance().SpawnFoodPanel(food);
+                break;
+            default:
+                consumableItem.Use(1);
+                break;
+        }
     }
 }

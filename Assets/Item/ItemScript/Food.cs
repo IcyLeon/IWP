@@ -29,9 +29,9 @@ public class Food : ConsumableItem
                 {
                     ConsumeFood(this);
                 }
-                base.Use(Useamount);
             }
         }
+        base.Use(Useamount);
     }
 
     protected virtual void ConsumeFood(Food food)
@@ -53,8 +53,16 @@ public class Food : ConsumableItem
         return GetItemSO() as FoodData;
     }
 
-    public Food(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
+    public void AddDurationTime()
+    {
+        Timer += GetFoodData().Duration;
+    }
+    public void ResetTimer() // temp for now
     {
         Timer = GetFoodData().Duration;
+    }
+    public Food(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
+    {
+        ResetTimer();
     }
 }
