@@ -279,7 +279,9 @@ public class Characters : MonoBehaviour, IDamage
         if (callHitInfo)
             OnHit?.Invoke(e, this);
 
+        Debug.Log(GetHealth());
         SetHealth(GetHealth() - DamageValue);
+        Debug.Log(GetHealth());
 
         if (DamageValue > 0)
         {

@@ -67,7 +67,7 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
     {
     }
 
-    public void Interact(PlayerManager PM)
+    public virtual void Interact(PlayerManager PM)
     {
         if (isPurchaseable())
         {

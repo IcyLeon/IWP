@@ -43,6 +43,17 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         }
     }
 
+    public override void Interact(PlayerManager PM)
+    {
+        if (FriendlyKillerHandler.HasReachedLimitKillers())
+        {
+            AssetManager.GetInstance().OpenMessageNotification("Max turret limit reached");
+            return;
+        }
+
+        base.Interact(PM);
+    }
+
     public FriendlyKillerData GetFriendlyKillerData()
     {
         return friendlyKillerData;
@@ -75,11 +86,6 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
             if (FriendlyKillerHandler == null)
                 FriendlyKillerHandler = FriendlyKillerHandler.GetInstance();
 
-            if (FriendlyKillerHandler.HasReachedLimitKillers())
-            {
-                AssetManager.GetInstance().OpenMessageNotification("Max turret limit reached");
-                return;
-            }
 
             if (animator != null)
             {
@@ -88,8 +94,8 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                     animator.SetTrigger("Activated");
                 }
             }
-            if (GetFriendlyKillerData() == null)
 
+            if (GetFriendlyKillerData() == null)
             {
                 friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO(), PM, EnemyManager);
                 FriendlyKillerHandler.AddKillerToList(friendlyKillerData);

@@ -18,6 +18,7 @@ public class ItemTemplate : ScriptableObject
     public string ItemDesc;
     public string SummaryItemDesc;
     public Sprite ItemSprite;
+    public Sprite ItemIconTypeSprite;
     public Rarity Rarity;
 
     public virtual Type GetTypeREF()

@@ -5,19 +5,12 @@ using UnityEngine;
 
 public class Food : ConsumableItem
 {
-    private float Timer;
     private CharacterData characterData;
 
-    public void Update()
+    public virtual void Update()
     {
-        if (Timer > 0)
-            Timer -= Time.deltaTime;
     }
 
-    public bool isFoodBuffEnds()
-    {
-        return Timer <= 0f;
-    }
 
     public override void Use(int Useamount)
     {
@@ -53,16 +46,7 @@ public class Food : ConsumableItem
         return GetItemSO() as FoodData;
     }
 
-    public void AddDurationTime()
-    {
-        Timer += GetFoodData().Duration;
-    }
-    public void ResetTimer() // temp for now
-    {
-        Timer = GetFoodData().Duration;
-    }
     public Food(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
-        ResetTimer();
     }
 }

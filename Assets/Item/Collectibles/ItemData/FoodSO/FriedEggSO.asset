@@ -16,12 +16,10 @@ MonoBehaviour:
   ItemDesc: An egg fried on one side. The yolk flows out nicely when broken. So satisfying.
   SummaryItemDesc: Revive a fallen character and restores 100 HP
   ItemSprite: {fileID: 21300000, guid: aa54102202eb5b74385634d0a45a7630, type: 3}
+  ItemIconTypeSprite: {fileID: 21300000, guid: d103e2ecce5e7ad46a885dd7b7964700, type: 3}
   Rarity: 0
-  foodType: 1
-  InstantHeal: 0
-  StatsBoostInfoList: []
-  Duration: 0
   FoodStatsInfo:
   - Revives a character and restores 100 HP
-  ReviveCharacterHP: 100
+  FlatRestoreCharacterHP: 100
+  RestoreCharacterHP_Percentage: 0
   AdditionalRecoveryHeal: 0

@@ -26,7 +26,7 @@ public class CharacterData : UpgradableItems
     {
         return EquippedArtifacts;
     }
-    private List<Food> GetFoodBuffList()
+    public List<Food> GetFoodBuffList()
     {
         return FoodBuffList;
     }
@@ -40,7 +40,8 @@ public class CharacterData : UpgradableItems
         }
         else
         {
-            existFood.AddDurationTime();
+            if (existFood is BuffFood BuffFood)
+                BuffFood.ResetTimer();
         }
     }
 
@@ -90,10 +91,13 @@ public class CharacterData : UpgradableItems
             Food food = FoodBuffList[i];
             if (food != null)
             {
-                if (food.isFoodBuffEnds())
+                if (food is BuffFood BuffFood)
                 {
-                    FoodBuffList.RemoveAt(i);
-                    return;
+                    if (BuffFood.isFoodBuffEnds())
+                    {
+                        FoodBuffList.RemoveAt(i);
+                        return;
+                    }
                 }
                 food.Update();
             }
@@ -242,7 +246,7 @@ public class CharacterData : UpgradableItems
 
     public float GetActualEM(int level)
     {
-        return GetBaseEM(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.EM);
+        return GetBaseEM(level) + ArtifactsManager.GetInstance().GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.EM);
     }
 
 
@@ -256,14 +260,14 @@ public class CharacterData : UpgradableItems
 
     public float GetActualDEF(int level)
     {
-        return GetBaseDEF(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.DEF);
+        return GetBaseDEF(level) + ArtifactsManager.GetInstance().GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.DEF);
     }
 
     public float GetActualATK(int level)
     {
         int CritCoeficient;
-        float CritDmgValue = ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.CritDamage);
-        float CritRateValue = ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.CritRate);
+        float CritDmgValue = ArtifactsManager.GetInstance().GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.CritDamage);
+        float CritRateValue = ArtifactsManager.GetInstance().GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.CritRate);
         CritCoeficient = 1;
         if (!AssetManager.isInProbabilityRange(CritRateValue * 0.01f))
         {
@@ -271,7 +275,7 @@ public class CharacterData : UpgradableItems
             CritCoeficient = 0;
         }
 
-        float atkValue = GetBaseATK(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.ATK);
+        float atkValue = GetBaseATK(level) + ArtifactsManager.GetInstance().GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.ATK);
         return atkValue + atkValue * (1 + CritDmgValue * 0.01f) * CritCoeficient;
     }
 
@@ -289,7 +293,7 @@ public class CharacterData : UpgradableItems
     }
     public float GetActualMaxHealth(int level)
     {
-        return GetBaseMaxHealth(level) + ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.HP);
+        return GetBaseMaxHealth(level) + ArtifactsManager.GetInstance().GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(this, Artifacts.ArtifactsStat.HP);
     }
 
     public override int GetMaxLevel()

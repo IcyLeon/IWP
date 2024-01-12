@@ -31,13 +31,13 @@ public class FoodGadget : GadgetConsumableItem
         Food food;
         if (DeadCharacterData != null)
         {
-            food = GetFirstFood<ReviveFood>();
+            food = GetFirstFood<ReviveFoodSO>();
             if (food != null)
                 food.SetCharacterData(DeadCharacterData);
         }
         else
         {
-            food = GetFirstFood<Food>();
+            food = GetFirstFood<RecoveryFoodSO>();
             if (food != null)
                 food.SetCharacterData(CurrentCharacterData);
         }
@@ -52,12 +52,12 @@ public class FoodGadget : GadgetConsumableItem
         {
             Food food = foodList[i];
 
-            if (food is not T)
+            if (food.GetFoodData() is not T)
             {
                 foodList.RemoveAt(i);
             }
-            else if (food is ReviveFood && (typeof(T) == typeof(Food) ||
-                food.GetFoodData().GetFoodType() != FoodData.FoodType.RESTORE_HEALTH))
+            else if (food.GetFoodData() is ReviveFoodSO && (typeof(T) == typeof(RecoveryFoodSO) ||
+                food.GetFoodData() is not RecoveryFoodSO))
             {
                 foodList.RemoveAt(i);
             }
@@ -94,8 +94,10 @@ public class FoodGadget : GadgetConsumableItem
 
     private void UpdateContent()
     {
-        if (CurrentFood == null)
+        if (CurrentFood == null) {
+            amount = 0;
             return;
+        }
 
         amount = CurrentFood.GetAmount();
     }

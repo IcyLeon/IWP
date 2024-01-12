@@ -3,20 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReviveFood : Food
+public class ReviveFood : RecoveryFood
 {
-    private CharacterManager characterManager;
-    protected override void ConsumeFood(Food food)
+    public override void Use(int Useamount)
     {
-        base.ConsumeFood(food);
-
-        ReviveFoodSO rSO = food.GetItemSO() as ReviveFoodSO;
-        int TotalHeal = Mathf.RoundToInt(rSO.AdditionalRecoveryHeal + rSO.ReviveCharacterHP);
-        characterManager.GetPlayerManager().HealCharacterBruteForce(GetCharacterData(), TotalHeal, false);
+        if (!GetCharacterData().IsDead())
+        {
+            AssetManager.GetInstance().OpenMessageNotification("Object can only be used on a fallen character");
+            return;
+        }
+        base.Use(Useamount);
     }
-
     public ReviveFood(bool isNew, ItemTemplate itemSO) : base(isNew, itemSO)
     {
-        characterManager = CharacterManager.GetInstance();
     }
 }

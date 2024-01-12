@@ -3,24 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[CreateAssetMenu(fileName = "FoodData", menuName = "ScriptableObjects/FoodSO")]
 public class FoodData : ItemTemplate
 {
-    public enum FoodType
-    {
-        BUFF,
-        RESTORE_HEALTH,
-    }
-    [System.Serializable]
-    public class StatsBoostInfo {
-        public Artifacts.ArtifactsStat artifactsStat;
-        public float boostValue;
-    }
-
-    [SerializeField] FoodType foodType; // Ignore if it is Revive Food
-    public float InstantHeal;
-    public StatsBoostInfo[] StatsBoostInfoList;
-    public float Duration;
     public string[] FoodStatsInfo;
 
     public override Type GetTypeREF()
@@ -35,10 +19,5 @@ public class FoodData : ItemTemplate
     public override string GetItemType()
     {
         return "Food";
-    }
-
-    public FoodType GetFoodType()
-    {
-        return foodType;
     }
 }

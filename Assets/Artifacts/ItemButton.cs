@@ -27,6 +27,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
 
     [Header("Icons")]
     [SerializeField] EquippedByCharacter EquipByIconContent;
+    [SerializeField] Image ItemIconImage;
 
     [Header("Item")]
     [SerializeField] TextMeshProUGUI DisplayAmountTxt;
@@ -170,6 +171,12 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     public void SetItemsSO(ItemTemplate ItemsSO)
     {
         itemTemplate = ItemsSO;
+
+        if (ItemIconImage != null && itemTemplate != null)
+        {
+            ItemIconImage.sprite = itemTemplate.ItemIconTypeSprite;
+        }
+        ItemIconImage.gameObject.SetActive(itemTemplate != null && itemTemplate?.ItemIconTypeSprite != null);
     }
 
     private void UpdateHideLock()

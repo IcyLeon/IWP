@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50888aa2860947d4c961a15ed3a9e533, type: 3}
+  m_Name: PileEmUpSO
+  m_EditorClassIdentifier: 
+  ItemName: Pile 'Em Up
+  ItemDesc: A rich, meaty dish. Originally a Mondstadt dish made of steaks, potatoes,
+    and cheese, it has since become synonymous with Ludi Harpastum.
+  SummaryItemDesc: Increases all party members' CRIT Rate by 15% for 300s.
+  ItemSprite: {fileID: 21300000, guid: a7111533bd7c6c34a9d158c1b25e78b3, type: 3}
+  ItemIconTypeSprite: {fileID: 21300000, guid: 27cece65d74aecc429a5e6337be68fe2, type: 3}
+  Rarity: 2
+  FoodStatsInfo:
+  - Increases all party members' CRIT Rate by 15% for 300s.
+  StatsBoostInfoList:
+  - StatsBoost: 8
+    boostValue: 15
+  Duration: 300

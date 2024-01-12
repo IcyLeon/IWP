@@ -72,6 +72,28 @@ public class ArtifactsManager : MonoBehaviour
 
         return GetTotalArtifactValueStats(characterData, artifactsStat);
     }
+
+    public float GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
+    {
+        if (characterData == null)
+            return 0f;
+
+        switch (artifactsStat)
+        {
+            case Artifacts.ArtifactsStat.HPPERCENT:
+            case Artifacts.ArtifactsStat.HP:
+                return (characterData.GetBaseATK(characterData.GetLevel()) * (GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.HPPERCENT) + GetTotalFoodValueStats(characterData, Artifacts.ArtifactsStat.HPPERCENT)) * 0.01f) + GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.HP) + GetTotalFoodValueStats(characterData, Artifacts.ArtifactsStat.HP);
+            case Artifacts.ArtifactsStat.DEFPERCENT:
+            case Artifacts.ArtifactsStat.DEF:
+                return (characterData.GetBaseDEF(characterData.GetLevel()) * (GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.DEFPERCENT) + GetTotalFoodValueStats(characterData, Artifacts.ArtifactsStat.DEFPERCENT)) * 0.01f) + GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.DEF) + GetTotalFoodValueStats(characterData, Artifacts.ArtifactsStat.DEF);
+            case Artifacts.ArtifactsStat.ATKPERCENT:
+            case Artifacts.ArtifactsStat.ATK:
+                return (characterData.GetBaseATK(characterData.GetLevel()) * (GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.ATKPERCENT) + GetTotalFoodValueStats(characterData, Artifacts.ArtifactsStat.ATKPERCENT)) * 0.01f) + GetTotalArtifactValueStats(characterData, Artifacts.ArtifactsStat.ATK) + GetTotalFoodValueStats(characterData, Artifacts.ArtifactsStat.ATK);
+        }
+
+        return GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, artifactsStat) + GetTotalFoodValueStats(characterData, artifactsStat);
+    }
+
     public float GetTotalArtifactValueStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
     {
         float total = 0f;
@@ -90,6 +112,36 @@ public class ArtifactsManager : MonoBehaviour
                     if (artifacts.GetStats(j).GetArtifactsStat() == artifactsStat)
                     {
                         total += artifacts.GetStats(j).GetStatsValue();
+                    }
+                }
+            }
+        }
+
+        return total;
+    }
+
+    public float GetTotalFoodValueStats(CharacterData characterData, Artifacts.ArtifactsStat foodStat)
+    {
+        float total = 0f;
+        InventoryManager IM = InventoryManager.GetInstance();
+
+        if (IM == null || characterData == null)
+            return total;
+
+        for (int i = 0; i < characterData.GetFoodBuffList().Count; i++)
+        {
+            Food food = characterData.GetFoodBuffList()[i];
+            if (food != null)
+            {
+                BuffFoodSO buffFoodSO = food.GetFoodData() as BuffFoodSO;
+                if (buffFoodSO != null)
+                {
+                    for (int j = 0; j < buffFoodSO.StatsBoostInfoList.Length; j++)
+                    {
+                        if (buffFoodSO.StatsBoostInfoList[j].StatsBoost == foodStat)
+                        {
+                            total += buffFoodSO.StatsBoostInfoList[j].boostValue;
+                        }
                     }
                 }
             }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +10,8 @@ public class ItemContentDisplay : MonoBehaviour
     [SerializeField] TextMeshProUGUI ItemNameText;
     [SerializeField] TextMeshProUGUI ItemTypeText;    
     [SerializeField] TextMeshProUGUI ItemDescText;
+    [SerializeField] Image ItemIconTypeImage;
+
     [Header("Upgradable Content")]
     [SerializeField] TextMeshProUGUI UpgradableLevelText;
     [SerializeField] GameObject UpgradableContent;
@@ -81,6 +82,11 @@ public class ItemContentDisplay : MonoBehaviour
             ItemTypeText.text = itemsSO.GetItemType();
         if (ItemDescText)
             ItemDescText.text = itemsSO.ItemDesc;
+
+        if (ItemIconTypeImage && itemsSO != null)
+            ItemIconTypeImage.sprite = itemsSO.ItemIconTypeSprite;
+
+        ItemIconTypeImage.gameObject.SetActive(itemsSO != null && itemsSO?.ItemIconTypeSprite != null);
     }
 
     private void ShowUpgradableItemContent(UpgradableItems UpgradableItems)

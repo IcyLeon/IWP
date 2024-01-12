@@ -39,7 +39,8 @@ public class FoodPanel : MessagePanel
         if (FoodREF == null || SelectedItemButton == null)
             return;
 
-        AmountToEat += value;
+        if (FoodREF is not ReviveFood)
+            AmountToEat += value;
         AmountToEat = Mathf.Clamp(AmountToEat, 1, FoodREF.GetAmount());
 
         UpdateAmountAddTxt();
@@ -107,7 +108,6 @@ public class FoodPanel : MessagePanel
 
         if (FoodREF.GetAmount() > 0)
         {
-            Debug.Log(FoodREF.GetCharacterData().GetItemSO().ItemName + " ate the " + FoodREF.GetItemSO().ItemName);
             FoodREF.Use(AmountToEat);
             if (FoodREF.GetAmount() == 0)
             {

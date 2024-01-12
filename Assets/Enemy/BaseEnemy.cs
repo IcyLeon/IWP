@@ -25,7 +25,7 @@ public class BaseEnemy : Characters
 
     protected override void Start()
     {
-        SetHealth(GetMaxHealth());
+        base.Start();
         EM = EnemyManager.GetInstance();
         CurrentStaggering = 0;
         DetectionRange = 1f;
@@ -41,7 +41,7 @@ public class BaseEnemy : Characters
         }
 
         elementalReaction = new ElementalReaction();
-        base.Start();
+        SetHealth(GetMaxHealth());
     }
 
     protected virtual void OnCollisionStay(Collision collision)

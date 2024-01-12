@@ -14,7 +14,7 @@ public class FriendlyKillerHandler : MonoBehaviour
     }
     [SerializeField] FriendlyKillerInfo[] FriendlyKillerInfoList;
     private int MaxKillersLimit = 4;
-    private int PossibleMaxTurretPerWave = 8;
+    private int PossibleMaxTurretPerWave = 6;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
     public static OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
@@ -50,7 +50,7 @@ public class FriendlyKillerHandler : MonoBehaviour
         switch (sceneEnum)
         {
             case SceneEnum.GAME:
-                int randomAmt = Random.Range(0, (PossibleMaxTurretPerWave + 1) - FriendlyKillerDataList.Count);
+                int randomAmt = Random.Range(0, (PossibleMaxTurretPerWave + 1));
                 int Counter = 0;
                 while (Counter < randomAmt)
                 {
