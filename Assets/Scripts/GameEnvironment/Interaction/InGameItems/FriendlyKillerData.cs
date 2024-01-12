@@ -10,10 +10,10 @@ public class FriendlyKillerData
     private PlayerManager Owner;
     private FriendlyKillerSO FriendlyKillerSOREF;
 
-    public FriendlyKillerData(FriendlyKillerSO FriendlyKillerSO, PlayerManager owner)
+    public FriendlyKillerData(FriendlyKillerSO FriendlyKillerSO, PlayerManager owner, EnemyManager EM)
     {
         FriendlyKillerSOREF = FriendlyKillerSO;
-        MaxHealth = GetFriendlyKillerSO().BaseMaxHealth;
+        MaxHealth = GetFriendlyKillerSO().BaseMaxHealth + (60f * (EM.GetCurrentWave() - 1));
         CurrentHealth = MaxHealth;
         Owner = owner;
     }

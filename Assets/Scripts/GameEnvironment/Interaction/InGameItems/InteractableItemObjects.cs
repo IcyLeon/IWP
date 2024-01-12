@@ -32,6 +32,21 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
         Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("BossEntity"));
     }
 
+    private void Update()
+    {
+        UpdateOutofBound();
+    }
+
+    private void UpdateOutofBound()
+    {
+        bool OutOfBound = Characters.isOutofBound(transform.position);
+        if (OutOfBound)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
     public void Interact(PlayerManager PM)
     {
         InventoryManager IM = InventoryManager.GetInstance();

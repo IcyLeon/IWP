@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2296422559368538025}
   - component: {fileID: 461240154166491133}
   - component: {fileID: 4484403746063666375}
+  - component: {fileID: 7838050927994957959}
   - component: {fileID: 2142344314217808489}
   - component: {fileID: 3147508860641607269}
-  - component: {fileID: 7838050927994957959}
   m_Layer: 0
   m_Name: Misc
   m_TagString: Untagged
@@ -188,6 +188,22 @@ MonoBehaviour:
   - elementals: 0200000003000000
     elementalReactionState: 2
   elementalColorSO: {fileID: 11400000, guid: e9605da8a63febf4d995d50000c3d0fc, type: 2}
+--- !u!114 &7838050927994957959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8915231430309993823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202ef09d55d76f040bcb558f49573e6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FriendlyKillerInfoList:
+  - FriendlyKillerPrefab: {fileID: 3808838606348096962, guid: 74a43f7e3bec0474e95d4c374af08f10,
+      type: 3}
+    FriendlyKillerSO: {fileID: 11400000, guid: 48886e8e24efd7a4582dbe5fb713355a, type: 2}
 --- !u!114 &2142344314217808489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,22 +230,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StaminaSO: {fileID: 11400000, guid: 9561d8c28b23591419e1e9c890aa6520, type: 2}
---- !u!114 &7838050927994957959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8915231430309993823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 202ef09d55d76f040bcb558f49573e6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FriendlyKillerInfoList:
-  - FriendlyKillerPrefab: {fileID: 3808838606348096962, guid: 74a43f7e3bec0474e95d4c374af08f10,
-      type: 3}
-    FriendlyKillerSO: {fileID: 11400000, guid: 48886e8e24efd7a4582dbe5fb713355a, type: 2}
-  - FriendlyKillerPrefab: {fileID: 6966162322816042349, guid: 0fed470d84d9142498b43aeb50ae43b0,
-      type: 3}
-    FriendlyKillerSO: {fileID: 11400000, guid: 6a9060e4ca9b0a645a1af6c28b41c187, type: 2}

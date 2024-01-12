@@ -56,9 +56,14 @@ public class Characters : MonoBehaviour, IDamage
     {
         return CharactersSO;
     }
+
+    public static bool isOutofBound(Vector3 pos)
+    {
+        return pos.y <= -100f;
+    }
+
     protected virtual void Start()
     {
-        SetHealth(GetMaxHealth());
         isAttacking = false;
         OnHit += HitEvent;
     }
@@ -93,6 +98,10 @@ public class Characters : MonoBehaviour, IDamage
         return isAttacking;
     }
 
+    protected virtual void UpdateOutofBound()
+    {
+    }
+
     public virtual bool IsDead()
     {
         return GetHealth() <= 0;
@@ -123,6 +132,7 @@ public class Characters : MonoBehaviour, IDamage
             return;
 
 
+        UpdateOutofBound();
         if (healthBarScript)
         {
             healthBarScript.UpdateHealth(GetHealth(), 0, GetMaxHealth());

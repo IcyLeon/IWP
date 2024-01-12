@@ -46,8 +46,18 @@ public class BossManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (terrain == null)
+        {
+            GameObject terrainGO = GameObject.FindGameObjectWithTag("Terrain");
+            if (terrainGO == null)
+                return;
+
+            terrain = terrainGO.GetComponent<Terrain>();
+        }
         EM = EnemyManager.GetInstance();
-        FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
+
+        if (terrain)
+            FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
 
         EM.SetCurrentWave(EM.GetCurrentWave() + 1);
 

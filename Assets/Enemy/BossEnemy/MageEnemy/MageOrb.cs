@@ -31,7 +31,7 @@ public class MageOrb : MonoBehaviour, IDamage
     public void Init(MageEnemy ME, bool val)
     {
         MageEnemy = ME;
-        HealAmount = MageEnemy.GetMaxHealth() * 0.002f;
+        HealAmount = MageEnemy.GetMaxHealth() * 0.0035f;
         HealingLineRenderer = Instantiate(LineRendererPrefab, transform);
         HealingLineRenderer.useWorldSpace = true;
         HealingLineRenderer.positionCount = 2;
@@ -120,14 +120,17 @@ public class MageOrb : MonoBehaviour, IDamage
 
     private void UpdateLineRenderer()
     {
-        if (HealingLineRenderer && TimesUp)
+        if (HealingLineRenderer)
         {
-            Destroy(HealingLineRenderer.gameObject);
-            return;
-        }
+            if (TimesUp)
+            {
+                Destroy(HealingLineRenderer.gameObject);
+                return;
+            }
 
-        HealingLineRenderer.SetPosition(0, transform.position);
-        HealingLineRenderer.SetPosition(1, MageEnemy.GetMiddleTargetPosition());
+            HealingLineRenderer.SetPosition(0, transform.position);
+            HealingLineRenderer.SetPosition(1, MageEnemy.GetPointOfContact());
+        }
     }
 
 

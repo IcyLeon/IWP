@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
     private AssetManager assetManager;
     private bool isCompleted;
     private GameObject Teleporter;
-
     [SerializeField] CharactersSO tempcharactersSO;
 
     // Start is called before the first frame update

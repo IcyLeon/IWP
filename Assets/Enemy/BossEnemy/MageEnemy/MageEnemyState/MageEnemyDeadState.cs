@@ -11,6 +11,7 @@ public class MageEnemyDeadState : MageEnemyState
     {
         base.Enter();
         GetMageEnemyStateMachine().GetMageEnemy().GetRB().useGravity = true;
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationZ;
         GetMageEnemyStateMachine().GetMageEnemy().DisableAgent();
         StartAnimation("isDead");
     }

@@ -54,13 +54,11 @@ public class FoodGadget : GadgetConsumableItem
 
             if (food is not T)
             {
-                Debug.Log($"Removing item because it's not of type {typeof(T)}");
                 foodList.RemoveAt(i);
             }
             else if (food is ReviveFood && (typeof(T) == typeof(Food) ||
                 food.GetFoodData().GetFoodType() != FoodData.FoodType.RESTORE_HEALTH))
             {
-                Debug.Log($"Removing item because it's not a ReviveFoodSO and is FoodData with non-Restore Health type");
                 foodList.RemoveAt(i);
             }
         }

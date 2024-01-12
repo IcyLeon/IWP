@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,22 @@ public class Turret : FriendlyKillers
     private float FireInBetweenShots;
     private float StartFireRate;
     private const float SmoothTime = 20f;
+    [SerializeField] GameObject MuzzleFlashPS;
+    [SerializeField] Transform MuzzleFlashPivots;
     [SerializeField] Transform TurretRotationPivot;
     [SerializeField] GameObject TurretMuzzle;
 
     private Quaternion CurrentTargetRotation, Target_Rotation;
 
-    public float GetDamage()
-    {
-        return GetTurretSO().BaseDamage;
-    }
     public TurretSO GetTurretSO()
     {
         TurretSO turretSO = GetFriendlyKillerSO() as TurretSO;
         return turretSO;
+    }
+
+    public override float GetATK()
+    {
+        return base.GetATK() + (3.6f * (EnemyManager.GetCurrentWave() - 1));
     }
 
     public override bool IsDead()
@@ -33,8 +37,16 @@ public class Turret : FriendlyKillers
 
     private void Fire()
     {
+        foreach(var pivot in MuzzleFlashPivots.GetComponentsInChildren<Transform>())
+        {
+            if (pivot == MuzzleFlashPivots)
+                continue;
+
+            ParticleSystem PS = Instantiate(MuzzleFlashPS, pivot.transform).GetComponent<ParticleSystem>();
+            Destroy(PS.gameObject, PS.main.duration);
+        }
         IDamage targetIDamage = Target.GetComponent<IDamage>();
-        targetIDamage.TakeDamage(targetIDamage.GetPointOfContact(), new Elements(Elemental.NONE), GetDamage(), this);
+        targetIDamage.TakeDamage(targetIDamage.GetPointOfContact(), new Elements(Elemental.NONE), GetATK(), this);
     }
 
     public override Vector3 GetPointOfContact()

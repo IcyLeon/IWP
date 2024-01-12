@@ -53,6 +53,9 @@ MonoBehaviour:
   PurchaseableObjectSO: {fileID: 11400000, guid: 48886e8e24efd7a4582dbe5fb713355a,
     type: 2}
   animator: {fileID: 1623839402785325973}
+  MuzzleFlashPS: {fileID: 4807343151311948331, guid: 7c0182bf0f18038499ddac6d5771112e,
+    type: 3}
+  MuzzleFlashPivots: {fileID: 4660891371403050991}
   TurretRotationPivot: {fileID: 7182592437656559554}
   TurretMuzzle: {fileID: 7309361301007567655}
 --- !u!65 &5860864602334975098
@@ -158,6 +161,12 @@ Transform:
 --- !u!4 &3508620677317019323 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5957382628967168102, guid: 7bec6786966094e4e93dfa8038a74765,
+    type: 3}
+  m_PrefabInstance: {fileID: 7070018119321386717}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4660891371403050991 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2500359841924546866, guid: 7bec6786966094e4e93dfa8038a74765,
     type: 3}
   m_PrefabInstance: {fileID: 7070018119321386717}
   m_PrefabAsset: {fileID: 0}

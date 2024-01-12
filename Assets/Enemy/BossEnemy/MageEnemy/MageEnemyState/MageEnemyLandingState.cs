@@ -11,6 +11,7 @@ public class MageEnemyLandingState : MageEnemyAirborneState
     public override void Enter()
     {
         base.Enter();
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationZ;
         StartAnimation("isLanding");
     }
 
@@ -18,6 +19,7 @@ public class MageEnemyLandingState : MageEnemyAirborneState
     {
         base.Exit();
         GetMageEnemyStateMachine().GetMageEnemy().GetRB().useGravity = true;
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         StopAnimation("isLanding");
     }
 

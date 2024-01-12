@@ -43,9 +43,19 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return PlayerCharacterState;
     }
 
+    protected override void UpdateOutofBound()
+    {
+        bool OutOfBound = isOutofBound(GetPlayerManager().GetCharacterRB().position);
+        if (OutOfBound)
+        {
+            GetPlayerManager().ResetAllEnergy();
+            GetPlayerManager().AddHealthAllCharactersPercentage(-0.15f);
+            GetPlayerManager().GetCharacterRB().position = GetPlayerManager().GetPlayerController().GetPlayerState().PlayerData.PreviousPosition;
+        }
+    }
     public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
-        if (GetPlayerManager().IsSkillCasting())
+        if (GetPlayerManager().isBurstState())
             return null;
 
         if (characterData != null)

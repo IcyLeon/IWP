@@ -15,8 +15,8 @@ MonoBehaviour:
   PurchaseableObjectName: Technician Turret
   PurchaseableObjectSprite: {fileID: 21300000, guid: 613a28c60c86e944f8e6b9ec2ffaa604,
     type: 3}
-  BasePrice: 500
-  BaseMaxHealth: 1000
-  BaseDamage: 10
-  DetectionRange: 5
+  BasePrice: 35
+  BaseMaxHealth: 200
+  BaseDamage: 18
+  DetectionRange: 8
   FireRate: 5

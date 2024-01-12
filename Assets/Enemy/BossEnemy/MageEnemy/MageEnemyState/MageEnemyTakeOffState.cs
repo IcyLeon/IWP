@@ -12,6 +12,7 @@ public class MageEnemyTakeOffState : MageEnemyAirborneState
     {
         base.Enter();
         StartAnimation("isTakingOff");
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         GetMageEnemyStateMachine().MageEnemyData.TakeOffElapsed = GetMageEnemyStateMachine().MageEnemyData.TakeOffCooldown;
     }
 

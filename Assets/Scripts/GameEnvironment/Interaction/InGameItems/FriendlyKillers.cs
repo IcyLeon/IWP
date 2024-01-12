@@ -11,6 +11,8 @@ public interface IGamePurchase : IInteract
 
 public class FriendlyKillers : PurchaseableObjects, IDamage
 {
+    private FriendlyKillerHandler FriendlyKillerHandler;
+    protected EnemyManager EnemyManager;
     [SerializeField] protected Animator animator;
     private FriendlyKillerData friendlyKillerData;
     protected HealthBarScript healthBarScript;
@@ -25,7 +27,9 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     // Start is called before the first frame update
     protected override void Start()
     {
+        FriendlyKillerHandler = FriendlyKillerHandler.GetInstance();
         base.Start();
+        EnemyManager = EnemyManager.GetInstance();
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
         healthBarScript.transform.localPosition = GetWorldTxtLocalPosition();
         healthBarScript.Init(false, true);
@@ -68,6 +72,15 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
         if (canBuy)
         {
+            if (FriendlyKillerHandler == null)
+                FriendlyKillerHandler = FriendlyKillerHandler.GetInstance();
+
+            if (FriendlyKillerHandler.HasReachedLimitKillers())
+            {
+                AssetManager.GetInstance().OpenMessageNotification("Max turret limit reached");
+                return;
+            }
+
             if (animator != null)
             {
                 if (Characters.ContainsParam(animator, "Activated"))
@@ -76,9 +89,10 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
                 }
             }
             if (GetFriendlyKillerData() == null)
+
             {
-                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO(), PM);
-                FriendlyKillerHandler.GetInstance().AddKillerToList(friendlyKillerData);
+                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO(), PM, EnemyManager);
+                FriendlyKillerHandler.AddKillerToList(friendlyKillerData);
             }
             canBuy = false;
         }
@@ -248,9 +262,12 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         return null;
     }
 
-    public float GetATK()
+    public virtual float GetATK()
     {
-        return 0f;
+        if (GetFriendlyKillerSO() == null)
+            return 1f;
+
+        return GetFriendlyKillerSO().BaseDamage;
     }
 
     public float GetEM()

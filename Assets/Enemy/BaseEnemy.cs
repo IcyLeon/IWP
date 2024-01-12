@@ -25,6 +25,7 @@ public class BaseEnemy : Characters
 
     protected override void Start()
     {
+        SetHealth(GetMaxHealth());
         EM = EnemyManager.GetInstance();
         CurrentStaggering = 0;
         DetectionRange = 1f;
@@ -102,7 +103,7 @@ public class BaseEnemy : Characters
                 }
                 else
                 {
-                    if (!interact.CanInteract())
+                    if (!interact.CanInteract() && !damage.IsDead())
                         goCopy.Add(damage);
                 }
             }
@@ -155,8 +156,6 @@ public class BaseEnemy : Characters
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
-
-        UpdateOutofBound();
     }
 
     public override Vector3 GetPointOfContact()
@@ -174,15 +173,18 @@ public class BaseEnemy : Characters
         return col;
     }
 
-    private void UpdateOutofBound()
+    protected override void UpdateOutofBound()
     {
-        if (transform.position.y <= -100f)
+        bool isOutofBound = Characters.isOutofBound(transform.position);
+
+        if (isOutofBound)
         {
             SetHealth(0);
             UpdateDie();
             Destroy(gameObject);
         }
     }
+
     protected void TriggerStaggering(int amt = 1, bool conditionToTrigger = true)
     {
         if (!isAttacking)
@@ -273,6 +275,10 @@ public class BaseEnemy : Characters
             if (PM != null)
             {
                 ElementalOrb go = Instantiate(AssetManager.GetInstance().ElementalOrbPrefab, GetPointOfContact(), Quaternion.identity).GetComponent<ElementalOrb>();
+                Color color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(elements.GetElements()).color;
+                ParticleSystem.MainModule mainModule = go.GetComponent<ParticleSystem>().main;
+                mainModule.startColor = color;
+                go.GetComponent<TrailRenderer>().startColor = color;
                 go.SetSource(PM);
             }
         }

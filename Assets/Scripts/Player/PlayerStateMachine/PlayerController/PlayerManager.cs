@@ -77,7 +77,6 @@ public class PlayerManager : MonoBehaviour
         inventoryManager = InventoryManager.GetInstance();
         staminaManager = StaminaManager.GetInstance();
         SubscribeToKeyInputs();
-        StartCoroutine(SpawnInitDelay());
     }
 
     private void OnGadgetUse()
@@ -96,10 +95,11 @@ public class PlayerManager : MonoBehaviour
         SetCurrentGadgetItemEquipped(inventoryManager.GetCurrentGadgetItem());
     }
 
-    private void OnSceneChanged()
+    private void OnSceneChanged(SceneEnum s)
     {
         PlayerCharactersList.Clear();
         SubscribeToKeyInputs();
+        StartCoroutine(SpawnInitDelay());
     }
 
     public void AddPlayerCharactersList(PlayerCharacters pc)
@@ -144,7 +144,7 @@ public class PlayerManager : MonoBehaviour
     {
         return inventoryManager.GetCharactersOwnedList();
     }
-    public void AddAllCharactersPercentage(float percentage)
+    public void AddHealthAllCharactersPercentage(float percentage)
     {
         for (int i = 0; i < GetCharactersOwnedList().Count; i++)
         {
@@ -278,7 +278,6 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateOutofBound();
         UpdateGadget();
         UpdateCharacterData();
     }
@@ -326,19 +325,6 @@ public class PlayerManager : MonoBehaviour
     public PlayerMovementState GetPlayerMovementState()
     {
         return GetPlayerController().GetPlayerState().GetPlayerMovementState();
-    }
-
-    private void UpdateOutofBound()
-    {
-        if (rb == null)
-            return;
-
-        if (rb.position.y <= -100f)
-        {
-            ResetAllEnergy();
-            AddAllCharactersPercentage(-0.15f);
-            rb.position = GetPlayerController().GetPlayerState().PlayerData.PreviousPosition;
-        }
     }
 
     private void SwapCharactersControls(float index)
@@ -424,7 +410,7 @@ public class PlayerManager : MonoBehaviour
         if (GetCurrentCharacter().GetPlayerCharacterState() == null)
             return false;
 
-        return (GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || GetPlayerMovementState() is PlayerBurstState);
+        return (GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || isBurstState());
     }
 
     private PlayerCharacters GetPlayerCharacter(PlayerCharacterSO playersSO)

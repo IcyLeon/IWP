@@ -20,7 +20,7 @@ public class SceneManager : MonoBehaviour
     private static SceneManager instance;
     [SerializeField] Image ProgressBar;
     [SerializeField] GameObject LoadingCanvas;
-    public static Action OnSceneChanged;
+    public static Action<SceneEnum> OnSceneChanged = delegate { };
     private float TargetProgress = 0f;
     private SceneEnum currentScene;
 
@@ -47,6 +47,7 @@ public class SceneManager : MonoBehaviour
     {
         string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         currentScene = GetSceneEnum(currentSceneName);
+        OnSceneChanged?.Invoke(GetCurrentScene());
     }
 
     public static SceneManager GetInstance()
@@ -86,7 +87,7 @@ public class SceneManager : MonoBehaviour
 
         mainUI.SetPaused(false);
         LoadingCanvas.SetActive(false);
-        OnSceneChanged?.Invoke();
+        OnSceneChanged?.Invoke(GetCurrentScene());
     }
 
     private void Update()

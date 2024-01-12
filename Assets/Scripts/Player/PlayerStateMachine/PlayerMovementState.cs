@@ -96,8 +96,6 @@ public class PlayerMovementState : IState
     public virtual void Update()
     {
         rb = GetPlayerState().GetPlayerController().GetPlayerManager().GetCharacterRB();
-        GatherInput();
-        UpdateDash();
         UpdatePreviousPosition();
 
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
@@ -112,6 +110,9 @@ public class PlayerMovementState : IState
                 }
             }
         }
+
+        GatherInput();
+        UpdateDash();
     }
 
     protected void LimitFallVelocity()

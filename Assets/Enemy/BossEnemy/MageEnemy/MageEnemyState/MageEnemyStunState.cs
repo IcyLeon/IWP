@@ -13,6 +13,7 @@ public class MageEnemyStunState : MageEnemyState
         base.Enter();
         GetMageEnemyStateMachine().GetMageEnemy().GetRB().useGravity = true;
         GetMageEnemyStateMachine().MageEnemyData.CurrentStunElasped = GetMageEnemyStateMachine().MageEnemyData.stunDuration;
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationZ;
         GetMageEnemyStateMachine().MageEnemyData.ShieldStatus = false;
         StartAnimation("isStun");
     }
@@ -21,6 +22,7 @@ public class MageEnemyStunState : MageEnemyState
     {
         base.Exit();
         GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped = GetMageEnemyStateMachine().MageEnemyData.ShieldCooldown;
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         StopAnimation("isStun");
         GetMageEnemyStateMachine().MageEnemyData.Phase = MageEnemyData.MagePhase.Phase_2;
         ResetStunState();

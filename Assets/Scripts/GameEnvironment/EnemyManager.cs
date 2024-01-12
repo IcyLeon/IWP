@@ -15,7 +15,6 @@ public class EnemyManager : MonoBehaviour
     public onEnemyChanged OnEnemyKilled;
     public onEnemyChanged OnBossEnemyAdd;
     public onEnemyChanged OnBossEnemyRemove;
-    private SceneManager SceneManager;
     private static EnemyManager instance;
     private int CurrentWave;
     private int CurrentEnemyDefeated;
@@ -33,7 +32,7 @@ public class EnemyManager : MonoBehaviour
         float randomX = Random.Range(terrainPosition.x, terrainPosition.x + terrainSize.x);
         float randomZ = Random.Range(terrainPosition.z, terrainPosition.z + terrainSize.z);
         float terrainHeight = terrain.SampleHeight(new Vector3(randomX, 0f, randomZ));
-        Vector3 randomTerrainPosition = new Vector3(randomX, terrainHeight, randomZ);
+        Vector3 randomTerrainPosition = new Vector3(randomX, terrainHeight + terrainPosition.y, randomZ);
 
         return randomTerrainPosition;
     }
@@ -216,7 +215,6 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
-        SceneManager = SceneManager.GetInstance();
         ResetTotalEnemiesDefeated();
         SetCurrentWave(0);
     }

@@ -153,9 +153,12 @@ public class MageEnemy : BaseEnemy
 
     private void SpawnEnemies()
     {
-        BossManager BM = BossManager.GetInstance();
+        GameObject terrainGO = GameObject.FindGameObjectWithTag("Terrain");
+        if (terrainGO == null)
+            return;
 
-        if (BM == null)
+        Terrain terrain = terrainGO.GetComponent<Terrain>();
+        if (terrain == null)
             return;
 
         for (int i = 0; i < m_StateMachine.MageEnemyData.SpawnEnemiesAmount; i++)
@@ -163,7 +166,7 @@ public class MageEnemy : BaseEnemy
             if (CanSpawnReinforcement())
             {
                 int randomIndex = Random.Range(0, EM.GetEnemyInfo().GetEnemyContentList().Length);
-                BM.SpawnGroundUnitsWithinTerrain(EM.GetEnemyInfo().GetEnemyContentList()[randomIndex].EnemySO);
+                EM.SpawnGroundUnitsWithinTerrain(EM.GetEnemyInfo().GetEnemyContentList()[randomIndex].EnemySO, terrain);
             }
         }
     }
@@ -266,11 +269,6 @@ public class MageEnemy : BaseEnemy
         }
     }
 
-    public Vector3 GetMiddleTargetPosition()
-    {
-        return MiddlePositionTransform.position;
-    }
-
     private bool IsAirborne()
     {
         return m_StateMachine.GetCurrentState() is MageEnemyAirborneState;
@@ -288,6 +286,11 @@ public class MageEnemy : BaseEnemy
                 Destroy(MageOrbList[i].gameObject);
             }
         }
+    }
+
+    public override Vector3 GetPointOfContact()
+    {
+        return MiddlePositionTransform.position;
     }
 
     private void UpdateMageOrbList() {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FriendlyKillerHandler : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class FriendlyKillerHandler : MonoBehaviour
         public FriendlyKillerSO FriendlyKillerSO;
     }
     [SerializeField] FriendlyKillerInfo[] FriendlyKillerInfoList;
-    private int MaxKillers = 3;
+    private int MaxKillersLimit = 4;
+    private int PossibleMaxTurretPerWave = 8;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
     public static OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
@@ -32,6 +34,38 @@ public class FriendlyKillerHandler : MonoBehaviour
         }
 
         FriendlyKillerDataList = new();
+        SceneManager.OnSceneChanged += OnSceneChanged;
+    }
+
+    private void OnSceneChanged(SceneEnum sceneEnum)
+    {
+        GameObject terrainGO = GameObject.FindGameObjectWithTag("Terrain");
+        if (terrainGO == null)
+            return;
+
+        Terrain terrain = terrainGO.GetComponent<Terrain>();
+        if (terrain == null)
+            return;
+
+        switch (sceneEnum)
+        {
+            case SceneEnum.GAME:
+                int randomAmt = Random.Range(0, (PossibleMaxTurretPerWave + 1) - FriendlyKillerDataList.Count);
+                int Counter = 0;
+                while (Counter < randomAmt)
+                {
+                    int RandomKillers = Random.Range(0, FriendlyKillerInfoList.Length);
+                    Vector3 pos = EnemyManager.GetRandomPointWithinTerrain(terrain);
+                    FriendlyKillers friendlyKillers = Instantiate(FriendlyKillerInfoList[RandomKillers].FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>();
+
+                    Counter++;
+                }
+                break;
+        }
+    }
+
+    private void SpawnTurretsOnTerrains()
+    {
     }
 
     public void LoadKillersAroundTerrain(Terrain terrain)
@@ -62,7 +96,7 @@ public class FriendlyKillerHandler : MonoBehaviour
 
     public bool HasReachedLimitKillers()
     {
-        return FriendlyKillerDataList.Count >= MaxKillers;
+        return FriendlyKillerDataList.Count >= MaxKillersLimit;
     }
 
     public static FriendlyKillerHandler GetInstance()

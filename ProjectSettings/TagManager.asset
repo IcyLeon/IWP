@@ -8,6 +8,9 @@ TagManager:
   - PlayerCamera
   - BlurEffect
   - MageEntityTargetLocation
+  - Effects
+  - Icon
+  - Terrain
   layers:
   - Default
   - TransparentFX

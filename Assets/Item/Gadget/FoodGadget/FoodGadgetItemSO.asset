@@ -17,5 +17,6 @@ MonoBehaviour:
     absorbable nutritional matter. Despite the fact that it can greatly increase
     the efficiency of nutritional intake, most knights aren't too keen to put their
     food in it...
-  ItemSprite: {fileID: 21300000, guid: 3086d66a563317b40a20a20da2c64ac0, type: 3}
+  SummaryItemDesc: 
+  ItemSprite: {fileID: 21300000, guid: 7eb18dc3d23e50d48a6e7a458890abe7, type: 3}
   Rarity: 3
