@@ -9,22 +9,24 @@ using UnityEngine.UI;
 public class BossUIManager : MonoBehaviour
 {
     private EnemyManager EM;
-    private Dictionary<BossHealthBar, BaseEnemy> BossEnemyUI_Dictionary;
+    private Dictionary<BossHealthBar, BaseEnemy> BossEnemyUI_Dictionary = new();
     [SerializeField] GameObject UIContent;
     [SerializeField] GameObject BossHealthPrefab;
 
+    private void Awake()
+    {
+        EnemyManager.OnBossEnemyAdd += OnBossEnemyAdd;
+        EnemyManager.OnBossEnemyRemove += OnBossEnemyRemove;
+    }
     private void Start()
     {
-        BossEnemyUI_Dictionary = new();
         EM = EnemyManager.GetInstance();
-        EM.OnBossEnemyAdd += OnBossEnemyAdd;
-        EM.OnBossEnemyRemove += OnBossEnemyRemove;
     }
 
     private void OnDestroy()
     {
-        EM.OnBossEnemyAdd -= OnBossEnemyAdd;
-        EM.OnBossEnemyRemove -= OnBossEnemyRemove;
+        EnemyManager.OnBossEnemyAdd -= OnBossEnemyAdd;
+        EnemyManager.OnBossEnemyRemove -= OnBossEnemyRemove;
     }
 
     private BossHealthBar GetKeyFromValue(BaseEnemy value)

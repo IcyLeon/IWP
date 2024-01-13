@@ -54,6 +54,8 @@ public class AssetManager : MonoBehaviour
     public GameObject ElementalContainerUIPrefab;
     public GameObject ElementalOrbPrefab;
 
+    public GameObject IconPrefab;
+
     [Header("Currency")]
     public Sprite Coins;
     public Sprite Cash;

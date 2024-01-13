@@ -11,7 +11,6 @@ public class BaseEnemy : Characters
     [SerializeField] protected Collider col;
     [SerializeField] protected Rigidbody rb;
     protected float DetectionRange;
-    protected float Ratio;
     protected EnemyManager EM;
     private IDamage Target;
     [SerializeField] protected NavMeshAgent NavMeshAgent;
@@ -21,7 +20,9 @@ public class BaseEnemy : Characters
     protected int Staggering = 1;
     protected int CurrentStaggering;
     private int Level, MaxLevel;
+
     public Action<BaseEnemy> OnDeadEvent = delegate { };
+    private Coroutine DeadCoroutine;
 
     protected override void Start()
     {
@@ -36,7 +37,7 @@ public class BaseEnemy : Characters
         {
             healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
             healthBarScript.transform.SetParent(HealthBarPivotParent, true);
-            healthBarScript.transform.localPosition = HealthBarPivotParent.localPosition;
+            healthBarScript.transform.localPosition = Vector3.zero;
             healthBarScript.Init(true, false);
         }
 
@@ -179,8 +180,8 @@ public class BaseEnemy : Characters
 
         if (isOutofBound)
         {
-            SetHealth(0);
-            UpdateDie();
+            if (!IsDead())
+                SetHealth(0);
             Destroy(gameObject);
         }
     }
@@ -203,7 +204,7 @@ public class BaseEnemy : Characters
         if (GetPlayerLocation() == default(Vector3))
             return default(Vector3);
 
-        return GetPlayerLocation() - transform.position;
+        return GetPlayerLocation() - GetPointOfContact();
     }
 
     public void LookAtPlayerXZ()
@@ -234,12 +235,20 @@ public class BaseEnemy : Characters
             if (healthBarScript)
             {
                 Destroy(healthBarScript.gameObject);
-
-                EM.CallOnEnemyKilled(this);
-                OnDeadEvent?.Invoke(this);
+            }
+            if (DeadCoroutine == null)
+            {
+                DeadCoroutine = StartCoroutine(Dead());
             }
         }
         return isdead;
+    }
+
+    private IEnumerator Dead()
+    {
+        EM.CallOnEnemyKilled(this);
+        OnDeadEvent?.Invoke(this);
+        yield return null;
     }
 
     private void UpdateHealthBar()

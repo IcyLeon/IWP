@@ -11,7 +11,7 @@ public class GadgetItemSO : ItemTemplate
     }
     public override Category GetCategory()
     {
-        return Category.COLLECTIBLES;
+        return Category.GADGETS;
     }
     public override string GetItemType()
     {

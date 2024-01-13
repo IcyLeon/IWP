@@ -13,8 +13,8 @@ public class FriendlyKillerHandler : MonoBehaviour
         public FriendlyKillerSO FriendlyKillerSO;
     }
     [SerializeField] FriendlyKillerInfo[] FriendlyKillerInfoList;
-    private int MaxKillersLimit = 4;
-    private int PossibleMaxTurretPerWave = 6;
+    private int MaxKillersLimit = 3;
+    private int PossibleMaxTurretPerWave = 5;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
     public static OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
@@ -39,6 +39,16 @@ public class FriendlyKillerHandler : MonoBehaviour
 
     private void OnSceneChanged(SceneEnum sceneEnum)
     {
+        switch (sceneEnum)
+        {
+            case SceneEnum.GAME:
+                SpawnTurretsOnTerrains();
+                break;
+        }
+    }
+
+    private void SpawnTurretsOnTerrains()
+    {
         GameObject terrainGO = GameObject.FindGameObjectWithTag("Terrain");
         if (terrainGO == null)
             return;
@@ -47,25 +57,14 @@ public class FriendlyKillerHandler : MonoBehaviour
         if (terrain == null)
             return;
 
-        switch (sceneEnum)
+
+        int randomAmt = Random.Range(0, PossibleMaxTurretPerWave + 1);
+        for (int i = 0; i < randomAmt; i++)
         {
-            case SceneEnum.GAME:
-                int randomAmt = Random.Range(0, (PossibleMaxTurretPerWave + 1));
-                int Counter = 0;
-                while (Counter < randomAmt)
-                {
-                    int RandomKillers = Random.Range(0, FriendlyKillerInfoList.Length);
-                    Vector3 pos = EnemyManager.GetRandomPointWithinTerrain(terrain);
-                    FriendlyKillers friendlyKillers = Instantiate(FriendlyKillerInfoList[RandomKillers].FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>();
-
-                    Counter++;
-                }
-                break;
+            int RandomKillers = Random.Range(0, FriendlyKillerInfoList.Length);
+            Vector3 pos = EnemyManager.GetRandomPointWithinTerrain(terrain);
+            FriendlyKillers friendlyKillers = Instantiate(FriendlyKillerInfoList[RandomKillers].FriendlyKillerPrefab, pos, Quaternion.identity).GetComponent<FriendlyKillers>();
         }
-    }
-
-    private void SpawnTurretsOnTerrains()
-    {
     }
 
     public void LoadKillersAroundTerrain(Terrain terrain)

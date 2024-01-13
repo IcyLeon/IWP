@@ -45,6 +45,7 @@ public class BowCharacters : PlayerCharacters
 
     private void FireArrows()
     {
+        ShootDirection = Direction;
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(ShootElemental));
@@ -52,7 +53,7 @@ public class BowCharacters : PlayerCharacters
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
 
         if (!GetPlayerManager().IsAiming())
-            BaseFireSpeed = OriginalFireSpeed * 0.8f;
+            BaseFireSpeed = OriginalFireSpeed * 0.68f;
         else
             BaseFireSpeed = OriginalFireSpeed;
 
@@ -85,6 +86,7 @@ public class BowCharacters : PlayerCharacters
 
         if (Time.time - LastClickedTime > AttackRate)
         {
+
             SetLookAtTarget();
             ShootDirection = Direction;
             Animator.SetTrigger("Attack1");
@@ -94,6 +96,9 @@ public class BowCharacters : PlayerCharacters
 
     public void LaunchChargedAttack()
     {
+        if (Time.timeScale == 0)
+            return;
+
         if (Time.time - LastClickedTime > ChargedAttackRate)
         {
             ShootElemental = GetBowCharactersState().BowData.CurrentElemental;
@@ -162,8 +167,7 @@ public class BowCharacters : PlayerCharacters
         if (CrossHair == null)
             CrossHair = AssetManager.GetInstance().SpawnCrossHair();
 
-        Direction = GetFirstTargetHits(20f) - EmitterPivot.position;
-        ShootDirection = Direction;
+        Direction = GetFirstTargetHits(25f) - EmitterPivot.position;
         LookAtDirection(Camera.main.transform.forward);
     }
 

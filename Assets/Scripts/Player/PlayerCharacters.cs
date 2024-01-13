@@ -306,10 +306,10 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     public override bool UpdateDie()
     {
-        if (characterData.GetHealth() <= 0)
-            return true;
+        if (characterData == null)
+            return false;
 
-        return false;
+        return characterData.GetHealth() <= 0;
     }
 
     protected virtual bool ElementalSkillTrigger()

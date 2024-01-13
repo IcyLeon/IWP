@@ -82,7 +82,8 @@ public class MageOrb : MonoBehaviour, IDamage
 
         healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
         healthBarScript.transform.SetParent(HealthBarPivotParent, true);
-
+        healthBarScript.transform.localPosition = Vector3.zero;
+        healthBarScript.Init(false, false);
     }
 
     void DestroyOrb()

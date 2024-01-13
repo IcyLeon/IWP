@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PunchingBotIdle : PunchingBotState
 {
-    private float WaitForAction = 0.45f;
+    private float WaitForAction = 0.15f;
     private float WaitForActionElapsed = 0f;
 
     public PunchingBotIdle(PunchingBotStateMachine p) : base(p)

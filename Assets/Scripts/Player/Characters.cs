@@ -279,9 +279,7 @@ public class Characters : MonoBehaviour, IDamage
         if (callHitInfo)
             OnHit?.Invoke(e, this);
 
-        Debug.Log(GetHealth());
         SetHealth(GetHealth() - DamageValue);
-        Debug.Log(GetHealth());
 
         if (DamageValue > 0)
         {
@@ -325,7 +323,8 @@ public class Characters : MonoBehaviour, IDamage
     {
         CurrentHealth = val;
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, GetMaxHealth());
-        if (GetHealth() <= 0)
+
+        if (IsDead())
             UpdateDie();
     }
 

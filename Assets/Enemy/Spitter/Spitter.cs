@@ -118,10 +118,12 @@ public class Spitter : BaseEnemy
                     state = States.BASICATK;
                 }
 
-                NavMeshAgent.enabled = NavMeshAgent.updateRotation = true;
+                NavMeshAgent.updateRotation = false;
+                NavMeshAgent.enabled = true;
+                LookAtPlayerXZ();
                 break;
             case States.BASICATK:
-                if (!HasReachedTargetLocation(GetPlayerLocation()) && NavMeshAgent.enabled)
+                if (!HasReachedTargetLocation(GetPlayerLocation()))
                 {
                     state = States.STRAFE;
                 }
@@ -189,7 +191,7 @@ public class Spitter : BaseEnemy
         Vector3 dir = (GetPlayerLocation() - FireEmitter.position).normalized;
         Fireball fireBall = Instantiate(FireBallPrefab, FireEmitter.position, Quaternion.identity).GetComponent<Fireball>();
         Rigidbody r = fireBall.GetComponent<Rigidbody>();
-        r.velocity = dir * 10f;
+        r.velocity = dir * 20f;
         CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.6f);
     }
 

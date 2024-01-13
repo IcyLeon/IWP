@@ -64,7 +64,7 @@ public class MageEnemyState : IState
         SetTargetRotation(quaternion);
 
         GetMageEnemyStateMachine().MageEnemyData.CurrentTargetRotation = GetMageEnemyStateMachine().MageEnemyData.Target_Rotation;
-
+        GetMageEnemyStateMachine().MageEnemyData.dampedTargetRotationPassedTime = 0;
         Quaternion targetRotation = Quaternion.Euler(0f, GetMageEnemyStateMachine().MageEnemyData.CurrentTargetRotation.eulerAngles.y, 0f);
         rb.MoveRotation(targetRotation);
 

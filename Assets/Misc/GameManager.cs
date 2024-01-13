@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
-using static UnityEngine.EventSystems.EventTrigger;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -12,12 +13,13 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     public class GameSpawnInfo
     {
-        public GameObject[] IntroduceItem;
+        public ScriptableObject ScriptableObjectSO;
         public int Wave;
     }
+
     [SerializeField] GameObject TeleporterPrefab;
     [SerializeField] GameSpawnInfo[] GameSpawnInfoList;
-    [SerializeField] GameSpawnInfo[] FriendKillerSpawnInfoList;
+    [SerializeField] Transform WaypointSpawnPointListGO;
     [SerializeField] Terrain terrain;
     private EnemyManager EM;
     private static GameManager instance;
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        SceneManager.OnSceneChanged += OnSceneChanged;
+        EnemyManager.OnEnemyKilled += OnEnemyKilled;
         instance = this;
     }
 
@@ -38,10 +42,46 @@ public class GameManager : MonoBehaviour
     {
         EM = EnemyManager.GetInstance();
         assetManager = AssetManager.GetInstance();
-        EM.OnEnemyKilled += OnEnemyKilled;
         isCompleted = false;
         TotalEnemyInWave = 0;
         FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
+    }
+
+    private void SpawnEnemies(int Wave, float sec)
+    {
+        int random = Random.Range(0, GameSpawnInfoList.Length);
+
+        if (Wave < GameSpawnInfoList[random].Wave)
+        {
+            SpawnEnemies(Wave, sec);
+            return;
+        }
+
+        CharactersSO CharactersSO = GameSpawnInfoList[random].ScriptableObjectSO as CharactersSO;
+        WaveSpawn(CharactersSO, sec);
+
+    }
+
+    private void OnSceneChanged(SceneEnum s)
+    {
+        StartCoroutine(SetRandomLocation());
+    }
+    private IEnumerator SetRandomLocation()
+    {
+        yield return null;
+        CharacterManager.GetInstance().GetPlayerManager().transform.position = GetRandomSpawnPoint();
+    }
+    private Vector3 GetRandomSpawnPoint()
+    {
+        Transform[] WaypointList = WaypointSpawnPointListGO.GetComponentsInChildren<Transform>(true)
+            .Where(childTransform => childTransform != WaypointSpawnPointListGO.transform)
+            .ToArray();
+
+        int random = Random.Range(0, WaypointList.Length);
+        Vector3 point = WaypointList[random].position;
+        float terrainHeight = terrain.SampleHeight(new Vector3(point.x, 0f, point.z));
+        Vector3 actposition = new Vector3(point.x, terrainHeight + terrain.GetPosition().y, point.z);
+        return actposition;
     }
 
     private void OnEnemyKilled(BaseEnemy enemy)
@@ -52,7 +92,8 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         EM.ResetCounter();
-        EM.OnEnemyKilled -= OnEnemyKilled;
+        SceneManager.OnSceneChanged -= OnSceneChanged;
+        EnemyManager.OnEnemyKilled -= OnEnemyKilled;
     }
 
     public void UpdateWave()
@@ -82,11 +123,11 @@ public class GameManager : MonoBehaviour
             return;
 
         EM.SetCurrentWave(EM.GetCurrentWave() + 1);
-
         assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Incoming!");
         TotalEnemyInWave = CalculateHowManyToSpawn();
         EM.SetEnemiesCount(TotalEnemyInWave);
-        WaveSpawn(tempcharactersSO, 1);
+
+        SpawnEnemies(EM.GetCurrentWave(), 1f);
     }
 
     private void OnWaveComplete()
@@ -96,6 +137,8 @@ public class GameManager : MonoBehaviour
 
         Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
         MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
+
+        InventoryManager.GetInstance().AddCurrency(CurrencyType.COINS, Mathf.RoundToInt(50f + 50f * (EM.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
     }
 
     private void WaveSpawn(CharactersSO charactersSO, float delay)
@@ -119,7 +162,7 @@ public class GameManager : MonoBehaviour
 
         BaseEnemy enemy = EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
         enemy.OnDeadEvent += OnDead;
-        WaveSpawn(charactersSO, sec);
+        SpawnEnemies(EM.GetCurrentWave(), sec);
     }
 
     private void OnDead(BaseEnemy e)

@@ -24,7 +24,7 @@ public class CharacterArtifactStatsDisplay : MonoBehaviour
 
         if (characterStatsValueText)
         {
-            characterStatsValueText.text = "+" + Mathf.RoundToInt(ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, ArtifactsStat)).ToString();
+            characterStatsValueText.text = "+" + Mathf.RoundToInt(ArtifactsManager.GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, ArtifactsStat)).ToString();
         }
 
     }

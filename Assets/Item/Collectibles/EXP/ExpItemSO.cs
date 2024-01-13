@@ -12,6 +12,11 @@ public class ExpItemSO : ItemTemplate
         return typeof(ConsumableItemForbiddenInInventory);
     }
 
+    public override Category GetCategory()
+    {
+        return Category.DEVELOPMENT_ITEM;
+    }
+
     public override string GetItemType()
     {
         return "Character EXP Material";

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Apple_Shop
   m_EditorClassIdentifier: 
   ItemsSO: {fileID: 11400000, guid: 8ee57fc8cbe590e49b6944642b9acd9a, type: 2}
-  Price: 0
+  Price: 250
   CurrencyType: 1

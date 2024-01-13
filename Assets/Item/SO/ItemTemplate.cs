@@ -7,7 +7,9 @@ public enum Category
 {
     FOOD,
     COLLECTIBLES,
-    ARTIFACTS
+    ARTIFACTS,
+    GADGETS,
+    DEVELOPMENT_ITEM,
 }
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/ItemsSO")]

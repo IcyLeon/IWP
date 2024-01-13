@@ -34,25 +34,117 @@ public class ArtifactsManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public List<KeyValuePair<ArtifactsInfo, int>> GetStackAll2PieceOr4PieceList(CharacterData characterData)
+    {
+        Dictionary<ArtifactsInfo, int> piecesSet = GetAllArtifactsSetInCharactersInventory(characterData);
+
+        List<KeyValuePair<ArtifactsInfo, int>> resultList = new();
+
+        foreach (var kvp in piecesSet)
+        {
+            if (kvp.Value == 2)
+            {
+                resultList.Add(kvp);
+            }
+        }
+
+        if (resultList.Count == 0)
+        {
+            foreach (var kvp in piecesSet)
+            {
+                if (kvp.Value == 4)
+                {
+                    resultList.Add(kvp);
+                }
+            }
+        }
+
+        return resultList;
+    }
+
+    public int GetTotalDuplicatePieceCount(CharacterData characterData, ArtifactsInfo artifactsInfo)
+    {
+        Dictionary<ArtifactsInfo, int> AmountOfpiecesSetEquipped = GetAllArtifactsSetInCharactersInventory(characterData);
+
+        int counter = 0;
+
+        foreach (var kvp in AmountOfpiecesSetEquipped)
+        {
+            if (kvp.Key == artifactsInfo)
+            {
+                int value = kvp.Value;
+                for (int i = 0; i <= value; i++)
+                {
+                    if (i % 2 == 0 && i != 0)
+                    {
+                        counter++;
+                    }
+                }
+            }
+        }
+
+        return counter;
+    }
+
+
+    private Dictionary<ArtifactsInfo, int> GetAllArtifactsSetInCharactersInventory(CharacterData characterData)
+    {
+        Dictionary<ArtifactsInfo, int> artifactCounts = new();
+
+        foreach (var artifactValue in characterData.GetEquippedArtifactsList())
+        {
+            ArtifactsInfo ArtifactsInfo = GetArtifactsInfo(artifactValue.GetArtifactsSet());
+
+            if (artifactCounts.ContainsKey(ArtifactsInfo))
+            {
+                artifactCounts[ArtifactsInfo]++;
+            }
+            else
+            {
+                artifactCounts.Add(ArtifactsInfo, 1);
+            }
+        }
+
+        return artifactCounts;
+    }
+
+
+
+
     public static ArtifactsManager GetInstance()
     {
         return instance;
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            Artifacts artifacts = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
-            InventoryManager.GetInstance().AddItems(artifacts);
+        //Debug only
+        //if (Input.GetKeyDown(KeyCode.Return))
+        //{
+        //    Artifacts artifacts = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+        //    Artifacts artifacts2 = CreateArtifact(ArtifactType.PLUME, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+        //    Artifacts artifacts3 = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+        //    Artifacts artifacts4 = CreateArtifact(ArtifactType.PLUME, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+        //    Artifacts artifacts5 = CreateArtifact(ArtifactType.SANDS, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+        //    Artifacts artifacts6 = CreateArtifact(ArtifactType.GOBLET, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+        //    Artifacts artifacts7 = CreateArtifact(ArtifactType.SANDS, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+        //    Artifacts artifacts8 = CreateArtifact(ArtifactType.GOBLET, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+        //    InventoryManager.GetInstance().AddItems(artifacts);
+        //    InventoryManager.GetInstance().AddItems(artifacts2);
+        //    InventoryManager.GetInstance().AddItems(artifacts3);
+        //    InventoryManager.GetInstance().AddItems(artifacts4);
+        //    InventoryManager.GetInstance().AddItems(artifacts5);
+        //    InventoryManager.GetInstance().AddItems(artifacts6);
+        //    InventoryManager.GetInstance().AddItems(artifacts7);
+        //    InventoryManager.GetInstance().AddItems(artifacts8);
 
-
-            Item item = InventoryManager.CreateItem(expItemSO);
-            InventoryManager.GetInstance().AddItems(item);
-        }
+        //    Item item = InventoryManager.CreateItem(expItemSO);
+        //    InventoryManager.GetInstance().AddItems(item);
+        //}
 
     }
 
-    public float GetTotalArtifactValueStatsIncludePercentageAndBaseStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
+    public static float GetTotalArtifactValueStatsIncludePercentageAndBaseStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
     {
         if (characterData == null)
             return 0f;
@@ -73,7 +165,7 @@ public class ArtifactsManager : MonoBehaviour
         return GetTotalArtifactValueStats(characterData, artifactsStat);
     }
 
-    public float GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
+    public static float GetTotalFoodAndArtifactValueStatsIncludePercentageAndBaseStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
     {
         if (characterData == null)
             return 0f;
@@ -94,7 +186,7 @@ public class ArtifactsManager : MonoBehaviour
         return GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, artifactsStat) + GetTotalFoodValueStats(characterData, artifactsStat);
     }
 
-    public float GetTotalArtifactValueStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
+    public static float GetTotalArtifactValueStats(CharacterData characterData, Artifacts.ArtifactsStat artifactsStat)
     {
         float total = 0f;
         InventoryManager IM = InventoryManager.GetInstance();
@@ -120,7 +212,7 @@ public class ArtifactsManager : MonoBehaviour
         return total;
     }
 
-    public float GetTotalFoodValueStats(CharacterData characterData, Artifacts.ArtifactsStat foodStat)
+    public static float GetTotalFoodValueStats(CharacterData characterData, Artifacts.ArtifactsStat foodStat)
     {
         float total = 0f;
         InventoryManager IM = InventoryManager.GetInstance();

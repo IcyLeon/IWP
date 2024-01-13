@@ -35,7 +35,7 @@ public class CharacterStatsDisplay : MonoBehaviour
         if (!ShowIncludeStatsBonusStats)
             totalStats = ShowTotalStatsCharactersValue(characterData.GetLevel());
         else
-            totalStats = ShowTotalStatsCharactersValue(characterData.GetLevel()) + Mathf.RoundToInt(ArtifactsManager.GetInstance().GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, characterStatsType));
+            totalStats = ShowTotalStatsCharactersValue(characterData.GetLevel()) + Mathf.RoundToInt(ArtifactsManager.GetTotalArtifactValueStatsIncludePercentageAndBaseStats(characterData, characterStatsType));
 
         string StatsValue;
         if (characterStatsValueText)

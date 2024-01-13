@@ -384,7 +384,7 @@ public class MageEnemy : BaseEnemy
 
     public override float GetElementalShield()
     {
-        return BaseShield + BaseShield * (GetLevel() - 1) * 0.45f;
+        return BaseShield + BaseShield * (GetLevel() - 1) * 0.58f;
     }
 
     private void FixedUpdate()

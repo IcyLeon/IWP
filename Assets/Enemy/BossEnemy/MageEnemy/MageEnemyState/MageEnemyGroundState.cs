@@ -14,6 +14,8 @@ public class MageEnemyGroundState : MageEnemyState
 
         if (CanPerformAction())
         {
+            UpdateAttacksFarAway();
+
             if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus)
             {
                 if (GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped <= 0f)
@@ -24,23 +26,9 @@ public class MageEnemyGroundState : MageEnemyState
             }
             GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped -= Time.deltaTime;
 
-
-            if (GetMageEnemyStateMachine().GetMageEnemy().GetTotalMageNotDestroyed() == 0 && GetMageEnemyStateMachine().MageEnemyData.ShieldStatus
-                && GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped > 0)
-            {
-                GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped -= Time.deltaTime;
-            }
-
-
             if (GetMageEnemyStateMachine().MageEnemyData.TakeOffElapsed <= 0)
             {
                 GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyTakeOffState);
-                return;
-            }
-
-            if (GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped <= 0 && !isAirborne())
-            {
-                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemySpawnCrystalsState);
                 return;
             }
 
@@ -53,6 +41,42 @@ public class MageEnemyGroundState : MageEnemyState
     {
         base.Exit();
         GetMageEnemyStateMachine().MageEnemyData.dampedTargetRotationPassedTime = 0f;
+    }
+
+    protected void UpdateAttacksFarAway()
+    {
+        if (isAirborne())
+            return;
+
+
+        if (GetMageEnemyStateMachine().MageEnemyData.CallingEnemiesElasped <= 0)
+        {
+            if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus || !GetMageEnemyStateMachine().GetMageEnemy().CanSpawnReinforcement())
+                return;
+
+            if (GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyAttackState)
+            {
+                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemySpawnMinionState);
+                return;
+            }
+        }
+        GetMageEnemyStateMachine().MageEnemyData.CallingEnemiesElasped -= Time.deltaTime;
+
+
+        if (GetMageEnemyStateMachine().GetMageEnemy().GetTotalMageNotDestroyed() == 0 && GetMageEnemyStateMachine().MageEnemyData.ShieldStatus
+    && GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped > 0)
+        {
+            GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped -= Time.deltaTime;
+        }
+
+        if (GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped <= 0)
+        {
+            if (GetMageEnemyStateMachine().GetCurrentState() is not MageEnemyAttackState)
+            {
+                GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemySpawnCrystalsState);
+                return;
+            }
+        }
     }
 
     protected void UpdateBasicAttacks()
@@ -80,14 +104,6 @@ public class MageEnemyGroundState : MageEnemyState
                     GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyBasicAttackState);
                     break;
                 case 1:
-                    if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus || !GetMageEnemyStateMachine().GetMageEnemy().CanSpawnReinforcement())
-                    {
-                        UpdateBasicAttacks();
-                        return;
-                    }
-                    GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemySpawnMinionState);
-                    break;
-                case 2:
                     GetMageEnemyStateMachine().ChangeState(GetMageEnemyStateMachine().MageEnemyChargeAttackState);
                     break;
             }

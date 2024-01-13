@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef46c16bdb09ef4fb7e8ecd8c5ce020, type: 3}
   m_Name: SpitterDropValue
   m_EditorClassIdentifier: 
-  BaseDropValue: 40
+  BaseDropValue: 9

@@ -12,9 +12,9 @@ public class EnemyManager : MonoBehaviour
     private List<BaseEnemy> CurrentEnemySpawnedList;
     private List<BaseEnemy> BossEnemyList = new();
     public delegate void onEnemyChanged(BaseEnemy enemy);
-    public onEnemyChanged OnEnemyKilled;
-    public onEnemyChanged OnBossEnemyAdd;
-    public onEnemyChanged OnBossEnemyRemove;
+    public static onEnemyChanged OnEnemyKilled;
+    public static onEnemyChanged OnBossEnemyAdd;
+    public static onEnemyChanged OnBossEnemyRemove;
     private static EnemyManager instance;
     private int CurrentWave;
     private int CurrentEnemyDefeated;
@@ -164,6 +164,9 @@ public class EnemyManager : MonoBehaviour
 
     public void CallOnEnemyKilled(BaseEnemy enemy)
     {
+        if (!enemy.IsDead())
+            return;
+
         TotalEnemiesDefeated++;
         InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(enemy.GetDropValue()));
         OnEnemyKilled?.Invoke(enemy);

@@ -10,10 +10,6 @@ public class FoodGadgetItemSO : GadgetItemSO
     {
         return typeof(FoodGadget);
     }
-    public override Category GetCategory()
-    {
-        return Category.COLLECTIBLES;
-    }
     public override string GetItemType()
     {
         return "Gadget";

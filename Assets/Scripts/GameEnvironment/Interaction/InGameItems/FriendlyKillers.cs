@@ -43,6 +43,14 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
         }
     }
 
+    public override int GetCost()
+    {
+        if (EnemyManager == null)
+            EnemyManager = EnemyManager.GetInstance();
+
+        return base.GetCost() + Mathf.RoundToInt(base.GetCost() * (EnemyManager.GetCurrentWave() - 1) * 0.558f);
+    }
+
     public override void Interact(PlayerManager PM)
     {
         if (FriendlyKillerHandler.HasReachedLimitKillers())
@@ -109,6 +117,11 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     {
         if (healthBarScript)
         {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                SetHealth(GetHealth() - 10);
+            }
+
             if (friendlyKillerData != null)
             {
                 healthBarScript.UpdateHealth(GetHealth(), 0f, GetMaxHealth());
@@ -119,19 +132,19 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     protected virtual void UpdateDead()
     {
-        if (IsDead())
+        if (friendlyKillerData == null)
+            return;
+
+        FriendlyKillerHandler.GetInstance().RemoveKillerToList(friendlyKillerData);
+        if (animator != null)
         {
-            FriendlyKillerHandler.GetInstance().RemoveKillerToList(friendlyKillerData);
-            if (animator != null)
+            if (Characters.ContainsParam(animator, "Deactivated"))
             {
-                if (Characters.ContainsParam(animator, "Deactivated"))
-                {
-                    animator.SetTrigger("Deactivated");
-                }
+                animator.SetTrigger("Deactivated");
             }
-            GameObject go = Instantiate(AssetManager.GetInstance().FirePrefab, transform.position, Quaternion.identity);
-            friendlyKillerData = null;
         }
+        GameObject go = Instantiate(AssetManager.GetInstance().FirePrefab, transform.position, Quaternion.identity);
+        friendlyKillerData = null;
     }
 
     public virtual bool IsDead()
@@ -158,7 +171,6 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
         SetHealth(GetHealth() - dmg);
         AssetManager.GetInstance().SpawnWorldText_Elemental(position, elemental, dmg.ToString());
-        UpdateDead();
 
         return e;
     }
@@ -245,6 +257,8 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
             return;
 
         GetFriendlyKillerData().SetHealth(val);
+        if (IsDead())
+            UpdateDead();
     }
 
     public float GetHealth()

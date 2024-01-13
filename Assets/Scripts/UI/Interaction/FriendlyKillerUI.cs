@@ -12,13 +12,13 @@ public class FriendlyKillerUI : MonoBehaviour
     private void Awake()
     {
         FriendlyKillerPlacementUI_Dictionary = new();
+        FriendlyKillerHandler.OnFriendlyKillersDataAdd += OnFriendlyKillersDataAdd;
+        FriendlyKillerHandler.OnFriendlyKillersDataRemove += OnFriendlyKillersDataRemove;
     }
     // Start is called before the first frame update
     void Start()
     {
         FriendlyKillerHandler = FriendlyKillerHandler.GetInstance();
-        FriendlyKillerHandler.OnFriendlyKillersDataAdd += OnFriendlyKillersDataAdd;
-        FriendlyKillerHandler.OnFriendlyKillersDataRemove += OnFriendlyKillersDataRemove;
         Init();
     }
 
@@ -43,8 +43,11 @@ public class FriendlyKillerUI : MonoBehaviour
 
     void OnFriendlyKillersDataRemove(FriendlyKillerData f)
     {
-        Destroy(FriendlyKillerPlacementUI_Dictionary[f].gameObject);
-        FriendlyKillerPlacementUI_Dictionary.Remove(f);
+        FriendlyKillerPlacementUI fkp = FriendlyKillerPlacementUI_Dictionary[f];
+        if (FriendlyKillerPlacementUI_Dictionary.Remove(f))
+        {
+            Destroy(fkp.gameObject);
+        }
     }
 
     private void OnDestroy()

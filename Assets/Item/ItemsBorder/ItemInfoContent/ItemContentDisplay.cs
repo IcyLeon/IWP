@@ -24,6 +24,7 @@ public class ItemContentDisplay : MonoBehaviour
     [SerializeField] GameObject ArtifactsContent;
     [SerializeField] GameObject ArtifactsStatsContent;
     [SerializeField] GameObject ArtifactsSets;
+    [SerializeField] ArtifactSetInfo ArtifactSetInfo;
 
     [Header("Food Info Content")]
     [SerializeField] GameObject FoodsContent;
@@ -66,12 +67,15 @@ public class ItemContentDisplay : MonoBehaviour
             i++;
         }
 
-        if (ArtifactSetText)
-            ArtifactSetText.text = artifactsInfo.ArtifactsSetName + ":";
-        if (Artifact2PieceText)
-            Artifact2PieceText.text = "2-Piece Set: " + artifactsInfo.TwoPieceDesc;
-        if (Artifact4PieceText)
-            Artifact4PieceText.text = "4-Piece Set: " + artifactsInfo.FourPieceDesc;
+        ArtifactSetInfo.SetArtifactSO(artifactsInfo);
+    }
+
+    public void UpdateArtifactSetInfo(CharacterData characterData)
+    {
+        if (ArtifactSetInfo)
+        {
+            ArtifactSetInfo.UpdateContent(characterData);
+        }
     }
 
     private void ShowCommonItemContent(ItemTemplate itemsSO)
@@ -83,10 +87,13 @@ public class ItemContentDisplay : MonoBehaviour
         if (ItemDescText)
             ItemDescText.text = itemsSO.ItemDesc;
 
-        if (ItemIconTypeImage && itemsSO != null)
-            ItemIconTypeImage.sprite = itemsSO.ItemIconTypeSprite;
+        if (ItemIconTypeImage)
+        {
+            if (itemsSO != null)
+                ItemIconTypeImage.sprite = itemsSO.ItemIconTypeSprite;
 
-        ItemIconTypeImage.gameObject.SetActive(itemsSO != null && itemsSO?.ItemIconTypeSprite != null);
+            ItemIconTypeImage.gameObject.SetActive(itemsSO != null && itemsSO?.ItemIconTypeSprite != null);
+        }
     }
 
     private void ShowUpgradableItemContent(UpgradableItems UpgradableItems)

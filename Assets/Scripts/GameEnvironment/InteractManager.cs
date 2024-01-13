@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public interface IWorldMarker
+{
+    Sprite GetWorldMarkerSprite();
+    void SpawnMarker();
+    Transform GetMarkerParentPivotTransform();
+}
+
 public interface IInteract
 {
     bool CanInteract();

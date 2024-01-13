@@ -8,7 +8,7 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
     private CharacterData characterData;
     [SerializeField] RectTransform ArtifactPivotPoint;
     [SerializeField] CurrentCharacterArtifacts[] CurrentCharacterArtifactsList;
-    [SerializeField] CharacterArtifactStatsDisplay[] CharacterArtifactStatsDisplay;
+    [SerializeField] Transform CharacterArtifactStatsDisplayContent;
 
     public CharactersShowcaseManager GetCharactersShowcaseManager()
     {
@@ -45,7 +45,7 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
             artifactBubble.UpdateCurrentArtifact();
         }
 
-        foreach (var CharacterArtifactStats in CharacterArtifactStatsDisplay)
+        foreach (var CharacterArtifactStats in CharacterArtifactStatsDisplayContent.GetComponentsInChildren<CharacterArtifactStatsDisplay>())
         {
             CharacterArtifactStats.SetCharacterData(characterData);
         }
@@ -82,7 +82,7 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
 
     private void UpdateArtifactsDisplay()
     {
-        foreach (var CharacterArtifactStats in CharacterArtifactStatsDisplay)
+        foreach (var CharacterArtifactStats in CharacterArtifactStatsDisplayContent.GetComponentsInChildren<CharacterArtifactStatsDisplay>())
         {
             CharacterArtifactStats.DisplayCharactersArtifactsStat();
         }

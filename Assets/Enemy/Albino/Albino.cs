@@ -268,7 +268,7 @@ public class Albino : BaseEnemy
 
         while (true)
         {
-            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 1f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 0.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
             {
                 SlamAreaDamage();
                 break;

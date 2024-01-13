@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -76,16 +77,18 @@ public class EquipItems : MonoBehaviour, IPointerClickHandler
                         ExistArtifacts.SetEquippedCharacter(null);
                     }
 
-
-
                     if (currentCharacterREF != null)
                     {
-                        Debug.Log(currentCharacterREF.GetActualMaxHealth(currentCharacterREF.GetLevel()));
                         currentCharacterREF.SetHealth(currentCharacterREF.GetPreviousHealthRatio() * currentCharacterREF.GetActualMaxHealth(currentCharacterREF.GetLevel()));
                     }
                 }
                 break;
         }
+    }
+
+    public void SetCurrentCharacterREF(CharacterData characterData)
+    {
+        currentCharacterREF = characterData;
     }
 
     // Update is called once per frame

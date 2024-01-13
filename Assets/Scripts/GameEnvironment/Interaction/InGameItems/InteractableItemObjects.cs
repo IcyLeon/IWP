@@ -53,7 +53,8 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
 
         if (ItemREF != null)
         {
-            PM.SpawnItemCollectedUI(ItemREF.GetItemSO());
+            if (PM)
+                PM.SpawnItemCollectedUI(ItemREF.GetItemSO());
             IM.AddItems(ItemREF);
         }
 

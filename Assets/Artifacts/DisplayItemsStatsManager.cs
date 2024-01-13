@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class DisplayItemsStatsManager : MonoBehaviour
 {
@@ -18,6 +17,8 @@ public class DisplayItemsStatsManager : MonoBehaviour
     }
     [SerializeField] ParticleSystem fog;
     [SerializeField] Background[] Backgrounds;
+    [SerializeField] CharactersShowcaseManager CharactersShowcaseManager;
+    private CharacterData currentCharacterREF;
 
     [Header("Display Upgradable in Inventory")]
     [SerializeField] ScrollRect ScrollRect;
@@ -108,6 +109,9 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
     private void UpdateArtifactEquipContent()
     {
+        if (CharactersShowcaseManager.GetSelectedCharacterData())
+            currentCharacterREF = CharactersShowcaseManager.GetSelectedCharacterData().GetCharacterData();
+
         Artifacts artifacts = GetItemCurrentSelected() as Artifacts;
         EquippedByCharacter.gameObject.SetActive(false);
         if (artifacts != null)
@@ -118,8 +122,10 @@ public class DisplayItemsStatsManager : MonoBehaviour
                 EquippedByCharacter.UpdateContent(playersCharacterSO.PartyIcon, playersCharacterSO.ItemName);
                 EquippedByCharacter.gameObject.SetActive(true);
             }
+            ItemContentDisplay.UpdateArtifactSetInfo(currentCharacterREF);
         }
     }
+
     private void ChangeParticleColor(Color color)
     {
         ParticleSystem.Particle[] particles = new ParticleSystem.Particle[fog.particleCount];
@@ -170,9 +176,11 @@ public class DisplayItemsStatsManager : MonoBehaviour
 
         SelectedArtifactsBubble.UpdateSelectedItem((Artifacts)GetItemCurrentSelected(), (ArtifactsSO)SelectedItemsSO);
         EquipButton.SetItemREF(GetItemCurrentSelected());
+        EquipButton.SetCurrentCharacterREF(currentCharacterREF);
         LockButton.SetItemREF(GetItemCurrentSelected());
         ItemContentDisplay.RefreshItemContentDisplay(GetItemCurrentSelected(), SelectedItemsSO);
     }
+
 
     private void onTabChangedEvent()
     {

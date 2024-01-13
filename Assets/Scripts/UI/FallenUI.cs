@@ -25,6 +25,7 @@ public class FallenUI : MonoBehaviour
         ReviveAllCharacters();
         EnemyManager.GetInstance().ResetEverything();
         RemoveAllTurrets();
+        InventoryManager.GetInstance().ResetEverything();
     }
 
     void ReviveAllCharacters()

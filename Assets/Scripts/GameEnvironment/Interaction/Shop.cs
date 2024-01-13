@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shop : MonoBehaviour, IInteract
+public class Shop : MarkerIndicatorInteraction, IInteract
 {
-    [SerializeField] Sprite ShopIcon;
     [SerializeField] GameObject ShopUI;
     public void Interact(PlayerManager PM)
     {
@@ -30,6 +29,6 @@ public class Shop : MonoBehaviour, IInteract
 
     public Sprite GetInteractionSprite()
     {
-        return ShopIcon;
+        return GetWorldMarkerSprite();
     }
 }

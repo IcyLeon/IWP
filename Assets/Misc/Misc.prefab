@@ -134,6 +134,8 @@ MonoBehaviour:
     type: 3}
   ElementalOrbPrefab: {fileID: 2761850602990719289, guid: d8178b63cbc2dd9489253e2e3cea3ce0,
     type: 3}
+  IconPrefab: {fileID: 2649292692826693735, guid: 51d1234283f8234439440e777e84f82b,
+    type: 3}
   Coins: {fileID: 21300000, guid: a9911bb6bad21eb4d837e1a8e0710961, type: 3}
   Cash: {fileID: 21300000, guid: 44425270f48a0254f8e809705803f802, type: 3}
   ElectricEffect: {fileID: 467047049062790365, guid: 4a717d49788ca7f4d9fa725d95995cf8,

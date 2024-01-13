@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
     private Elements elements;
     private PlayerCharacters BowCharacters;
     private CharacterData BowCharactersData;
-    private float FlightTime = 10f;
+    private float FlightTime = 15f;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,7 @@ public class Arrow : MonoBehaviour
     IEnumerator TurnOnGravity()
     {
         rb.useGravity = false;
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.2f);
         rb.useGravity = true;
     }
 
@@ -31,16 +31,7 @@ public class Arrow : MonoBehaviour
 
     private void LimitFallVelocity()
     {
-        float FallSpeedLimit = 15f;
-        Vector3 velocity = new Vector3(0f, rb.velocity.y, 0f);
-        if (velocity.y >= -FallSpeedLimit)
-        {
-            return;
-        }
-
-        Vector3 limitVel = new Vector3(0f, -FallSpeedLimit - velocity.y, 0f);
-        rb.AddForce(limitVel, ForceMode.VelocityChange);
-
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, 45f);
     }
 
     // Update is called once per frame
@@ -58,9 +49,10 @@ public class Arrow : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         PlayerCharacters player = other.GetComponent<PlayerCharacters>();
+        FriendlyKillers friendlyKillers = other.GetComponent<FriendlyKillers>();
         IDamage damageObject = other.gameObject.GetComponent<IDamage>();
 
-        if (player == null && (!other.isTrigger || damageObject != null))
+        if (player == null && (!other.isTrigger || damageObject != null) && friendlyKillers == null)
         {
             if (damageObject != null)
             {

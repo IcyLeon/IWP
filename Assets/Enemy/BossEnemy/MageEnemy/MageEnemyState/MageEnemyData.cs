@@ -20,6 +20,8 @@ public class MageEnemyData
     private float OriginalAttackInterval = 1.5f;
     public float AttackInterval;
     public float AttackCurrentElasped = 0f;
+    public float CallingEnemiesInterval = 10f;
+    public float CallingEnemiesElasped = 0f;
     public int CurrentAttackIndex = 1;
 
     public float CurrentStunElasped = 0f;
@@ -56,6 +58,8 @@ public class MageEnemyData
         CrystalsCoreSpawnElasped = CrystalsCoreSpawnDuration;
         Phase = MagePhase.Phase_1;
         AttackInterval = GetRandomAttackInterval();
+        AttackCurrentElasped = Time.time;
+        CallingEnemiesElasped = CallingEnemiesInterval;
     }
 
     public float GetRandomAttackInterval()

@@ -60,11 +60,15 @@ public class InventoryManager : MonoBehaviour {
         SetCurrentEquipCharacter(GetCharactersOwnedList()[0]); // change this
 
 
+        InitDefaultItemInInventory();
+    }
+
+    void InitDefaultItemInInventory()
+    {
         GadgetItem item = CreateItem(GadgetItemSO) as GadgetItem;
         AddItems(item);
         SetCurrentGadgetItemEquipped(item);
     }
-
     public void SetCurrentGadgetItemEquipped(GadgetItem gadgetItem)
     {
         currentEquipGadgetItem = gadgetItem;
@@ -195,12 +199,32 @@ public class InventoryManager : MonoBehaviour {
 
     public void RemoveItems(Item item)
     {
+        if (PlayerStats == null)
+            return;
+
         if (PlayerStats.RemoveItems(item))
         {
             OnInventoryItemRemove?.Invoke(item, item.GetItemSO());
             CallOnInventoryChanged(item, item.GetItemSO());
         }
     }
+
+    public void ResetEverything()
+    {
+        if (PlayerStats == null)
+            return;
+
+        for (int i = GetINVList().Count - 1; i >= 0; i--)
+        {
+            RemoveItems(GetINVList()[i]);
+        }
+
+        PlayerStats.AddCash(-GetCurrency(CurrencyType.CASH));
+        PlayerStats.AddCoins(-GetCurrency(CurrencyType.COINS));
+
+        InitDefaultItemInInventory();
+    }
+
     public List<CharacterData> GetEquipCharactersDataList()
     {
         return EquipCharactersDatalist;

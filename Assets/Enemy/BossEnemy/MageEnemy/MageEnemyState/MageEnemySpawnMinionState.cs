@@ -12,6 +12,7 @@ public class MageEnemySpawnMinionState : MageEnemyAttackState
     {
         base.Enter();
         StartAnimation("isCalling");
+        GetMageEnemyStateMachine().MageEnemyData.CallingEnemiesElasped = GetMageEnemyStateMachine().MageEnemyData.CallingEnemiesInterval;
         AssetManager.GetInstance().OpenMessageNotification("The mage is calling for reinforcement");
     }
 

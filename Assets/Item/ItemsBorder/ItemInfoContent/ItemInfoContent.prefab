@@ -909,6 +909,7 @@ GameObject:
   m_Component:
   - component: {fileID: 780418646077180455}
   - component: {fileID: 2176770111479209928}
+  - component: {fileID: 1079130895121444382}
   m_Layer: 5
   m_Name: ArtifactSetInfo
   m_TagString: Untagged
@@ -965,6 +966,30 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1079130895121444382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938689278313073498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 187d995595163b240916bbff2e9b6b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArtifactSetText: {fileID: 1659066989171871348}
+  artifactSetInfoContent:
+  - CheckImage: {fileID: 5200709723655548514}
+    ArtifactPieceText: {fileID: 828784174526540001}
+  - CheckImage: {fileID: 1020842730659729023}
+    ArtifactPieceText: {fileID: 11078058960099982}
+  CheckSprite: {fileID: 21300000, guid: 227675b94b7450446a11238c500b4832, type: 3}
+  UnCheckSprite: {fileID: 21300000, guid: 451a7c5a200b9a74c90060ae14b0c282, type: 3}
+  SuccessColorText: {r: 0.36078432, g: 0.69803923, b: 0.3372549, a: 1}
+  DefaultColorText: {r: 0.44313726, g: 0.46666667, b: 0.50980395, a: 1}
+  SuccessColorCheckerImage: {r: 1, g: 1, b: 1, a: 1}
+  DefaultColorCheckerImage: {r: 0.73333335, g: 0.72156864, b: 0.6901961, a: 1}
 --- !u!1 &3062129965214467657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,10 +1437,10 @@ RectTransform:
   m_Father: {fileID: 682760507464993866}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 91.62, y: -15.445}
+  m_SizeDelta: {x: 183.24, y: 30.89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7692043682378027523
 CanvasRenderer:
@@ -3190,6 +3215,7 @@ MonoBehaviour:
   ArtifactsContent: {fileID: 2609421500717959497}
   ArtifactsStatsContent: {fileID: 8822221873695553750}
   ArtifactsSets: {fileID: 2938689278313073498}
+  ArtifactSetInfo: {fileID: 1079130895121444382}
   FoodsContent: {fileID: 5722721808278461533}
   StarsTransformParent: {fileID: 0}
 --- !u!1 &9036259576784786829
