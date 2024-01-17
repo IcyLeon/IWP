@@ -113,7 +113,7 @@ public class CharacterData : UpgradableItems
         CurrentElementalSkillCooldown = 0;
         CurrentElementalBurstEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
-        Level = 1;
+        ResetLevel();
         CurrentHealth = GetBaseMaxHealth(GetLevel());
         SetPreviousHealthRatio(GetHealth() / GetActualMaxHealth(GetLevel()));
         MaxLevel = 20;
@@ -136,6 +136,12 @@ public class CharacterData : UpgradableItems
         EnergyBurstCost = playerCharacterSO.EnergyCost;
         MaxLevel = 20;
         elementalReaction = new ElementalReaction();
+    }
+
+    public void ResetLevel()
+    {
+        Level = 1;
+        CurrentExpAmount = TotalExpAmount = 0;
     }
 
     public ElementalReaction GetElementalReaction()

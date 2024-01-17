@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Wanderer's Advice
   m_EditorClassIdentifier: 
   ItemName: Wanderer's Advice
-  ItemDesc: Wanderer's Advice is a Character EXP Material that provides 1,000 Character
+  ItemDesc: Wanderer's Advice is a Character EXP Material that provides 250 Character
     EXP to increase a character's level.
-  SummaryItemDesc: Gives 1,000 Character EXP to increase a character's level.
+  SummaryItemDesc: Gives 250 Character EXP to increase a character's level.
   ItemSprite: {fileID: 21300000, guid: 7b5839d84b1c91b4d9d6db37da3213f2, type: 3}
+  ItemIconTypeSprite: {fileID: 0}
   Rarity: 1
-  ExpAmount: 1000
+  ExpAmount: 250

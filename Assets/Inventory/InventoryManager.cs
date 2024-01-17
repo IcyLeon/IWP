@@ -46,8 +46,13 @@ public class InventoryManager : MonoBehaviour {
 
         PlayerStats = new PlayerStats();
         EquipCharactersDatalist = new List<CharacterData>();
+        FallenUI.OnReviveChange += ResetEverything;
     }
 
+    private void OnDestroy()
+    {
+        FallenUI.OnReviveChange -= ResetEverything;
+    }
 
 
     void Start()
@@ -218,9 +223,7 @@ public class InventoryManager : MonoBehaviour {
         {
             RemoveItems(GetINVList()[i]);
         }
-
-        PlayerStats.AddCash(-GetCurrency(CurrencyType.CASH));
-        PlayerStats.AddCoins(-GetCurrency(CurrencyType.COINS));
+        PlayerStats.ResetCharactersLevels();
 
         InitDefaultItemInInventory();
     }

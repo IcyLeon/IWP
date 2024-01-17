@@ -10,7 +10,7 @@ public class StaminaManager : MonoBehaviour
     private float WaitToRegen;
     private float WaitElapsed;
     private StaminaScript staminaScript;
-    private PlayerController PlayerController;
+    private PlayerManager PlayerManager;
     [SerializeField] StaminaSO StaminaSO;
 
     private void Awake()
@@ -70,10 +70,13 @@ public class StaminaManager : MonoBehaviour
         if (staminaData != null)
             staminaData.Update();
 
-        if (staminaScript == null)
-            staminaScript = MainUI.GetInstance().GetStaminaBar();
+        if (PlayerManager == null)
+            PlayerManager = CharacterManager.GetInstance().GetPlayerManager();
 
-        staminaScript.UpdateStamina(staminaData.GetCurrentStamina() / staminaData.GetMaxStamina());
+        if (staminaScript == null)
+            staminaScript = PlayerManager.GetPlayerCanvasUI().GetStaminaBar();
+        else
+            staminaScript.UpdateStamina(staminaData.GetCurrentStamina() / staminaData.GetMaxStamina());
     }
 
     public void PerformStaminaAction(float Cost)

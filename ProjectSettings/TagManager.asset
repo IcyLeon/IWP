@@ -11,6 +11,7 @@ TagManager:
   - Effects
   - Icon
   - Terrain
+  - UICamera
   layers:
   - Default
   - TransparentFX

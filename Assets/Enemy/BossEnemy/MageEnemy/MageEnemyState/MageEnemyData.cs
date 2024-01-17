@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking.Types;
 
 public class MageEnemyData
 {
@@ -48,7 +49,7 @@ public class MageEnemyData
 
 
     public int NoOfFireball = 6;
-
+    public MarkerData m_MarkerData;
     public MageEnemyData()
     {
         ShieldCurrentElasped = ShieldCooldown;
@@ -60,6 +61,17 @@ public class MageEnemyData
         AttackInterval = GetRandomAttackInterval();
         AttackCurrentElasped = Time.time;
         CallingEnemiesElasped = CallingEnemiesInterval;
+
+        m_MarkerData = new MarkerData();
+    }
+    public void UpdateMarkerData()
+    {
+        m_MarkerData.UpdateMarkerData();
+    }
+
+    public void RemoveAllMarkers()
+    {
+        m_MarkerData.RemoveAllMarkers();
     }
 
     public float GetRandomAttackInterval()

@@ -62,7 +62,7 @@ public class BaseEnemy : Characters
     }
     private int GetRandomLevel()
     {
-        int CurrentWave = EM.GetCurrentWave();
+        int CurrentWave = EnemyManager.GetCurrentWave();
         int actualLevel = Random.Range(CurrentWave - 3, CurrentWave + 1);
         actualLevel = Mathf.Clamp(actualLevel, 1, GetMaxLevel());
 
@@ -74,7 +74,7 @@ public class BaseEnemy : Characters
         if (EnemyValueDropSO == null)
             return 1;
 
-        return EnemyValueDropSO.BaseDropValue * (GetLevel() - 1) + EnemyValueDropSO.BaseDropValue * (Random.Range(0.5f, 1.5f));
+        return EnemyValueDropSO.BaseDropValue + EnemyValueDropSO.BaseDropValue * (GetLevel() - 1) * (Random.Range(0.8f, 1.5f));
     }
     public override float GetATK()
     {
@@ -112,9 +112,9 @@ public class BaseEnemy : Characters
         return goCopy.ToArray();
     }
 
-    protected override void HitEvent(Elements e, IDamage d)
+    protected override void HitEvent(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
-        PlayerManager.CallEntityHitSendInfo(e, d);
+        PlayerManager.CallEntityHitSendInfo(ER, e, d);
     }
 
     private IDamage GetNearestPlayerObject()
@@ -157,16 +157,6 @@ public class BaseEnemy : Characters
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
-    }
-
-    public override Vector3 GetPointOfContact()
-    {
-        Vector3 temp = transform.position;
-        if (GetCollider() != null)
-        {
-            temp = GetCollider().bounds.center;
-        }
-        return temp;
     }
 
     public Collider GetCollider()
@@ -300,7 +290,7 @@ public class BaseEnemy : Characters
         if (GetNavMeshAgent() == null)
             return false;
 
-        return (transform.position - target).magnitude <= GetNavMeshAgent().stoppingDistance + 0.25f; // slide offset to prevent jerking
+        return (transform.position - target).magnitude <= GetNavMeshAgent().stoppingDistance + 0.5f; // slide offset to prevent jerking
     }
 
     protected void SetRandomDestination()

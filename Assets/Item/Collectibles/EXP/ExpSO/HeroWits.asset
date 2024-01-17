@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: HeroWits
   m_EditorClassIdentifier: 
   ItemName: Hero's Wit
-  ItemDesc: Hero's Wit is a Character EXP Material that provides 20,000 Character
+  ItemDesc: Hero's Wit is a Character EXP Material that provides 2,500 Character
     EXP to increase a character's level.
-  SummaryItemDesc: Gives 20000 Character EXP to increase a character's level.
+  SummaryItemDesc: Gives 5000 Character EXP to increase a character's level.
   ItemSprite: {fileID: 21300000, guid: b4e0b03b399a47b43bb0342b1b0c7a7a, type: 3}
+  ItemIconTypeSprite: {fileID: 0}
   Rarity: 3
-  ExpAmount: 20000
+  ExpAmount: 2500

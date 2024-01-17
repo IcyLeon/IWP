@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class MarkerData
 {
-    private Dictionary<MarkerEnemyData, IDamage> MarkerEnemyDataList;
+    private Dictionary<IDamage, MarkerEnemyData> MarkerEnemyDataList;
 
-    public Dictionary<MarkerEnemyData, IDamage> GetMarkerEnemyDataList()
+    public Dictionary<IDamage, MarkerEnemyData> GetMarkerEnemyDataList()
     {
         return MarkerEnemyDataList;
     }
@@ -16,41 +16,38 @@ public class MarkerData
         MarkerEnemyDataList = new();
     }
 
-    public MarkerEnemyData GetMarkerEnemyData(IDamage dmg)
+    public MarkerEnemyData GetMarkerEnemyData(IDamage d)
     {
-        for (int i = GetMarkerEnemyDataList().Count - 1; i >= 0; i--)
+
+        if (MarkerEnemyDataList.ContainsKey(d))
         {
-            KeyValuePair<MarkerEnemyData, IDamage> itemPair = GetMarkerEnemyDataList().ElementAt(i);
-            if (GetMarkerEnemyDataList().TryGetValue(itemPair.Key, out IDamage IDamage))
-            {
-                if (dmg == IDamage)
-                    return itemPair.Key;
-            }
+            return MarkerEnemyDataList[d];
         }
+
         return null;
     }
     public void UpdateMarkerData()
     {
         for (int i = GetMarkerEnemyDataList().Count - 1; i >= 0; i--)
         {
-            KeyValuePair<MarkerEnemyData, IDamage> itemPair = GetMarkerEnemyDataList().ElementAt(i);
-            if (MarkerEnemyDataList.TryGetValue(itemPair.Key, out IDamage IDamage))
+            KeyValuePair<IDamage, MarkerEnemyData> itemPair = GetMarkerEnemyDataList().ElementAt(i);
+            if (MarkerEnemyDataList.TryGetValue(itemPair.Key, out MarkerEnemyData MarkerEnemyData))
             {
-                if (itemPair.Key.isTimeOut())
+                if (MarkerEnemyData.isTimeOut())
                 {
-                    itemPair.Key.GetMarker().DestroySelf();
+                    MarkerEnemyData.GetMarker().DestroySelf();
                     GetMarkerEnemyDataList().Remove(itemPair.Key);
                 }
-                if (IDamage == null)
+                if (MarkerEnemyData == null)
                 {
-                    itemPair.Key.GetMarker().DestroySelf();
+                    MarkerEnemyData.GetMarker().DestroySelf();
                     GetMarkerEnemyDataList().Remove(itemPair.Key);
                 }
                 else
                 {
-                    if (IDamage.IsDead())
+                    if (itemPair.Key.IsDead())
                     {
-                        itemPair.Key.GetMarker().DestroySelf();
+                        MarkerEnemyData.GetMarker().DestroySelf();
                         GetMarkerEnemyDataList().Remove(itemPair.Key);
                     }
                 }
@@ -62,25 +59,30 @@ public class MarkerData
     {
         for (int i = GetMarkerEnemyDataList().Count - 1; i >= 0; i--)
         {
-            KeyValuePair<MarkerEnemyData, IDamage> itemPair = GetMarkerEnemyDataList().ElementAt(i);
-            if (GetMarkerEnemyDataList().TryGetValue(itemPair.Key, out IDamage IDamage))
+            KeyValuePair<IDamage, MarkerEnemyData> itemPair = GetMarkerEnemyDataList().ElementAt(i);
+            if (GetMarkerEnemyDataList().TryGetValue(itemPair.Key, out MarkerEnemyData MarkerEnemyData))
             {
-                itemPair.Key.GetMarker().DestroySelf();
+                MarkerEnemyData.GetMarker().DestroySelf();
                 GetMarkerEnemyDataList().Remove(itemPair.Key);
             }
         }
         GetMarkerEnemyDataList().Clear();
     }
 
-    public void AddMarkerToEnemy(MarkerEnemyData m)
+    public MarkerEnemyData AddMarkerToEnemy(IDamage dmg, float timer)
     {
-        if (GetMarkerEnemyDataList().TryGetValue(m, out IDamage IDamage))
+
+        if (GetMarkerEnemyDataList().TryGetValue(dmg, out MarkerEnemyData MarkerEnemyData))
         {
-            m.SetTimer(m.GetMaxTimer());
+            MarkerEnemyData.SetTimer(MarkerEnemyData.GetMaxTimer());
         }
         else
         {
-            GetMarkerEnemyDataList().Add(m, m.GetIDamageObj());
+            MarkerEnemyData m = new MarkerEnemyData(dmg, timer);
+            GetMarkerEnemyDataList().Add(m.GetIDamageObj(), m);
+            return m;
         }
+        return null;
+
     }
 }

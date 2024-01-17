@@ -75,12 +75,58 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject ItemCollectedUIPrefab;
 
     private static AssetManager instance;
+
+    public static Action<GameObject, Color32> OnSpawnArrow = delegate { };
+
+    public static void CallSpawnArrow(GameObject GameObject, Color32 color)
+    {
+        OnSpawnArrow?.Invoke(GameObject, color);
+    }
+
     public static bool isInProbabilityRange(float a)
     {
         float randomValue = Random.value;
         float probability = 1.0f - a;
         return randomValue > probability;
     }
+
+    public static IEnumerator DisableDissolved(GameObject go, Material materialInstance, float timer = 1f)
+    {
+        float startTime = Time.time;
+        float timetaken = timer;
+        float value = 0f;
+
+        while (Time.time - startTime < timetaken)
+        {
+            float t = (Time.time - startTime) / timetaken;
+            value = Mathf.Lerp(value, 1f, t);
+
+            materialInstance.SetFloat("_Scale", value);
+            yield return null;
+        }
+
+        materialInstance.SetFloat("_Scale", 1f); // Ensure the final value is set precisely.
+    }
+
+    public static IEnumerator Dissolved(GameObject go, Material materialInstance, float timer = 1f)
+    {
+        float startTime = Time.time;
+        float timetaken = timer;
+        float value = 1f;
+
+        while (Time.time - startTime < timetaken)
+        {
+            float t = (Time.time - startTime) / timetaken;
+            value = Mathf.Lerp(value, 0f, t);
+
+            materialInstance.SetFloat("_Scale", value);
+            yield return null;
+        }
+
+        materialInstance.SetFloat("_Scale", 0f);
+        Destroy(go.gameObject);
+    }
+
     public static string CurrencyText(CurrencyType type)
     {
         switch (type)
@@ -114,9 +160,23 @@ public class AssetManager : MonoBehaviour
         }
     }
 
+    public void SpawnItemDropListGO(List<Item> ItemList, Vector3 pos)
+    {
+        if (ItemList == null)
+            return;
+
+        for (int i = 0; i < ItemList.Count; i++)
+        {
+            Item item = ItemList[i];
+            SpawnItemDrop(item, pos);
+        }
+    }
+
+
     public void SpawnItemDrop(Item item, Vector3 spawnPos, ItemTemplate itemTemplate = null) // if item/existing item is null, use itemtemplate to spawn a new item
     {
         InteractableItemObjects itemGO = Instantiate(InteractableItemObjectPrefab, spawnPos, Quaternion.identity).GetComponent<InteractableItemObjects>();
+        itemGO.GetComponent<Rigidbody>().AddForce(Vector3.up * 20f, ForceMode.Impulse);
         Item ItemREF = null;
         if (item == null)
         {
@@ -204,13 +264,16 @@ public class AssetManager : MonoBehaviour
 
     public WorldText SpawnWorldText(Sprite sprite, string val, Transform Parent)
     {
-        WorldText wt = Instantiate(WorldText, Parent).GetComponent<WorldText>();
+        WorldText wt = Instantiate(WorldText).GetComponent<WorldText>();
+        wt.transform.SetParent(Parent, true);
+        wt.transform.localPosition = Vector3.zero;
         wt.UpdateContent(sprite, val);
         return wt;
     }
-    public ArrowIndicator SpawnArrowIndicator(GameObject source)
+    public ArrowIndicator SpawnArrowIndicator(GameObject target, GameObject source, Transform t)
     {
-        ArrowIndicator go = Instantiate(ArrowIndicatorPrefab, GetCanvasGO().transform).GetComponent<ArrowIndicator>();
+        ArrowIndicator go = Instantiate(ArrowIndicatorPrefab, t).GetComponent<ArrowIndicator>();
+        go.SetTarget(target);
         go.SetSource(source);
         go.transform.SetAsFirstSibling();
         return go;

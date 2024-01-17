@@ -37,7 +37,7 @@ public class BossHealthBar : MonoBehaviour
         EnemyNameTxt.text = BaseEnemy.GetCharactersSO().ItemName;
     }
 
-    void HitEvent(Elements e, Characters c)
+    void HitEvent(ElementalReactionsTrigger ER, Elements e, Characters c)
     {
         if (healthBarScript)
         {

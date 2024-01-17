@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Mage
   ItemDesc: 
+  SummaryItemDesc: 
   ItemSprite: {fileID: 0}
+  ItemIconTypeSprite: {fileID: 0}
   Rarity: 3
   AscensionInfoList:
   - BaseHP: 3500
     BaseATK: 100
     BaseDEF: 89
-    BaseMaxHP: 500000
-    BaseMaxATK: 2500
+    BaseMaxHP: 55000
+    BaseMaxATK: 600
     BaseMaxDEF: 450

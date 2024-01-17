@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2413450475139021371}
   - component: {fileID: 5087144872236465287}
   - component: {fileID: 2725991877473313992}
-  - component: {fileID: 7073239054408800055}
+  - component: {fileID: 976262894436748590}
   m_Layer: 0
   m_Name: IconWorldCanvas
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &2725991877473313992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &7073239054408800055
+--- !u!114 &976262894436748590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

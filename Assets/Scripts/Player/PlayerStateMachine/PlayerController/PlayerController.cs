@@ -55,7 +55,10 @@ public class PlayerController : MonoBehaviour
         return playerState.GetPlayerMovementState().GetAnimationSpeed();
     }
 
-
+    public bool isCursorVisible()
+    {
+        return Cursor.visible;
+    }
     private void Awake()
     {
         lockMovement = LockMovement.Enable;
@@ -169,9 +172,8 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (GetPlayerManager().GetAliveCharacters() == null)
+        if (playerState.IsDeadState())
             return;
-
 
         OnScroll?.Invoke(Input.mouseScrollDelta.y);
 
@@ -207,7 +209,6 @@ public class PlayerController : MonoBehaviour
     {
         GetCameraManager().CameraAim();
     }
-
 
     // Update is called once per frame
     void FixedUpdate()

@@ -88,7 +88,7 @@ public class SwordCharacters : PlayerCharacters
     {
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, damage.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(hitEffect.gameObject, hitEffect.main.duration);
-        damage.TakeDamage(damage.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), GetATK(), this);
+        damage.TakeDamage(damage.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), GetATK() * 1.8f, this);
     }
 
     public override void LaunchBasicAttack()

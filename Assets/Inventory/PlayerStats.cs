@@ -28,6 +28,22 @@ public class PlayerStats
         }
     }
 
+    public void ResetCharactersLevels()
+    {
+        for (int i = 0; i < CharactersOwnedList.Count; i++)
+        {
+            CharacterData characterData = CharactersOwnedList[i];
+            if (characterData != null)
+            {
+                characterData.GetEquippedArtifactsList().Clear();
+                characterData.ResetLevel();
+            }
+        }
+
+        AddCash(-GetCash());
+        AddCoins(-GetCoins());
+    }
+
     public CharacterData GetOwnedCharacterData(PlayerCharacterSO playersSO)
     {
         for (int i = 0; i < CharactersOwnedList.Count; i++)

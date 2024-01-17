@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 
         CharactersSO CharactersSO = GameSpawnInfoList[random].ScriptableObjectSO as CharactersSO;
         WaveSpawn(CharactersSO, sec);
-
+        SpawnArrowNearestEnemies();
     }
 
     private void OnSceneChanged(SceneEnum s)
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
         if (Time.timeScale == 0)
             return;
 
-        if (EM.GetCurrentWave() != 0 && EM.GetEnemiesCount() != 0)
+        if (EnemyManager.GetCurrentWave() != 0 && EM.GetEnemiesCount() != 0)
         {
             if (EM.GetCurrentEnemyDefeated() < TotalEnemyInWave)
             {
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
             {
                 if (!isCompleted && EM.GetCurrentEnemyDefeated() >= EM.GetEnemiesCount())
                 {
-                    assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Complete");
+                    assetManager.OpenMessageNotification("Wave " + EnemyManager.GetCurrentWave() + " Complete");
                     OnWaveComplete();
                     isCompleted = true;
                     return;
@@ -122,12 +122,12 @@ public class GameManager : MonoBehaviour
         if (isCompleted)
             return;
 
-        EM.SetCurrentWave(EM.GetCurrentWave() + 1);
-        assetManager.OpenMessageNotification("Wave " + EM.GetCurrentWave() + " Incoming!");
+        EM.SetCurrentWave(EnemyManager.GetCurrentWave() + 1);
+        assetManager.OpenMessageNotification("Wave " + EnemyManager.GetCurrentWave() + " Incoming!");
         TotalEnemyInWave = CalculateHowManyToSpawn();
         EM.SetEnemiesCount(TotalEnemyInWave);
 
-        SpawnEnemies(EM.GetCurrentWave(), 1f);
+        SpawnEnemies(EnemyManager.GetCurrentWave(), 4f);
     }
 
     private void OnWaveComplete()
@@ -135,10 +135,16 @@ public class GameManager : MonoBehaviour
         if (Teleporter != null)
             return;
 
-        Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
-        MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
+        Vector3 terrainSize = terrain.terrainData.size;
+        Vector3 terrainPosition = terrain.GetPosition();
+        Vector3 middlePosition = terrainPosition + terrainSize / 2f;
+        float terrainHeight = terrain.SampleHeight(middlePosition);
+        Vector3 spawnPosition = new Vector3(middlePosition.x, terrainHeight + terrainPosition.y,  middlePosition.z);
 
-        InventoryManager.GetInstance().AddCurrency(CurrencyType.COINS, Mathf.RoundToInt(50f + 50f * (EM.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
+        Teleporter = Instantiate(TeleporterPrefab, spawnPosition, Quaternion.identity);
+        AssetManager.CallSpawnArrow(Teleporter, Color.green);
+
+        InventoryManager.GetInstance().AddCurrency(CurrencyType.COINS, Mathf.RoundToInt(50f + 50f * (EnemyManager.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
     }
 
     private void WaveSpawn(CharactersSO charactersSO, float delay)
@@ -153,7 +159,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaveSpawnDelay(CharactersSO charactersSO, float sec)
     {
-        while (!EM.HasNotReachSpawnLimit() || EM.GetTotalEnemyAliveInList() >= (TotalEnemyInWave - EM.GetCurrentEnemyDefeated() - 1))
+        while (!EM.HasNotReachSpawnLimit() || EM.GetTotalEnemyAliveInList() >= (EM.GetEnemiesCount() - EM.GetCurrentEnemyDefeated() - 1))
         {
             yield return null;
         }
@@ -162,19 +168,42 @@ public class GameManager : MonoBehaviour
 
         BaseEnemy enemy = EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
         enemy.OnDeadEvent += OnDead;
-        SpawnEnemies(EM.GetCurrentWave(), sec);
+
+        float actualTimer = Random.Range(sec - 2.5f, sec + 2.5f);
+        actualTimer = Mathf.Max(1f, actualTimer);
+
+        SpawnEnemies(EnemyManager.GetCurrentWave(), actualTimer);
     }
 
     private void OnDead(BaseEnemy e)
     {
+        SpawnArrowNearestEnemies();
         EM.EnemyDropRandomItem(e.GetCharactersSO(), e.GetPointOfContact());
         e.OnDeadEvent -= OnDead;
+    }
+
+    private void SpawnArrowNearestEnemies()
+    {
+        int percentageDiff = EM.GetEnemiesCount() - EM.GetCurrentEnemyDefeated();
+        if (percentageDiff <= 4f)
+        {
+            for (int i = 0; i < EM.GetCurrentEnemySpawnedList().Count; i++) {
+                BaseEnemy enemy = EM.GetCurrentEnemySpawnedList()[i];
+                if (enemy != null)
+                {
+                    if (!enemy.IsDead())
+                    {
+                        AssetManager.CallSpawnArrow(enemy.gameObject, Color.red);
+                    }
+                }
+            }
+        }
     }
 
     public int CalculateHowManyToSpawn()
     {
         int BaseRate = 3;
-        return Mathf.RoundToInt(BaseRate + EM.GetCurrentWave() * (EM.GetCurrentWave() - 1) + BaseRate);
+        return Mathf.RoundToInt(BaseRate + EnemyManager.GetCurrentWave() * (EnemyManager.GetCurrentWave() - 1) + BaseRate);
     }
 
     // Update is called once per frame

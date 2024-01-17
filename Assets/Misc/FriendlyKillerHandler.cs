@@ -14,7 +14,7 @@ public class FriendlyKillerHandler : MonoBehaviour
     }
     [SerializeField] FriendlyKillerInfo[] FriendlyKillerInfoList;
     private int MaxKillersLimit = 3;
-    private int PossibleMaxTurretPerWave = 5;
+    private int PossibleMaxTurretPerWave = 10;
     private List<FriendlyKillerData> FriendlyKillerDataList;
     public delegate void OnFriendlyKillersDataChanged(FriendlyKillerData FriendlyKillerData);
     public static OnFriendlyKillersDataChanged OnFriendlyKillersDataAdd;
@@ -34,7 +34,22 @@ public class FriendlyKillerHandler : MonoBehaviour
         }
 
         FriendlyKillerDataList = new();
+        FallenUI.OnReviveChange += RemoveAllTurrets;
         SceneManager.OnSceneChanged += OnSceneChanged;
+    }
+
+    void RemoveAllTurrets()
+    {
+        for (int i = 0; i < GetFriendlyKillerDataList().Count; i++)
+        {
+            RemoveKillerToList(GetFriendlyKillerDataList()[i]);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        FallenUI.OnReviveChange -= RemoveAllTurrets;
+        SceneManager.OnSceneChanged -= OnSceneChanged;
     }
 
     private void OnSceneChanged(SceneEnum sceneEnum)

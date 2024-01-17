@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Nobless_StrongBox_Shop
   m_EditorClassIdentifier: 
   ItemsSO: {fileID: 11400000, guid: 52160c1739045bd4bb502d6e64a1e96e, type: 2}
-  Price: 350
-  CurrencyType: 0
+  Price: 550
+  CurrencyType: 1

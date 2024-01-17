@@ -24,8 +24,7 @@ public interface IInteract
 public class InteractManager : MonoBehaviour
 {
     [SerializeField] GameObject InteractablePrefab;
-    private MainUI mainUI;
-    private PlayerController playerController;
+    private PlayerManager PlayerManager;
     private float InteractRange = 3f;
     private List<InteractOptions> InteractOptionList;
     private int CurrentIdx;
@@ -34,11 +33,10 @@ public class InteractManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GetComponent<PlayerController>();
+        PlayerManager = GetComponent<PlayerManager>();
         PlayerController.OnInteract += InteractObj;
         PlayerController.OnScroll += Scroll;
         CurrentIdx = -1;
-        mainUI = MainUI.GetInstance();
         InteractOptionList = new();
         StartCoroutine(UpdateInteractObj());
     }
@@ -127,7 +125,7 @@ public class InteractManager : MonoBehaviour
             if (TotalInteractList.Length != 0)
             {
                 if (SelectionArrow == null)
-                    SelectionArrow = mainUI.GetInteractOptionsUI().SpawnInteractionArrow();
+                    SelectionArrow = PlayerManager.GetPlayerCanvasUI().GetInteractOptionsUI().SpawnInteractionArrow();
             }
             else
             {
@@ -141,7 +139,7 @@ public class InteractManager : MonoBehaviour
 
     private void RemoveInteractObject(IInteract interactObj)
     {
-        foreach(Transform t in mainUI.GetInteractOptionsUI().GetInteractOptionsPivot())
+        foreach(Transform t in PlayerManager.GetPlayerCanvasUI().GetInteractOptionsUI().GetInteractOptionsPivot())
         {
             InteractOptions InteractOptions = t.GetComponent<InteractOptions>();
             if (InteractOptions.GetIInferact() == interactObj)
@@ -154,7 +152,7 @@ public class InteractManager : MonoBehaviour
         
     private void SpawnInteractObj(IInteract interactable)
     {
-        InteractOptions interactOptions = Instantiate(InteractablePrefab, mainUI.GetInteractOptionsUI().GetInteractOptionsPivot().transform).GetComponent<InteractOptions>();
+        InteractOptions interactOptions = Instantiate(InteractablePrefab, PlayerManager.GetPlayerCanvasUI().GetInteractOptionsUI().GetInteractOptionsPivot().transform).GetComponent<InteractOptions>();
         interactOptions.SetIInferact(interactable);
         interactOptions.UpdateText(interactable.InteractMessage());
         InteractOptionList.Add(interactOptions);
@@ -169,13 +167,13 @@ public class InteractManager : MonoBehaviour
         IInteract interactObj = InteractOptionList[CurrentIdx].GetIInferact();
         if (interactObj != null)
         {
-            interactObj.Interact(playerController.GetPlayerManager());
+            interactObj.Interact(PlayerManager);
         }
     }
 
     private IInteract GetNearestInteractObj()
     {
-        Vector3 playerPosition = playerController.GetPlayerManager().GetPlayerOffsetPosition().position;
+        Vector3 playerPosition = PlayerManager.GetPlayerOffsetPosition().position;
         Collider[] interactList = GetAllNearestInteractObj() as Collider[];
         IInteract nearestInteractable = null;
         float closestDistance = float.MaxValue;
@@ -198,7 +196,7 @@ public class InteractManager : MonoBehaviour
 
     private IInteract[] GetAllNearestInteractObj()
     {
-        Vector3 playerPosition = playerController.GetPlayerManager().GetPlayerOffsetPosition().position;
+        Vector3 playerPosition = PlayerManager.GetPlayerOffsetPosition().position;
         Collider[] colliders = Physics.OverlapSphere(playerPosition, InteractRange);
         List<IInteract> InteractableList = new();
 

@@ -6,14 +6,10 @@ using UnityEngine.EventSystems;
 public class UpgradeCanvasTransition : MonoBehaviour, IPointerClickHandler
 {
     private Item ItemREF;
-    private UpgradeCanvas upgradeCanvas;
+    [SerializeField] UpgradeCanvas upgradeCanvas;
     [SerializeField] GameObject CharacterShowcaseCanvas;
     [SerializeField] GameObject ItemShowcaseCanvas;
 
-    void Start()
-    {
-        upgradeCanvas = MainUI.GetInstance().GetUpgradeCanvas();
-    }
     public void OnPointerClick(PointerEventData eventData)
     {
         SpawnUI();

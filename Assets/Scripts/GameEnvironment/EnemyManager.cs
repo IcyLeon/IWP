@@ -16,7 +16,7 @@ public class EnemyManager : MonoBehaviour
     public static onEnemyChanged OnBossEnemyAdd;
     public static onEnemyChanged OnBossEnemyRemove;
     private static EnemyManager instance;
-    private int CurrentWave;
+    private static int CurrentWave;
     private int CurrentEnemyDefeated;
     private int TotalEnemies;
     private int TotalEnemiesDefeated;
@@ -50,6 +50,11 @@ public class EnemyManager : MonoBehaviour
         return 0;
     }
 
+    public List<BaseEnemy> GetCurrentEnemySpawnedList()
+    {
+        return CurrentEnemySpawnedList;
+    }
+
     public bool HasNotReachSpawnLimit()
     {
         return GetTotalCurrentEnemySpawnedList() < GetMaxEnemyInScene();
@@ -57,14 +62,14 @@ public class EnemyManager : MonoBehaviour
 
     public int GetTotalCurrentEnemySpawnedList()
     {
-        return CurrentEnemySpawnedList.Count;
+        return GetCurrentEnemySpawnedList().Count;
     }
     public int GetTotalEnemyAliveInList()
     {
         int Count = 0;
         for (int i = 0; i < GetTotalCurrentEnemySpawnedList(); i++)
         {
-            BaseEnemy enemy = CurrentEnemySpawnedList[i];
+            BaseEnemy enemy = GetCurrentEnemySpawnedList()[i];
             if (enemy != null)
             {
                 if (!enemy.IsDead())
@@ -83,7 +88,7 @@ public class EnemyManager : MonoBehaviour
         Vector3 spawnPosition = GetRandomPointWithinTerrain(terrain);
 
         BaseEnemy enemy = Instantiate(EnemyInfoSO.GetEnemyContent(charactersSO).EnemyPrefab, spawnPosition, Quaternion.identity).GetComponent<BaseEnemy>();
-        CurrentEnemySpawnedList.Add(enemy);
+        GetCurrentEnemySpawnedList().Add(enemy);
         return enemy;
     }
 
@@ -145,22 +150,8 @@ public class EnemyManager : MonoBehaviour
 
         } while (currentAmt < amtToDrop);
 
-        SpawnItemDropGO(itemsList, SpawnPosition);
+        AssetManager.GetInstance().SpawnItemDropListGO(itemsList, SpawnPosition);
     }
-
-    private void SpawnItemDropGO(List<Item> ItemList, Vector3 pos)
-    {
-        AssetManager AM = AssetManager.GetInstance();
-        if (ItemList == null)
-            return;
-
-        for (int i = 0; i < ItemList.Count; i++)
-        {
-            Item item = ItemList[i];
-            AM.SpawnItemDrop(item, pos);
-        }
-    }
-
 
     public void CallOnEnemyKilled(BaseEnemy enemy)
     {
@@ -214,8 +205,13 @@ public class EnemyManager : MonoBehaviour
         }
 
         CurrentEnemySpawnedList = new();
+        FallenUI.OnReviveChange += ResetEverything;
     }
 
+    private void OnDestroy()
+    {
+        FallenUI.OnReviveChange -= ResetEverything;
+    }
     private void Start()
     {
         ResetTotalEnemiesDefeated();
@@ -231,9 +227,9 @@ public class EnemyManager : MonoBehaviour
     {
         for (int i = GetTotalCurrentEnemySpawnedList() - 1; i >= 0; i--)
         {
-            if (CurrentEnemySpawnedList[i] != null)
+            if (GetCurrentEnemySpawnedList()[i] != null)
             {
-                CurrentEnemySpawnedList[i].SetHealth(0);
+                GetCurrentEnemySpawnedList()[i].SetHealth(0);
             }
         }
     }
@@ -242,15 +238,15 @@ public class EnemyManager : MonoBehaviour
     {
         for (int i = GetTotalCurrentEnemySpawnedList() - 1; i >= 0; i--)
         {
-            if (CurrentEnemySpawnedList[i] == null)
+            if (GetCurrentEnemySpawnedList()[i] == null)
             {
-                CurrentEnemySpawnedList.RemoveAt(i);
+                GetCurrentEnemySpawnedList().RemoveAt(i);
             }
             else
             {
-                if (CurrentEnemySpawnedList[i].IsDead())
+                if (GetCurrentEnemySpawnedList()[i].IsDead())
                 {
-                    CurrentEnemySpawnedList.RemoveAt(i);
+                    GetCurrentEnemySpawnedList().RemoveAt(i);
                 }
             }
         }
@@ -278,7 +274,7 @@ public class EnemyManager : MonoBehaviour
         OnEnemyWaveChange?.Invoke();
     }
 
-    public int GetCurrentWave()
+    public static int GetCurrentWave()
     {
         return CurrentWave;
     }

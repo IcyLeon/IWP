@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FriedEgg_Shop
   m_EditorClassIdentifier: 
   ItemsSO: {fileID: 11400000, guid: 87977df504e45f34384b877062244f1b, type: 2}
-  Price: 250
+  Price: 300
   CurrencyType: 1

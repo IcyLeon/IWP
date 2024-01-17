@@ -7,7 +7,8 @@ public abstract class UpgradableItems : Item
 {
     protected int Level, MaxLevel;
     protected bool locked;
-    protected float ExpAmount;
+    protected float CurrentExpAmount;
+    protected float TotalExpAmount;
     public event Action onLevelChanged;
 
     public virtual void Upgrade()
@@ -34,12 +35,20 @@ public abstract class UpgradableItems : Item
 
     public float GetExpAmount()
     {
-        return ExpAmount;
+        return CurrentExpAmount;
     }
 
     public void SetExpAmount(float amt)
     {
-        ExpAmount = amt;
+        CurrentExpAmount = amt;
+    }
+    public void SetMaxExpAmount(float amt)
+    {
+        TotalExpAmount = amt;
+    }
+    public float GetMaxExpAmount()
+    {
+        return TotalExpAmount;
     }
 
 
@@ -47,7 +56,7 @@ public abstract class UpgradableItems : Item
     {
         MaxLevel = 20;
         Level = 0;
-        ExpAmount = 0;
+        CurrentExpAmount = TotalExpAmount = 0;
         locked = false;
     }
 

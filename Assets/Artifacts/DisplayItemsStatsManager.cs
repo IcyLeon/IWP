@@ -235,13 +235,9 @@ public class DisplayItemsStatsManager : MonoBehaviour
         }
     }
 
-    private void SelectArtifactTabSelectedItem(ItemButton itemButton)
+    public void SelectArtifactTabSelectedItem(ArtifactType artifactType)
     {
-        Artifacts artifacts = (Artifacts)(itemButton.GetItemREF());
-        if (artifacts == null)
-            return;
-
-        TabGroup.OnTabSelected(TabGroup.GetTabMenuList()[TabGroup.GetTabMenuByArtifactType(artifacts.GetArtifactType())].TabButton);
+        TabGroup.OnTabSelected(TabGroup.GetTabMenuList()[TabGroup.GetTabMenuByArtifactType(artifactType)].TabButton);
     }
     private void GetItemSelected(ItemButton itemButton)
     {
@@ -250,7 +246,6 @@ public class DisplayItemsStatsManager : MonoBehaviour
         if (itemButton == null)
             return;
 
-        SelectArtifactTabSelectedItem(itemButton);
         SelectedItemsSO = itemButton.GetItemsSO();
         SelectedItem = itemButton.GetItemREF();
         UpdateOutlineSelection();

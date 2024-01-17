@@ -36,10 +36,10 @@ RectTransform:
   m_Father: {fileID: 8614858274734371332}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -32.5}
-  m_SizeDelta: {x: 0, y: 65}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &7436213054335523991
 MonoBehaviour:
@@ -417,7 +417,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1061416641067494792
 CanvasRenderer:
@@ -714,9 +714,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShopIcon: {fileID: 1519423339782111581}
-  CostImage: {fileID: 7045640976448834037}
+  ShopBackgroundBorder: {fileID: 8396864430528935322}
   ShopItemTxt: {fileID: 8396864431465511069}
-  PriceTxt: {fileID: 256417547456600109}
+  PriceInfo: {fileID: 7609650263308941789}
   BackgroundImage: {fileID: 8396864430408299629}
   DefaultColor:
     serializedVersion: 2
@@ -785,7 +785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14117648, g: 0.20784314, b: 0.24705882, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1034,6 +1034,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8614858274734371332}
+  - component: {fileID: 4281657220142685477}
+  - component: {fileID: 7609650263308941789}
   m_Layer: 5
   m_Name: Currency
   m_TagString: Untagged
@@ -1062,3 +1064,43 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4281657220142685477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8473182546400329978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &7609650263308941789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8473182546400329978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da6b4c3fc8f78e40948663e69a6e455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrencyImage: {fileID: 7045640976448834037}
+  CurrencyValueTxt: {fileID: 256417547456600109}

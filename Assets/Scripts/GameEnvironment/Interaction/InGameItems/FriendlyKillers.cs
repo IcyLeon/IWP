@@ -5,14 +5,12 @@ using UnityEngine;
 
 public interface IGamePurchase : IInteract
 {
-    void ShowCost();
     public int GetCost();
 }
 
 public class FriendlyKillers : PurchaseableObjects, IDamage
 {
     private FriendlyKillerHandler FriendlyKillerHandler;
-    protected EnemyManager EnemyManager;
     [SerializeField] protected Animator animator;
     private FriendlyKillerData friendlyKillerData;
     protected HealthBarScript healthBarScript;
@@ -29,9 +27,9 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     {
         FriendlyKillerHandler = FriendlyKillerHandler.GetInstance();
         base.Start();
-        EnemyManager = EnemyManager.GetInstance();
-        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab, transform).GetComponent<HealthBarScript>();
-        healthBarScript.transform.localPosition = GetWorldTxtLocalPosition();
+        healthBarScript = Instantiate(AssetManager.GetInstance().EnemyHealthUIPrefab).GetComponent<HealthBarScript>();
+        healthBarScript.transform.SetParent(WorldTextPivotTransform, true);
+        healthBarScript.transform.localPosition = Vector3.zero;
         healthBarScript.Init(false, true);
     }
 
@@ -45,9 +43,6 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
     public override int GetCost()
     {
-        if (EnemyManager == null)
-            EnemyManager = EnemyManager.GetInstance();
-
         return base.GetCost() + Mathf.RoundToInt(base.GetCost() * (EnemyManager.GetCurrentWave() - 1) * 0.558f);
     }
 
@@ -105,7 +100,7 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
 
             if (GetFriendlyKillerData() == null)
             {
-                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO(), PM, EnemyManager);
+                friendlyKillerData = new FriendlyKillerData(GetFriendlyKillerSO(), PM);
                 FriendlyKillerHandler.AddKillerToList(friendlyKillerData);
             }
             canBuy = false;

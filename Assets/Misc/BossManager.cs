@@ -25,9 +25,9 @@ public class BossManager : MonoBehaviour
             return;
 
         Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
-        MainUI.GetInstance().SpawnArrowIndicator(Teleporter);
+        AssetManager.CallSpawnArrow(Teleporter, Color.green);
 
-        InventoryManager.GetInstance().AddCurrency(CurrencyType.COINS, Mathf.RoundToInt(180f + 180f * (EM.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
+        InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(180f + 180f * (EnemyManager.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
     }
 
     private bool IsAllBossAreDead()
@@ -61,7 +61,7 @@ public class BossManager : MonoBehaviour
         if (terrain)
             FriendlyKillerHandler.GetInstance().LoadKillersAroundTerrain(terrain);
 
-        EM.SetCurrentWave(EM.GetCurrentWave() + 1);
+        EM.SetCurrentWave(EnemyManager.GetCurrentWave() + 1);
 
 
     }

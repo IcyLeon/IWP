@@ -75,7 +75,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1
+  m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
+  MiddlePositionTransform: {fileID: 494984}
   Animator: {fileID: 9545436}
   Model: {fileID: 189936}
   HealthBarPivotParent: {fileID: 7383274449593521668}

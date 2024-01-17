@@ -24,7 +24,7 @@ public class Objectives : MonoBehaviour
         if (EM == null)
             return;
 
-        WavesTxt.text = "Wave: " + EM.GetCurrentWave();
+        WavesTxt.text = "Wave: " + EnemyManager.GetCurrentWave();
     }
     void OnEnemyDefeatedChange()
     {

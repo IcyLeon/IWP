@@ -48,6 +48,8 @@ public class MageEnemyGroundState : MageEnemyState
         if (isAirborne())
             return;
 
+        if (!isShieldState())
+            return;
 
         if (GetMageEnemyStateMachine().MageEnemyData.CallingEnemiesElasped <= 0)
         {

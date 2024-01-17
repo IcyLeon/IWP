@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PileEmUP_Shop
   m_EditorClassIdentifier: 
   ItemsSO: {fileID: 11400000, guid: 928dacb588805d84481ac41d52506962, type: 2}
-  Price: 1000
+  Price: 800
   CurrencyType: 1

@@ -30,9 +30,9 @@ public class AprilData
         connectedLineRenderer.positionCount = m_MarkerData.GetMarkerEnemyDataList().Count;
         for (int i = 0; i < m_MarkerData.GetMarkerEnemyDataList().Count; i++)
         {
-            KeyValuePair<MarkerEnemyData, IDamage> itemPair = m_MarkerData.GetMarkerEnemyDataList().ElementAt(i);
-            if (m_MarkerData.GetMarkerEnemyDataList().TryGetValue(itemPair.Key, out IDamage IDamage)) {
-                connectedLineRenderer.SetPosition(i, IDamage.GetPointOfContact());
+            KeyValuePair<IDamage, MarkerEnemyData> itemPair = m_MarkerData.GetMarkerEnemyDataList().ElementAt(i);
+            if (m_MarkerData.GetMarkerEnemyDataList().TryGetValue(itemPair.Key, out MarkerEnemyData MarkerEnemyData)) {
+                connectedLineRenderer.SetPosition(i, itemPair.Key.GetPointOfContact());
             }
         }
     }

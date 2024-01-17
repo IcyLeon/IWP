@@ -16,6 +16,7 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] GameObject EnhancementContent;
     [SerializeField] GameObject ButtonMask;
     [Header("Enhancement Infomation")]
+    [SerializeField] PriceInfo PriceInfo;
     [SerializeField] int EnhancementItemToSell;
     [SerializeField] SelectedArtifactsBubble SelectedArtifactsBubble;
     [SerializeField] TextMeshProUGUI LevelDisplay, ExpAmountDisplay, IncreaseAmountExpDisplay, IncreaseLevelDisplay;
@@ -33,7 +34,7 @@ public class EnhancementManager : MonoBehaviour
     private float PreviewUpgradeEXP;
     private bool UpgradinginProgress = false;
     private InventoryManager InventoryManager;
-    private UpgradeCanvas upgradeCanvas;
+    [SerializeField] UpgradeCanvas upgradeCanvas;
 
     [Header("Artifacts Stats")]
     [SerializeField] GameObject ArtifactsStatsContainer;
@@ -43,8 +44,6 @@ public class EnhancementManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();
-
         InventoryManager = InventoryManager.GetInstance();
         InventoryManager.OnInventoryItemRemove += OnInventoryItemRemove;
         LoadEmptySlots();
@@ -58,11 +57,6 @@ public class EnhancementManager : MonoBehaviour
         );
     }
 
-    public void Init()
-    {
-        if (upgradeCanvas == null)
-            upgradeCanvas = MainUI.GetInstance().GetUpgradeCanvas();
-    }
     public void SetExpDisplay()
     {
         UpgradableItems UpgradableItemREF = GetItemREF() as UpgradableItems;
@@ -457,12 +451,12 @@ public class EnhancementManager : MonoBehaviour
 
     private IEnumerator UpgradeProgress()
     {
-        float smoothTime = 4.5f;
+        float smoothTime = 1f;
         float UpgradeElasped = 0;
         UpgradableItems UpgradableItemREF = GetItemREF() as UpgradableItems;
         ButtonMask.SetActive(true);
 
-        while (GetItemREF() != null)
+        while (GetItemREF() != null && UpgradeElasped < smoothTime)
         {
             UpgradinginProgress = true;
             if (UpgradableItemREF.GetLevel() < CostList.Length)
@@ -470,9 +464,12 @@ public class EnhancementManager : MonoBehaviour
                 if (Mathf.Approximately(Mathf.RoundToInt(upgradeProgressSlider.value), (int)upgradeProgressSlider.maxValue))
                 {
                     UpgradableItemREF.SetExpAmount(UpgradableItemREF.GetExpAmount() - upgradeProgressSlider.maxValue);
+
                     if ((UpgradableItemREF.GetLevel() + 1) < CostList.Length)
+                    {
                         MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, CostList[UpgradableItemREF.GetLevel() + 1]);
 
+                    }
                     UpdatePreviewEXP();
                     upgradeProgressSlider.value = upgradeProgressSlider.minValue;
                     UpgradableItemREF.Upgrade();
@@ -485,14 +482,15 @@ public class EnhancementManager : MonoBehaviour
             }
             else
             {
+                UpgradableItemREF.SetMaxExpAmount(itemList.GetTotalCost(GetItemREF().GetRarity()));
                 MainUI.SetProgressUpgrades(upgradeProgressSlider, 0, 0); // max level
                 UpdateContent();
-                break;
             }
 
             UpgradeElasped += Time.unscaledDeltaTime;
             yield return null;
         }
+
         upgradeProgressSlider.value = UpgradableItemREF.GetExpAmount();
         ButtonMask.SetActive(false);
         UpgradinginProgress = false;
@@ -507,17 +505,10 @@ public class EnhancementManager : MonoBehaviour
             Slot slot = GetEnhancementItemList()[i].GetComponent<Slot>();
             if (slot.GetItemButton() != null)
             {
-                switch (slot.GetItemButton().GetItemREF()?.GetRarity())
+                if (slot.GetItemButton().GetItemREF() is Artifacts artifact)
                 {
-                    case Rarity.ThreeStar: // hardcode for now
-                        total += 500f;
-                        break;
-                    case Rarity.FourStar:
-                        total += 1000f;
-                        break;
-                    case Rarity.FiveStar:
-                        total += 5000f;
-                        break;
+                    int BaseValue = ArtifactsManager.GetInstance().GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactEXPManager(artifact.GetRarity()).BaseEXP;
+                    total += BaseValue + (0.8f * artifact.GetMaxExpAmount());
                 }
             }
         }
@@ -529,6 +520,7 @@ public class EnhancementManager : MonoBehaviour
         if (GetItemREF() != null)
         {
             UpgradableItems UpgradableItemREF = GetItemREF() as UpgradableItems;
+            UpgradableItemREF.SetMaxExpAmount(UpgradableItemREF.GetMaxExpAmount() + PreviewUpgradeEXP);
             UpgradableItemREF.SetExpAmount(PreviewUpgradeEXP);
             StartCoroutine(UpgradeProgress());
         }

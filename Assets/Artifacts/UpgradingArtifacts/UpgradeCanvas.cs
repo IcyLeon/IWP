@@ -12,6 +12,7 @@ public class UpgradeCanvas : MonoBehaviour
     [SerializeField] SlotPopup slotPopup;
     [SerializeField] ItemContentManager ItemContentManager;
     [SerializeField] EnhancementManager EnhancementManager;
+    [SerializeField] GameObject ItemBag;
     private Item itemREF;
 
     public Item GetItemREF()
@@ -38,9 +39,8 @@ public class UpgradeCanvas : MonoBehaviour
         else if (GetItemREF() is not UpgradableItems)
             return;
 
-        MainUI.GetInstance().OpenItemBag();
+        ItemBag.SetActive(true);
         transform.GetChild(0).gameObject.SetActive(true);
-        EnhancementManager.Init();
         EnhancementManager.SetExpDisplay();
         slotPopup.Refresh();
         UpgradeItemsType.text = GetItemREF().GetItemSO().GetItemType() + " / " + GetItemREF().GetItemSO().ItemName;

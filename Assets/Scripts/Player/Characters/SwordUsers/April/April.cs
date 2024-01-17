@@ -25,7 +25,7 @@ public class April : SwordCharacters
         UltiRange = 4f;
     }
 
-    public MarkerOnTargets GetEnemyMarker()
+    private MarkerOnTargets GetEnemyMarker()
     {
         MarkerOnTargets go = Instantiate(EnemyMarkerPrefab).GetComponent<MarkerOnTargets>();
         return go;
@@ -135,13 +135,16 @@ public class April : SwordCharacters
             IDamage dmg = colliders[i].GetComponent<IDamage>();
             if (dmg != null)
             {
-                MarkerEnemyData m = new MarkerEnemyData(GetEnemyMarker(), GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData(), dmg, GetPlayersSO().ElementalBurstTimer);
-                GetAprilState().aprilData.m_MarkerData.AddMarkerToEnemy(m);
+                MarkerEnemyData NewMarkerAdded = GetAprilState().aprilData.m_MarkerData.AddMarkerToEnemy(dmg, GetPlayersSO().ElementalBurstTimer);
+                if (NewMarkerAdded != null)
+                {
+                    NewMarkerAdded.InitTargets(GetEnemyMarker());
+                }
             }
         }
     }
 
-    public override void OnEntityHitSendInfo(Elements e, IDamage d)
+    public override void OnEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
         MarkerEnemyData m = GetAprilState().aprilData.m_MarkerData.GetMarkerEnemyData(d);
         if (m != null)
@@ -149,7 +152,7 @@ public class April : SwordCharacters
             if (GetPlayerManager().GetAliveCharacters() != null)
                 GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), 25f + GetDEF() * 0.35f);
 
-            if (e.GetElements() != Elemental.NONE)
+            if (ER != null)
             {
                 DealDamageToAllConnected(e, m);
             }
@@ -160,9 +163,9 @@ public class April : SwordCharacters
     {
         foreach(var d in GetAprilState().aprilData.m_MarkerData.GetMarkerEnemyDataList())
         {
-            if (d.Value != null)
-                if (!d.Value.IsDead() && d.Value != m.GetIDamageObj())
-                    d.Value.TakeDamage(d.Value.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.15f * GetMaxHealth() + 75f, this, false);
+            if (d.Key != null)
+                if (!d.Key.IsDead() && d.Value != m.GetIDamageObj())
+                    d.Key.TakeDamage(d.Key.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 0.15f * GetMaxHealth() + 35f, this, false);
         }
     }
 

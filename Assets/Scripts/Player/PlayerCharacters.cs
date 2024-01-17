@@ -21,7 +21,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     {
         return PlayerManager;
     }
-    public virtual void OnEntityHitSendInfo(Elements e, IDamage d)
+    public virtual void OnEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
 
     }
@@ -70,11 +70,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public CharacterData GetCharacterData()
     {
         return characterData;
-    }
-
-    public override Vector3 GetPointOfContact()
-    {
-        return GetPlayerManager().GetPlayerOffsetPosition().position;
     }
 
     public override ElementalReaction GetElementalReaction()
@@ -178,7 +173,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     {
         SetBurstActive(false);
 
-        healthBarScript = MainUI.GetInstance().GetPlayerHealthBar();
+        healthBarScript = GetPlayerManager().GetPlayerCanvasUI().GetPlayerHealthBar();
         PlayerManager.onEntityHitSendInfo += OnEntityHitSendInfo;
         if (GetBurstCamera())
             GetBurstCamera().gameObject.SetActive(false);

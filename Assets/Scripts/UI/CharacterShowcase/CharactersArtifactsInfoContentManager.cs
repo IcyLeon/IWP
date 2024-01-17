@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharactersArtifactsInfoContentManager : MonoBehaviour
 {
+    [SerializeField] DisplayItemsStatsManager DisplayItemsStatsManager;
     private CharactersShowcaseManager CharactersShowcaseManager;
     private CharacterData characterData;
     [SerializeField] RectTransform ArtifactPivotPoint;
@@ -98,7 +99,8 @@ public class CharactersArtifactsInfoContentManager : MonoBehaviour
 
     void SelectedArtifactsBubbleClick(CurrentCharacterArtifacts cca)
     {
-        MainUI.GetInstance().GetDisplayItemsStatsManager().OpenDisplayItemsStatsManager(cca.GetSelectedArtifactsBubble().GetArtifacts());
+        DisplayItemsStatsManager.OpenDisplayItemsStatsManager(cca.GetSelectedArtifactsBubble().GetArtifacts());
+        DisplayItemsStatsManager.SelectArtifactTabSelectedItem(cca.GetArtifactType());
         GetCharactersShowcaseManager().transform.GetChild(0).gameObject.SetActive(false);
     }
 }

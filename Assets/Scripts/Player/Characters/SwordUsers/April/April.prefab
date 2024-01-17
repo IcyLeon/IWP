@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: 1f82e998edf14f041978ed9b72e14bc4, type: 2}
+  MiddlePositionTransform: {fileID: 6320933228677454013}
   Animator: {fileID: 9153545723736545998}
   Model: {fileID: 556025944887194207}
   HealthBarPivotParent: {fileID: 0}

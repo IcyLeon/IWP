@@ -14,7 +14,7 @@ public class MageEnemy : BaseEnemy
     [SerializeField] GameObject FireBallPrefab;
     [SerializeField] Transform FireBallPivotTransform;
     [SerializeField] MageEnemyPunch m_PunchCollider;
-    [SerializeField] Transform MiddlePositionTransform;
+    [SerializeField] GameObject EnemyMarkerPrefab;
     private List<MageFireBall> MageFireBallList = new();
     private List<MageOrb> MageOrbList = new();
     private List<FireAreaOfEffect> FireAreaOfEffectList = new();
@@ -97,14 +97,17 @@ public class MageEnemy : BaseEnemy
 
         if (!ChargeColliderList.TryGetValue(collision.collider, out bool value))
         {
-            PlayerCharacters pc = collision.collider.GetComponent<PlayerCharacters>();
-            if (pc != null)
+            IDamage IDmg = collision.collider.GetComponent<IDamage>();
+            if (IDmg != null)
             {
-                Elements hitElement = pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 1.8f, this);
+                Elements hitElement = IDmg.TakeDamage(IDmg.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 1.8f, this);
                 if (hitElement != null)
                 {
-                    Vector3 ForceDir = (pc.GetPointOfContact() - GetPointOfContact()).normalized * 15f;
-                    pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
+                    if (IDmg is PlayerCharacters player)
+                    {
+                        Vector3 ForceDir = (player.GetPointOfContact() - GetPointOfContact()).normalized * 15f;
+                        player.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
+                    }
                 }
             }
             ChargeColliderList.Add(collision.collider, true);
@@ -145,6 +148,7 @@ public class MageEnemy : BaseEnemy
                 if (!PlayerREF.IsDead() && Time.time - FireHitIntervalElapsed > FireHitInterval)
                 {
                     PlayerREF.TakeDamage(PlayerREF.GetPointOfContact(), new Elements(Elemental.FIRE), GetATK() * 0.35f, this);
+                    SetMarkersOnEnemy(PlayerREF);
                     FireHitIntervalElapsed = Time.time;
                 }
             }
@@ -220,10 +224,11 @@ public class MageEnemy : BaseEnemy
     {
         m_StateMachine.Update();
         base.Update();
-        Debug.Log(m_StateMachine.GetCurrentState());
+        //Debug.Log(m_StateMachine.GetCurrentState());
         UpdateFireBreathing();
         UpdateMageOrbList();
         UpdateMageFireBallList();
+        m_StateMachine.MageEnemyData.UpdateMarkerData();
         Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude, 0.15f, Time.deltaTime);
         Animator.SetBool("Airborne", IsAirborne());
     }
@@ -288,11 +293,6 @@ public class MageEnemy : BaseEnemy
         }
     }
 
-    public override Vector3 GetPointOfContact()
-    {
-        return MiddlePositionTransform.position;
-    }
-
     private void UpdateMageOrbList() {
 
         for (int i = MageOrbList.Count - 1; i >= 0; i--)
@@ -319,6 +319,21 @@ public class MageEnemy : BaseEnemy
                 m_StateMachine.MageEnemyData.CrystalsCoreStayElasped -= Time.deltaTime;
             }
         }
+    }
+
+    private MarkerOnTargets GetPlayerMarker()
+    {
+        MarkerOnTargets go = Instantiate(EnemyMarkerPrefab).GetComponent<MarkerOnTargets>();
+        return go;
+    }
+
+    private void SetMarkersOnEnemy(IDamage dmg)
+    {
+        //MarkerEnemyData NewMarkerAdded = m_StateMachine.MageEnemyData.m_MarkerData.AddMarkerToEnemy(dmg, 20f);
+        //if (NewMarkerAdded != null)
+        //{
+        //    NewMarkerAdded.InitTargets(GetPlayerMarker());
+        //}
     }
 
     private IEnumerator MageCrystalCoreMovingTimeout()
@@ -368,6 +383,7 @@ public class MageEnemy : BaseEnemy
                 if (!d.IsDead())
                 {
                     d.TakeDamage(d.GetPointOfContact(), new Elements(Elemental.FIRE), dmg, this);
+                    SetMarkersOnEnemy(d);
                 }
             }
         }

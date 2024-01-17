@@ -14,9 +14,10 @@ public class MageEnemyPunch : MonoBehaviour
     {
         if (!PunchColliderList.TryGetValue(Collider, out bool value))
         {
-            PlayerCharacters pc = Collider.GetComponent<PlayerCharacters>();
-            if (pc != null)
-                PunchColliderList.Add(Collider, true);
+            IDamage IDmg = Collider.GetComponent<IDamage>();
+            if (IDmg != null)
+                if (IDmg is PlayerCharacters || IDmg is FriendlyKillers)
+                    PunchColliderList.Add(Collider, true);
         }
     }
 
@@ -36,15 +37,21 @@ public class MageEnemyPunch : MonoBehaviour
             KeyValuePair<Collider, bool> PunchColliderkeyValuePair = PunchColliderList.ElementAt(i);
             if (PunchColliderList.TryGetValue(PunchColliderkeyValuePair.Key, out bool value))
             {
-                PlayerCharacters pc = PunchColliderkeyValuePair.Key.GetComponent<PlayerCharacters>();
-                Elements hitElement = pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), MageEnemy.GetATK(), MageEnemy);
-                if (hitElement != null)
+                IDamage IDmg = PunchColliderkeyValuePair.Key.GetComponent<IDamage>();
+                if (IDmg != null)
                 {
-                    Vector3 ForceDir = HeadPivot.transform.forward * 15f;
-                    pc.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
+                    Elements hitElement = IDmg.TakeDamage(IDmg.GetPointOfContact(), new Elements(Elemental.NONE), MageEnemy.GetATK(), MageEnemy);
+                    if (hitElement != null)
+                    {
+                        if (IDmg is PlayerCharacters player)
+                        {
+                            Vector3 ForceDir = HeadPivot.transform.forward * 15f;
+                            player.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
+                        }
 
-                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, pc.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
-                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                        ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, IDmg.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
+                        Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                    }
                 }
 
             }

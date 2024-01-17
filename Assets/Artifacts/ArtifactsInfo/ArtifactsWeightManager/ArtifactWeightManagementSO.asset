@@ -12,6 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d1ef5fd67b6124fa0342643046dac0, type: 3}
   m_Name: ArtifactWeightManagementSO
   m_EditorClassIdentifier: 
+  ArtifactEXPManagement:
+  - rarity: 2
+    BaseEXP: 1260
+    BaseCost: 1260
+  - rarity: 3
+    BaseEXP: 2520
+    BaseCost: 2520
+  - rarity: 4
+    BaseEXP: 3780
+    BaseCost: 3780
   artifactPossibleMainStatsList:
   - ArtifactMainStatsInfoList:
     - StartingArtifactStatsHand:

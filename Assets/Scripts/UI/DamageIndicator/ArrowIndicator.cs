@@ -1,21 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking.Types;
+using UnityEngine.UI;
 
 public class ArrowIndicator : MonoBehaviour
 {
-    private CharacterManager characterManager;
+    private GameObject target;
     private GameObject source;
+    [SerializeField] Image ArrowImage;
     [SerializeField] Transform Pivot;
-    private void Start()
-    {
-        characterManager = CharacterManager.GetInstance();
-    }
 
+    public void SetArrowColor(Color32 color)
+    {
+        ArrowImage.color = color;
+    }
     public GameObject GetSource()
     {
-        return source;
+        return target;
+    }
+    public void SetTarget(GameObject t)
+    {
+        target = t;
     }
     public void SetSource(GameObject source)
     {
@@ -24,15 +29,31 @@ public class ArrowIndicator : MonoBehaviour
 
     void Update()
     {
+        if (target == null)
+            Destroy(gameObject);
+
         UpdateRotation();
+        UpdateIDamage();
     }
 
-    private void UpdateRotation()
+    void UpdateIDamage()
     {
-        if (source == null)
+        if (target == null)
             return;
 
-        Vector3 direction = (source.transform.position - characterManager.GetPlayerManager().transform.position);
+        IDamage dmg = target.GetComponent<IDamage>();
+        if (dmg != null)
+        {
+            if (dmg.IsDead())
+                target = null;
+        }
+    }
+    private void UpdateRotation()
+    {
+        if (source == null || target == null)
+            return;
+
+        Vector3 direction = (target.transform.position - source.transform.position);
         direction.Normalize();
         Quaternion sourceRot = Quaternion.LookRotation(direction);
         sourceRot.z = -sourceRot.y;

@@ -1187,6 +1187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharactersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
+  MiddlePositionTransform: {fileID: 7165188474089559228}
   Animator: {fileID: 2641773154839491820}
   Model: {fileID: 0}
   HealthBarPivotParent: {fileID: 0}
@@ -1195,8 +1196,6 @@ MonoBehaviour:
     type: 3}
   EmitterPivot: {fileID: 1357641750335799808}
   ChargeUpFinishPrefab: {fileID: 3444178974453000335, guid: e684bcb8a60b49b40adc1a1ef3a69682,
-    type: 3}
-  TargetOrbPrefab: {fileID: 260796668554883667, guid: c7219445ca073fd4088e1595e66881e1,
     type: 3}
   CoordinateAttackPivot: {fileID: 1648127688757362118}
   AmberAuraBurstPrefab: {fileID: 7648515999253688526, guid: 541f93ef40294a941aa72477bba269db,

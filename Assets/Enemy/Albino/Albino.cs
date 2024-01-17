@@ -33,7 +33,7 @@ public class Albino : BaseEnemy
         JumpOnAir = false;
         DetectionRange = 10f;
         StrafeElasped = AttackElapsed = 0f;
-        Staggering = 8;
+        Staggering = 15;
         state = States.CHASE;
     }
 
@@ -44,13 +44,21 @@ public class Albino : BaseEnemy
         UpdateState();
     }
 
-    protected override void HitEvent(Elements e, IDamage dmg)
+    protected override void HitEvent(ElementalReactionsTrigger ER, Elements e, IDamage dmg)
     {
+        int currentStag = 0;
+
         if (state == States.PATROL)
             state = States.CHASE;
 
-        base.HitEvent(e, dmg);
-        TriggerStaggering(1, state != States.SLAM);
+        base.HitEvent(ER, e, dmg);
+
+        if (e != null)
+            currentStag += 2;
+        if (ER != null)
+            currentStag += 5;
+
+        TriggerStaggering(currentStag, state != States.SLAM);
     }
 
     protected override void UpdateState()

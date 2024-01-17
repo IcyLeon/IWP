@@ -41,13 +41,14 @@ public class Characters : MonoBehaviour, IDamage
     protected float CurrentHealth;
 
     [SerializeField] protected CharactersSO CharactersSO;
+    [SerializeField] protected Transform MiddlePositionTransform;
     [SerializeField] protected Animator Animator;
     [SerializeField] protected GameObject Model;
     [SerializeField] protected Transform HealthBarPivotParent;
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
     private float CurrentElementalShield;
-    public Action<Elements, Characters> OnHit = delegate { };
+    public Action<ElementalReactionsTrigger, Elements, Characters> OnHit = delegate { };
 
 
     protected Coroutine DieCoroutine;
@@ -277,7 +278,7 @@ public class Characters : MonoBehaviour, IDamage
         }
 
         if (callHitInfo)
-            OnHit?.Invoke(e, this);
+            OnHit?.Invoke(ElementalReactionsTrigger, e, this);
 
         SetHealth(GetHealth() - DamageValue);
 
@@ -288,7 +289,7 @@ public class Characters : MonoBehaviour, IDamage
         return e;
     }
 
-    protected virtual void HitEvent(Elements e, IDamage d)
+    protected virtual void HitEvent(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
 
     }
@@ -335,7 +336,10 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual Vector3 GetPointOfContact()
     {
-        return default(Vector3);
+        if (MiddlePositionTransform == null)
+            return default(Vector3);
+
+        return MiddlePositionTransform.position;
     }
 
     public virtual float GetEM()

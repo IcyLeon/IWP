@@ -61,6 +61,11 @@ public class CurrentCharacterArtifacts : MonoBehaviour, IPointerClickHandler
             ArtifactLevel.text = "+" + artifacts.GetLevel();
     }
 
+    public ArtifactType GetArtifactType()
+    {
+        return artifactType;
+    }
+
     private ArtifactsSO GetArtifactsSO(Artifacts artifact)
     {
         if (artifact == null)

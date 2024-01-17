@@ -16,6 +16,7 @@ MonoBehaviour:
   ItemDesc: 
   SummaryItemDesc: 
   ItemSprite: {fileID: 21300000, guid: abdf0211c8124bf4c8b7dd53703edd80, type: 3}
+  ItemIconTypeSprite: {fileID: 0}
   Rarity: 3
   AscensionInfoList:
   - BaseHP: 962
@@ -32,6 +33,6 @@ MonoBehaviour:
     type: 3}
   ElementalSkillsCooldown: 15
   UltiSkillCooldown: 10
-  EnergyCost: 1
+  EnergyCost: 70
   ElementalBurstTimer: 10
   ElementalSkillsTimer: 12

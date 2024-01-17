@@ -98,4 +98,12 @@ public class PlayerState
     {
         ChangeState(playerIdleState);
     }
+
+    public bool IsDeadState()
+    {
+        if (currentState == null)
+            return false;
+
+        return currentState is PlayerDeadState;
+    }
 }

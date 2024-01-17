@@ -12,9 +12,12 @@ public class PunchingBotPunchCollider : MonoBehaviour
     {
         if (!PunchColliderList.TryGetValue(Collider, out bool value))
         {
-            PlayerCharacters pc = Collider.GetComponent<PlayerCharacters>();
-            if (pc != null)
-                PunchColliderList.Add(Collider, true);
+            IDamage IDmg = Collider.GetComponent<IDamage>();
+            if (IDmg != null)
+            {
+                if (IDmg is PlayerCharacters || IDmg is FriendlyKillers)
+                    PunchColliderList.Add(Collider, true);
+            }
         }
     }
 
@@ -29,13 +32,16 @@ public class PunchingBotPunchCollider : MonoBehaviour
         for (int i = 0; i < PunchColliderList.Count; i++)
         {
             KeyValuePair<Collider, bool> PunchColliderkeyValuePair = PunchColliderList.ElementAt(i);
-            if (PunchColliderList.TryGetValue(PunchColliderkeyValuePair.Key, out bool value)) {
-                PlayerCharacters pc = PunchColliderkeyValuePair.Key.GetComponent<PlayerCharacters>();
-                pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), PunchingBot.GetATK(), PunchingBot);
+            if (PunchColliderList.TryGetValue(PunchColliderkeyValuePair.Key, out bool value))
+            {
+                IDamage IDmg = PunchColliderkeyValuePair.Key.GetComponent<IDamage>();
+                if (IDmg != null)
+                {
+                    IDmg.TakeDamage(IDmg.GetPointOfContact(), new Elements(Elemental.NONE), PunchingBot.GetATK(), PunchingBot);
 
-                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, pc.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
-                Destroy(hitEffect.gameObject, hitEffect.main.duration);
-
+                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, IDmg.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
+                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                }
             }
         }
         PunchColliderList.Clear();

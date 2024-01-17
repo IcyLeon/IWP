@@ -52,6 +52,15 @@ public class ArtifactWeightManagement : ScriptableObject
         public int MaxDropValue;
     }
 
+    [Serializable]
+    public class ArtifactEXPManager
+    {
+        public Rarity rarity;
+        public int BaseEXP;
+        public int BaseCost;
+    }
+
+    public ArtifactEXPManager[] ArtifactEXPManagement;
     public ArtifactPossibleStats[] artifactPossibleMainStatsList;
     public ArtifactWeight[] artifactWeightsList;
     public ArtifactPossibleSubStats[] artifactPossibleSubStatsList;
@@ -73,6 +82,18 @@ public class ArtifactWeightManagement : ScriptableObject
             }
         }
         return 0f;
+    }
+
+    public ArtifactEXPManager GetArtifactEXPManager(Rarity rarity)
+    {
+        for (int i = 0; i < ArtifactEXPManagement.Length; i++)
+        {
+            if (ArtifactEXPManagement[i].rarity == rarity)
+            {
+                return ArtifactEXPManagement[i];
+            }
+        }
+        return null;
     }
 
     public PossibleNumberofStats GetPossibleNumberofStats(Rarity rarity)

@@ -7,6 +7,7 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
     [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
+    [SerializeField] PlayerCanvasUI PlayerCanvasUI;
     [SerializeField] Transform CameraLook;
     private Rigidbody rb;
     private List<PlayerCharacters> PlayerCharactersList = new();
@@ -16,18 +17,19 @@ public class PlayerManager : MonoBehaviour
     private StaminaManager staminaManager;
     private InventoryManager inventoryManager;
     private CharacterManager characterManager;
+
     public delegate void OnCharacterChange(CharacterData characterData, PlayerCharacters playerCharacters);
     public static OnCharacterChange onCharacterChange;
-    public delegate void OnEntityHit(Elements e, IDamage IDamage);
+    public delegate void OnEntityHit(ElementalReactionsTrigger ER, Elements e, IDamage IDamage);
     public static OnEntityHit onEntityHitSendInfo;
     public static Action<GadgetItem> OnGadgetItemChange = delegate { };
     private ItemCollectedUI ItemCollectedUI;
 
     private GadgetItem currentEquipGadgetItem;
 
-    public static void CallEntityHitSendInfo(Elements e, IDamage IDamage)
+    public static void CallEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage IDamage)
     {
-        onEntityHitSendInfo?.Invoke(e, IDamage);
+        onEntityHitSendInfo?.Invoke(ER, e, IDamage);
     }
 
     public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
@@ -35,11 +37,25 @@ public class PlayerManager : MonoBehaviour
         return PlayerCoordinateAttackManager;
     }
 
+    private void ReviveAllCharacters()
+    {
+        for (int i = 0; i < GetCharactersOwnedList().Count; i++)
+        {
+            CharacterData pc = GetCharactersOwnedList()[i];
+            HealCharacterBruteForce(pc, pc.GetActualMaxHealth(pc.GetLevel()));
+        }
+    }
+
+
     public PlayerElementalSkillandBurstManager GetPlayerElementalSkillandBurstManager()
     {
         return PlayerElementalSkillandBurstManager;
     }
 
+    public PlayerCanvasUI GetPlayerCanvasUI()
+    {
+        return PlayerCanvasUI;
+    }
     public void SpawnItemCollectedUI(ItemTemplate itemSO)
     {
         AssetManager AM = AssetManager.GetInstance();
@@ -57,17 +73,21 @@ public class PlayerManager : MonoBehaviour
         PlayerController.OnGadgetUse += OnGadgetUse;
         characterManager = CharacterManager.GetInstance();
         SceneManager.OnSceneChanged += OnSceneChanged;
-
+        FallenUI.OnReviveChange += ReviveAllCharacters;
         characterManager.SetPlayerManager(this);
     }
 
+    public InventoryManager GetInventoryManager()
+    {
+        return inventoryManager;
+    }
     public void SetCurrentGadgetItemEquipped(GadgetItem gadgetItem)
     {
-        if (inventoryManager == null)
+        if (GetInventoryManager() == null)
             return;
 
-        inventoryManager.SetCurrentGadgetItemEquipped(gadgetItem);
-        currentEquipGadgetItem = inventoryManager.GetCurrentGadgetItem();
+        GetInventoryManager().SetCurrentGadgetItemEquipped(gadgetItem);
+        currentEquipGadgetItem = GetInventoryManager().GetCurrentGadgetItem();
         OnGadgetItemChange?.Invoke(gadgetItem);
     }
 
@@ -81,7 +101,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnGadgetUse()
     {
-        GadgetItem gadgetItem = inventoryManager.GetCurrentGadgetItem();
+        GadgetItem gadgetItem = GetInventoryManager().GetCurrentGadgetItem();
         if (gadgetItem != null)
         {
             gadgetItem.UseGadget();
@@ -91,8 +111,8 @@ public class PlayerManager : MonoBehaviour
     {
         yield return null;
         characterManager.SpawnCharacters(GetCharactersOwnedList(), this);
-        SwapCharacters(inventoryManager.GetCurrentEquipCharacterData());
-        SetCurrentGadgetItemEquipped(inventoryManager.GetCurrentGadgetItem());
+        SwapCharacters(GetInventoryManager().GetCurrentEquipCharacterData());
+        SetCurrentGadgetItemEquipped(GetInventoryManager().GetCurrentGadgetItem());
     }
 
     private void OnSceneChanged(SceneEnum s)
@@ -122,9 +142,9 @@ public class PlayerManager : MonoBehaviour
         c.SetHealth(c.GetHealth() + (int)actualamt);
         if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()) && showtext)
         {
-            AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
-            if (c == inventoryManager.GetCurrentEquipCharacterData())
+            if (c == GetInventoryManager().GetCurrentEquipCharacterData())
             {
+                AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
                 ParticleSystem healEffect = Instantiate(AssetManager.GetInstance().HealEffect, transform).GetComponent<ParticleSystem>();
                 Destroy(healEffect.gameObject, healEffect.main.duration);
             }
@@ -142,7 +162,7 @@ public class PlayerManager : MonoBehaviour
 
     public List<CharacterData> GetCharactersOwnedList()
     {
-        return inventoryManager.GetCharactersOwnedList();
+        return GetInventoryManager().GetCharactersOwnedList();
     }
     public void AddHealthAllCharactersPercentage(float percentage)
     {
@@ -205,7 +225,14 @@ public class PlayerManager : MonoBehaviour
 
         c.SetHealth(c.GetHealth() + (int)actualamt);
         if (c.GetHealth() < c.GetActualMaxHealth(c.GetLevel()) && showtext)
-            AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
+        {
+            if (c == GetInventoryManager().GetCurrentEquipCharacterData())
+            {
+                AssetManager.GetInstance().SpawnWorldText_Other(GetPlayerOffsetPosition().position, OthersState.HEAL, "+" + (int)actualamt);
+                ParticleSystem healEffect = Instantiate(AssetManager.GetInstance().HealEffect, transform).GetComponent<ParticleSystem>();
+                Destroy(healEffect.gameObject, healEffect.main.duration);
+            }
+        }
     }
 
     private void SubscribeToKeyInputs()
@@ -217,6 +244,7 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerController.OnNumsKeyInput -= SwapCharactersControls;
         PlayerController.OnGadgetUse -= OnGadgetUse;
+        FallenUI.OnReviveChange -= ReviveAllCharacters;
         SceneManager.OnSceneChanged -= OnSceneChanged;
     }
 
@@ -291,7 +319,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void UpdateCharacterData()
     {
-        if (inventoryManager == null)
+        if (GetInventoryManager() == null)
             return;
 
         for (int i = 0; i < GetCharactersOwnedList().Count; i++)
@@ -319,7 +347,7 @@ public class PlayerManager : MonoBehaviour
 
     public List<CharacterData> GetEquippedCharacterData()
     {
-        return inventoryManager.GetEquipCharactersDataList();
+        return GetInventoryManager().GetEquipCharactersDataList();
     }
 
     public PlayerMovementState GetPlayerMovementState()
@@ -357,7 +385,7 @@ public class PlayerManager : MonoBehaviour
             return;
 
         PlayerCharacters playerCharacters = GetPlayerCharacter(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
-        CharacterData characterData = inventoryManager.GetOwnedCharacterData(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
+        CharacterData characterData = GetInventoryManager().GetOwnedCharacterData(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
 
         ChangeCharacter(playerCharacters, characterData, true);
     }
@@ -380,14 +408,14 @@ public class PlayerManager : MonoBehaviour
             playerCharacters.SetCharacterData(characterData);
             playerCharacters.ResetAttack();
             playerCharacters.ResetElementsIndicator();
-            inventoryManager.SetCurrentEquipCharacter(characterData);
+            GetInventoryManager().SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(playerCharacters);
             playerCharacters.gameObject.SetActive(true);
 
             if (showeffects)
                 CharacterChange(characterData);
 
-            inventoryManager.SetCurrentEquipCharacter(characterData);
+            GetInventoryManager().SetCurrentEquipCharacter(characterData);
             onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData(), CurrentCharacter);
         }
     }

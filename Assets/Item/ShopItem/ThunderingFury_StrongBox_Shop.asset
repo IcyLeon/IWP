@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ThunderingFury_StrongBox_Shop
   m_EditorClassIdentifier: 
   ItemsSO: {fileID: 11400000, guid: eb738f14df4be314eb68c3ecaf050aec, type: 2}
-  Price: 350
-  CurrencyType: 0
+  Price: 550
+  CurrencyType: 1

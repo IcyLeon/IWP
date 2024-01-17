@@ -7,17 +7,18 @@ public class MarkerEnemyData
     private float Timer;
     private float MaxTimer;
     private MarkerOnTargets Marker;
-    private CharacterData characterData;
     private IDamage damageTarget;
 
-    public MarkerEnemyData(MarkerOnTargets m, CharacterData characterData, IDamage damageTarget, float MaxTimer)
+    public MarkerEnemyData(IDamage damageTarget, float MaxTimer)
     {
-        Marker = m;
-        this.characterData = characterData;
         this.damageTarget = damageTarget;
         this.MaxTimer = MaxTimer;
         Timer = this.MaxTimer;
+    }
 
+    public void InitTargets(MarkerOnTargets m)
+    {
+        Marker = m;
         if (Marker != null)
         {
             Marker.SetMarkerData(this);

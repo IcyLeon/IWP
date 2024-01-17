@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f06cf5dff9e6a846bca77eb4f4c19f5, type: 3}
+  m_Name: ExquisiteChestSO
+  m_EditorClassIdentifier: 
+  PurchaseableObjectName: Exquisite Chest
+  PurchaseableObjectSprite: {fileID: 21300000, guid: ccb654504863f384a8ced0107ecd6796,
+    type: 3}
+  BasePrice: 65
+  ItemDropsList:
+  - {fileID: 11400000, guid: e4a08a69655b3e246b8a3b12de45f174, type: 2}
+  - {fileID: 11400000, guid: 3599e6fe12ab2c149a3272aaab4f09cc, type: 2}
+  - {fileID: 11400000, guid: 3ae1aa8cfa5d346489fd6ff4b5e9c8a0, type: 2}
+  - {fileID: 11400000, guid: 581eb018cbf165848b553d94bab31b49, type: 2}
+  MaxTotalDrops: 4
+  BaseCoinsDrops: 35
+  BaseCashsDrops: 200

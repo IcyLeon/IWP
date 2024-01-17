@@ -8,9 +8,9 @@ using UnityEngine.UI;
 public class ShopInfo : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] Image ShopIcon;
-    [SerializeField] Image CostImage;
+    [SerializeField] Image ShopBackgroundBorder;
     [SerializeField] TextMeshProUGUI ShopItemTxt;
-    [SerializeField] TextMeshProUGUI PriceTxt;
+    [SerializeField] PriceInfo PriceInfo;
     [SerializeField] Image BackgroundImage;
     [SerializeField] Color32 DefaultColor;
     [SerializeField] Color32 SelectedColor;
@@ -56,9 +56,9 @@ public class ShopInfo : MonoBehaviour, IPointerClickHandler
             name = artifactsSO.GetItemType();
         }
         ShopIcon.sprite = ShopItemSO.ItemsSO.ItemSprite;
+        ShopBackgroundBorder.sprite = AssetManager.GetInstance().GetItemListTemplate().raritylist[(int)ShopItemSO.ItemsSO.Rarity].ItemQualityBackground;
         ShopItemTxt.text = name;
-        CostImage.sprite = AssetManager.GetInstance().GetCurrencySprite(ShopItemSO.CurrencyType);
-        PriceTxt.text = ShopItemSO.Price.ToString();
+        PriceInfo.UpdateContent(ShopItemSO.CurrencyType, ShopItemSO.Price);
     }
 
     public ShopItemSO GetShopItemSO()

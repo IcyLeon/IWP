@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -146,6 +147,36 @@ public class PlayerMovementState : IState
         return slopeSpeedModifier;
     }
 
+    private RaycastHit GetClosestRaycastHit(RaycastHit[] raycastHits)
+    {
+        List<RaycastHit> validHits = new List<RaycastHit>(raycastHits);
+
+        if (validHits.Count == 0)
+            return default(RaycastHit);
+
+        float closestDistance = float.MaxValue;
+        RaycastHit closestHit = validHits[0];
+
+        for (int i = validHits.Count - 1; i >= 0; i--)
+        {
+            IDamage damageComponent = validHits[i].collider.GetComponent<IDamage>();
+
+            if (damageComponent != null && damageComponent.IsDead())
+            {
+                validHits.RemoveAt(i);
+            }
+            else
+            {
+                if (validHits[i].distance < closestDistance)
+                {
+                    closestDistance = validHits[i].distance;
+                    closestHit = validHits[i];
+                }
+            }
+        }
+        return closestHit;
+    }
+
     protected void Float(bool ignoreEnemies = false)
     {
         if (rb == null)
@@ -162,8 +193,10 @@ public class PlayerMovementState : IState
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
 
         Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
+        RaycastHit[] raycastHits = Physics.RaycastAll(capsuleColliderCenterInWorldSpace, Vector3.down, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, layerMask, QueryTriggerInteraction.Ignore);
+        RaycastHit hit = GetClosestRaycastHit(raycastHits);
 
-        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, layerMask, QueryTriggerInteraction.Ignore))
+        if (hit.collider != null)
         {
             float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 

@@ -58,7 +58,7 @@ public class CameraManager : MonoBehaviour
         CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
         CinemachinePOV aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
 
-        if (!MainUI.GetInstance().isCursorVisible())
+        if (!playerController.isCursorVisible())
         {
             if (playerPOV != null)
             {

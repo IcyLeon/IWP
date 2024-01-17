@@ -33,7 +33,7 @@ public class Spitter : BaseEnemy
         DetectionRange = 8f;
         CurrentStrafeT = DefaultStrafeT;
         CurrentBasicAttackRate = DefaultBasicAttackRate;
-        Staggering = 5;
+        Staggering = 10;
         CurrentAttackRate = DefaultAttackRate;
     }
 
@@ -44,10 +44,17 @@ public class Spitter : BaseEnemy
         UpdateState();
     }
 
-    protected override void HitEvent(Elements e, IDamage dmg)
+    protected override void HitEvent(ElementalReactionsTrigger ER, Elements e, IDamage dmg)
     {
-        base.HitEvent(e, dmg);
-        TriggerStaggering(2);
+        int currentStag = 0;
+        base.HitEvent(ER, e, dmg);
+
+        if (e != null)
+            currentStag += 2;
+        if (ER != null)
+            currentStag += 4;
+
+        TriggerStaggering(currentStag);
     }
 
     protected override void UpdateState()

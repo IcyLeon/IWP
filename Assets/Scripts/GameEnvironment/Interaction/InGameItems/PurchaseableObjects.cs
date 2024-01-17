@@ -9,21 +9,16 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
     [SerializeField] protected Transform WorldTextPivotTransform;
     [SerializeField] protected PurchaseableObjectSO PurchaseableObjectSO;
     private AssetManager assetManager;
-    private PlayerManager PM;
+    protected PlayerManager PM;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         assetManager = AssetManager.GetInstance();
-        worldText = assetManager.SpawnWorldText(assetManager.GetCurrencySprite(PurchaseableType), GetCost().ToString(), transform);
-        worldText.transform.localPosition = new Vector3(0, WorldTextPivotTransform.transform.localPosition.y, 0);
+        worldText = assetManager.SpawnWorldText(assetManager.GetCurrencySprite(PurchaseableType), GetCost().ToString(), WorldTextPivotTransform);
         worldText.gameObject.SetActive(false);
     }
 
-    protected Vector3 GetWorldTxtLocalPosition()
-    {
-        return worldText.transform.localPosition;
-    }
     protected virtual void Update()
     {
     }
@@ -86,11 +81,6 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
     public string InteractMessage()
     {
         return GetPurchaseableObjectSO().PurchaseableObjectName;
-    }
-
-    public void ShowCost()
-    {
-
     }
 
     public virtual void OnInteractUpdate(IInteract interactComponent)
