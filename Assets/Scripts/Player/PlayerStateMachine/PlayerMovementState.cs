@@ -163,15 +163,19 @@ public class PlayerMovementState : IState
 
             if (damageComponent != null && damageComponent.IsDead())
             {
-                validHits.RemoveAt(i);
-            }
-            else
-            {
-                if (validHits[i].distance < closestDistance)
+                if (closestHit.collider == validHits[i].collider)
                 {
-                    closestDistance = validHits[i].distance;
-                    closestHit = validHits[i];
+                    closestHit = default(RaycastHit);
                 }
+                validHits.RemoveAt(i);
+                continue;
+            }
+
+            // Check if the current hit is closer than the current closestHit
+            if (validHits[i].distance < closestDistance)
+            {
+                closestDistance = validHits[i].distance;
+                closestHit = validHits[i];
             }
         }
         return closestHit;
@@ -187,8 +191,8 @@ public class PlayerMovementState : IState
 
         LayerMask layerMask = Physics.DefaultRaycastLayers;
 
-        if (ignoreEnemies)
-            layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
+        //if (ignoreEnemies)
+        //    layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
 
@@ -316,13 +320,20 @@ public class PlayerMovementState : IState
 
 
         LayerMask layerMask = Physics.DefaultRaycastLayers;
-
-        if (ignoreEnemies)
-            layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
-
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
-        bool isGrounded = Physics.CheckSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
-        return isGrounded;
+        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
+        List<Collider> colliderCopy = new(Colliders);
+        for(int i = colliderCopy.Count - 1; i >= 0; i--)
+        {
+            IDamage dmg = colliderCopy[i].GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                if (dmg.IsDead())
+                    colliderCopy.RemoveAt(i);
+            }
+        }
+
+        return colliderCopy.Count > 0;
     }
 
     protected CapsuleCollider GetCapsuleCollider()

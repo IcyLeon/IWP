@@ -21,12 +21,12 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.143
+    m_Value: 0.228
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.509
+    m_Value: 0.55
   rounded:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &-4496222433914074975
 MonoBehaviour:
@@ -56,22 +56,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.1
+    m_Value: 1
   contrast:
     m_OverrideState: 1
-    m_Value: 20.1
+    m_Value: 4
   colorFilter:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
     m_OverrideState: 1
     m_Value: -8
   saturation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 4
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,6 +91,7 @@ MonoBehaviour:
   - {fileID: -4496222433914074975}
   - {fileID: -6070402956561800770}
   - {fileID: 7739644171059363912}
+  - {fileID: 5763303348509106250}
 --- !u!114 &3484085068621995284
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -105,14 +106,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   threshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.8
   intensity:
     m_OverrideState: 1
     m_Value: 2
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.604
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -146,14 +147,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   lift:
-    m_OverrideState: 0
-    m_Value: {x: 0.95164514, y: 0.990885, z: 1, w: -0.0000000012638133}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.64901423, z: 0.88374424, w: -0.0000000012638133}
   gamma:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: -0.033444818}
   gain:
     m_OverrideState: 0
-    m_Value: {x: 0.8238369, y: 0.8294269, z: 1, w: 0.029379943}
+    m_Value: {x: 1, y: 0.8686905, z: 0.9975229, w: 0.029379943}
+--- !u!114 &5763303348509106250
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdfbdbb87d3286943a057f7791b43141, type: 3}
+  m_Name: ChannelMixer
+  m_EditorClassIdentifier: 
+  active: 1
+  redOutRedIn:
+    m_OverrideState: 0
+    m_Value: 100
+  redOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 0
+  redOutBlueIn:
+    m_OverrideState: 1
+    m_Value: 18
+  greenOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  greenOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 100
+  greenOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutRedIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutGreenIn:
+    m_OverrideState: 0
+    m_Value: 0
+  blueOutBlueIn:
+    m_OverrideState: 0
+    m_Value: 100
 --- !u!114 &7739644171059363912
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -169,7 +210,7 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: -9
+    m_Value: 5
   tint:
-    m_OverrideState: 1
-    m_Value: 12
+    m_OverrideState: 0
+    m_Value: 0

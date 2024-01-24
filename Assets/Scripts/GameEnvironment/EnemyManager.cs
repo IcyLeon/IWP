@@ -29,12 +29,18 @@ public class EnemyManager : MonoBehaviour
     {
         Vector3 terrainPosition = terrain.GetPosition();
         Vector3 terrainSize = terrain.terrainData.size;
-        float randomX = Random.Range(terrainPosition.x, terrainPosition.x + terrainSize.x);
-        float randomZ = Random.Range(terrainPosition.z, terrainPosition.z + terrainSize.z);
-        float terrainHeight = terrain.SampleHeight(new Vector3(randomX, 0f, randomZ));
-        Vector3 randomTerrainPosition = new Vector3(randomX, terrainHeight + terrainPosition.y, randomZ);
+        NavMeshHit hit;
+        NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
+        int randomIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
-        return randomTerrainPosition;
+        if (NavMesh.SamplePosition(navMeshTriangulation.vertices[randomIndex], out hit, 2.0f, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+
+        Vector3 middlePosition = terrainPosition + terrainSize / 2f;
+        float terrainHeight = terrain.SampleHeight(middlePosition);
+        return new Vector3(middlePosition.x, terrainHeight + terrainPosition.y, middlePosition.z);
     }
     private int GetMaxEnemyInScene()
     {

@@ -275,7 +275,7 @@ public class EnhanceCharactersManager : MonoBehaviour
 
     private IEnumerator UpgradeProgress()
     {
-        float smoothTime = 4.5f;
+        float smoothTime = 3.5f;
         float UpgradeElasped = 0;
         ButtonMask.SetActive(true);
 

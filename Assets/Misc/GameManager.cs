@@ -202,8 +202,10 @@ public class GameManager : MonoBehaviour
 
     public int CalculateHowManyToSpawn()
     {
-        int BaseRate = 3;
-        return Mathf.RoundToInt(BaseRate + EnemyManager.GetCurrentWave() * (EnemyManager.GetCurrentWave() - 1) + BaseRate);
+        int BaseRate = 8;
+        int total = Mathf.RoundToInt(BaseRate + (EnemyManager.GetCurrentWave() - 1) * BaseRate);
+        total = Mathf.Clamp(total, 0, 80);
+        return total;
     }
 
     // Update is called once per frame

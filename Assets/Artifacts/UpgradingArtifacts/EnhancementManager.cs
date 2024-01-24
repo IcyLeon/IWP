@@ -451,7 +451,7 @@ public class EnhancementManager : MonoBehaviour
 
     private IEnumerator UpgradeProgress()
     {
-        float smoothTime = 1f;
+        float smoothTime = 3.5f;
         float UpgradeElasped = 0;
         UpgradableItems UpgradableItemREF = GetItemREF() as UpgradableItems;
         ButtonMask.SetActive(true);
