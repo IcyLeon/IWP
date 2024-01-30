@@ -22,7 +22,7 @@ public class Teleporter : MonoBehaviour, IInteract
         if (scene == SceneEnum.GAME)
         {
             int CurrentWave = EnemyManager.GetCurrentWave();
-            if (CurrentWave % 4 == 0 && CurrentWave != 0)
+            if (CurrentWave % 2 == 0 && CurrentWave != 0)
             {
                 scene = SceneEnum.BOSS;
             }

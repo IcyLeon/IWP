@@ -10,7 +10,8 @@ public enum SceneEnum
 {
     GAME,
     SHOP,
-    BOSS
+    BOSS, 
+    MAIN_MENU
 }
 
 public class SceneManager : MonoBehaviour
@@ -73,7 +74,9 @@ public class SceneManager : MonoBehaviour
         asyncOperation.allowSceneActivation = false;
         LoadingCanvas.SetActive(true);
         ProgressBar.fillAmount = TargetProgress = 0f;
-        mainUI.SetPaused(true);
+
+        if (mainUI)
+            mainUI.SetPaused(true);
         do
         {
             await Task.Delay(500);
@@ -85,7 +88,8 @@ public class SceneManager : MonoBehaviour
         asyncOperation.allowSceneActivation = true;
         await Task.Delay(100);
 
-        mainUI.SetPaused(false);
+        if (mainUI)
+            mainUI.SetPaused(false);
         LoadingCanvas.SetActive(false);
         OnSceneChanged?.Invoke(GetCurrentScene());
     }
@@ -119,6 +123,8 @@ public class SceneManager : MonoBehaviour
     {
         switch (SceneEnum)
         {
+            case SceneEnum.MAIN_MENU:
+                return "MainMenuScene";
             case SceneEnum.GAME:
                 return "GameScene";
             case SceneEnum.SHOP:
