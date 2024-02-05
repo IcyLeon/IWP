@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Random = UnityEngine.Random;
 
 public enum Elemental
 {
@@ -30,8 +31,43 @@ public class PlayerCharacterSO : CharactersSO
     public float ElementalBurstTimer;
     public float ElementalSkillsTimer;
 
+    [Header("Sound")]
+    public AudioClip[] AttackVoiceList;
+    public AudioClip[] ElementalSkillVoiceList;
+    public AudioClip[] ElementalSkillRecastVoiceList;
+    public AudioClip[] ElementalBurstVoiceList;
+    public AudioClip[] FallenVoiceList;
+
     public override Type GetTypeREF()
     {
         return typeof(CharacterData);
+    }
+
+    public AudioClip GetRandomSkillVoice()
+    {
+        int index = Random.Range(0, ElementalSkillVoiceList.Length);
+        return ElementalSkillVoiceList[index];
+    }
+
+    public AudioClip GetRandomSkillRecastVoice()
+    {
+        int index = Random.Range(0, ElementalSkillRecastVoiceList.Length);
+        return ElementalSkillRecastVoiceList[index];
+    }
+
+    public AudioClip GetRandomFallenVoice()
+    {
+        int index = Random.Range(0, FallenVoiceList.Length);
+        return FallenVoiceList[index];
+    }
+    public AudioClip GetRandomBasicAttackVoice()
+    {
+        int index = Random.Range(0, AttackVoiceList.Length);
+        return AttackVoiceList[index];
+    }
+    public AudioClip GetRandomBurstVoice()
+    {
+        int index = Random.Range(0, ElementalBurstVoiceList.Length);
+        return ElementalBurstVoiceList[index];
     }
 }

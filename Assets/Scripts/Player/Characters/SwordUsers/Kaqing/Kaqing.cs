@@ -65,32 +65,19 @@ public class Kaqing : SwordCharacters
             GetKaqingState().GetKaqing().DestroyTeleporter();
     }
 
+    public override float GetATK()
+    {
+        if (GetCurrentSwordElemental() == Elemental.NONE)
+            return base.GetATK();
+        else
+            return base.GetATK() * 1.25f;
+    }
+
     private void SpawnElectroSlash()
     {
         BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
-        Collider[] Colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up + transform.forward * 2f, 2.8f, LayerMask.GetMask("Entity", "BossEntity"));
-        foreach (Collider other in Colliders)
-        {
-            IDamage damageObj = other.GetComponent<IDamage>();
-            if (damageObj != null)
-            {
-                if (!damageObj.IsDead())
-                {
-                    Vector3 hitPosition = other.transform.position;
-
-                    if (other is MeshCollider meshCollider)
-                    {
-                        hitPosition = meshCollider.ClosestPointOnBounds(other.transform.position);
-                    }
-
-                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
-                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(GetCurrentSwordElemental()), GetATK() * 1.35f, this);
-                    GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
-                }
-            }
-        }
+        GetSwordModel().ResetHits();
     }
 
     public void StartElementalTimer()

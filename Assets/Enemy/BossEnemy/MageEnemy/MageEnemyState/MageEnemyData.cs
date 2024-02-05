@@ -21,7 +21,7 @@ public class MageEnemyData
     private float OriginalAttackInterval = 1.5f;
     public float AttackInterval;
     public float AttackCurrentElasped = 0f;
-    public float CallingEnemiesInterval = 10f;
+    public float CallingEnemiesInterval = 15f;
     public float CallingEnemiesElasped = 0f;
     public int CurrentAttackIndex = 1;
 

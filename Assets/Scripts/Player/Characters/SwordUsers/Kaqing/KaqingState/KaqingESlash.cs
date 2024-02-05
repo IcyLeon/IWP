@@ -16,6 +16,8 @@ public class KaqingESlash : KaqingElementalSkillState
         GetKaqingState().GetKaqing().GetModel().SetActive(true);
         GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0f);
         GetKaqingState().GetKaqing().StartElementalTimer();
+
+        GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsRecastVoice();
     }
 
     public override void OnAnimationTransition()

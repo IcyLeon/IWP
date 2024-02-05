@@ -14,8 +14,6 @@ public class MageEnemyGroundState : MageEnemyState
 
         if (CanPerformAction())
         {
-            UpdateAttacksFarAway();
-
             if (!GetMageEnemyStateMachine().MageEnemyData.ShieldStatus)
             {
                 if (GetMageEnemyStateMachine().MageEnemyData.ShieldCurrentElasped <= 0f)
@@ -34,6 +32,7 @@ public class MageEnemyGroundState : MageEnemyState
 
             GetMageEnemyStateMachine().MageEnemyData.TakeOffElapsed -= Time.deltaTime;
 
+            UpdateAttacksFarAway();
         }
     }
 
@@ -43,12 +42,12 @@ public class MageEnemyGroundState : MageEnemyState
         GetMageEnemyStateMachine().MageEnemyData.dampedTargetRotationPassedTime = 0f;
     }
 
-    protected void UpdateAttacksFarAway()
+    private void UpdateAttacksFarAway()
     {
         if (isAirborne())
             return;
 
-        if (!isShieldState())
+        if (isShieldState())
             return;
 
         if (GetMageEnemyStateMachine().MageEnemyData.CallingEnemiesElasped <= 0)

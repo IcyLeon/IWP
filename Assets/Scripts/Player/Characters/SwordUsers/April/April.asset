@@ -36,3 +36,18 @@ MonoBehaviour:
   EnergyCost: 70
   ElementalBurstTimer: 10
   ElementalSkillsTimer: 12
+  AttackVoiceList:
+  - {fileID: 8300000, guid: 7f094030319fb96449fb36d0c7016cf9, type: 3}
+  ElementalSkillVoiceList:
+  - {fileID: 8300000, guid: f88f82ded52fe8f4f8d7f456e7a1c0cb, type: 3}
+  - {fileID: 8300000, guid: 6db7563b9c39dd8499bbc0c4078f0b61, type: 3}
+  - {fileID: 8300000, guid: a4d6422d6c84aa542a77baf8202fa1c1, type: 3}
+  ElementalSkillRecastVoiceList: []
+  ElementalBurstVoiceList:
+  - {fileID: 8300000, guid: 816979967cc614344adcf32e62b5b8bb, type: 3}
+  - {fileID: 8300000, guid: 3892891c8212bb4448cc98a05933bbdc, type: 3}
+  - {fileID: 8300000, guid: ae1dcbe1df4f6d14babb8c6497d2c1ca, type: 3}
+  FallenVoiceList:
+  - {fileID: 8300000, guid: d847179ac51264b45926306c53389f5c, type: 3}
+  - {fileID: 8300000, guid: 1d6ca99b337c6f24eac4f05e45e3354a, type: 3}
+  - {fileID: 8300000, guid: 43924022c0e3aa64aaa1f31a0c066d7a, type: 3}

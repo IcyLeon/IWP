@@ -17,6 +17,8 @@ public class PlayerElementalSkillState : PlayerControlState
     {
         base.Enter();
         StartAnimation("isCasting");
+
+        GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsVoice();
     }
 
     public override void Exit()

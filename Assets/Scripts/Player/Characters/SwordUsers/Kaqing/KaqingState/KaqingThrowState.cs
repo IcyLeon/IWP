@@ -18,6 +18,7 @@ public class KaqingThrowState : KaqingElementalSkillState
     public override void OnAnimationTransition()
     {
         GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
+        GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsVoice();
     }
 
     public override void Exit()

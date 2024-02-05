@@ -5,6 +5,10 @@ using UnityEngine;
 public class BridgeManager : MonoBehaviour
 {
     private Camera Cam;
+    [Header("Environment")]
+    [SerializeField] GameObject[] PillarSectionPrefab;
+
+    [Header("Bridge")]
     [SerializeField] GameObject BridgePrefab;
     [SerializeField] GameObject Bridge2Prefab;
     [SerializeField] Transform Spawner;
@@ -14,6 +18,7 @@ public class BridgeManager : MonoBehaviour
     private float LengthToDisappear = 3f;
     List<GameObject> Bridges = new List<GameObject>();
     private Coroutine SpawnBridge;
+    private Coroutine SpawnPillars;
     private int regularBridgeSpawned = 3;
 
     public float GetSpawnerOffsetLength()

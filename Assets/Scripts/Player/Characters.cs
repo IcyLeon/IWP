@@ -50,7 +50,6 @@ public class Characters : MonoBehaviour, IDamage
     private float CurrentElementalShield;
     public Action<ElementalReactionsTrigger, Elements, Characters> OnHit = delegate { };
 
-
     protected Coroutine DieCoroutine;
     protected bool isAttacking;
     public CharactersSO GetCharactersSO()

@@ -16,6 +16,7 @@ MonoBehaviour:
   ItemDesc: Amber
   SummaryItemDesc: 
   ItemSprite: {fileID: 21300000, guid: 38d9755ecac619247b8ccb121b9cf164, type: 3}
+  ItemIconTypeSprite: {fileID: 0}
   Rarity: 3
   AscensionInfoList:
   - BaseHP: 793
@@ -35,3 +36,18 @@ MonoBehaviour:
   EnergyCost: 50
   ElementalBurstTimer: 8
   ElementalSkillsTimer: 0
+  AttackVoiceList:
+  - {fileID: 8300000, guid: 6486d234cbe247b49b8e88d26426d504, type: 3}
+  ElementalSkillVoiceList:
+  - {fileID: 8300000, guid: 465e2d96432abb04681700e4dae0ec76, type: 3}
+  - {fileID: 8300000, guid: c17d1cb2015cb6449aff6b66a582c3a6, type: 3}
+  - {fileID: 8300000, guid: 1714ccb069b474a4d9eb08d6a4a34c86, type: 3}
+  ElementalSkillRecastVoiceList: []
+  ElementalBurstVoiceList:
+  - {fileID: 8300000, guid: dc429988ab08a6c4e90f93365ec10929, type: 3}
+  - {fileID: 8300000, guid: a649fd86c76db5e4485fd1aaaecb8a93, type: 3}
+  - {fileID: 8300000, guid: 09fad6882ff0b9b48a905e295c235c88, type: 3}
+  FallenVoiceList:
+  - {fileID: 8300000, guid: b81df11ec56ac3544b90caa45899e2cd, type: 3}
+  - {fileID: 8300000, guid: 3030001a00fc3e94eb4c33f1b3ae6f6b, type: 3}
+  - {fileID: 8300000, guid: 3e3c78608301f6d4490b21a2b34d9928, type: 3}

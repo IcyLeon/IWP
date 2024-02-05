@@ -58,7 +58,12 @@ public class Arrow : MonoBehaviour
             {
                 if (!damageObject.IsDead())
                 {
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, BowCharactersData.GetActualATK(BowCharacters.GetLevel()), BowCharacters);
+                    float dmg = BowCharactersData.GetActualATK(BowCharacters.GetLevel());
+                    if (elements.GetElements() != Elemental.NONE)
+                    {
+                        dmg *= 2.5f;
+                    }
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, dmg, BowCharacters);
                 }
                 else
                 {

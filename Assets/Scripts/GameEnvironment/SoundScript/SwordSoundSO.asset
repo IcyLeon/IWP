@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9d2a4520c0f5b4da69a3c9b2623be2, type: 3}
+  m_Name: SwordSoundSO
+  m_EditorClassIdentifier: 
+  HitClipList:
+  - {fileID: 8300000, guid: 75e6a049ce53abe4d99e230e4708b334, type: 3}
+  SwingClipList:
+  - {fileID: 8300000, guid: e0d9cc0423e329c45b27f59d2563c3ea, type: 3}
+  - {fileID: 8300000, guid: 617a294f0b3faec4bb0dd1067c5fa552, type: 3}

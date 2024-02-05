@@ -16,10 +16,15 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     protected IDamage NearestTarget;
     protected float Range = 1f, UltiRange = 1f;
     protected PlayerCharacterState PlayerCharacterState;
+    private PlayerSoundManager soundManager;
 
     public override object GetSource()
     {
         return PlayerManager;
+    }
+    public PlayerSoundManager GetPlayerSoundManager()
+    {
+        return soundManager;
     }
     public virtual void OnEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
@@ -41,6 +46,45 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public PlayerCharacterState GetPlayerCharacterState()
     {
         return PlayerCharacterState;
+    }
+
+    public void PlayRandomSkillsRecastVoice()
+    {
+        if (GetPlayersSO() == null)
+            return;
+
+        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomSkillRecastVoice());
+    }
+
+    public void PlayRandomSkillsVoice()
+    {
+        if (GetPlayersSO() == null)
+            return;
+
+        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomSkillVoice());
+    }
+    public void PlayRandomSkillsBurstVoice()
+    {
+        if (GetPlayersSO() == null)
+            return;
+
+        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomBurstVoice());
+    }
+
+    public void PlayRandomFallenVoice()
+    {
+        if (GetPlayersSO() == null)
+            return;
+
+        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomFallenVoice());
+    }
+
+    public void PlayRandomBasicAttackVoice()
+    {
+        if (GetPlayersSO() == null)
+            return;
+
+        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomBasicAttackVoice());
     }
 
     protected override void UpdateOutofBound()
@@ -381,6 +425,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     private void OnEnable()
     {
         PlayerManager = transform.root.GetComponent<PlayerManager>();
+        soundManager = GetPlayerManager().GetComponentInChildren<PlayerSoundManager>();
         PlayerController.OnElementalSkillHold += ElementalSkillHold;
         PlayerController.OnElementalBurstTrigger += ElementalBurstTrigger;
         PlayerController.OnElementalSkillTrigger += ElementalSkillTrigger;

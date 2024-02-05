@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4349451007376416125}
   - component: {fileID: 1997537665954752951}
   - component: {fileID: 888146972988425238}
+  - component: {fileID: 3183219009406175060}
   m_Layer: 3
   m_Name: dullbladeGI
   m_TagString: Untagged
@@ -58,7 +59,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51881127414958178}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128,4 +129,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56bc61abc260b59438c23bc82f1fa7fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SwordSoundSO: {fileID: 11400000, guid: d58dd1ffa0aac9f46ac0fff3c511fee2, type: 2}
   SlashPivot: {fileID: 9107736225787897751}
+--- !u!136 &3183219009406175060
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51881127414958178}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.75
+  m_Height: 3
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: -1.48}
