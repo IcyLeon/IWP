@@ -15,12 +15,13 @@ MonoBehaviour:
   ItemName: Pile 'Em Up
   ItemDesc: A rich, meaty dish. Originally a Mondstadt dish made of steaks, potatoes,
     and cheese, it has since become synonymous with Ludi Harpastum.
-  SummaryItemDesc: Increases all party members' CRIT Rate by 15% for 300s.
+  SummaryItemDesc: Increases the selected character CRIT Rate CRIT Rate by 15% for
+    300s.
   ItemSprite: {fileID: 21300000, guid: a7111533bd7c6c34a9d158c1b25e78b3, type: 3}
   ItemIconTypeSprite: {fileID: 21300000, guid: 27cece65d74aecc429a5e6337be68fe2, type: 3}
   Rarity: 2
   FoodStatsInfo:
-  - Increases all party members' CRIT Rate by 15% for 300s.
+  - Increases the selected member's CRIT Rate by 15% for 300s.
   StatsBoostInfoList:
   - StatsBoost: 8
     boostValue: 15
