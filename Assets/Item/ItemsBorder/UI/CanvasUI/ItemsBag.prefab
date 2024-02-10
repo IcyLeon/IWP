@@ -46232,11 +46232,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8668059471870567342}
     m_Modifications:
-    - target: {fileID: 1615519208190959141, guid: 394a171cdc473be45b9e8d4f727df533,
-        type: 3}
-      propertyPath: AllowDragnDrop
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1615519208190959142, guid: 394a171cdc473be45b9e8d4f727df533,
         type: 3}
       propertyPath: m_Pivot.x
