@@ -5967,6 +5967,7 @@ MonoBehaviour:
   NewImage: {fileID: 8759725967422983578}
   lockItem: {fileID: 1198464982107632492}
   canvasGroup: {fileID: 2416702639122407698}
+  itemButtonSoundSO: {fileID: 11400000, guid: c9e20fba1767a2440993810c9e96fc3c, type: 2}
 --- !u!114 &628377997153778598
 MonoBehaviour:
   m_ObjectHideFlags: 0

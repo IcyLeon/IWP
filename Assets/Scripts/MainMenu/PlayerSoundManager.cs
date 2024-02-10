@@ -25,12 +25,13 @@ public class PlayerSoundManager : MonoBehaviour
             audioSource.transform.SetParent(transform);
             audioSource.playOnAwake = false;
             audioSource.outputAudioMixerGroup = AudioMixerGroup;
+            audioSource.loop = false;
             audioObject.SetActive(false);
             audioSourcePool.Add(audioSource);
         }
     }
 
-    public void PlaySound(AudioClip clip)
+    public void PlaySound(AudioClip clip, float spatialblend = 0f, Vector3 WorldPosition = default(Vector3), float volume = 1f)
     {
         AudioSource availableAudioSource = GetAvailableAudioSource();
 
@@ -38,6 +39,12 @@ public class PlayerSoundManager : MonoBehaviour
         {
             availableAudioSource.gameObject.SetActive(true);
             availableAudioSource.clip = clip;
+            availableAudioSource.volume = volume;
+            availableAudioSource.spatialBlend = spatialblend;
+            if (availableAudioSource.spatialBlend == 1)
+            {
+                availableAudioSource.transform.position = WorldPosition;
+            }
             availableAudioSource.Play();
             StartCoroutine(DeactivateAudioSourceAfterDelay_Coroutine(availableAudioSource));
         }

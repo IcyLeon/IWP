@@ -112,6 +112,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8172815035096013775}
+  ImpactSounds:
+  - {fileID: 8300000, guid: 8247b71787d61f744ad923672f5efc13, type: 3}
+  - {fileID: 8300000, guid: 70594930b5f0d0d439766d24d5e94e87, type: 3}
+  - {fileID: 8300000, guid: 426b6a5ef8a87224bb47470c6c0051ef, type: 3}
   FireAreaOfEffectPrefab: {fileID: 1949552378025990013, guid: 4e48bc4f552f5a94da40431c5ff9da0b,
     type: 3}
   ExplosionPSPrefab: {fileID: 5911502358899225721, guid: 590ff0f24b73e064eb6c8b0735088438,

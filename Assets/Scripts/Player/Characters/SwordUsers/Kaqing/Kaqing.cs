@@ -16,6 +16,8 @@ public class Kaqing : SwordCharacters
     [SerializeField] GameObject TargetOrbPrefab;
     [SerializeField] Transform EmitterPivot;
     [SerializeField] GameObject UltiSlashPrefab;
+    [SerializeField] GameObject ElectroPlungeAttack;
+    [SerializeField] KaqingESlashCollider KaqingESlashCollider;
     private ParticleSystem UltiSlash;
 
     public void SpawnUltiSlash()
@@ -24,6 +26,22 @@ public class Kaqing : SwordCharacters
             DestroyUltiSlash();
 
         UltiSlash = Instantiate(UltiSlashPrefab, GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up * 1f, Quaternion.identity).GetComponent<ParticleSystem>();
+    }
+
+    private void ToggleOnESlash()
+    {
+        if (!GetSwordModel())
+            return;
+
+        KaqingESlashCollider.SetCanHit(true);
+    }
+
+    private void ToggleOffESlash()
+    {
+        if (!GetSwordModel())
+            return;
+
+        KaqingESlashCollider.SetCanHit(false);
     }
 
     public void DestroyUltiSlash()
@@ -37,12 +55,23 @@ public class Kaqing : SwordCharacters
         return (KaqingState)PlayerCharacterState;
     }
 
+    protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
+    {
+        Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
+
+        if (GetCurrentSwordElemental() != Elemental.NONE)
+            AssetManager.GetInstance().SpawnParticlesEffect(HitPos, ElectroPlungeAttack);
+        
+        return colliders;
+    }
+
     // Start is called before the first frame update
     protected override void Start()
     {
         PlayerCharacterState = new KaqingState(this);
         CurrentElementalSwordFusion = 0;
         base.Start();
+        KaqingESlashCollider.SetKaqing(this);
         UltiRange = 8f;
         ElementalHitPos = Vector3.zero;
         CurrentElement = Elemental.NONE;
@@ -60,9 +89,12 @@ public class Kaqing : SwordCharacters
             base.SpawnSlash();
         else
             SpawnElectroSlash();
+    }
 
-        if (PlayerCharacterState.GetPlayerControlState() is KaqingESlash)
-            GetKaqingState().GetKaqing().DestroyTeleporter();
+    private void ESlash()
+    {
+        AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
+        GetKaqingState().GetKaqing().DestroyTeleporter();
     }
 
     public override float GetATK()

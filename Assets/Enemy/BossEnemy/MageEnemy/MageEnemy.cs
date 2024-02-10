@@ -24,19 +24,12 @@ public class MageEnemy : BaseEnemy
     private float BaseShield = 2500f;
     private Dictionary<Collider, bool> ChargeColliderList = new();
 
-    [SerializeField] AudioSource MageAudioSource;
     [Header("Audio")]
     [SerializeField] AudioClip RoarClip;
 
     public AudioClip GetRoarSound()
     {
         return RoarClip;
-    }
-
-    public void PlaySound(AudioClip a)
-    {
-        MageAudioSource.clip = a;
-        MageAudioSource.Play();
     }
 
     private void TurnOnChargeAttackStatus()

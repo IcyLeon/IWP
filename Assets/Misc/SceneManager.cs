@@ -21,8 +21,10 @@ public class SceneManager : MonoBehaviour
     private static SceneManager instance;
     [SerializeField] Image ProgressBar;
     [SerializeField] GameObject LoadingCanvas;
+    [SerializeField] AudioClip TeleportAudioClip;
     public static Action<SceneEnum> OnSceneChanged = delegate { };
     private float TargetProgress = 0f;
+    private SoundEffectsManager SoundEffectsManager;
     private SceneEnum currentScene;
 
     private void Awake()
@@ -48,7 +50,8 @@ public class SceneManager : MonoBehaviour
     {
         string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         currentScene = GetSceneEnum(currentSceneName);
-        OnSceneChanged?.Invoke(GetCurrentScene());
+        SoundEffectsManager = SoundEffectsManager.GetInstance();
+        CallOnSceneChanged(GetCurrentScene());
     }
 
     public static SceneManager GetInstance()
@@ -73,6 +76,10 @@ public class SceneManager : MonoBehaviour
         AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
         asyncOperation.allowSceneActivation = false;
         LoadingCanvas.SetActive(true);
+
+        SoundEffectsManager.SetVolume(SoundEffectsManager.SoundMixerGroup.MUSIC, -80f);
+        SoundEffectsManager.PlaySFXSound(TeleportAudioClip);
+
         ProgressBar.fillAmount = TargetProgress = 0f;
 
         if (mainUI)
@@ -91,6 +98,12 @@ public class SceneManager : MonoBehaviour
         if (mainUI)
             mainUI.SetPaused(false);
         LoadingCanvas.SetActive(false);
+        CallOnSceneChanged(GetCurrentScene());
+    }
+
+    private void CallOnSceneChanged(SceneEnum s)
+    {
+        SoundEffectsManager.GetInstance().SetVolume(SoundEffectsManager.SoundMixerGroup.MUSIC, 0f);
         OnSceneChanged?.Invoke(GetCurrentScene());
     }
 

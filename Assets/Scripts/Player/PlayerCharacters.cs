@@ -16,20 +16,25 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     protected IDamage NearestTarget;
     protected float Range = 1f, UltiRange = 1f;
     protected PlayerCharacterState PlayerCharacterState;
-    private PlayerSoundManager soundManager;
 
     public override object GetSource()
     {
         return PlayerManager;
     }
-    public PlayerSoundManager GetPlayerSoundManager()
-    {
-        return soundManager;
-    }
+
     public virtual void OnEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
 
     }
+
+    public override void FootstepSound()
+    {
+        if (GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState() is not PlayerMovingState)
+            return;
+
+        base.FootstepSound();
+    }
+
     public void SetBurstActive(bool value)
     {
         isBurstActive = value;
@@ -53,7 +58,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayersSO() == null)
             return;
 
-        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomSkillRecastVoice());
+        if (AssetManager.isInProbabilityRange(0.75f))
+            GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomSkillRecastVoice());
     }
 
     public void PlayRandomSkillsVoice()
@@ -61,14 +67,15 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayersSO() == null)
             return;
 
-        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomSkillVoice());
+        if (AssetManager.isInProbabilityRange(0.8f))
+            GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomSkillVoice());
     }
     public void PlayRandomSkillsBurstVoice()
     {
         if (GetPlayersSO() == null)
             return;
 
-        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomBurstVoice());
+        GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomBurstVoice());
     }
 
     public void PlayRandomFallenVoice()
@@ -76,7 +83,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayersSO() == null)
             return;
 
-        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomFallenVoice());
+        GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomFallenVoice());
     }
 
     public void PlayRandomBasicAttackVoice()
@@ -84,7 +91,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayersSO() == null)
             return;
 
-        GetPlayerSoundManager().PlaySound(GetPlayersSO().GetRandomBasicAttackVoice());
+        if (AssetManager.isInProbabilityRange(0.75f))
+            GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomBasicAttackVoice());
     }
 
     protected override void UpdateOutofBound()
@@ -229,8 +237,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     {
         Collider[] colliders = Physics.OverlapSphere(GetPointOfContact(), 5f, LayerMask.GetMask("Entity", "BossEntity"));
 
-        AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
-
         return colliders;
     }
 
@@ -274,6 +280,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager() == null)
             return;
 
+        //Debug.Log(PlayerCharacterState.GetCurrentState());
+        //Debug.Log(GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState());
 
         GetPlayerCharacterState().Update();
 
@@ -425,7 +433,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     private void OnEnable()
     {
         PlayerManager = transform.root.GetComponent<PlayerManager>();
-        soundManager = GetPlayerManager().GetComponentInChildren<PlayerSoundManager>();
         PlayerController.OnElementalSkillHold += ElementalSkillHold;
         PlayerController.OnElementalBurstTrigger += ElementalBurstTrigger;
         PlayerController.OnElementalSkillTrigger += ElementalSkillTrigger;

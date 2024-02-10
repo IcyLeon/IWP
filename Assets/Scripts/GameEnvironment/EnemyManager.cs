@@ -30,10 +30,12 @@ public class EnemyManager : MonoBehaviour
         Vector3 terrainPosition = terrain.GetPosition();
         Vector3 terrainSize = terrain.terrainData.size;
         NavMeshHit hit;
+
         NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
         int randomIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+        int walkableAreaMask = 1 << NavMesh.GetAreaFromName("Walkable");
 
-        if (NavMesh.SamplePosition(navMeshTriangulation.vertices[randomIndex], out hit, 2.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(navMeshTriangulation.vertices[randomIndex], out hit, 2.0f, walkableAreaMask))
         {
             return hit.position;
         }

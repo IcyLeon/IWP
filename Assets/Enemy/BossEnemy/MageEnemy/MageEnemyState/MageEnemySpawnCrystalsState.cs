@@ -12,6 +12,7 @@ public class MageEnemySpawnCrystalsState : MageEnemyAttackState
     {
         base.Enter();
         StartAnimation("isSpawnOrb");
+        SoundEffectsManager.GetInstance().PlaySFXSound(GetMageEnemyStateMachine().GetMageEnemy().GetRoarSound());
         GetMageEnemyStateMachine().MageEnemyData.CrystalsCoreSpawnElasped = GetMageEnemyStateMachine().MageEnemyData.GetRandomSpawnCrystalsInterval();
     }
 

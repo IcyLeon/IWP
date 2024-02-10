@@ -38,6 +38,12 @@ MonoBehaviour:
   ElementalSkillsTimer: 12
   AttackVoiceList:
   - {fileID: 8300000, guid: 7f094030319fb96449fb36d0c7016cf9, type: 3}
+  - {fileID: 8300000, guid: b191f5d917f7db94e9745fa3035e75fc, type: 3}
+  - {fileID: 8300000, guid: bab074590e4f9eb4f8ee8aae61e87479, type: 3}
+  - {fileID: 8300000, guid: 86e480f6af3238849afff0f6555af146, type: 3}
+  - {fileID: 8300000, guid: 654fea7d2c3cba543830bf153a24ff8d, type: 3}
+  - {fileID: 8300000, guid: 0a68efb049e656d459425e42ef9979db, type: 3}
+  - {fileID: 8300000, guid: 2534b0ee7bdb4e24c9031910a1e7840a, type: 3}
   ElementalSkillVoiceList:
   - {fileID: 8300000, guid: f88f82ded52fe8f4f8d7f456e7a1c0cb, type: 3}
   - {fileID: 8300000, guid: 6db7563b9c39dd8499bbc0c4078f0b61, type: 3}

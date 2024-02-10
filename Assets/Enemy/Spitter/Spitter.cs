@@ -18,9 +18,10 @@ public class Spitter : BaseEnemy
     private float DefaultStrafeT = 0.15f, CurrentStrafeT;
     private Coroutine StrafeCoroutine;
     private Coroutine PatrolCoroutine;
-    [SerializeField] GameObject FireBallPrefab;
-    [SerializeField] Transform FireEmitter;
-    private float DefaultAttackRate = 2.5f, CurrentAttackRate;
+    [SerializeField] protected GameObject FireBallPrefab;
+    [SerializeField] protected Transform FireEmitter;
+    [SerializeField] protected Elemental elemental;
+    protected float DefaultAttackRate = 2.5f, CurrentAttackRate;
     private float DefaultBasicAttackRate = 0.8f, CurrentBasicAttackRate;
     private float AttackElapsed;
     private float BasicAttackElapsed;
@@ -193,12 +194,13 @@ public class Spitter : BaseEnemy
         AttackElapsed += Time.deltaTime;
     }
 
-    private void ShootFireBall()
+    protected virtual void ShootFireBall()
     {
         Vector3 dir = (GetPlayerLocation() - FireEmitter.position).normalized;
         Fireball fireBall = Instantiate(FireBallPrefab, FireEmitter.position, Quaternion.identity).GetComponent<Fireball>();
+        fireBall.SetElement(elemental);
         Rigidbody r = fireBall.GetComponent<Rigidbody>();
-        r.velocity = dir * 20f;
+        r.velocity = dir * 15f;
         CurrentAttackRate = Random.Range(DefaultAttackRate, DefaultAttackRate + 0.6f);
     }
 

@@ -15,12 +15,12 @@ public class ShopManager : MonoBehaviour
     [SerializeField] ShopTabContentManager tabContentManager;
     [SerializeField] Purchase PurchaseItem;
     private ShopInfo selectedShopInfo;
-    private List<ShopInfo> ShopInfoList;
+    private List<ShopInfo> ShopInfoList = new();
 
     // Start is called before the first frame update
     void Start()
     {
-        ShopInfoList = new();
+        ItemContent.SetActive(false);
         foreach (ShopItemSO shopItemSO in BuffShopItemList)
         {
             ShopInfo si = Instantiate(AssetManager.GetInstance().ShopInfoPrefab, tabContentManager.GetTabContent()[0].transform).GetComponent<ShopInfo>();
@@ -29,6 +29,13 @@ public class ShopManager : MonoBehaviour
             si.OnShopButtonClick += SelectedColor_Buff;
             ShopInfoList.Add(si);
         }
+
+        if (ShopInfoList.Count > 0)
+        {
+            SelectedShopInfo(ShopInfoList[0]);
+            SelectedColor_Buff(ShopInfoList[0]);
+        }
+
         foreach (ShopItemSO shopItemSO in ConsumableShopItemList)
         {
             ShopInfo si = Instantiate(AssetManager.GetInstance().ShopInfoPrefab, tabContentManager.GetTabContent()[1].transform).GetComponent<ShopInfo>();
@@ -37,7 +44,6 @@ public class ShopManager : MonoBehaviour
             si.OnShopButtonClick += SelectedColor_Consumable;
             ShopInfoList.Add(si);
         }
-        ItemContent.SetActive(false);
     }
 
     private void SelectedColor_Buff(ShopInfo s)
@@ -65,10 +71,12 @@ public class ShopManager : MonoBehaviour
             si.OnShopButtonClick -= SelectedColor_Consumable;
         }
     }
+
     private void SelectedShopInfo(ShopInfo shopInfo)
     {
         selectedShopInfo = shopInfo;
-        if (selectedShopInfo == null)
+
+        if (selectedShopInfo.GetShopItemSO() == null)
         {
             ItemContent.SetActive(false);
             return;
@@ -76,9 +84,10 @@ public class ShopManager : MonoBehaviour
 
         ItemContent.SetActive(true);
         CostCurrencyImage.sprite = AssetManager.GetInstance().GetCurrencySprite(selectedShopInfo.GetShopItemSO().CurrencyType);
-        PurchaseItem.SetShopItemREF(shopInfo.GetShopItemSO());
-        ItemContentManager.SetItemREF(null, shopInfo.GetShopItemSO().ItemsSO);
+        PurchaseItem.SetShopItemREF(selectedShopInfo.GetShopItemSO());
+        ItemContentManager.SetItemREF(null, selectedShopInfo.GetShopItemSO().ItemsSO);
         PreviewCostTxt.text = selectedShopInfo.GetShopItemSO().Price.ToString();
+
     }
 
 }

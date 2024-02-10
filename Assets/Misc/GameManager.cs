@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
         Teleporter = Instantiate(TeleporterPrefab, spawnPosition, Quaternion.identity);
         AssetManager.CallSpawnArrow(Teleporter, Color.green);
 
-        InventoryManager.GetInstance().AddCurrency(CurrencyType.COINS, Mathf.RoundToInt(50f + 50f * (EnemyManager.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
+        InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(50f + 50f * (EnemyManager.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));
     }
 
     private void WaveSpawn(CharactersSO charactersSO, float delay)

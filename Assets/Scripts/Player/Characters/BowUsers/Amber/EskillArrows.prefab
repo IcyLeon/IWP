@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8174631957522115123}
+  explosionClipSound: {fileID: 8300000, guid: 4ef595bf9b2479f499868105ee2ba52b, type: 3}
 --- !u!96 &2157035981788636276
 TrailRenderer:
   serializedVersion: 2

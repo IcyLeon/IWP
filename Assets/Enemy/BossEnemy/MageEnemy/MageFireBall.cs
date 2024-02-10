@@ -10,8 +10,15 @@ public class MageFireBall : MonoBehaviour
     private MageEnemy MageEnemy;
     [SerializeField] Rigidbody rb;
     private float Speed = 30f;
+    [SerializeField] AudioClip[] ImpactSounds;
     [SerializeField] GameObject FireAreaOfEffectPrefab;
     [SerializeField] GameObject ExplosionPSPrefab;
+
+    private void PlayRandomImpact()
+    {
+        int random = Random.Range(0, ImpactSounds.Length);
+        SoundEffectsManager.GetInstance().PlaySFXSound(ImpactSounds[random], 1f, transform.position);
+    }
 
     public void Init(float timer, MageEnemy mageEnemy)
     {
@@ -37,6 +44,7 @@ public class MageFireBall : MonoBehaviour
 
     private void DestroyFireBall()
     {
+        PlayRandomImpact();
         MageEnemy.NukePlayer(rb.position, 2.5f, MageEnemy.GetATK() * 0.75f);
         ParticleSystem PS = Instantiate(ExplosionPSPrefab, rb.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(PS.gameObject, PS.main.duration);

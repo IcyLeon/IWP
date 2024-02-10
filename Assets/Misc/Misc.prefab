@@ -110,7 +110,9 @@ MonoBehaviour:
     type: 3}
   HitExplosion: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473,
     type: 3}
-  ChargeUpEmitterPrefab: {fileID: 198199717081307550, guid: 5c1037723130e1741a93b0425a45fdcb,
+  ChargeUpEmitterPrefab: {fileID: 198199717081307550, guid: 8ff839c9589c95846a2c090bca937daa,
+    type: 3}
+  ArrowLaunchPrefab: {fileID: 700816801433580107, guid: 007efcc778b8935478db0d1c217a3483,
     type: 3}
   BasicAttackHitEffect: {fileID: 6621960582307996560, guid: a7c712b55e8b37445a9fb6eea77308af,
     type: 3}
@@ -118,7 +120,6 @@ MonoBehaviour:
     type: 3}
   CoordinateAttackPrefab: {fileID: 4021347431716728331, guid: d7339b3d6c0e36345a89584779533594,
     type: 3}
-  ElectroSlashPrefab: {fileID: 0}
   EnemyHealthUIPrefab: {fileID: 5718291668450855976, guid: b57b9d02a01b1c44bb3ae2d66fc7312a,
     type: 3}
   StarPrefab: {fileID: 3037185799881192553, guid: 56ffe41a903e65746b49e860c8f6dab2,

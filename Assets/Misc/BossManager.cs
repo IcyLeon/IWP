@@ -9,6 +9,7 @@ public class BossManager : MonoBehaviour
     private static BossManager instance;
     private EnemyManager EM;
     private Coroutine SpawningCoroutine;
+    [SerializeField] AudioSource audioMusicSource;
     [SerializeField] Terrain terrain;
     [SerializeField] GameObject TreePrefab;
     [SerializeField] GameObject TeleporterPrefab;
@@ -25,6 +26,7 @@ public class BossManager : MonoBehaviour
             return;
 
         Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
+        audioMusicSource.volume = 0f;
         AssetManager.CallSpawnArrow(Teleporter, Color.green);
 
         InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(180f + 180f * (EnemyManager.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));

@@ -39,7 +39,7 @@ public interface ISkillsBurstManager
 public class Characters : MonoBehaviour, IDamage
 {
     protected float CurrentHealth;
-
+    [SerializeField] FootStepSO FootStepSO;
     [SerializeField] protected CharactersSO CharactersSO;
     [SerializeField] protected Transform MiddlePositionTransform;
     [SerializeField] protected Animator Animator;
@@ -48,6 +48,7 @@ public class Characters : MonoBehaviour, IDamage
     protected HealthBarScript healthBarScript;
     protected ElementalReaction elementalReaction;
     private float CurrentElementalShield;
+    private SoundEffectsManager soundManager;
     public Action<ElementalReactionsTrigger, Elements, Characters> OnHit = delegate { };
 
     protected Coroutine DieCoroutine;
@@ -55,6 +56,16 @@ public class Characters : MonoBehaviour, IDamage
     public CharactersSO GetCharactersSO()
     {
         return CharactersSO;
+    }
+
+    public SoundEffectsManager GetSoundManager()
+    {
+        return soundManager;
+    }
+
+    public virtual void FootstepSound()
+    {
+        SoundEffectsManager.GetInstance().PlaySFXSound(FootStepSO.GetRandomFootstepSound(), 1f, GetPointOfContact(), 0.5f);
     }
 
     public static bool isOutofBound(Vector3 pos)
@@ -65,6 +76,7 @@ public class Characters : MonoBehaviour, IDamage
     protected virtual void Start()
     {
         isAttacking = false;
+        soundManager = SoundEffectsManager.GetInstance();
         OnHit += HitEvent;
     }
     public void ResetAttack()

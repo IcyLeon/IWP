@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,6 +10,7 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] GameObject ArrowPrefab;
     [SerializeField] Transform EmitterPivot;
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
+    [SerializeField] BowSoundSO BowSoundSO;
     private ParticleSystem ChargeUpEmitter;
     private GameObject CrossHair;
     private float OriginalFireSpeed = 800f, BaseFireSpeed;
@@ -47,15 +49,24 @@ public class BowCharacters : PlayerCharacters
     {
         ShootDirection = Direction;
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
+        ParticleSystem arrowLuanch = Instantiate(AssetManager.GetInstance().ArrowLaunchPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(arrowLuanch.gameObject, arrowLuanch.main.duration);
+
         Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(ShootElemental));
         ArrowFire.SetCharacterData(this);
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
 
         if (!GetPlayerManager().IsAiming())
+        {
+            GetSoundManager().PlaySFXSound(BowSoundSO.GetRandomBasicFireAudioClip());
             BaseFireSpeed = OriginalFireSpeed * 0.68f;
+        }
         else
+        {
+            GetSoundManager().PlaySFXSound(BowSoundSO.AimFireAudioClip);
             BaseFireSpeed = OriginalFireSpeed;
+        }
 
         ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + GetBowCharactersState().BowData.ChargeElapsed));
 
@@ -67,13 +78,16 @@ public class BowCharacters : PlayerCharacters
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
     {
         Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
+
+        AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
+
         foreach (Collider collider in colliders)
         {
             IDamage damageObject = collider.gameObject.GetComponent<IDamage>();
             if (damageObject != null)
             {
                 if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 3.5f, this);
+                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.NONE), GetATK() * 2.5f, this);
             }
         }
         return colliders;
@@ -118,6 +132,7 @@ public class BowCharacters : PlayerCharacters
 
     public void SpawnChargeUpFinish()
     {
+        GetSoundManager().PlaySFXSound(BowSoundSO.BowChargeUpAudioClip);
         ParticleSystem ps = Instantiate(ChargeUpFinishPrefab, EmitterPivot).GetComponent<ParticleSystem>();
         Destroy(ps.gameObject, ps.main.duration);
     }

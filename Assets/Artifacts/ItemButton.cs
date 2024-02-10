@@ -43,6 +43,7 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
     [SerializeField] Image NewImage;
     [SerializeField] LockItem lockItem;
     [SerializeField] CanvasGroup canvasGroup;
+
     //[SerializeField] ParticleSystem Burst;
 
 
@@ -281,6 +282,11 @@ public class ItemButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandl
         }
         //Burst.gameObject.SetActive(true);
         //Burst.Emit(1);
+        if (itemTemplate is ArtifactsSO)
+        {
+            SoundEffectsManager s = SoundEffectsManager.GetInstance();
+            s.PlaySFXSound(s.GetSoundSO().ArtifactSoundClick);
+        }
         onButtonClick?.Invoke(this);
         transform.localScale = Vector3.one;
     }

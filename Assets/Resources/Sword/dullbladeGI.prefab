@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9107736225787897751}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: SlashPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 1997537665954752951}
   - component: {fileID: 888146972988425238}
   - component: {fileID: 3183219009406175060}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: dullbladeGI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SwordSoundSO: {fileID: 11400000, guid: d58dd1ffa0aac9f46ac0fff3c511fee2, type: 2}
   SlashPivot: {fileID: 9107736225787897751}
+  Collider: {fileID: 3183219009406175060}
 --- !u!136 &3183219009406175060
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -141,7 +142,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.75
+  m_Radius: 0.8
   m_Height: 3
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: -1.48}
+  m_Center: {x: 0, y: 0, z: -1.5}

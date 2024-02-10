@@ -9,6 +9,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
     [SerializeField] PlayerCanvasUI PlayerCanvasUI;
     [SerializeField] Transform CameraLook;
+
+    [Header("Common Audio")]
+    [SerializeField] AudioClip SwitchSoundEffectsClip;
+
     private Rigidbody rb;
     private List<PlayerCharacters> PlayerCharactersList = new();
     private PlayerCharacters CurrentCharacter;
@@ -386,7 +390,6 @@ public class PlayerManager : MonoBehaviour
 
         PlayerCharacters playerCharacters = GetPlayerCharacter(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
         CharacterData characterData = GetInventoryManager().GetOwnedCharacterData(GetCharactersOwnedList()[index].GetItemSO() as PlayerCharacterSO);
-
         ChangeCharacter(playerCharacters, characterData, true);
     }
 
@@ -416,6 +419,7 @@ public class PlayerManager : MonoBehaviour
                 CharacterChange(characterData);
 
             GetInventoryManager().SetCurrentEquipCharacter(characterData);
+            SoundEffectsManager.GetInstance().PlaySFXSound(SwitchSoundEffectsClip);
             onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData(), CurrentCharacter);
         }
     }

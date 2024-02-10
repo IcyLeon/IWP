@@ -8,6 +8,7 @@ public class AmberESkillArrows : MonoBehaviour
     private CharacterData AmberCharacterData;
     private IDamage target;
     [SerializeField] Rigidbody rb;
+    [SerializeField] AudioClip explosionClipSound;
     private Vector3 FocalPointPos;
 
     public Rigidbody GetRB()
@@ -28,7 +29,14 @@ public class AmberESkillArrows : MonoBehaviour
     void Start()
     {
         StartCoroutine(Moving());
-        Destroy(gameObject, 5f);
+        StartCoroutine(Timeout());
+    }
+
+    private IEnumerator Timeout()
+    {
+        yield return new WaitForSeconds(5f);
+        Explode();
+        Destroy(gameObject);
     }
 
     public void SetCharacterData(PlayerCharacters PlayerCharacters)
@@ -81,23 +89,16 @@ public class AmberESkillArrows : MonoBehaviour
 
     void Explode()
     {
-        Collider[] colliders = Physics.OverlapSphere(rb.position, 3.5f, LayerMask.GetMask("Entity", "BossEntity"));
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            IDamage damageObject = colliders[i].gameObject.GetComponent<IDamage>();
-            if (damageObject != null)
-            {
-                if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(AmberCharacterData.GetPlayerCharacterSO().Elemental), AmberCharacterData.GetActualATK(AmberCharacterData.GetLevel()), Amber);
-            }
-        }
-
-        ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitExplosion, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Destroy(hitEffect.gameObject, hitEffect.main.duration);
+        Explosion explosion = Instantiate(AssetManager.GetInstance().HitExplosion, transform.position, Quaternion.identity).GetComponent<Explosion>();
+        explosion.SetExplosionSound(explosionClipSound);
+        explosion.Init(AmberCharacterData.GetPlayerCharacterSO().Elemental, LayerMask.GetMask("Entity", "BossEntity"), 3.5f, AmberCharacterData.GetActualATK(AmberCharacterData.GetLevel()), Amber);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.isTrigger)
+            return;
+
         PlayerCharacters player = other.GetComponent<PlayerCharacters>();
         IDamage damageObject = other.GetComponent<IDamage>();
 

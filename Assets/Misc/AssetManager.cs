@@ -33,14 +33,14 @@ public class AssetManager : MonoBehaviour
     public GameObject HitEffect;
     public GameObject HitExplosion;
     public ParticleSystem ChargeUpEmitterPrefab;
+    public GameObject ArrowLaunchPrefab;
+
     [Header("Normal Attack Sword")]
     public GameObject BasicAttackHitEffect;
 
     [Header("Amber")]
     public GameObject ESkillArrowsPrefab;
     public GameObject CoordinateAttackPrefab;
-    [Header("Kaqing")]
-    public GameObject ElectroSlashPrefab;
 
     [Header("UI")]
     public GameObject EnemyHealthUIPrefab;

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93aebd8b925f8884cbb45e97af5c6d1f, type: 3}
+  m_Name: AmberBowSound
+  m_EditorClassIdentifier: 
+  BowChargeUpAudioClip: {fileID: 8300000, guid: 8445533fb2c11a34db944b0f7a92a816,
+    type: 3}
+  BasicFireAudioClip:
+  - {fileID: 8300000, guid: 3443a4f2e70a9f3469dde0b383340313, type: 3}
+  - {fileID: 8300000, guid: 25d54956d23d3e14abd84e1f63fad8d9, type: 3}
+  AimFireAudioClip: {fileID: 8300000, guid: 26797a122635f9346a09cff84bac5310, type: 3}

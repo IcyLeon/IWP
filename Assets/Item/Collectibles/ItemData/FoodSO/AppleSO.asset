@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Apple
   ItemDesc: Crisp and fragrant. Delicious raw or made into wine.
-  SummaryItemDesc: Restores 300 HP
+  SummaryItemDesc: Restores 80 HP
   ItemSprite: {fileID: 21300000, guid: f5af248767e68b9409f2582f10554519, type: 3}
   ItemIconTypeSprite: {fileID: 21300000, guid: 710bbdd456411e347b92412bd22ebeda, type: 3}
   Rarity: 0
   FoodStatsInfo:
-  - Restores 300 HP for the selected character
-  FlatRestoreCharacterHP: 300
+  - Restores 80 HP for the selected character
+  FlatRestoreCharacterHP: 80
   RestoreCharacterHP_Percentage: 0
   AdditionalRecoveryHeal: 0

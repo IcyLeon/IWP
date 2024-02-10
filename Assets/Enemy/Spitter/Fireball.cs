@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Fireball : MonoBehaviour
 {
+    [SerializeField] AudioClip explosionClipSound;
+    private Elemental elemental;
     private IDamage source;
 
     private void Start()
@@ -15,33 +17,31 @@ public class Fireball : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         Explode();
+        Destroy(gameObject);
     }
 
     public void SetSource(IDamage source)
     {
         this.source = source;
     }
+
+    public void SetElement(Elemental e)
+    {
+        elemental = e;
+    }
+
     void Explode()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 1.5f, LayerMask.GetMask("Player"));
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            IDamage damageObject = colliders[i].gameObject.GetComponent<IDamage>();
-            if (damageObject != null)
-            {
-                if (!damageObject.IsDead())
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(Elemental.FIRE), 100f, source);
-
-                //Debug.Log(damageObject);
-            }
-        }
-
-        ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitExplosion, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Destroy(hitEffect.gameObject, hitEffect.main.duration);
+        Explosion explosion = Instantiate(AssetManager.GetInstance().HitExplosion, transform.position, Quaternion.identity).GetComponent<Explosion>();
+        explosion.SetExplosionSound(explosionClipSound);
+        explosion.Init(elemental, LayerMask.GetMask("Player"), 2.5f, 100f, source);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.isTrigger)
+            return;
+
         BaseEnemy BaseEnemy = other.GetComponent<BaseEnemy>();
 
         if (BaseEnemy == null)

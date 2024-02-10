@@ -17,6 +17,22 @@ public class SwordCharacters : PlayerCharacters
         return SwordModel;
     }
 
+    public void ToggleOnCanHit()
+    {
+        if (!GetSwordModel())
+            return;
+
+        GetSwordModel().SetCanHit(true);
+    }
+
+    public void ToggleOffCanHit()
+    {
+        if (!GetSwordModel())
+            return;
+
+        GetSwordModel().SetCanHit(false);
+    }
+
     public virtual void SpawnSlash()
     {
         BasicAttackTrigger();
@@ -53,6 +69,10 @@ public class SwordCharacters : PlayerCharacters
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
     {
         Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
+
+        if (GetCurrentSwordElemental() == Elemental.NONE)
+            AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
+
         foreach (Collider collider in colliders)
         {
             IDamage damageObject = collider.gameObject.GetComponent<IDamage>();
@@ -70,6 +90,7 @@ public class SwordCharacters : PlayerCharacters
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, damage.GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(hitEffect.gameObject, hitEffect.main.duration);
         damage.TakeDamage(damage.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), GetATK() * 1.8f, this);
+        SoundEffectsManager.GetInstance().PlaySFXSound(GetSwordModel().GetSwordSoundSO().GetRandomHitClip());
     }
 
     public override void LaunchBasicAttack()

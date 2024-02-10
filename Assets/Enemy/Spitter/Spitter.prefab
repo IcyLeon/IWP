@@ -1620,6 +1620,7 @@ MonoBehaviour:
   FireBallPrefab: {fileID: 8879955223002945827, guid: 51064d8c67c73ee41a6e7110323a0e88,
     type: 3}
   FireEmitter: {fileID: 412224}
+  elemental: 1
 --- !u!1 &172518
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,8 +8,25 @@ public class Sword : MonoBehaviour
     private Dictionary<Collider, bool> ChargeColliderList = new();
     [SerializeField] SwordSoundSO SwordSoundSO;
     [SerializeField] Transform SlashPivot;
-    
+    [SerializeField] Collider Collider;
 
+    private void Awake()
+    {
+        Collider.enabled = false;
+    }
+
+    public void SetCanHit(bool val)
+    {
+        Collider.enabled = val;
+        if (!Collider.enabled)
+        {
+            ChargeColliderList.Clear();
+        }
+    }
+    public SwordSoundSO GetSwordSoundSO()
+    {
+        return SwordSoundSO;
+    }
     public Transform GetSlashPivot()
     {
         return SlashPivot;
@@ -21,9 +38,9 @@ public class Sword : MonoBehaviour
 
     public void ResetHits()
     {
-        if (SwordSoundSO != null)
+        if (GetSwordSoundSO() != null)
         {
-            SwordCharacters.GetPlayerSoundManager().PlaySound(SwordSoundSO.GetRandomSwingClip());
+            SwordCharacters.GetSoundManager().PlaySFXSound(GetSwordSoundSO().GetRandomSwingClip());
         }
         ChargeColliderList.Clear();
     }
@@ -32,11 +49,24 @@ public class Sword : MonoBehaviour
         if (SwordCharacters.GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState() is not PlayerAttackState)
             return;
 
+        FriendlyKillers friendlyKillers = other.GetComponent<FriendlyKillers>();
+        PlayerCharacters pc = other.GetComponent<PlayerCharacters>();
+
+        if (friendlyKillers != null)
+            return;
+
+        if (pc != null)
+            return;
+
+
         if (!ChargeColliderList.TryGetValue(other, out bool value))
         {
             IDamage damageObj = other.GetComponent<IDamage>();
             if (damageObj != null)
             {
+                if (other.GetComponent<PlayerCharacters>() != null)
+                    return;
+
                 if (!damageObj.IsDead())
                 {
                     Vector3 hitPosition = other.ClosestPointOnBounds(transform.position);
@@ -47,9 +77,9 @@ public class Sword : MonoBehaviour
                     SwordCharacters.GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
 
 
-                    if (SwordSoundSO != null)
+                    if (GetSwordSoundSO() != null)
                     {
-                        SwordCharacters.GetPlayerSoundManager().PlaySound(SwordSoundSO.GetRandomHitClip());
+                        SwordCharacters.GetSoundManager().PlaySFXSound(GetSwordSoundSO().GetRandomHitClip());
                     }
                 }
 
