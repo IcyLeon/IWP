@@ -18,7 +18,7 @@ public class MageEnemyLandingState : MageEnemyAirborneState
     public override void Exit()
     {
         base.Exit();
-        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezeAll;
         StopAnimation("isLanding");
     }
 

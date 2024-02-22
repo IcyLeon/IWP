@@ -111,6 +111,17 @@ public class ArtifactsManager : MonoBehaviour
 
 
 
+    public static bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)
+    {
+        for (int i = (int)Artifacts.ArtifactsStat.HPPERCENT; i < (int)Artifacts.ArtifactsStat.TOTAL_STATS; i++)
+        {
+            if ((int)stat == i)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static ArtifactsManager GetInstance()
     {
@@ -119,29 +130,29 @@ public class ArtifactsManager : MonoBehaviour
     private void Update()
     {
         //Debug only
-        //if (Input.GetKeyDown(KeyCode.Return))
-        //{
-        //    Artifacts artifacts = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
-        //    Artifacts artifacts2 = CreateArtifact(ArtifactType.PLUME, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
-        //    Artifacts artifacts3 = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
-        //    Artifacts artifacts4 = CreateArtifact(ArtifactType.PLUME, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
-        //    Artifacts artifacts5 = CreateArtifact(ArtifactType.SANDS, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
-        //    Artifacts artifacts6 = CreateArtifact(ArtifactType.GOBLET, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
-        //    Artifacts artifacts7 = CreateArtifact(ArtifactType.SANDS, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FourStar);
-        //    Artifacts artifacts8 = CreateArtifact(ArtifactType.GOBLET, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.ThreeStar);
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Artifacts artifacts = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+            Artifacts artifacts2 = CreateArtifact(ArtifactType.PLUME, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FiveStar);
+            Artifacts artifacts3 = CreateArtifact(ArtifactType.FLOWER, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+            Artifacts artifacts4 = CreateArtifact(ArtifactType.PLUME, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+            Artifacts artifacts5 = CreateArtifact(ArtifactType.SANDS, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+            Artifacts artifacts6 = CreateArtifact(ArtifactType.GOBLET, ArtifactsSet.THUNDERING_FURY, Rarity.FiveStar);
+            Artifacts artifacts7 = CreateArtifact(ArtifactType.SANDS, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.FourStar);
+            Artifacts artifacts8 = CreateArtifact(ArtifactType.GOBLET, ArtifactsSet.NOBLESSE_OBLIGE, Rarity.ThreeStar);
 
-        //    InventoryManager.GetInstance().AddItems(artifacts);
-        //    InventoryManager.GetInstance().AddItems(artifacts2);
-        //    InventoryManager.GetInstance().AddItems(artifacts3);
-        //    InventoryManager.GetInstance().AddItems(artifacts4);
-        //    InventoryManager.GetInstance().AddItems(artifacts5);
-        //    InventoryManager.GetInstance().AddItems(artifacts6);
-        //    InventoryManager.GetInstance().AddItems(artifacts7);
-        //    InventoryManager.GetInstance().AddItems(artifacts8);
-        //    InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, 999);
-        //    Item item = InventoryManager.CreateItem(expItemSO);
-        //    InventoryManager.GetInstance().AddItems(item);
-        //}
+            InventoryManager.GetInstance().AddItems(artifacts);
+            InventoryManager.GetInstance().AddItems(artifacts2);
+            InventoryManager.GetInstance().AddItems(artifacts3);
+            InventoryManager.GetInstance().AddItems(artifacts4);
+            InventoryManager.GetInstance().AddItems(artifacts5);
+            InventoryManager.GetInstance().AddItems(artifacts6);
+            InventoryManager.GetInstance().AddItems(artifacts7);
+            InventoryManager.GetInstance().AddItems(artifacts8);
+            InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, 999);
+            Item item = InventoryManager.CreateItem(expItemSO);
+            InventoryManager.GetInstance().AddItems(item);
+        }
 
     }
 

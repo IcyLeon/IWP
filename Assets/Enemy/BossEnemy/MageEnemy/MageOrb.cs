@@ -31,10 +31,13 @@ public class MageOrb : MonoBehaviour, IDamage
     public void Init(MageEnemy ME, bool val)
     {
         MageEnemy = ME;
-        HealAmount = MageEnemy.GetMaxHealth() * 0.0035f;
-        HealingLineRenderer = Instantiate(LineRendererPrefab, transform);
-        HealingLineRenderer.useWorldSpace = true;
-        HealingLineRenderer.positionCount = 2;
+        if (MageEnemy != null)
+        {
+            HealAmount = MageEnemy.GetMaxHealth() * 0.0035f;
+            HealingLineRenderer = Instantiate(LineRendererPrefab, transform);
+            HealingLineRenderer.useWorldSpace = true;
+            HealingLineRenderer.positionCount = 2;
+        }
         TimesUp = val;
     }
     public Vector3 GetPointOfContact()
@@ -103,7 +106,7 @@ public class MageOrb : MonoBehaviour, IDamage
         }
         if (!TimesUp)
         {
-            if (!IsDead()) {
+            if (!IsDead() && MageEnemy != null) {
                 if (Time.time - HealingMageIntervalElapsed > HealingMageInterval)
                 {
                     MageEnemy.SetHealth(MageEnemy.GetHealth() + HealAmount);

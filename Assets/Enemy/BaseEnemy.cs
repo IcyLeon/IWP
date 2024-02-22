@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -43,17 +42,6 @@ public class BaseEnemy : Characters
 
         elementalReaction = new ElementalReaction();
         SetHealth(GetMaxHealth());
-    }
-
-    protected virtual void OnCollisionStay(Collision collision)
-    {
-        if (collision.collider.GetComponent<IDamage>() == null)
-            return;
-
-        if (!IsDead())
-            return;
-
-        Physics.IgnoreCollision(collision.collider, col);
     }
 
     protected int GetMaxLevel()
@@ -222,6 +210,8 @@ public class BaseEnemy : Characters
         bool isdead = base.UpdateDie();
         if (isdead)
         {
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+
             if (healthBarScript)
             {
                 Destroy(healthBarScript.gameObject);

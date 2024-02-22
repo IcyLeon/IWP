@@ -7,14 +7,6 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
 {
     private Item ItemREF;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Chest chest = collision.collider.GetComponent<Chest>();
-        if (chest != null)
-        {
-            Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);
-        }
-    }
     public void SetItemsREF(Item ItemREF)
     {
         this.ItemREF = ItemREF;
@@ -38,15 +30,6 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
     {
         //Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Entity"));
         //Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("BossEntity"));
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        IDamage damage = collision.collider.GetComponent<IDamage>();
-        Chest chest = collision.collider.GetComponent<Chest>();
-
-        if (damage != null || chest != null)
-            Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);
     }
 
     private void Update()

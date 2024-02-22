@@ -16,7 +16,7 @@ public class DamageText : MonoBehaviour
     {
         RT = GetComponent<RectTransform>();
         vel = Vector2.zero;
-        Offset = Vector3.one * 1.5f;
+        Offset = Vector3.one * 0.5f;
         canvasGroup.alpha = 0f;
     }
     // Start is called before the first frame update
@@ -24,27 +24,29 @@ public class DamageText : MonoBehaviour
     {
         DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(elemental).color;
         Init(pos, text);
-        StartCoroutine(FadeInAnimation());
-        StartCoroutine(WorldTextAnim(1.25f));
+        AnimateText(1.35f);
     }
 
     public void SpawnText(Vector3 pos, ElementalReactionState elementalReaction, string text)
     {
         DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalReactionInfo(elementalReaction).color;
         Init(pos, text);
-        StartCoroutine(FadeInAnimation());
-        StartCoroutine(WorldTextAnim(1f));
+        AnimateText(1.35f);
     }
 
     public void SpawnText(Vector3 pos, OthersState othersState, string text)
     {
         DamageTextTMP.color = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetOthersInfo(othersState).color; ;
         Init(pos, text);
-        StartCoroutine(FadeInAnimation());
-        StartCoroutine(WorldTextAnim(1.25f));
-        StartCoroutine(MoveUpAnimation());
+        AnimateText(1.15f);
     }
 
+    private void AnimateText(float TargetSize)
+    {
+        StartCoroutine(FadeInAnimation());
+        StartCoroutine(WorldTextAnim(TargetSize));
+        StartCoroutine(MoveUpAnimation());
+    }
 
     private void Init(Vector3 pos, string text)
     {
@@ -69,7 +71,7 @@ public class DamageText : MonoBehaviour
     {
         float AnimationTime = 0.2f;
         float ElaspedTime = 0f;
-        transform.localScale = Vector3.one * 3f;
+        transform.localScale = Vector3.one * 8f;
         Vector3 target = Vector3.one * targetSize;
 
         while (transform.localScale != target)
@@ -87,7 +89,7 @@ public class DamageText : MonoBehaviour
         float AnimationTime = 1f;
         while (ElaspedTime < AnimationTime)
         {
-            vel.y += Time.deltaTime * 50f; 
+            vel.y += Time.deltaTime * 35f; 
             ElaspedTime += Time.deltaTime;
             yield return null;
         }

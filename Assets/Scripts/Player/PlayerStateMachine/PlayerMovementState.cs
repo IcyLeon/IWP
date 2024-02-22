@@ -10,7 +10,7 @@ public class PlayerMovementState : IState
     private float WalkSpeed;
     private float Speed;
     protected Rigidbody rb;
-    private float DecelerateForce = 3.5f;
+    private float DecelerateForce = 4.5f;
     private PlayerCharacters playerCharacter;
     protected void SetSpeedModifier(float sp)
     {
@@ -92,6 +92,11 @@ public class PlayerMovementState : IState
     protected bool IsAiming()
     {
         return GetPlayerState().GetPlayerController().GetCameraManager().GetAimCamera().gameObject.activeSelf;
+    }
+
+    protected bool IsAttacking()
+    {
+        return GetPlayerState().GetPlayerMovementState() is PlayerAttackState;
     }
 
     public virtual void Update()
@@ -189,15 +194,13 @@ public class PlayerMovementState : IState
         if (GetPlayerState().GetPlayerController().GetResizeableCollider() == null || GetCapsuleCollider() == null)
             return;
 
-        LayerMask layerMask = Physics.DefaultRaycastLayers;
-
-        //if (ignoreEnemies)
-        //    layerMask = ~LayerMask.GetMask("Entity", "BossEntity");
+        if (!rb.useGravity)
+            return;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
 
         Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
-        RaycastHit[] raycastHits = Physics.RaycastAll(capsuleColliderCenterInWorldSpace, Vector3.down, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, layerMask, QueryTriggerInteraction.Ignore);
+        RaycastHit[] raycastHits = Physics.RaycastAll(capsuleColliderCenterInWorldSpace, Vector3.down, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore);
         RaycastHit hit = GetClosestRaycastHit(raycastHits);
 
         if (hit.collider != null)
@@ -318,10 +321,11 @@ public class PlayerMovementState : IState
         if (rb == null || GetCapsuleCollider() == null)
             return false;
 
+        if (!rb.useGravity)
+            return false;
 
-        LayerMask layerMask = Physics.DefaultRaycastLayers;
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
-        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, layerMask, QueryTriggerInteraction.Ignore);
+        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore);
         List<Collider> colliderCopy = new(Colliders);
         for(int i = colliderCopy.Count - 1; i >= 0; i--)
         {

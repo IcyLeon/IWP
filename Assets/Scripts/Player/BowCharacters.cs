@@ -51,8 +51,6 @@ public class BowCharacters : PlayerCharacters
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
         ParticleSystem arrowLuanch = Instantiate(AssetManager.GetInstance().ArrowLaunchPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(arrowLuanch.gameObject, arrowLuanch.main.duration);
-
-        Rigidbody ArrowRB = ArrowFire.GetComponent<Rigidbody>();
         ArrowFire.SetElements(new Elements(ShootElemental));
         ArrowFire.SetCharacterData(this);
         ArrowFire.transform.rotation = Quaternion.LookRotation(ShootDirection);
@@ -68,7 +66,7 @@ public class BowCharacters : PlayerCharacters
             BaseFireSpeed = OriginalFireSpeed;
         }
 
-        ArrowRB.AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + GetBowCharactersState().BowData.ChargeElapsed));
+        ArrowFire.GetRigidbody().AddForce(ShootDirection.normalized * BaseFireSpeed * (1 + GetBowCharactersState().BowData.ChargeElapsed));
 
         DestroyChargeUpEmitter();
         ShootElemental = Elemental.NONE;

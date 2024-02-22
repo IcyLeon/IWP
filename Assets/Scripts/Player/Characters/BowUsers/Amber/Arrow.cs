@@ -10,6 +10,10 @@ public class Arrow : MonoBehaviour
     private CharacterData BowCharactersData;
     private float FlightTime = 15f;
 
+    public Rigidbody GetRigidbody()
+    {
+        return rb;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -63,7 +67,8 @@ public class Arrow : MonoBehaviour
                     {
                         dmg *= 2.5f;
                     }
-                    damageObject.TakeDamage(damageObject.GetPointOfContact(), elements, dmg, BowCharacters);
+                    Vector3 hitPosition = other.ClosestPointOnBounds(transform.position);
+                    damageObject.TakeDamage(hitPosition, elements, dmg, BowCharacters);
                 }
                 else
                 {

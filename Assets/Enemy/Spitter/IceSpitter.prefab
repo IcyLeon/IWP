@@ -547,9 +547,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!135 &2200075266860672777
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -597,6 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d328f9ddb26945e49b2afff9185ba1eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FootStepSO: {fileID: 0}
   CharactersSO: {fileID: 11400000, guid: 59b74a4cbf6ca0946a036b24185ea789, type: 2}
   MiddlePositionTransform: {fileID: 6946539906456317409}
   Animator: {fileID: 1636070997341191272}

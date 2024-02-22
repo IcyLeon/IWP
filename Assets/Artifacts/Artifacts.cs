@@ -24,11 +24,6 @@ public class ArtifactStatsInfo
     public void SetStatsValue(float value)
     {
         StatsValue = value;
-
-        if (!DisplayArtifactStats.CheckIfInBetweenStats_PERCENT(GetArtifactsStat()))
-        {
-            StatsValue = Mathf.RoundToInt(StatsValue);
-        }
     }
 
     public float GetStatsValue()
@@ -230,16 +225,28 @@ public class Artifacts : UpgradableItems
 
     private float GetArtifactStartingValue(ArtifactsStat artifactsStat)
     {
-        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStartingValue(GetArtifactType(), artifactsStat, GetRarity());
+        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStatsValueInfo(GetArtifactType(), artifactsStat, GetRarity()).Evaluate(0f);
     }
     private float GetHighestPossibleStatsRoll(ArtifactsStat artifactsStat)
     {
         return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetHighestPossibleStatsRoll(artifactsStat, GetRarity());
     }
 
-    private float GetArtifactMainStatsIncreaseRatioValue(int idx)
+    private float GetArtifactMainStatsValueInfo(int idx, int level)
     {
-        return AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactIncreaseValue(GetArtifactType(), GetStats(idx).GetArtifactsStat(), GetRarity());
+        ArtifactsStat a = GetStats(idx).GetArtifactsStat();
+        float value = AM.GetArtifactsListInfo().ArtifactWeightManagement.GetArtifactStatsValueInfo(GetArtifactType(), GetStats(idx).GetArtifactsStat(), GetRarity()).Evaluate(level);
+
+        if (ArtifactsManager.CheckIfInBetweenStats_PERCENT(a))
+        {
+            value = Mathf.Round(value * 10f) / 10f;
+        }
+        else
+        {
+            value = Mathf.Round(value);
+        }
+
+        return value;
     }
 
     public float GetNextMainStatsValue(int levelIncrease)
@@ -247,7 +254,7 @@ public class Artifacts : UpgradableItems
         if (GetTotalStats() == 0)
             return 0f;
 
-        return GetArtifactMainStatsIncreaseRatioValue(0) * levelIncrease + GetStats(0).GetStatsValue();
+        return GetArtifactMainStatsValueInfo(0, GetLevel() + levelIncrease);
     }
 
 
@@ -256,6 +263,6 @@ public class Artifacts : UpgradableItems
         if (GetTotalStats() == 0)
             return;
 
-        GetStats(0).SetStatsValue(GetStats(0).GetStatsValue() + GetArtifactMainStatsIncreaseRatioValue(0));
+        GetStats(0).SetStatsValue(GetArtifactMainStatsValueInfo(0, GetLevel()));
     }
 }

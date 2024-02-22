@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class KaqingTeleporter : MonoBehaviour
 {
+    [SerializeField] GameObject ExplosionEffects;
     private Elements elements;
     private PlayerCharacters Kaqing;
     private bool EnergyOrbMoving;
@@ -27,11 +29,6 @@ public class KaqingTeleporter : MonoBehaviour
         OnDestroyOrb?.Invoke();
     }
 
-    void Explode()
-    {
-
-    }
-
     public void SetElements(Elements elements)
     {
         this.elements = elements;
@@ -44,13 +41,13 @@ public class KaqingTeleporter : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, TargetLoc, speed * Time.deltaTime);
             yield return null;
         }
-        TravelDamage();
+        Explode();
         yield return new WaitForSeconds(0.1f);
         Destroy(gameObject, Kaqing.GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
         EnergyOrbMoving = false;
     }
 
-    private void TravelDamage()
+    private void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, transform.localScale.magnitude * 2f, LayerMask.GetMask("Entity", "BossEntity"));
         for(int i = 0; i < colliders.Length; i++)
@@ -60,9 +57,15 @@ public class KaqingTeleporter : MonoBehaviour
             if (damage != null)
             {
                 if (!damage.IsDead())
-                    damage.TakeDamage(damage.GetPointOfContact(), elements, Kaqing.GetATK(), Kaqing);
+                {
+                    Vector3 hitPosition = collider.ClosestPointOnBounds(transform.position);
+                    damage.TakeDamage(hitPosition, elements, Kaqing.GetATK(), Kaqing);
+                }
             }
         }
+
+        ParticleSystem ps = Instantiate(ExplosionEffects, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(ps.gameObject, ps.main.duration);
     }
 
     public void SetCharacterData(PlayerCharacters characterData)

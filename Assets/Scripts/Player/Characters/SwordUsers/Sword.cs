@@ -5,7 +5,6 @@ using UnityEngine;
 public class Sword : MonoBehaviour
 {
     private SwordCharacters SwordCharacters;
-    private Dictionary<Collider, bool> ChargeColliderList = new();
     [SerializeField] SwordSoundSO SwordSoundSO;
     [SerializeField] Transform SlashPivot;
     [SerializeField] Collider Collider;
@@ -18,10 +17,6 @@ public class Sword : MonoBehaviour
     public void SetCanHit(bool val)
     {
         Collider.enabled = val;
-        if (!Collider.enabled)
-        {
-            ChargeColliderList.Clear();
-        }
     }
     public SwordSoundSO GetSwordSoundSO()
     {
@@ -42,13 +37,16 @@ public class Sword : MonoBehaviour
         {
             SwordCharacters.GetSoundManager().PlaySFXSound(GetSwordSoundSO().GetRandomSwingClip());
         }
-        ChargeColliderList.Clear();
     }
-    private void OnTriggerStay(Collider other)
-    {
-        if (SwordCharacters.GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState() is not PlayerAttackState)
-            return;
 
+    private void LateUpdate()
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
         FriendlyKillers friendlyKillers = other.GetComponent<FriendlyKillers>();
         PlayerCharacters pc = other.GetComponent<PlayerCharacters>();
 
@@ -58,33 +56,25 @@ public class Sword : MonoBehaviour
         if (pc != null)
             return;
 
-
-        if (!ChargeColliderList.TryGetValue(other, out bool value))
+        IDamage damageObj = other.GetComponent<IDamage>();
+        if (damageObj != null)
         {
-            IDamage damageObj = other.GetComponent<IDamage>();
-            if (damageObj != null)
+            if (!damageObj.IsDead())
             {
-                if (other.GetComponent<PlayerCharacters>() != null)
-                    return;
+                Vector3 hitPosition = other.ClosestPointOnBounds(transform.position);
 
-                if (!damageObj.IsDead())
+                ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
+                Destroy(hitEffect.gameObject, hitEffect.main.duration);
+                damageObj.TakeDamage(hitPosition, new Elements(SwordCharacters.GetCurrentSwordElemental()), SwordCharacters.GetATK(), SwordCharacters);
+                SwordCharacters.GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
+
+
+                if (GetSwordSoundSO() != null)
                 {
-                    Vector3 hitPosition = other.ClosestPointOnBounds(transform.position);
-
-                    ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
-                    Destroy(hitEffect.gameObject, hitEffect.main.duration);
-                    damageObj.TakeDamage(damageObj.GetPointOfContact(), new Elements(SwordCharacters.GetCurrentSwordElemental()), SwordCharacters.GetATK(), SwordCharacters);
-                    SwordCharacters.GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
-
-
-                    if (GetSwordSoundSO() != null)
-                    {
-                        SwordCharacters.GetSoundManager().PlaySFXSound(GetSwordSoundSO().GetRandomHitClip());
-                    }
+                    SwordCharacters.GetSoundManager().PlaySFXSound(GetSwordSoundSO().GetRandomHitClip());
                 }
-
-                ChargeColliderList.Add(other, true);
             }
+
         }
     }
 }

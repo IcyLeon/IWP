@@ -135,16 +135,6 @@ public class Kaqing : SwordCharacters
 
     }
 
-    protected override bool ElementalBurstTrigger()
-    {
-        if (GetPlayerManager().CanPerformAction() && !GetPlayerManager().IsAiming())
-        {
-            base.ElementalBurstTrigger();
-        }
-
-        return false;
-    }
-
     public void UpdateTargetOrb()
     {
         if (targetOrb == null)

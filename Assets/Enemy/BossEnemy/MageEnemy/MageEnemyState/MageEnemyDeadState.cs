@@ -10,6 +10,7 @@ public class MageEnemyDeadState : MageEnemyState
     public override void Enter()
     {
         base.Enter();
+        GetMageEnemyStateMachine().GetMageEnemy().TurnOFFireBreathingCollider();
         GetMageEnemyStateMachine().GetMageEnemy().GetRB().useGravity = true;
         GetMageEnemyStateMachine().GetMageEnemy().GetRB().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationZ;
         GetMageEnemyStateMachine().GetMageEnemy().DisableAgent();

@@ -93,10 +93,8 @@ public class MageEnemy : BaseEnemy
         FireHitIntervalElapsed = Time.time;
     }
 
-    protected override void OnCollisionStay(Collision collision)
+    protected void OnCollisionStay(Collision collision)
     {
-        base.OnCollisionStay(collision);
-
         if (m_StateMachine.GetCurrentState() is not MageEnemyChargeAttackState)
             return;
 
@@ -197,7 +195,6 @@ public class MageEnemy : BaseEnemy
     {
         TurnOFFireBreathingCollider();
         CrystalsParent = GameObject.FindGameObjectWithTag("MageEntityTargetLocation");
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("BossEntity"), LayerMask.NameToLayer("Entity"));
         m_StateMachine = new MageEnemyStateMachine(this);
         base.Start();
     }

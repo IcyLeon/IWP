@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class PlayerGroundState : PlayerMovementState
@@ -94,6 +92,9 @@ public class PlayerGroundState : PlayerMovementState
 
     private void OnJump()
     {
+        if (IsAttacking())
+            return;
+
         GetPlayerState().ChangeState(GetPlayerState().playerJumpState);
     }
 }

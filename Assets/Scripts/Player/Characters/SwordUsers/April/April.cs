@@ -59,7 +59,10 @@ public class April : SwordCharacters
             if (dmg != null)
             {
                 if (!dmg.IsDead())
-                    dmg.TakeDamage(dmg.GetPointOfContact(), new Elements(GetPlayersSO().Elemental), 50, this);
+                {
+                    Vector3 hitPosition = colliders[i].ClosestPointOnBounds(GetPlayerManager().GetPlayerOffsetPosition().position);
+                    dmg.TakeDamage(hitPosition, new Elements(GetPlayersSO().Elemental), 50, this);
+                }
             }
         }
         ParticleSystem ps = Instantiate(ShieldExplosion, GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();

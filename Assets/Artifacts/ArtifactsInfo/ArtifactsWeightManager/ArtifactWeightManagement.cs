@@ -15,17 +15,23 @@ public class ArtifactWeightManagement : ScriptableObject
     }
 
     [Serializable]
+    public class ArtifactStatsValueInfo
+    {
+        public Rarity rarity;
+        public AnimationCurve CurveStatsValue;
+    }
+
+    [Serializable]
     public class StartingArtifactStatsHand
     {
         public Rarity rarity;
-        public float increaseValueRatio;
         public float value;
     }
 
     [Serializable]
     public class ArtifactMainStatsInfo
     {
-        public StartingArtifactStatsHand[] StartingArtifactStatsHand;
+        public ArtifactStatsValueInfo[] ArtifactStatsValueInfoList;
         public ArtifactsStat ArtifactsStat;
     }
 
@@ -120,7 +126,7 @@ public class ArtifactWeightManagement : ScriptableObject
         return null;
     }
 
-    public float GetArtifactIncreaseValue(ArtifactType ArtifactType, ArtifactsStat ArtifactsStat, Rarity rarity)
+    public AnimationCurve GetArtifactStatsValueInfo(ArtifactType ArtifactType, ArtifactsStat ArtifactsStat, Rarity rarity)
     {
         ArtifactMainStatsInfo[] list = GetArtifactMainStatsInfoList(ArtifactType);
 
@@ -128,40 +134,18 @@ public class ArtifactWeightManagement : ScriptableObject
         {
             if (list[i].ArtifactsStat == ArtifactsStat)
             {
-                for (int j = 0; j < list[i].StartingArtifactStatsHand.Length; j++)
+                for (int j = 0; j < list[i].ArtifactStatsValueInfoList.Length; j++)
                 {
-                    StartingArtifactStatsHand StartingArtifactStatsHand = list[i].StartingArtifactStatsHand[j];
-                    if (StartingArtifactStatsHand.rarity == rarity)
+                    ArtifactStatsValueInfo ArtifactStatsValueInfo = list[i].ArtifactStatsValueInfoList[j];
+                    if (ArtifactStatsValueInfo.rarity == rarity)
                     {
-                        return StartingArtifactStatsHand.increaseValueRatio;
+                        return ArtifactStatsValueInfo.CurveStatsValue;
                     }
                 }
             }
         }
 
-        return 0f;
-    }
-
-    public float GetArtifactStartingValue(ArtifactType ArtifactType, ArtifactsStat ArtifactsStat, Rarity rarity)
-    {
-        ArtifactMainStatsInfo[] list = GetArtifactMainStatsInfoList(ArtifactType);
-
-        for (int i = 0; i < list.Length; i++)
-        {
-            if (list[i].ArtifactsStat == ArtifactsStat)
-            {
-                for (int j = 0; j < list[i].StartingArtifactStatsHand.Length; j++)
-                {
-                    StartingArtifactStatsHand StartingArtifactStatsHand = list[i].StartingArtifactStatsHand[j];
-                    if (StartingArtifactStatsHand.rarity == rarity)
-                    {
-                        return StartingArtifactStatsHand.value;
-                    }
-                }
-            }
-        }
-
-        return 0f;
+        return null;
     }
     public ArtifactWeight GetArtifactWeight(ArtifactsStat ArtifactsStat)
     {

@@ -24,212 +24,1323 @@ MonoBehaviour:
     BaseCost: 3780
   artifactPossibleMainStatsList:
   - ArtifactMainStatsInfoList:
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 122
-        value: 430
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 430
+            inSlope: 121.916664
+            outSlope: 121.916664
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 1893
+            inSlope: 121.916664
+            outSlope: 121.916664
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 183
-        value: 645
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 645
+            inSlope: 182.875
+            outSlope: 182.875
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 3571
+            inSlope: 182.875
+            outSlope: 182.875
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 203
-        value: 717
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 717
+            inSlope: 203.15
+            outSlope: 203.15
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 4780
+            inSlope: 203.15
+            outSlope: 203.15
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 0
     ArtifactType: 0
   - ArtifactMainStatsInfoList:
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 8
-        value: 28
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 28
+            inSlope: 7.9166665
+            outSlope: 7.9166665
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 123
+            inSlope: 7.9166665
+            outSlope: 7.9166665
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 12
-        value: 42
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 42
+            inSlope: 11.875
+            outSlope: 11.875
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 232
+            inSlope: 11.875
+            outSlope: 11.875
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 13
-        value: 47
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 47
+            inSlope: 13.2
+            outSlope: 13.2
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 311
+            inSlope: 13.2
+            outSlope: 13.2
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 3
     ArtifactType: 1
   - ArtifactMainStatsInfoList:
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.8
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.8
+            inSlope: 1.65
+            outSlope: 1.65
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 25.6
+            inSlope: 1.65
+            outSlope: 1.65
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.8
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.98125
+            outSlope: 1.98125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 38.7
+            inSlope: 1.98125
+            outSlope: 1.98125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2
-        value: 7.8
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7.8
+            inSlope: 2.2
+            outSlope: 2.2
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 51.8
+            inSlope: 2.2
+            outSlope: 2.2
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 5
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.2
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 23.1
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.8
-        value: 6.3
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.3
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 34.8
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 46.6
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 7
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.8
-        value: 6.6
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.6
+            inSlope: 1.8499999
+            outSlope: 1.8499999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 28.8
+            inSlope: 1.8499999
+            outSlope: 1.8499999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 2.2
-        value: 7.9
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7.9
+            inSlope: 2.225
+            outSlope: 2.225
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 43.5
+            inSlope: 2.225
+            outSlope: 2.225
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2.5
-        value: 8.7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 8.7
+            inSlope: 2.48
+            outSlope: 2.48
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 58.3
+            inSlope: 2.48
+            outSlope: 2.48
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 6
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 5.9
-        value: 21
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 21
+            inSlope: 5.941667
+            outSlope: 5.941667
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 92.3
+            inSlope: 5.941667
+            outSlope: 5.941667
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 7.1
-        value: 25.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 25.2
+            inSlope: 7.1312504
+            outSlope: 7.1312504
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 139.3
+            inSlope: 7.1312504
+            outSlope: 7.1312504
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 7.9
-        value: 28
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 28
+            inSlope: 7.925
+            outSlope: 7.925
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 186.5
+            inSlope: 7.925
+            outSlope: 7.925
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 1
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.2
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 23.1
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.8
-        value: 6.3
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.3
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 34.8
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 46.6
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 4
     ArtifactType: 2
   - ArtifactMainStatsInfoList:
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.8
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.2
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 23.1
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.8
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.3
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 34.8
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2
-        value: 7.8
-      ArtifactsStat: 5
-    - StartingArtifactStatsHand:
-      - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.2
-      - rarity: 3
-        increaseValueRatio: 1.8
-        value: 6.3
-      - rarity: 4
-        increaseValueRatio: 2
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 46.6
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 7
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.8
-        value: 6.6
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.6
+            inSlope: 1.8499999
+            outSlope: 1.8499999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 28.8
+            inSlope: 1.8499999
+            outSlope: 1.8499999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 2.2
-        value: 7.9
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7.9
+            inSlope: 2.225
+            outSlope: 2.225
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 43.5
+            inSlope: 2.225
+            outSlope: 2.225
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2.5
-        value: 8.7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 8.7
+            inSlope: 2.48
+            outSlope: 2.48
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 58.3
+            inSlope: 2.48
+            outSlope: 2.48
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 6
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 5.9
-        value: 21
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 21
+            inSlope: 5.941667
+            outSlope: 5.941667
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 92.3
+            inSlope: 5.941667
+            outSlope: 5.941667
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 7.1
-        value: 25.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 25.2
+            inSlope: 7.1312504
+            outSlope: 7.1312504
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 139.3
+            inSlope: 7.1312504
+            outSlope: 7.1312504
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 7.9
-        value: 28
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 28
+            inSlope: 7.925
+            outSlope: 7.925
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 186.5
+            inSlope: 7.925
+            outSlope: 7.925
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 1
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.2
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 23.1
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.8
-        value: 6.3
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.3
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 34.8
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 46.6
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 4
     ArtifactType: 3
   - ArtifactMainStatsInfoList:
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.2
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 23.1
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.8
-        value: 6.3
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.3
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 34.8
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 46.6
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 7
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1.8
-        value: 6.6
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.6
+            inSlope: 1.8499999
+            outSlope: 1.8499999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 28.8
+            inSlope: 1.8499999
+            outSlope: 1.8499999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 2.2
-        value: 7.9
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7.9
+            inSlope: 2.225
+            outSlope: 2.225
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 43.5
+            inSlope: 2.225
+            outSlope: 2.225
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 2.5
-        value: 8.7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 8.7
+            inSlope: 2.48
+            outSlope: 2.48
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 58.3
+            inSlope: 2.48
+            outSlope: 2.48
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 6
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 5.9
-        value: 21
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 21
+            inSlope: 5.941667
+            outSlope: 5.941667
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 92.3
+            inSlope: 5.941667
+            outSlope: 5.941667
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 7.1
-        value: 25.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 25.2
+            inSlope: 7.1312504
+            outSlope: 7.1312504
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 139.3
+            inSlope: 7.1312504
+            outSlope: 7.1312504
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 7.9
-        value: 28
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 28
+            inSlope: 7.925
+            outSlope: 7.925
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 186.5
+            inSlope: 7.925
+            outSlope: 7.925
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 1
-    - StartingArtifactStatsHand:
+    - ArtifactStatsValueInfoList:
       - rarity: 2
-        increaseValueRatio: 1
-        value: 3.5
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 5.2
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 23.1
+            inSlope: 1.4916668
+            outSlope: 1.4916668
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 3
-        increaseValueRatio: 1.2
-        value: 4.2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 6.3
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 34.8
+            inSlope: 1.78125
+            outSlope: 1.78125
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       - rarity: 4
-        increaseValueRatio: 1.3
-        value: 4.7
-      ArtifactsStat: 8
-    - StartingArtifactStatsHand:
-      - rarity: 2
-        increaseValueRatio: 2
-        value: 7
-      - rarity: 3
-        increaseValueRatio: 2.4
-        value: 8.4
-      - rarity: 4
-        increaseValueRatio: 2.7
-        value: 9.3
-      ArtifactsStat: 9
-    - StartingArtifactStatsHand:
-      - rarity: 2
-        increaseValueRatio: 1.5
-        value: 5.2
-      - rarity: 3
-        increaseValueRatio: 1.8
-        value: 6.3
-      - rarity: 4
-        increaseValueRatio: 2
-        value: 7
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 46.6
+            inSlope: 1.9799999
+            outSlope: 1.9799999
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
       ArtifactsStat: 4
+    - ArtifactStatsValueInfoList:
+      - rarity: 2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 3.5
+            inSlope: 0.9916666
+            outSlope: 0.9916666
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 15.4
+            inSlope: 0.9916666
+            outSlope: 0.9916666
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - rarity: 3
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 4.2
+            inSlope: 1.1875
+            outSlope: 1.1875
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 23.2
+            inSlope: 1.1875
+            outSlope: 1.1875
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - rarity: 4
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 4.7
+            inSlope: 1.32
+            outSlope: 1.32
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 31.1
+            inSlope: 1.32
+            outSlope: 1.32
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      ArtifactsStat: 8
+    - ArtifactStatsValueInfoList:
+      - rarity: 2
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 7
+            inSlope: 1.9833332
+            outSlope: 1.9833332
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 12
+            value: 30.8
+            inSlope: 1.9833332
+            outSlope: 1.9833332
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - rarity: 3
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 8.4
+            inSlope: 2.375
+            outSlope: 2.375
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 16
+            value: 46.4
+            inSlope: 2.375
+            outSlope: 2.375
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - rarity: 4
+        CurveStatsValue:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 9.3
+            inSlope: 2.645
+            outSlope: 2.645
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 20
+            value: 62.2
+            inSlope: 2.645
+            outSlope: 2.645
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      ArtifactsStat: 9
     ArtifactType: 4
   artifactWeightsList:
   - Weight: 6
@@ -249,112 +1360,82 @@ MonoBehaviour:
   artifactPossibleSubStatsList:
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 143.4
     - rarity: 3
-      increaseValueRatio: 0
       value: 239
     - rarity: 4
-      increaseValueRatio: 0
       value: 298.75
     ArtifactsStat: 0
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 13.99
     - rarity: 3
-      increaseValueRatio: 0
       value: 18.65
     - rarity: 4
-      increaseValueRatio: 0
       value: 23.31
     ArtifactsStat: 1
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 11.11
     - rarity: 3
-      increaseValueRatio: 0
       value: 18.52
     - rarity: 4
-      increaseValueRatio: 0
       value: 23.15
     ArtifactsStat: 2
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 9.34
     - rarity: 3
-      increaseValueRatio: 0
       value: 15.56
     - rarity: 4
-      increaseValueRatio: 0
       value: 19.45
     ArtifactsStat: 3
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 3.5
     - rarity: 3
-      increaseValueRatio: 0
       value: 4.66
     - rarity: 4
-      increaseValueRatio: 0
       value: 5.83
     ArtifactsStat: 4
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 3.89
     - rarity: 3
-      increaseValueRatio: 0
       value: 5.18
     - rarity: 4
-      increaseValueRatio: 0
       value: 6.48
     ArtifactsStat: 5
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 4.37
     - rarity: 3
-      increaseValueRatio: 0
       value: 5.83
     - rarity: 4
-      increaseValueRatio: 0
       value: 7.29
     ArtifactsStat: 6
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 3.5
     - rarity: 3
-      increaseValueRatio: 0
       value: 4.66
     - rarity: 4
-      increaseValueRatio: 0
       value: 5.83
     ArtifactsStat: 7
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 2.33
     - rarity: 3
-      increaseValueRatio: 0
       value: 3.11
     - rarity: 4
-      increaseValueRatio: 0
       value: 3.89
     ArtifactsStat: 8
   - StartingArtifactStatsHand:
     - rarity: 2
-      increaseValueRatio: 0
       value: 4.66
     - rarity: 3
-      increaseValueRatio: 0
       value: 6.22
     - rarity: 4
-      increaseValueRatio: 0
       value: 7.77
     ArtifactsStat: 9
   PossibleNumberofStatsList:

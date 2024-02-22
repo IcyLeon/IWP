@@ -20,13 +20,26 @@ public class BossManager : MonoBehaviour
         EM.SpawnGroundUnitsWithinTerrain(charactersSO, terrain);
     }
 
+    private IEnumerator SetMusicTransition(float target, float sec)
+    {
+        float dt = 0;
+        float current = audioMusicSource.volume;
+
+        while (dt <= sec)
+        {
+            audioMusicSource.volume = Mathf.Lerp(current, target, dt / sec);
+            dt += Time.deltaTime;
+            yield return null;
+        }
+    }
+
     private void OnWaveComplete()
     {
         if (Teleporter != null)
             return;
 
         Teleporter = Instantiate(TeleporterPrefab, EnemyManager.GetRandomPointWithinTerrain(terrain), Quaternion.identity);
-        audioMusicSource.volume = 0f;
+        StartCoroutine(SetMusicTransition(-80f, 1f));
         AssetManager.CallSpawnArrow(Teleporter, Color.green);
 
         InventoryManager.GetInstance().AddCurrency(CurrencyType.CASH, Mathf.RoundToInt(180f + 180f * (EnemyManager.GetCurrentWave() - 1) * Random.Range(0.4f, 1f)));

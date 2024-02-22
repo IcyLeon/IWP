@@ -40,7 +40,8 @@ public class Explosion : MonoBehaviour
             IDamage damageObject = other.gameObject.GetComponent<IDamage>();
             if (damageObject != null && !damageObject.IsDead())
             {
-                damageObject.TakeDamage(damageObject.GetPointOfContact(), new Elements(elemental), dmg, source);
+                Vector3 hitPosition = other.ClosestPointOnBounds(transform.position);
+                damageObject.TakeDamage(hitPosition, new Elements(elemental), dmg, source);
             }
         }
     }

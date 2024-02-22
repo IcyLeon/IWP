@@ -78,7 +78,7 @@ public class BossUIManager : MonoBehaviour
             KeyValuePair<BossHealthBar, BaseEnemy> keyValuePair = BossEnemyUI_Dictionary.ElementAt(i);
             if (BossEnemyUI_Dictionary.TryGetValue(keyValuePair.Key, out BaseEnemy BE))
             {
-                if (BE == null)
+                if (BE == null || BE.IsDead())
                 {
                     BossEnemyUI_Dictionary.Remove(keyValuePair.Key);
                     Destroy(keyValuePair.Key.gameObject);

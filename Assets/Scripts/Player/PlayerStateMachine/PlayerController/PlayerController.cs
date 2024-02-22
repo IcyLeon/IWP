@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
-        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, ~LayerMask.GetMask("Ignore Raycast")))
         {
             return hit.point;
         }
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
 
     public RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
-        RaycastHit[] RaycastAll = Physics.RaycastAll(origin, direction.normalized, maxdistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        RaycastHit[] RaycastAll = Physics.RaycastAll(origin, direction.normalized, maxdistance, ~LayerMask.GetMask("Ignore Raycast"));
         return RaycastAll;
     }
 

@@ -14,9 +14,9 @@ public class DisplayArtifactStats : MonoBehaviour
     public void DisplayArtifactsStat(string Name, ArtifactStatsInfo a, Artifacts artifacts)
     {
         this.artifacts = artifacts;
-        string StatsValue = Mathf.Approximately(a.GetStatsValue(), Mathf.Round(a.GetStatsValue()))
-        ? a.GetStatsValue().ToString("F0")
-        : a.GetStatsValue().ToString("F1");
+        string StatsValue = ArtifactsManager.CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat())
+        ? a.GetStatsValue().ToString("F1")
+        : a.GetStatsValue().ToString("F0");
 
         if (ArtifactStatValueText)
         {
@@ -26,7 +26,7 @@ public class DisplayArtifactStats : MonoBehaviour
         else
             ArtifactStatNameText.text = Name + "+" + StatsValue;
 
-        if (CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat()))
+        if (ArtifactsManager.CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat()))
         {
             if (ArtifactStatValueText)
                 ArtifactStatValueText.text = StatsValue + "%";
@@ -41,22 +41,10 @@ public class DisplayArtifactStats : MonoBehaviour
         string statsValue = artifacts.GetNextMainStatsValue(increaselevelPreview).ToString();
         if (artifacts != null)
         {
-            if (CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat()))
+            if (ArtifactsManager.CheckIfInBetweenStats_PERCENT(a.GetArtifactsStat()))
                 ArtifactIncreasePreviewValueText.text = statsValue + "%";
             else                                        
                 ArtifactIncreasePreviewValueText.text = statsValue;
         }
-    }
-
-    public static bool CheckIfInBetweenStats_PERCENT(Artifacts.ArtifactsStat stat)
-    {
-        for (int i = (int)Artifacts.ArtifactsStat.HPPERCENT; i < (int)Artifacts.ArtifactsStat.TOTAL_STATS; i++)
-        {
-            if ((int)stat == i)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

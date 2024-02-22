@@ -9,6 +9,8 @@ public class ElementalReaction
     private ElementalReactionsManager elementalReactionsManager;
     public delegate void OnElementChanged(bool isChanged);
     public OnElementChanged onElementChanged;
+    private float DisableReactionElasped;
+    private const float DisableReactionTime = 0.15f;
 
     public void UpdateElementsList()
     {
@@ -55,11 +57,20 @@ public class ElementalReaction
 
 
         GetElementList().Clear();
+        DisableReaction();
 
         return trigger;
     }
 
+    private void DisableReaction()
+    {
+        DisableReactionElasped = Time.time;
+    }
 
+    private bool CanAddElements()
+    {
+        return Time.time - DisableReactionElasped > DisableReactionTime;
+    }
 
     public void AddElements(Elements elements)
     {
@@ -67,6 +78,9 @@ public class ElementalReaction
             return;
 
         if (elements.GetElements() == Elemental.NONE)
+            return;
+
+        if (!CanAddElements())
             return;
 
         Elements ExistingElements = isElementsAlreadyExisted(elements);
@@ -119,6 +133,7 @@ public class ElementalReaction
     public ElementalReaction()
     {
         ElementsList = new List<Elements>();
+        DisableReactionElasped = 0;
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
     }
 }

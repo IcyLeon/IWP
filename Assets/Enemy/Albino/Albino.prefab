@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ab9cb3a895aaf44828940669e02025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FootStepSO: {fileID: 0}
   CharactersSO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
   MiddlePositionTransform: {fileID: 494984}
   Animator: {fileID: 9545436}
@@ -113,9 +114,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!136 &5367633756893768036
 CapsuleCollider:
   m_ObjectHideFlags: 0

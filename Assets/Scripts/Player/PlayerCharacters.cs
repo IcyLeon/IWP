@@ -384,7 +384,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (characterData == null || !GetPlayerManager().CanPerformAction())
             return false;
 
-        if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost())
+        if (GetCharacterData().CanTriggerBurstSKill() && GetCharacterData().CanTriggerBurstSKillCost() && !GetPlayerManager().IsAiming())
         {
             characterData.ResetElementalBurstCooldown();
             GetPlayerCharacterState().ElementalBurstTrigger();
