@@ -26,11 +26,13 @@ namespace UnityEngine.Rendering.Toon.Universal.Samples
 		public float			dragForce;
 		public AnimationCurve	dragCurve;
 		public SpringBone[] springBones;
+		[SerializeField] string[] springBonesStartWithNames;
 
 		void Start ()
 		{
-			UpdateParameters ();
-		}
+            UpdateParameters ();
+
+        }
 
 #if UNITY_EDITOR
 		void Update ()
@@ -57,6 +59,39 @@ namespace UnityEngine.Rendering.Toon.Universal.Samples
 				}
 			}
 		}
+
+		[ContextMenu("Obtain Bones")]
+		public void GetAllBones()
+		{
+			Transform[] t = GetComponentsInChildren<Transform>();
+            foreach (Transform t2 in t)
+			{
+                SpringBone SB = t2.GetComponent<SpringBone>();
+				if (SB != null)
+				{
+					DestroyImmediate(SB, true);
+				}
+            }
+
+			foreach (Transform t2 in t)
+			{
+				if (t2.childCount > 0)
+				{
+					foreach (string s in springBonesStartWithNames)
+					{
+						if (t2.name.StartsWith(s))
+						{
+							t2.gameObject.AddComponent<SpringBone>();
+							SpringBone SB = t2.GetComponent<SpringBone>();
+							SB.child = t2.GetChild(0);
+							SB.boneAxis = Vector3.up;
+						}
+					}
+				}
+			}
+			springBones = GetComponentsInChildren<SpringBone>();
+
+        }
 
 		private void UpdateParameters ()
 		{
