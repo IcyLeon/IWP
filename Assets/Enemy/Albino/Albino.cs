@@ -345,8 +345,9 @@ public class Albino : BaseEnemy
                 if (pc.GetBurstActive())
                     return;
 
-                pc.TakeDamage(pc.transform.position, new Elements(Elemental.NONE), 100f, this);
-                pc.GetPlayerManager().GetCharacterRB().AddForce(((pc.GetPlayerManager().GetCharacterRB().position - pc.transform.position).normalized + Vector3.up).normalized * 15f, ForceMode.Impulse); ;
+                Elements e = pc.TakeDamage(pc.transform.position, new Elements(Elemental.NONE), 100f, this);
+                if (e != null)
+                    pc.GetPlayerManager().GetCharacterRB().AddForce(((pc.GetPlayerManager().GetCharacterRB().position - pc.transform.position).normalized + Vector3.up).normalized * 15f, ForceMode.Impulse); ;
             }
         }
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();

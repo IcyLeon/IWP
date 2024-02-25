@@ -27,7 +27,7 @@ public class PlayerDashState : PlayerGroundState
     //}
     private void Dash()
     {
-        if (Time.time - GetPlayerState().PlayerData.StartDashTime > GetPlayerState().PlayerData.TimeToBeConsideredConsecutive)
+        if (Time.time - GetPlayerState().PlayerData.StartDashTime > PlayerData.TimeToBeConsideredConsecutive)
         {
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
         }
@@ -45,7 +45,7 @@ public class PlayerDashState : PlayerGroundState
         if (!CheckIfisAboutToFall())
             rb.velocity = DashDirection * 10f;
 
-        if (GetPlayerState().PlayerData.consecutiveDashesUsed == GetPlayerState().PlayerData.ConsecutiveDashesLimitAmount)
+        if (GetPlayerState().PlayerData.consecutiveDashesUsed == PlayerData.ConsecutiveDashesLimitAmount)
         {
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
             DisableDash();

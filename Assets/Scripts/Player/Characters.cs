@@ -15,6 +15,7 @@ public interface IDamage {
     public float GetATK();
     public float GetEM();
     public object GetSource();
+    public bool CanTakeDamage();
     Elements TakeDamage(Vector3 position, Elements elements, float damageAmt, IDamage source, bool callHitInfo = true);
 }
 
@@ -255,7 +256,7 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
-        if (IsDead())
+        if (IsDead() || !CanTakeDamage())
             return null;
 
         Elemental elemental;
@@ -361,5 +362,10 @@ public class Characters : MonoBehaviour, IDamage
     public virtual object GetSource()
     {
         return this;
+    }
+
+    public virtual bool CanTakeDamage()
+    {
+        return true;
     }
 }

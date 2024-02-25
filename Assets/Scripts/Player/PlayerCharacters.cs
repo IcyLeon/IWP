@@ -22,6 +22,11 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return PlayerManager;
     }
 
+    public override bool CanTakeDamage()
+    {
+        return Time.time - GetPlayerManager().GetPlayerController().GetPlayerState().PlayerData.TimeForImmuneDamageElapsed > PlayerData.TimeForImmuneDamageTaken;
+    }
+
     public virtual void OnEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage d)
     {
 
@@ -107,7 +112,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     }
     public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
-        if (GetPlayerManager().isBurstState())
+        if (GetPlayerManager().isBurstState() || !GetModel().activeSelf)
             return null;
 
         if (characterData != null)

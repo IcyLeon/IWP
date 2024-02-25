@@ -294,4 +294,9 @@ public class FriendlyKillers : PurchaseableObjects, IDamage
     {
         return friendlyKillerData.GetOwner();
     }
+
+    public bool CanTakeDamage()
+    {
+        return true;
+    }
 }

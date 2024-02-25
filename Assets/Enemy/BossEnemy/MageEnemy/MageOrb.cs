@@ -167,4 +167,9 @@ public class MageOrb : MonoBehaviour, IDamage
     {
         return this;
     }
+
+    public bool CanTakeDamage()
+    {
+        return true;
+    }
 }

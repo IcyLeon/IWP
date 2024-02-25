@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+[RequireComponent(typeof(Collider))]
 public class KaqingTeleporter : MonoBehaviour
 {
     [SerializeField] GameObject ExplosionEffects;
@@ -34,9 +34,18 @@ public class KaqingTeleporter : MonoBehaviour
         this.elements = elements;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        PlayerCharacters pc = other.GetComponent<PlayerCharacters>();
+        if (pc != null)
+            return;
+
+        EnergyOrbMoving = false;
+    }
+
     private IEnumerator MoveToTargetLocation(float speed)
     {
-        while (transform.position != TargetLoc)
+        while (transform.position != TargetLoc && EnergyOrbMoving)
         {
             transform.position = Vector3.MoveTowards(transform.position, TargetLoc, speed * Time.deltaTime);
             yield return null;
@@ -59,7 +68,7 @@ public class KaqingTeleporter : MonoBehaviour
                 if (!damage.IsDead())
                 {
                     Vector3 hitPosition = collider.ClosestPointOnBounds(transform.position);
-                    damage.TakeDamage(hitPosition, elements, Kaqing.GetATK(), Kaqing);
+                    damage.TakeDamage(hitPosition, elements, Kaqing.GetATK() * 1.25f, Kaqing);
                 }
             }
         }

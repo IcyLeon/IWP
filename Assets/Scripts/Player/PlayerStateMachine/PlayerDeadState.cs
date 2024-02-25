@@ -36,6 +36,7 @@ public class PlayerDeadState : PlayerMovementState
     private void ChangeCharacter()
     {
         GetPlayerState().GetPlayerController().GetPlayerManager().SwapCharacters(GetAliveCharacters(), true);
+        GetPlayerState().PlayerData.TimeForImmuneDamageElapsed = Time.time;
     }
 
     private CharacterData GetAliveCharacters()

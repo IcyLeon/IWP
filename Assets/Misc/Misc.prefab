@@ -106,7 +106,7 @@ MonoBehaviour:
     type: 3}
   CrossHair: {fileID: 8100762868000659337, guid: 35cd60bf475dacb45a6480fe5d70705f,
     type: 3}
-  HitEffect: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8,
+  HitEffect: {fileID: 7406095534841664015, guid: b03f41a81951a56479c8334049b8888c,
     type: 3}
   HitExplosion: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473,
     type: 3}

@@ -404,7 +404,7 @@ public class PlayerMovementState : IState
             return;
         }
 
-        float smoothedYAngle = Mathf.SmoothDampAngle(currentYAngle, GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, ref GetPlayerState().PlayerData.dampedTargetRotationCurrentVelocity, GetPlayerState().PlayerData.timeToReachTargetRotation - GetPlayerState().PlayerData.dampedTargetRotationPassedTime);
+        float smoothedYAngle = Mathf.SmoothDampAngle(currentYAngle, GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, ref GetPlayerState().PlayerData.dampedTargetRotationCurrentVelocity, PlayerData.timeToReachTargetRotation - GetPlayerState().PlayerData.dampedTargetRotationPassedTime);
         GetPlayerState().PlayerData.dampedTargetRotationPassedTime += Time.deltaTime;
 
         Quaternion targetRotation = Quaternion.Euler(0f, smoothedYAngle, 0f);

@@ -24,11 +24,9 @@ public class PlayerManager : MonoBehaviour
 
     public delegate void OnCharacterChange(CharacterData characterData, PlayerCharacters playerCharacters);
     public static OnCharacterChange onCharacterChange;
-    public delegate void OnEntityHit(ElementalReactionsTrigger ER, Elements e, IDamage IDamage);
-    public static OnEntityHit onEntityHitSendInfo;
+    public static Action<ElementalReactionsTrigger, Elements, IDamage> onEntityHitSendInfo;
     public static Action<GadgetItem> OnGadgetItemChange = delegate { };
     private ItemCollectedUI ItemCollectedUI;
-
     private GadgetItem currentEquipGadgetItem;
 
     public static void CallEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage IDamage)
