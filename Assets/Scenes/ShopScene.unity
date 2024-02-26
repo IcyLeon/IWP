@@ -181,7 +181,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 4
+  m_CameraDistance: 3.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -488,7 +488,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &236052561
 PrefabInstance:
@@ -1312,6 +1312,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1741218322945949887, guid: 9d67fce8649e5e64dae6a91c08c83d40,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1741218323022525702, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
       propertyPath: m_SizeDelta.y
@@ -1320,7 +1325,7 @@ PrefabInstance:
     - target: {fileID: 1741218323022525702, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.001002013
       objectReference: {fileID: 0}
     - target: {fileID: 1898017099944317562, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
@@ -3092,7 +3097,7 @@ Transform:
   - {fileID: 2126074297}
   - {fileID: 326536009}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &608906737
 PrefabInstance:
@@ -3343,7 +3348,7 @@ PrefabInstance:
     - target: {fileID: 5702070931007079290, guid: da378460dd3953b478a399e3719d4627,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5702070931007079290, guid: da378460dd3953b478a399e3719d4627,
         type: 3}
@@ -3710,7 +3715,7 @@ RectTransform:
   - {fileID: 579213907}
   - {fileID: 868467912}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3762,7 +3767,7 @@ Transform:
   - {fileID: 1085881158}
   - {fileID: 1512910917}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1371584327
 GameObject:
@@ -3825,7 +3830,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.2
+  m_Intensity: 0.35
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3867,7 +3872,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 0.3
+  m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -3888,7 +3893,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 170.5, y: -30, z: 0}
 --- !u!114 &1484765492
 MonoBehaviour:
@@ -4233,7 +4238,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1817642050
 PrefabInstance:
@@ -4250,7 +4255,7 @@ PrefabInstance:
     - target: {fileID: 8247322821960482793, guid: a9a38326e630da14ea01acb43e9bc415,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8247322821960482793, guid: a9a38326e630da14ea01acb43e9bc415,
         type: 3}
@@ -24407,7 +24412,7 @@ PrefabInstance:
     - target: {fileID: 596789828369248711, guid: bb084403bdc3b1f469f1a51ee2ba0432,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 596789828369248711, guid: bb084403bdc3b1f469f1a51ee2ba0432,
         type: 3}

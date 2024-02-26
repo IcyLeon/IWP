@@ -9,7 +9,6 @@ public class PlayerMovementState : IState
     private PlayerState PlayerState;
     private float WalkSpeed;
     private float Speed;
-    protected Rigidbody rb;
     private float DecelerateForce = 4.5f;
     private PlayerCharacters playerCharacter;
     protected void SetSpeedModifier(float sp)
@@ -59,7 +58,6 @@ public class PlayerMovementState : IState
     }
     public virtual void Enter()
     {
-        rb = GetPlayerState().GetPlayerController().GetPlayerManager().GetCharacterRB();
     }
 
     public virtual void Exit()
@@ -101,7 +99,7 @@ public class PlayerMovementState : IState
 
     public virtual void Update()
     {
-        rb = GetPlayerState().GetPlayerController().GetPlayerManager().GetCharacterRB();
+        GetPlayerState().rb = GetPlayerState().GetPlayerController().GetPlayerManager().GetCharacterRB();
         UpdatePreviousPosition();
 
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
@@ -131,7 +129,7 @@ public class PlayerMovementState : IState
         }
 
         Vector3 limitVel = new Vector3(0f, -FallSpeedLimit - velocity.y, 0f);
-        rb.AddForce(limitVel, ForceMode.VelocityChange);
+        GetPlayerState().rb.AddForce(limitVel, ForceMode.VelocityChange);
 
     }
     public virtual float GetAnimationSpeed()
@@ -152,58 +150,22 @@ public class PlayerMovementState : IState
         return slopeSpeedModifier;
     }
 
-    private RaycastHit GetClosestRaycastHit(RaycastHit[] raycastHits)
+    protected void Float()
     {
-        List<RaycastHit> validHits = new List<RaycastHit>(raycastHits);
-
-        if (validHits.Count == 0)
-            return default(RaycastHit);
-
-        float closestDistance = float.MaxValue;
-        RaycastHit closestHit = validHits[0];
-
-        for (int i = validHits.Count - 1; i >= 0; i--)
-        {
-            IDamage damageComponent = validHits[i].collider.GetComponent<IDamage>();
-
-            if (damageComponent != null && damageComponent.IsDead())
-            {
-                if (closestHit.collider == validHits[i].collider)
-                {
-                    closestHit = default(RaycastHit);
-                }
-                validHits.RemoveAt(i);
-                continue;
-            }
-
-            // Check if the current hit is closer than the current closestHit
-            if (validHits[i].distance < closestDistance)
-            {
-                closestDistance = validHits[i].distance;
-                closestHit = validHits[i];
-            }
-        }
-        return closestHit;
-    }
-
-    protected void Float(bool ignoreEnemies = false)
-    {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return;
 
         if (GetPlayerState().GetPlayerController().GetResizeableCollider() == null || GetCapsuleCollider() == null)
             return;
 
-        if (!rb.useGravity)
+        if (!GetPlayerState().rb.useGravity)
             return;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
 
         Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
-        RaycastHit[] raycastHits = Physics.RaycastAll(capsuleColliderCenterInWorldSpace, Vector3.down, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore);
-        RaycastHit hit = GetClosestRaycastHit(raycastHits);
 
-        if (hit.collider != null)
+        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore))
         {
             float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 
@@ -218,7 +180,7 @@ public class PlayerMovementState : IState
             SetSpeedModifier(slopeSpeedModifier);
 
             GetPlayerState().PlayerData.HitDistance = hit.distance;
-            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - hit.distance;
+            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * GetPlayerState().rb.transform.localScale.y - hit.distance;
 
             if (distanceToFloatingPoint == 0f)
             {
@@ -228,29 +190,29 @@ public class PlayerMovementState : IState
             float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
 
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
-            rb.AddForce(liftForce, ForceMode.VelocityChange);
+            GetPlayerState().rb.AddForce(liftForce, ForceMode.VelocityChange);
         }
         else
         {
-            if (!IsTouchingTerrain(ignoreEnemies))
+            if (!IsTouchingTerrain())
                 return;
 
-            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * rb.transform.localScale.y - GetPlayerState().PlayerData.HitDistance;
+            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * GetPlayerState().rb.transform.localScale.y - GetPlayerState().PlayerData.HitDistance;
             float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
 
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
-            rb.AddForce(liftForce, ForceMode.VelocityChange);
+            GetPlayerState().rb.AddForce(liftForce, ForceMode.VelocityChange);
         }
     }
 
     public bool CheckIfisAboutToFall()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return false;
 
         float horizontalDisCheck = 1f;
-        float verticalDisCheck = 1.5f;
-        Vector3 dir = rb.velocity;
+        float verticalDisCheck = 2f;
+        Vector3 dir = GetPlayerState().rb.velocity;
         if (dir == Vector3.zero)
         {
             dir = GetPlayerState().GetPlayerController().transform.forward;
@@ -260,7 +222,7 @@ public class PlayerMovementState : IState
         dir.y = 0f;
         dir.Normalize();
 
-        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore))
         {
             return false;
         }
@@ -275,7 +237,7 @@ public class PlayerMovementState : IState
 
     private void UpdatePreviousPosition()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return;
 
         if (this is not PlayerGroundState)
@@ -285,7 +247,7 @@ public class PlayerMovementState : IState
             return;
 
 
-        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore))
         {
             GetPlayerState().PlayerData.PreviousPosition = hit.point;
         }
@@ -293,7 +255,7 @@ public class PlayerMovementState : IState
 
     private void UpdatePhysicsMovement()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return;
 
 
@@ -313,15 +275,15 @@ public class PlayerMovementState : IState
         if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable || GetPlayerState().PlayerData.SpeedModifier == 0)
             return;
 
-        rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+        GetPlayerState().rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
     protected bool IsTouchingTerrain(bool ignoreEnemies = false)
     {
-        if (rb == null || GetCapsuleCollider() == null)
+        if (GetPlayerState().rb == null || GetCapsuleCollider() == null)
             return false;
 
-        if (!rb.useGravity)
+        if (!GetPlayerState().rb.useGravity)
             return false;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
@@ -377,7 +339,7 @@ public class PlayerMovementState : IState
         GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
 
         Quaternion targetRotation = Quaternion.Euler(0f, GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, 0f);
-        rb.MoveRotation(targetRotation);
+        GetPlayerState().rb.MoveRotation(targetRotation);
 
     }
 
@@ -393,10 +355,10 @@ public class PlayerMovementState : IState
 
     private void RotateTowardsTargetRotation()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return;
 
-        float currentYAngle = rb.rotation.eulerAngles.y;
+        float currentYAngle = GetPlayerState().rb.rotation.eulerAngles.y;
 
         if (currentYAngle == GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y)
         {
@@ -409,37 +371,37 @@ public class PlayerMovementState : IState
 
         Quaternion targetRotation = Quaternion.Euler(0f, smoothedYAngle, 0f);
 
-        rb.MoveRotation(targetRotation);
+        GetPlayerState().rb.MoveRotation(targetRotation);
     }
 
     protected Vector3 GetHorizontalVelocity()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return Vector3.zero;
 
-        Vector3 vel = rb.velocity;
+        Vector3 vel = GetPlayerState().rb.velocity;
         vel.y = 0;
         return vel;
     }
 
     protected Vector3 GetVerticalVelocity()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return Vector3.zero;
 
-        return new Vector3(0f, rb.velocity.y, 0f);
+        return new Vector3(0f, GetPlayerState().rb.velocity.y, 0f);
     }
 
 
     protected void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        rb.AddForce(-playerVerticalVelocity * DecelerateForce, ForceMode.Acceleration);
+        GetPlayerState().rb.AddForce(-playerVerticalVelocity * DecelerateForce, ForceMode.Acceleration);
     }
     protected void DecelerateHorizontal()
     {
         Vector3 playerHorizontalVelocity = GetHorizontalVelocity();
-        rb.AddForce(-playerHorizontalVelocity * DecelerateForce, ForceMode.Acceleration);
+        GetPlayerState().rb.AddForce(-playerHorizontalVelocity * DecelerateForce, ForceMode.Acceleration);
     }
 
     protected bool IsMovingUp(float minimumVelocity = 0f)
@@ -460,20 +422,20 @@ public class PlayerMovementState : IState
 
     public void ResetVelocity()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return;
 
-        rb.velocity = Vector3.zero;
+        GetPlayerState().rb.velocity = Vector3.zero;
     }
 
     protected void ResetVerticalVelocity()
     {
-        if (rb == null)
+        if (GetPlayerState().rb == null)
             return;
 
-        Vector3 vel = rb.velocity;
+        Vector3 vel = GetPlayerState().rb.velocity;
         vel.y = 0;
-        rb.velocity = vel;
+        GetPlayerState().rb.velocity = vel;
     }
 
     private void GatherInput()
@@ -500,9 +462,5 @@ public class PlayerMovementState : IState
     public virtual void OnAnimationTransition()
     {
 
-    }
-
-    public virtual void OnAnimationEventCustomCall()
-    {
     }
 }

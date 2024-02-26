@@ -12,14 +12,14 @@ public class PlayerPlungeState : PlayerAirborneState
     {
         base.Enter();
         ResetVelocity();
-        rb.useGravity = false;
+        GetPlayerState().rb.useGravity = false;
         GetPlayerState().GetPlayerController().GetCapsuleCollider().isTrigger = true;
         StartAnimation("isPlunging");
     }
     public override void Exit()
     {
         base.Exit();
-        rb.useGravity = true;
+        GetPlayerState().rb.useGravity = true;
         GetPlayerState().GetPlayerController().GetCapsuleCollider().isTrigger = false;
         OnPlungeAttack();
         StopAnimation("isPlunging");
@@ -34,15 +34,15 @@ public class PlayerPlungeState : PlayerAirborneState
 
     public override void OnAnimationTransition()
     {
-        rb.useGravity = true;
+        GetPlayerState().rb.useGravity = true;
     }
 
     public override void FixedUpdate()
     {
-        Float(true);
-        if (rb.useGravity)
+        Float();
+        if (GetPlayerState().rb.useGravity)
         {
-            rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
+            GetPlayerState().rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
             LimitFallVelocity();
         }
     }

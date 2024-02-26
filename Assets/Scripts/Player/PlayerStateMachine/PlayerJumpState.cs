@@ -31,7 +31,7 @@ public class PlayerJumpState : PlayerAirborneState
 
         Vector3 JumpForceDir = GetPlayerState().PlayerData.CurrentJumpForceXZ * direction.normalized;
         JumpForceDir.y = JumpForce;
-        rb.AddForce(JumpForceDir, ForceMode.VelocityChange);
+        GetPlayerState().rb.AddForce(JumpForceDir, ForceMode.VelocityChange);
     }
 
     public override void FixedUpdate()

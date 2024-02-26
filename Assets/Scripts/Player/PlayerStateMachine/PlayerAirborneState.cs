@@ -27,9 +27,8 @@ public class PlayerAirborneState : PlayerMovementState
     private void CheckPlunge()
     {
         float PlungeAttackRange = 2f;
-        int layerMask = Physics.DefaultRaycastLayers;
 
-        if (!Physics.Raycast(rb.position, Vector3.down, PlungeAttackRange, layerMask, QueryTriggerInteraction.Ignore) && !IsTouchingTerrain())
+        if (!Physics.Raycast(GetPlayerState().rb.position, Vector3.down, PlungeAttackRange, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore) && !IsTouchingTerrain())
         {
             if (Input.GetMouseButtonDown(0) && this is not PlayerPlungeState && !GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
             {

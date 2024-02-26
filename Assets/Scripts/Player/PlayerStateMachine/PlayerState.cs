@@ -15,6 +15,8 @@ public class PlayerState
 {
     private IState currentState;
 
+    public Rigidbody rb;
+
     private PlayerController PlayerController;
 
     public PlayerData PlayerData;

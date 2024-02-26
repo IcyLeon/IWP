@@ -36,7 +36,7 @@ public class Frog : BaseEnemy
     }
 
     // Update is called once per frame
-    void UpdateState()
+    protected override void UpdateState()
     {
         if (NavMeshAgent == null)
             return;

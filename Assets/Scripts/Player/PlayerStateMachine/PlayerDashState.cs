@@ -43,7 +43,7 @@ public class PlayerDashState : PlayerGroundState
         SetTargetRotation(Quaternion.LookRotation(DashDirection));
 
         if (!CheckIfisAboutToFall())
-            rb.velocity = DashDirection * 10f;
+            GetPlayerState().rb.velocity = DashDirection * 10f;
 
         if (GetPlayerState().PlayerData.consecutiveDashesUsed == PlayerData.ConsecutiveDashesLimitAmount)
         {
@@ -65,7 +65,7 @@ public class PlayerDashState : PlayerGroundState
 
         if (GetInputDirection() != Vector3.zero)
         {
-            rb.velocity = GetPlayerState().PlayerData.Direction * rb.velocity.magnitude;
+            GetPlayerState().rb.velocity = GetPlayerState().PlayerData.Direction * GetPlayerState().rb.velocity.magnitude;
         }
 
         if (CheckIfisAboutToFall())

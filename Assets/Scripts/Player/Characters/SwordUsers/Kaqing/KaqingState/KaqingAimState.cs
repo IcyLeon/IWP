@@ -43,7 +43,6 @@ public class KaqingAimState : KaqingElementalSkillState
 
     public override void Exit()
     {
-        base.Exit();
         GetKaqingState().GetKaqing().DestroyTargetOrb();
     }
 }

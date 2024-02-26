@@ -1259,7 +1259,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 8d407c572ffcdd64a8093245d978392e, type: 3}
   m_Controller: {fileID: 9100000, guid: e029e430e913b374387843833ab0b593, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1327,7 +1327,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!136 &1002647185652568759
 CapsuleCollider:
   m_ObjectHideFlags: 0
