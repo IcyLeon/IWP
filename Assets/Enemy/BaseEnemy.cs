@@ -210,7 +210,7 @@ public class BaseEnemy : Characters
         bool isdead = base.UpdateDie();
         if (isdead)
         {
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            gameObject.layer = LayerMask.NameToLayer("Ignore Collision");
 
             if (healthBarScript)
             {

@@ -260,25 +260,6 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: "blendShape.\u306B\u3063\u3053\u308A"
-    path: "\u523B\u6674_mesh"
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 3
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
     attribute: "blendShape.\u03C9"
     path: "\u523B\u6674_mesh"
     classID: 137
@@ -9557,13 +9538,6 @@ AnimationClip:
       isPPtrCurve: 0
     - serializedVersion: 2
       path: 3336198790
-      attribute: 1438629341
-      script: {fileID: 0}
-      typeID: 137
-      customType: 20
-      isPPtrCurve: 0
-    - serializedVersion: 2
-      path: 3336198790
       attribute: 2581586682
       script: {fileID: 0}
       typeID: 137
@@ -10278,25 +10252,6 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: "blendShape.\u306B\u3084\u308A\uFF12"
-    path: "\u523B\u6674_mesh"
-    classID: 137
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 3
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: "blendShape.\u306B\u3063\u3053\u308A"
     path: "\u523B\u6674_mesh"
     classID: 137
     script: {fileID: 0}

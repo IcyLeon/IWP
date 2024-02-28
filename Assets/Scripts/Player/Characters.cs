@@ -207,7 +207,7 @@ public class Characters : MonoBehaviour, IDamage
             if (c != null)
             {
                 Vector3 dir = currentPos - c.GetPointOfContact();
-                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, ~LayerMask.GetMask("Entity", "Ignore Raycast", "BossEntity"), QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
                 {
                     if (hit.collider.GetComponent<PlayerCharacters>() == null)
                     {

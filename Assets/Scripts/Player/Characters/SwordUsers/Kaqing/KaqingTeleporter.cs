@@ -40,6 +40,9 @@ public class KaqingTeleporter : MonoBehaviour
         if (pc != null)
             return;
 
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ignore Raycast") || other.gameObject.layer == LayerMask.NameToLayer("Ignore Collision"))
+            return;
+
         EnergyOrbMoving = false;
     }
 

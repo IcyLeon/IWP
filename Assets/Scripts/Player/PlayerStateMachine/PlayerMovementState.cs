@@ -165,7 +165,7 @@ public class PlayerMovementState : IState
 
         Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
 
-        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
         {
             float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 
@@ -222,7 +222,7 @@ public class PlayerMovementState : IState
         dir.y = 0f;
         dir.Normalize();
 
-        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, dir, horizontalDisCheck, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
         {
             return false;
         }
@@ -247,7 +247,7 @@ public class PlayerMovementState : IState
             return;
 
 
-        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(GetPlayerState().GetPlayerController().GetPlayerManager().GetPlayerOffsetPosition().position, Vector3.down, out RaycastHit hit, float.MaxValue, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
         {
             GetPlayerState().PlayerData.PreviousPosition = hit.point;
         }
@@ -287,7 +287,7 @@ public class PlayerMovementState : IState
             return false;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
-        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast"), QueryTriggerInteraction.Ignore);
+        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore);
         List<Collider> colliderCopy = new(Colliders);
         for(int i = colliderCopy.Count - 1; i >= 0; i--)
         {

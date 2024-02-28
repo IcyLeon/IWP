@@ -53,7 +53,7 @@ public class HealingDrone : FriendlyKillers
 
     private void Heal()
     {
-        Collider[] colliders = GetAllNearestIDamage(transform.position, GetDetectionRange(), LayerMask.GetMask("Player"), ~LayerMask.GetMask("Ignore Raycast"));
+        Collider[] colliders = GetAllNearestIDamage(transform.position, GetDetectionRange(), LayerMask.GetMask("Player"), ~LayerMask.GetMask("Ignore Raycast, Ignore Collision"));
         for (int i = 0; i < colliders.Length; i++)
         {
             PlayerCharacters pc = colliders[i].GetComponent<PlayerCharacters>();

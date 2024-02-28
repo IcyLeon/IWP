@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerStats
 {
-    private int Load;
-    private int MaxLoad;
     private int coins;
     private int cash;
     List<CharacterData> CharactersOwnedList;
@@ -106,8 +104,6 @@ public class PlayerStats
 
     public PlayerStats()
     {
-        Load = 0;
-        MaxLoad = 10000;
         coins = 0;
         InventoryList = new List<Item>();
         CharactersOwnedList = new List<CharacterData>();

@@ -6,8 +6,16 @@ using Cinemachine;
 public class CameraManager : MonoBehaviour
 {
     private PlayerController playerController;
+    [SerializeField] Transform CameraParent;
     [SerializeField] CinemachineVirtualCamera playerCamera;
     [SerializeField] CinemachineVirtualCamera aimCamera;
+    [SerializeField][Range(0f, 20f)] float ZoomSoothing = 4f;
+    [SerializeField][Range(0f, 10f)] float MinDistance = 1f;
+    [SerializeField][Range(0f, 10f)] float MaxDistance = 4f;
+    private CinemachinePOV playerPOV;
+    private CinemachinePOV aimPOV;
+    private CinemachineFramingTransposer CFT;
+    private float targetDistance;
     private Coroutine ScreenShakeCoroutine;
 
     public GameObject GetAimCamera()
@@ -55,9 +63,6 @@ public class CameraManager : MonoBehaviour
 
     private void LockWhenPaused()
     {
-        CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
-        CinemachinePOV aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
-
         if (!playerController.isCursorVisible())
         {
             if (playerPOV != null)
@@ -97,6 +102,7 @@ public class CameraManager : MonoBehaviour
 
         playerCamera.Follow = playerController.GetPlayerManager().GetPlayerOffsetPosition();
         aimCamera.Follow = playerCamera.Follow;
+
         LockWhenPaused();
         //Vector3 d = testCamera.LookAt.position - (playerController.GetPlayerOffsetPosition().position);
         //d.Normalize();
@@ -108,8 +114,6 @@ public class CameraManager : MonoBehaviour
     }
     private IEnumerator RecenteringCoroutine()
     {
-        CinemachinePOV playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
-
         playerPOV.m_HorizontalRecentering.m_enabled = true;
         yield return new WaitForSeconds(playerPOV.m_HorizontalRecentering.m_WaitTime);
         yield return new WaitForSeconds(playerPOV.m_HorizontalRecentering.m_RecenteringTime);
@@ -126,6 +130,35 @@ public class CameraManager : MonoBehaviour
         aimCamera.gameObject.SetActive(true);
     }
 
+    private void Awake()
+    {
+        PlayerController.OnScroll += Zoom;
+
+        CFT = playerCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+        playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
+        aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
+        CameraParent.transform.SetParent(null);
+        targetDistance = MaxDistance;
+    }
+
+    private void OnDestroy()
+    {
+        PlayerController.OnScroll -= Zoom;
+    }
+
+    private void Zoom(float scroll)
+    {
+        targetDistance = Mathf.Clamp(targetDistance + (scroll * -1), MinDistance, MaxDistance);
+    }
+
+    private void UpdateZoom()
+    {
+        if (targetDistance == CFT.m_CameraDistance)
+            return;
+
+        CFT.m_CameraDistance = Mathf.Lerp(CFT.m_CameraDistance, targetDistance, ZoomSoothing * Time.deltaTime);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -136,5 +169,6 @@ public class CameraManager : MonoBehaviour
     void Update()
     {
         UpdateCamera();
+        UpdateZoom();
     }
 }

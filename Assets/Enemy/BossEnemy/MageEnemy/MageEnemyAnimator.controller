@@ -761,6 +761,31 @@ AnimatorTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 1
+--- !u!1101 &-3409603028579469304
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: isDead
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 0}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 1
+  serializedVersion: 3
+  m_TransitionDuration: 0.15
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 2
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1109 &-3155608606319792531
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -1256,6 +1281,7 @@ AnimatorState:
   - {fileID: -8355075852173281285}
   - {fileID: -6939323547050144940}
   - {fileID: -6045037760264469952}
+  - {fileID: -3409603028579469304}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -1428,14 +1454,14 @@ AnimatorStateMachine:
   m_EntryTransitions:
   - {fileID: -6775473036465930762}
   m_StateMachineTransitions:
-  - first: {fileID: 9048348319683511446}
-    second:
-    - {fileID: 4923390442707431136}
-    - {fileID: -3155608606319792531}
   - first: {fileID: 2192750315435418368}
     second:
     - {fileID: 2146836292268510996}
     - {fileID: 4602051569193085397}
+  - first: {fileID: 9048348319683511446}
+    second:
+    - {fileID: 4923390442707431136}
+    - {fileID: -3155608606319792531}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 180, y: 140, z: 0}
   m_EntryPosition: {x: 180, y: 312, z: 0}
@@ -2255,6 +2281,22 @@ AnimatorStateMachine:
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
+  - first: {fileID: -3508100104139773444}
+    second:
+    - {fileID: -8890287880398212576}
+    - {fileID: -3507185307635060900}
+    - {fileID: -91640694473058597}
+  - first: {fileID: -7546718198579998717}
+    second:
+    - {fileID: 5573373384103506884}
+    - {fileID: 7614547307947255710}
+    - {fileID: -4865251647646906141}
+    - {fileID: -5999179668519095859}
+  - first: {fileID: -8542781646683155581}
+    second:
+    - {fileID: 1817379872498592808}
+    - {fileID: 41111233871604034}
+    - {fileID: 2506405301386170644}
   - first: {fileID: 8118308710764676280}
     second:
     - {fileID: 4234958302696067504}
@@ -2262,22 +2304,6 @@ AnimatorStateMachine:
     second:
     - {fileID: 8319394217638108826}
     - {fileID: 7369116166417312381}
-  - first: {fileID: -7546718198579998717}
-    second:
-    - {fileID: 5573373384103506884}
-    - {fileID: 7614547307947255710}
-    - {fileID: -4865251647646906141}
-    - {fileID: -5999179668519095859}
-  - first: {fileID: -3508100104139773444}
-    second:
-    - {fileID: -8890287880398212576}
-    - {fileID: -3507185307635060900}
-    - {fileID: -91640694473058597}
-  - first: {fileID: -8542781646683155581}
-    second:
-    - {fileID: 1817379872498592808}
-    - {fileID: 41111233871604034}
-    - {fileID: 2506405301386170644}
   - first: {fileID: -2239127536902295557}
     second:
     - {fileID: 6613751424658933352}
