@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BowCharactersState : PlayerCharacterState
 {
-    public BowData BowData;
     public BowAimState bowAimState { get; }
     public BowIdleState bowIdleState;
 
@@ -21,7 +20,13 @@ public class BowCharactersState : PlayerCharacterState
 
     public BowCharactersState(Characters Characters) : base(Characters)
     {
-        BowData = new BowData();
+        CommonCharactersData = new BowData(1);
         bowAimState = new BowAimState(this);
+    }
+
+    public BowData GetBowData()
+    {
+        BowData bowData = CommonCharactersData as BowData;
+        return bowData;
     }
 }

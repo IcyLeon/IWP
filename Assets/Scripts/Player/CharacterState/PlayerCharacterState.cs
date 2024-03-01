@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class PlayerCharacterState : CharacterState
 {
+    public CommonCharactersData CommonCharactersData;
+
     public PlayerCharacterState(Characters Characters) : base(Characters)
     {
         GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().Subscribe(GetPlayerCharacters());
+        ResetBasicAttacks();
     }
 
     public PlayerCharacters GetPlayerCharacters()
@@ -67,4 +70,22 @@ public class PlayerCharacterState : CharacterState
 
         return p;
     }
+
+    public void ResetBasicAttacks()
+    {
+        if (CommonCharactersData == null)
+            return;
+
+        CommonCharactersData.BasicAttackPhase = 0;
+
+        for (int i = 1; i <= CommonCharactersData.MaxAttackPhase; i++)
+        {
+            string AtkName = "Attack" + i;
+            if (Characters.ContainsParam(Characters.GetAnimator(), AtkName))
+                Characters.GetAnimator().SetBool(AtkName, false);
+        }
+
+        GetPlayerCharacters().ResetAttack();
+    }
+
 }

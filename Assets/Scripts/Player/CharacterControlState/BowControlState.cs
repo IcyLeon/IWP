@@ -12,8 +12,8 @@ public class BowControlState : PlayerControlState
 
     protected void ResetCharge()
     {
-        GetBowCharactersState().BowData.CurrentElemental = Elemental.NONE;
-        GetBowCharactersState().BowData.ChargeElapsed = 0;
+        GetBowCharactersState().GetBowData().CurrentElemental = Elemental.NONE;
+        GetBowCharactersState().GetBowData().ChargeElapsed = 0;
     }
 
     public BowControlState(PlayerCharacterState pcs) : base(pcs)

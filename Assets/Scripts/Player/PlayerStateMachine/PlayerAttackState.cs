@@ -9,10 +9,6 @@ public class PlayerAttackState : PlayerGroundState
     public PlayerAttackState(PlayerState playerState) : base(playerState)
     {
     }
-    public override void Enter()
-    {
-        base.Enter();
-    }
 
     public override void FixedUpdate()
     {
@@ -35,7 +31,7 @@ public class PlayerAttackState : PlayerGroundState
         playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if (!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState || GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
+            if ((!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState) || GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
                 return;

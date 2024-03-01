@@ -203,8 +203,7 @@ public class Characters : MonoBehaviour, IDamage
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            IDamage c = colliders[i].GetComponent<IDamage>();
-            if (c != null)
+            if (colliders[i].TryGetComponent<IDamage>(out IDamage c))
             {
                 Vector3 dir = currentPos - c.GetPointOfContact();
                 if (Physics.Raycast(c.GetPointOfContact(), dir.normalized, out RaycastHit hit, range, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))

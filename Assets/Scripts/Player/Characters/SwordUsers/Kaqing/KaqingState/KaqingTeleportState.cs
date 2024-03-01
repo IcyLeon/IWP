@@ -19,7 +19,7 @@ public class KaqingTeleportState : KaqingElementalSkillState
 
         GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = false;
         GetKaqingState().GetKaqing().GetModel().SetActive(false);
-        GetKaqingState().GetKaqing().LookAtElementalHitPos();
+        GetKaqingState().GetKaqing().GetKaqingThrowTeleporter().LookAtElementalHitPos();
     }
 
     public override void Update()

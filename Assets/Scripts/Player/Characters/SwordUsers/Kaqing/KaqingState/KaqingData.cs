@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class KaqingData
 {
-    public float ESkillRange = 6.5f;
+    public float ESkillRange = 4.5f;
     public KaqingTeleporter kaqingTeleporter;
 }

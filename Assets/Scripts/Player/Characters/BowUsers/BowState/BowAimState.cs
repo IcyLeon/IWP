@@ -16,7 +16,7 @@ public class BowAimState : BowControlState
         base.Enter();
         StartDelay = false;
         DelayToIdleElasped = Time.time;
-        GetBowCharactersState().BowData.isChargedFinish = false;
+        GetBowCharactersState().GetBowData().isChargedFinish = false;
     }
 
     public override void Update()
@@ -42,7 +42,7 @@ public class BowAimState : BowControlState
 
     public override void ChargeTrigger()
     {
-        GetBowCharactersState().GetBowCharacters().LaunchChargedAttack();
+        LaunchChargedAttack();
 
         if (!AimHold)
         {
@@ -50,6 +50,21 @@ public class BowAimState : BowControlState
             StartDelay = true;
         }
     }
+
+    private void LaunchChargedAttack()
+    {
+        if (Time.timeScale == 0)
+            return;
+
+        BowData BowData = GetBowCharactersState().GetBowData();
+        if (Time.time - BowData.LastClickedTime > BowData.ChargedAttackRate)
+        {
+            BowData.ShootElemental = BowData.CurrentElemental;
+            GetBowCharactersState().GetPlayerCharacters().GetAnimator().SetBool("Attack1", true);
+            BowData.LastClickedTime = Time.time;
+        }
+    }
+
 
     public override void ChargeHold()
     {
@@ -77,19 +92,19 @@ public class BowAimState : BowControlState
         }
 
 
-        if (GetBowCharactersState().BowData.ChargeElapsed < GetBowCharactersState().BowData.ChargedMaxElapsed)
+        if (GetBowCharactersState().GetBowData().ChargeElapsed < GetBowCharactersState().GetBowData().ChargedMaxElapsed)
         {
-            GetBowCharactersState().BowData.ChargeElapsed += Time.deltaTime;
-            GetBowCharactersState().BowData.CurrentElemental = Elemental.NONE;
+            GetBowCharactersState().GetBowData().ChargeElapsed += Time.deltaTime;
+            GetBowCharactersState().GetBowData().CurrentElemental = Elemental.NONE;
         }
         else
         {
-            if (!GetBowCharactersState().BowData.isChargedFinish)
+            if (!GetBowCharactersState().GetBowData().isChargedFinish)
             {
                 GetBowCharactersState().GetBowCharacters().SpawnChargeUpFinish();
-                GetBowCharactersState().BowData.isChargedFinish = true;
+                GetBowCharactersState().GetBowData().isChargedFinish = true;
             }
-            GetBowCharactersState().BowData.CurrentElemental = GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData().GetPlayerCharacterSO().Elemental;
+            GetBowCharactersState().GetBowData().CurrentElemental = GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData().GetPlayerCharacterSO().Elemental;
         }
     }
 
@@ -97,7 +112,7 @@ public class BowAimState : BowControlState
     {
         base.Exit();
         ResetCharge();
-        GetBowCharactersState().BowData.isChargedFinish = false;
+        GetBowCharactersState().GetBowData().isChargedFinish = false;
 
         GetBowCharactersState().GetBowCharacters().DestroyCrossHair();
         GetBowCharactersState().GetBowCharacters().DestroyChargeUpEmitter();

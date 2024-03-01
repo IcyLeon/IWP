@@ -7,10 +7,7 @@ using UnityEngine.TextCore.Text;
 public class SwordCharacters : PlayerCharacters
 {
     [SerializeField] protected Sword SwordModel;
-    protected int BasicAttackPhase = 0;
-    private int MaxAttackPhase;
     protected Elemental CurrentElement;
-    private float LastClickedTime, AttackRate = 0.08f;
 
     public Sword GetSwordModel()
     {
@@ -46,24 +43,6 @@ public class SwordCharacters : PlayerCharacters
         base.Start();
         GetSwordModel().SetPlayerCharacter(this);
         Range = 5f;
-        MaxAttackPhase = 4;
-        ResetBasicAttacks();
-    }
-
-
-    public void ResetBasicAttacks()
-    {
-        BasicAttackPhase = 0;
-
-        for (int i = 1; i <= MaxAttackPhase; i++)
-        {
-            string AtkName = "Attack" + i;
-            if (ContainsParam(Animator, AtkName))
-                Animator.ResetTrigger(AtkName);
-        }
-
-        if (ContainsParam(Animator, "NextAtk"))
-            Animator.SetBool("NextAtk", false);
     }
 
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
@@ -93,34 +72,6 @@ public class SwordCharacters : PlayerCharacters
         SoundEffectsManager.GetInstance().PlaySFXSound(GetSwordModel().GetSwordSoundSO().GetRandomHitClip());
     }
 
-    public override void LaunchBasicAttack()
-    {
-        if (Time.timeScale == 0)
-            return;
-
-        if (Time.time - LastClickedTime >= 1f)
-        {
-            ResetBasicAttacks();
-        }
-
-
-        if (Time.time - LastClickedTime > AttackRate && BasicAttackPhase < MaxAttackPhase && !GetPlayerManager().IsSkillCasting())
-        {
-            SetLookAtTarget();
-            BasicAttackPhase++;
-            if (BasicAttackPhase > MaxAttackPhase)
-            {
-                ResetBasicAttacks();
-            }
-
-            string AtkName = "Attack" + BasicAttackPhase;
-            if (ContainsParam(Animator, AtkName))
-                Animator.SetTrigger(AtkName);
-
-            LastClickedTime = Time.time + AttackRate;
-        }
-    }
-
     protected override void ChargeTrigger()
     {
         if (!GetPlayerManager().CanPerformAction())
@@ -130,16 +81,6 @@ public class SwordCharacters : PlayerCharacters
             return;
 
         base.ChargeTrigger();
-    }
-
-    public int GetBasicAttackPhase()
-    {
-        return BasicAttackPhase;
-    }
-
-    public void SetAttackPhase(int phase)
-    {
-        BasicAttackPhase = phase;
     }
 
     public Elemental GetCurrentSwordElemental()

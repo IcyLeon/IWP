@@ -18,7 +18,25 @@ public class SwordIdleState : SwordControlState
         if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
-        GetSwordCharactersState().GetSwordCharacters().LaunchBasicAttack();
+        LaunchBasicAttack();
     }
 
+    protected override void LaunchBasicAttack()
+    {
+        if (Time.timeScale == 0 || HasReachedEndOfBasicAttackAnimation())
+            return;
+
+        if (Time.time - GetPlayerCharacterState().CommonCharactersData.LastClickedTime > CommonCharactersData.AttackRate && !GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsSkillCasting())
+        {
+            GetPlayerCharacterState().GetPlayerCharacters().SetLookAtTarget();
+            GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase++;
+
+            string AtkName = "Attack" + GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase;
+            Animator animator = GetPlayerCharacterState().GetPlayerCharacters().GetAnimator();
+            if (Characters.ContainsParam(animator, AtkName))
+                animator.SetBool(AtkName, true);
+
+            GetPlayerCharacterState().CommonCharactersData.LastClickedTime = Time.time;
+        }
+    }
 }

@@ -55,9 +55,29 @@ public class KaqingIdleState : SwordIdleState
         }
         if (GetKaqingState().KaqingData.kaqingTeleporter == null)
         {
-            GetKaqingState().GetKaqing().InitElementalSkillHitPos_NoAim();
+            ElementalSkillHitPos_NoAim();
             GetKaqingState().ChangeState(GetKaqingState().kaqingThrowState);
         }
+    }
+
+    private void ElementalSkillHitPos_NoAim()
+    {
+        Vector3 forward, hitPos;
+        Kaqing kaqing = GetKaqingState().GetKaqing();
+        if (kaqing.GetNearestIDamage() == null)
+        {
+            forward = kaqing.transform.forward;
+            forward.y = 0;
+            forward.Normalize();
+            hitPos = kaqing.GetRayPosition3D(kaqing.GetPlayerManager().GetPlayerOffsetPosition().position, forward, kaqing.GetKaqingState().KaqingData.ESkillRange);
+        }
+        else
+        {
+            forward = kaqing.GetNearestIDamage().GetPointOfContact() - kaqing.GetPlayerManager().GetPlayerOffsetPosition().position;
+            forward.Normalize();
+            hitPos = kaqing.GetRayPosition3D(kaqing.GetPlayerManager().GetPlayerOffsetPosition().position, forward, kaqing.GetKaqingState().KaqingData.ESkillRange);
+        }
+        kaqing.GetKaqingThrowTeleporter().SetElementalHitPosition(hitPos);
     }
 
     public override void ElementalBurstTrigger()

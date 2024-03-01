@@ -42,8 +42,24 @@ public class BowIdleState : BowControlState
         if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
-        GetBowCharactersState().GetBowCharacters().LaunchBasicAttack();
+        LaunchBasicAttack();
         threasHold_Charged = 0;
+    }
+
+    protected override void LaunchBasicAttack()
+    {
+        if (Time.timeScale == 0)
+            return;
+
+        BowData BowData = GetBowCharactersState().GetBowData();
+        if (Time.time - BowData.LastClickedTime > CommonCharactersData.AttackRate)
+        {
+
+            GetBowCharactersState().GetPlayerCharacters().SetLookAtTarget();
+            BowData.ShootDirection = BowData.Direction;
+            GetBowCharactersState().GetPlayerCharacters().GetAnimator().SetBool("Attack1", true);
+            BowData.LastClickedTime = Time.time;
+        }
     }
 
     private void UpdateBowAimThresHold()

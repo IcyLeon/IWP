@@ -6,15 +6,11 @@ using UnityEngine;
 
 public class Kaqing : SwordCharacters
 {
-    private Vector3 ElementalHitPos;
     private float CurrentElementalSwordFusion;
     [SerializeField] GameObject ElectroSlashPrefab;
-    [SerializeField] GameObject ElementalOrbPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
+    [SerializeField] KaqingThrowTeleporter KaqingThrowTeleporter;
     private ParticleSystem BurstRangeEffect;
-    private GameObject targetOrb;
-    [SerializeField] GameObject TargetOrbPrefab;
-    [SerializeField] Transform EmitterPivot;
     [SerializeField] GameObject UltiSlashPrefab;
     [SerializeField] GameObject ElectroPlungeAttack;
     [SerializeField] KaqingESlashCollider KaqingESlashCollider;
@@ -50,7 +46,7 @@ public class Kaqing : SwordCharacters
             Destroy(UltiSlash.gameObject);
     }
 
-    private KaqingState GetKaqingState()
+    public KaqingState GetKaqingState()
     {
         return (KaqingState)PlayerCharacterState;
     }
@@ -70,10 +66,10 @@ public class Kaqing : SwordCharacters
     {
         PlayerCharacterState = new KaqingState(this);
         CurrentElementalSwordFusion = 0;
+        KaqingThrowTeleporter.SetKaqing(this);
         base.Start();
         KaqingESlashCollider.SetKaqing(this);
         UltiRange = 8f;
-        ElementalHitPos = Vector3.zero;
         CurrentElement = Elemental.NONE;
     }
 
@@ -94,7 +90,7 @@ public class Kaqing : SwordCharacters
     private void ESlash()
     {
         AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
-        GetKaqingState().GetKaqing().DestroyTeleporter();
+        GetKaqingThrowTeleporter().DestroyTeleporter();
     }
 
     public override float GetATK()
@@ -135,62 +131,9 @@ public class Kaqing : SwordCharacters
 
     }
 
-    public void UpdateTargetOrb()
-    {
-        if (targetOrb == null)
-            targetOrb = Instantiate(TargetOrbPrefab);
-
-        targetOrb.transform.position = ElementalHitPos;
-    }
-
-    public void DestroyTargetOrb()
-    {
-        if (targetOrb != null)
-            Destroy(targetOrb);
-    }
-
     public override void OnBurstAnimationDone()
     {
         // do nothing
-    }
-
-    public void DestroyTeleporter()
-    {
-        if (GetKaqingState().KaqingData.kaqingTeleporter != null)
-            Destroy(GetKaqingState().KaqingData.kaqingTeleporter.gameObject);
-    }
-
-    public void LookAtElementalHitPos()
-    {
-        LookAtDirection(ElementalHitPos - GetPlayerManager().GetPlayerOffsetPosition().position);
-    }
-
-    public void InitElementalSkillHitPos_Aim()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-
-        Vector3 hitdir = (ray.origin + ray.direction * GetKaqingState().KaqingData.ESkillRange) - GetPlayerManager().GetPlayerOffsetPosition().position;
-        ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, GetKaqingState().KaqingData.ESkillRange);
-        LookAtElementalHitPos();
-    }
-
-    public void InitElementalSkillHitPos_NoAim()
-    {
-        Vector3 forward;
-        if (NearestTarget == null)
-        {
-            forward = transform.forward;
-            forward.y = 0;
-            forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, forward, GetKaqingState().KaqingData.ESkillRange);
-        }
-        else
-        {
-            forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
-            forward.Normalize();
-            ElementalHitPos = GetRayPosition3D(GetPlayerManager().GetPlayerOffsetPosition().position, forward, GetKaqingState().KaqingData.ESkillRange);
-        }
-        LookAtElementalHitPos();
     }
 
     protected override bool ElementalSkillTrigger()
@@ -203,19 +146,9 @@ public class Kaqing : SwordCharacters
         return true;
     }
 
-    private void OnDestroyOrb()
+    public KaqingThrowTeleporter GetKaqingThrowTeleporter()
     {
-        GetCharacterData().ResetElementalSkillCooldown();
-    }
-
-    private void ShootTeleportOrb()
-    {
-        KaqingTeleporter Orb = Instantiate(ElementalOrbPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<KaqingTeleporter>();
-        Orb.SetElements(new Elements(GetPlayersSO().Elemental));
-        Orb.SetCharacterData(this);
-        Orb.SetTargetLoc(ElementalHitPos);
-        Orb.OnDestroyOrb += OnDestroyOrb;
-        GetKaqingState().KaqingData.kaqingTeleporter = Orb;
+        return KaqingThrowTeleporter;
     }
 
     public override void UpdateISkills()

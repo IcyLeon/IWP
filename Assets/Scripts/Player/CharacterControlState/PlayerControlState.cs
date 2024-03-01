@@ -77,6 +77,25 @@ public class PlayerControlState : IPlayerCharactersState
     public virtual void Update()
     {
         InterruptUpdate();
+        UpdateBasicAttacks();
+    }
+
+    private void UpdateBasicAttacks()
+    {
+        if (Time.time - playerCharacterState.CommonCharactersData.LastClickedTime >= 1f)
+        {
+            playerCharacterState.ResetBasicAttacks();
+        }
+    }
+
+    protected bool HasReachedEndOfBasicAttackAnimation()
+    {
+        string AtkName = "Attack" + playerCharacterState.CommonCharactersData.MaxAttackPhase;
+        return playerCharacterState.GetPlayerCharacters().GetAnimator().GetBool(AtkName) || playerCharacterState.CommonCharactersData.BasicAttackPhase >= playerCharacterState.CommonCharactersData.MaxAttackPhase;
+    }
+
+    protected virtual void LaunchBasicAttack()
+    {
     }
 
     public virtual void ChargeHold()

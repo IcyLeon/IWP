@@ -16,14 +16,10 @@ public class SwordElementalSkillState : PlayerElementalSkillState
 
     protected override void ResetAllAttacks()
     {
-        SwordCharacters sc = GetSwordCharactersState().GetSwordCharacters();
-        if (sc != null)
+        PlayerCharacters pc = GetPlayerCharacterState().GetPlayerCharacters();
+        if (pc != null)
         {
-            if (sc != null)
-            {
-                sc.ResetBasicAttacks();
-            }
-            sc.ResetAttack();
+            pc.GetPlayerCharacterState().ResetBasicAttacks();
         }
     }
     public override void OnAnimationTransition()

@@ -88,12 +88,7 @@ public class PlayerDashState : PlayerGroundState
         PlayerCharacters pc = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
         if (pc != null)
         {
-            SwordCharacters sc = pc as SwordCharacters;
-            if (sc != null)
-            {
-                sc.ResetBasicAttacks();
-            }
-            pc.ResetAttack();
+            pc.GetPlayerCharacterState().ResetBasicAttacks();
         }
     }
     public override void FixedUpdate()

@@ -49,7 +49,7 @@ public class PlayerGroundState : PlayerMovementState
             PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
             if (playerCharacter != null)
             {
-                playerCharacter.ResetAttack();
+                playerCharacter.GetPlayerCharacterState().ResetBasicAttacks();
             }
             return;
         }

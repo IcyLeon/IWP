@@ -285,8 +285,8 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager() == null)
             return;
 
-        //Debug.Log(PlayerCharacterState.GetCurrentState());
-        //Debug.Log(GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState());
+        Debug.Log(PlayerCharacterState.GetCurrentState());
+        Debug.Log(GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState());
 
         GetPlayerCharacterState().Update();
 
@@ -318,7 +318,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         }
     }
 
-    protected Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
+    public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
         if (GetPlayerManager() == null)
             return Vector3.zero;
@@ -326,7 +326,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return GetPlayerManager().GetPlayerController().GetRayPosition3D(origin, direction, maxdistance);
     }
 
-    protected RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
+    public RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
         if (GetPlayerManager() == null)
             return default(RaycastHit[]);
@@ -342,7 +342,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState().UpdateTargetRotation_Instant(quaternion);
     }
 
-    protected void LookAtDirection(Vector3 dir)
+    public void LookAtDirection(Vector3 dir)
     {
         Quaternion quaternion = Quaternion.LookRotation(dir);
         SetTargetRotation(quaternion);
@@ -406,13 +406,18 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     public virtual void SetLookAtTarget()
     {
-        if (NearestTarget != null)
+        if (GetNearestIDamage() != null)
         {
-            Vector3 forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            Vector3 forward = GetNearestIDamage().GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
             forward.y = 0;
             forward.Normalize();
             LookAtDirection(forward);
         }
+    }
+
+    public IDamage GetNearestIDamage()
+    {
+        return NearestTarget;
     }
 
     protected virtual void ChargeHold()
@@ -430,10 +435,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         GetPlayerCharacterState().ChargeTrigger();
     }
 
-    public virtual void LaunchBasicAttack()
-    {
-
-    }
 
     private void OnEnable()
     {
@@ -491,9 +492,9 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     public void TriggerNextAtkTransition()
     {
-        ResetAttack();
-        if (ContainsParam(Animator, "NextAtk"))
-            Animator.SetBool("NextAtk", true);
+        //ResetAttack();
+        //if (ContainsParam(Animator, "NextAtk"))
+        //    Animator.SetBool("NextAtk", true);
     }
 
     public virtual void UpdateISkills()

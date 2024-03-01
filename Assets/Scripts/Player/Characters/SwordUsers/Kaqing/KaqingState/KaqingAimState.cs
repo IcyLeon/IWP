@@ -22,6 +22,15 @@ public class KaqingAimState : KaqingElementalSkillState
         GetKaqingState().ChangeState(GetKaqingState().kaqingThrowState);
     }
 
+    private void ElementalSkillHitPos_Aim()
+    {
+        Kaqing kaqing = GetKaqingState().GetKaqing();
+        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+
+        Vector3 hitdir = (ray.origin + ray.direction * kaqing.GetKaqingState().KaqingData.ESkillRange) - kaqing.GetPlayerManager().GetPlayerOffsetPosition().position;
+        kaqing.GetKaqingThrowTeleporter().UpdateTargetOrb(kaqing.GetRayPosition3D(kaqing.GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, kaqing.GetKaqingState().KaqingData.ESkillRange));
+    }
+
     public override void Update()
     {
         base.Update();
@@ -30,8 +39,7 @@ public class KaqingAimState : KaqingElementalSkillState
             return;
 
         GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
-        GetKaqingState().GetKaqing().InitElementalSkillHitPos_Aim();
-        GetKaqingState().GetKaqing().UpdateTargetOrb();
+        ElementalSkillHitPos_Aim();
 
         if (Timer >= MaxTimer)
         {
@@ -43,6 +51,6 @@ public class KaqingAimState : KaqingElementalSkillState
 
     public override void Exit()
     {
-        GetKaqingState().GetKaqing().DestroyTargetOrb();
+        GetKaqingState().GetKaqing().GetKaqingThrowTeleporter().DestroyTargetOrb();
     }
 }
