@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public class BaseEnemy : Characters
 {
-    [SerializeField] protected Collider col;
     [SerializeField] protected Rigidbody rb;
     protected float DetectionRange;
     protected EnemyManager EM;
@@ -145,11 +144,6 @@ public class BaseEnemy : Characters
 
         if (GetElementalReaction() != null)
             GetElementalReaction().UpdateElementsList();
-    }
-
-    public Collider GetCollider()
-    {
-        return col;
     }
 
     protected override void UpdateOutofBound()

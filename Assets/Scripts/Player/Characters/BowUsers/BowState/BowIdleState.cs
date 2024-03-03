@@ -54,9 +54,7 @@ public class BowIdleState : BowControlState
         BowData BowData = GetBowCharactersState().GetBowData();
         if (Time.time - BowData.LastClickedTime > CommonCharactersData.AttackRate)
         {
-
-            GetBowCharactersState().GetPlayerCharacters().SetLookAtTarget();
-            BowData.ShootDirection = BowData.Direction;
+            BowData.Direction = GetBowCharactersState().GetPlayerCharacters().LookAtClosestTarget();
             GetBowCharactersState().GetPlayerCharacters().GetAnimator().SetBool("Attack1", true);
             BowData.LastClickedTime = Time.time;
         }

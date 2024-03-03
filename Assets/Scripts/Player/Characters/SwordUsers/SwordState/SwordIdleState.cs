@@ -28,7 +28,7 @@ public class SwordIdleState : SwordControlState
 
         if (Time.time - GetPlayerCharacterState().CommonCharactersData.LastClickedTime > CommonCharactersData.AttackRate && !GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsSkillCasting())
         {
-            GetPlayerCharacterState().GetPlayerCharacters().SetLookAtTarget();
+            GetPlayerCharacterState().GetPlayerCharacters().LookAtClosestTarget();
             GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase++;
 
             string AtkName = "Attack" + GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase;

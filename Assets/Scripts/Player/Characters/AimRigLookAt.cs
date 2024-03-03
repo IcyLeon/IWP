@@ -4,10 +4,9 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.ProBuilder;
 
-public class AimLookAt : MonoBehaviour
+public class AimRigLookAt : MonoBehaviour
 {
     [SerializeField] Rig Rig;
-    [SerializeField] PlayerCharacters PlayerCharactersRef;
     [SerializeField] Transform TargetTransform;
     private float Soothing = 10f;
     private float TargetWeight;
@@ -27,19 +26,6 @@ public class AimLookAt : MonoBehaviour
     void Update()
     {
         Rig.weight = Mathf.Lerp(Rig.weight, TargetWeight, Time.deltaTime * Soothing);
-        UpdateAimState();
-    }
-
-    void UpdateAimState()
-    {
-        PlayerMovementState PMS = PlayerCharactersRef.GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState();
-
-        if (PMS is not PlayerAimState)
-        {
-            SetTargetWeight(0f);
-            return;
-        }
-        SetTargetWeight(1f);
     }
 
     public void SetTargetWeight(float val)

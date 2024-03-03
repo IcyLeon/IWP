@@ -9,11 +9,10 @@ public class Kaqing : SwordCharacters
     private float CurrentElementalSwordFusion;
     [SerializeField] GameObject ElectroSlashPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
-    [SerializeField] KaqingThrowTeleporter KaqingThrowTeleporter;
+    [SerializeField] KaqingAim KaqingAim;
     private ParticleSystem BurstRangeEffect;
     [SerializeField] GameObject UltiSlashPrefab;
     [SerializeField] GameObject ElectroPlungeAttack;
-    [SerializeField] KaqingESlashCollider KaqingESlashCollider;
     private ParticleSystem UltiSlash;
 
     public void SpawnUltiSlash()
@@ -22,22 +21,6 @@ public class Kaqing : SwordCharacters
             DestroyUltiSlash();
 
         UltiSlash = Instantiate(UltiSlashPrefab, GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up * 1f, Quaternion.identity).GetComponent<ParticleSystem>();
-    }
-
-    private void ToggleOnESlash()
-    {
-        if (!GetSwordModel())
-            return;
-
-        KaqingESlashCollider.SetCanHit(true);
-    }
-
-    private void ToggleOffESlash()
-    {
-        if (!GetSwordModel())
-            return;
-
-        KaqingESlashCollider.SetCanHit(false);
     }
 
     public void DestroyUltiSlash()
@@ -66,9 +49,7 @@ public class Kaqing : SwordCharacters
     {
         PlayerCharacterState = new KaqingState(this);
         CurrentElementalSwordFusion = 0;
-        KaqingThrowTeleporter.SetKaqing(this);
         base.Start();
-        KaqingESlashCollider.SetKaqing(this);
         UltiRange = 8f;
         CurrentElement = Elemental.NONE;
     }
@@ -85,12 +66,6 @@ public class Kaqing : SwordCharacters
             base.SpawnSlash();
         else
             SpawnElectroSlash();
-    }
-
-    private void ESlash()
-    {
-        AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
-        GetKaqingThrowTeleporter().DestroyTeleporter();
     }
 
     public override float GetATK()
@@ -131,11 +106,6 @@ public class Kaqing : SwordCharacters
 
     }
 
-    public override void OnBurstAnimationDone()
-    {
-        // do nothing
-    }
-
     protected override bool ElementalSkillTrigger()
     {
         if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
@@ -146,9 +116,9 @@ public class Kaqing : SwordCharacters
         return true;
     }
 
-    public KaqingThrowTeleporter GetKaqingThrowTeleporter()
+    public KaqingAim GetKaqingAim()
     {
-        return KaqingThrowTeleporter;
+        return KaqingAim;
     }
 
     public override void UpdateISkills()

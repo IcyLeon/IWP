@@ -44,7 +44,6 @@ public class KaqingBurstState : SwordElementalBurstState
     public override void Exit()
     {
         base.Exit();
-        StopAnimation("isBurst");
         HitElapsed = 0;
     }
 

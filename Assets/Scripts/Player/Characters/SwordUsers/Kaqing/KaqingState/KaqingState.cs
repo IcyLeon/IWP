@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class KaqingState : SwordCharacterState
 {
-    public KaqingData KaqingData;
     public KaqingBurstState kaqingBurstState { get; }
     public KaqingTeleportState kaqingTeleportState { get; }
     public KaqingThrowState kaqingThrowState { get; }
@@ -17,9 +16,14 @@ public class KaqingState : SwordCharacterState
         return (Kaqing)GetPlayerCharacters();
     }
 
+    public KaqingData KaqingData { get 
+        { return (KaqingData)CommonCharactersData; }
+    }
+
+
     public KaqingState(Characters Characters) : base(Characters)
     {
-        KaqingData = new KaqingData();
+        CommonCharactersData = new KaqingData(4);
         kaqingESlash = new KaqingESlash(this);
         kaqingAimState = new KaqingAimState(this);
         kaqingBurstState = new KaqingBurstState(this);

@@ -8,11 +8,11 @@ public class KaqingTeleporter : MonoBehaviour
 {
     [SerializeField] GameObject ExplosionEffects;
     private Elements elements;
-    private PlayerCharacters Kaqing;
+    private PlayerCharacters PlayerCharacters;
     private bool EnergyOrbMoving;
     private Vector3 TargetLoc;
 
-    public event Action OnDestroyOrb;
+    public event Action<PlayerCharacters> OnDestroyOrb;
     public void SetTargetLoc(Vector3 pos)
     {
         TargetLoc = pos;
@@ -26,7 +26,7 @@ public class KaqingTeleporter : MonoBehaviour
 
     private void OnDestroy()
     {
-        OnDestroyOrb?.Invoke();
+        OnDestroyOrb?.Invoke(PlayerCharacters);
     }
 
     public void SetElements(Elements elements)
@@ -55,7 +55,7 @@ public class KaqingTeleporter : MonoBehaviour
         }
         Explode();
         yield return new WaitForSeconds(0.1f);
-        Destroy(gameObject, Kaqing.GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
+        Destroy(gameObject, PlayerCharacters.GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
         EnergyOrbMoving = false;
     }
 
@@ -71,7 +71,7 @@ public class KaqingTeleporter : MonoBehaviour
                 if (!damage.IsDead())
                 {
                     Vector3 hitPosition = collider.ClosestPointOnBounds(transform.position);
-                    damage.TakeDamage(hitPosition, elements, Kaqing.GetATK() * 1.25f, Kaqing);
+                    damage.TakeDamage(hitPosition, elements, PlayerCharacters.GetATK() * 1.25f, PlayerCharacters);
                 }
             }
         }
@@ -82,7 +82,7 @@ public class KaqingTeleporter : MonoBehaviour
 
     public void SetCharacterData(PlayerCharacters characterData)
     {
-        Kaqing = characterData;
+        PlayerCharacters = characterData;
     }
     public bool GetEnergyOrbMoving()
     {

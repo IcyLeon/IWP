@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class SwordCharacters : PlayerCharacters
 {
@@ -12,22 +11,6 @@ public class SwordCharacters : PlayerCharacters
     public Sword GetSwordModel()
     {
         return SwordModel;
-    }
-
-    public void ToggleOnCanHit()
-    {
-        if (!GetSwordModel())
-            return;
-
-        GetSwordModel().SetCanHit(true);
-    }
-
-    public void ToggleOffCanHit()
-    {
-        if (!GetSwordModel())
-            return;
-
-        GetSwordModel().SetCanHit(false);
     }
 
     public virtual void SpawnSlash()

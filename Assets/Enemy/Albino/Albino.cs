@@ -245,14 +245,14 @@ public class Albino : BaseEnemy
         if (Mathf.Abs(Diff) > MaxHeightToLaunchAttack)
         {
             state = States.CHASE;
-            col.isTrigger = false;
+            Collider.isTrigger = false;
             Animator.SetTrigger("Cancel");
             SlamCoroutine = null;
         }
         Animator.SetTrigger("Jump");
         SetisAttacking(true);
         yield return new WaitUntil(() => JumpOnAir);
-        col.isTrigger = true;
+        Collider.isTrigger = true;
 
         SavePosition = GetPlayerLocation();
         Vector3 groundPos = SavePosition;
@@ -284,7 +284,7 @@ public class Albino : BaseEnemy
             rb.AddForce(Vector3.down * 1000f * Time.deltaTime);
             yield return null;
         }
-        col.isTrigger = false;
+        Collider.isTrigger = false;
         Animator.SetTrigger("Slam");
         JumpOnAir = false;
         yield return new WaitForSeconds(0.25f);

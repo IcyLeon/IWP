@@ -12,6 +12,5 @@ public class SwordCharacterState : PlayerCharacterState
     }
     public SwordCharacterState(Characters Characters) : base(Characters)
     {
-        CommonCharactersData = new CommonCharactersData(4);
     }
 }

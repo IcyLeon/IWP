@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class KaqingIdleState : SwordIdleState
 {
@@ -62,22 +63,9 @@ public class KaqingIdleState : SwordIdleState
 
     private void ElementalSkillHitPos_NoAim()
     {
-        Vector3 forward, hitPos;
-        Kaqing kaqing = GetKaqingState().GetKaqing();
-        if (kaqing.GetNearestIDamage() == null)
-        {
-            forward = kaqing.transform.forward;
-            forward.y = 0;
-            forward.Normalize();
-            hitPos = kaqing.GetRayPosition3D(kaqing.GetPlayerManager().GetPlayerOffsetPosition().position, forward, kaqing.GetKaqingState().KaqingData.ESkillRange);
-        }
-        else
-        {
-            forward = kaqing.GetNearestIDamage().GetPointOfContact() - kaqing.GetPlayerManager().GetPlayerOffsetPosition().position;
-            forward.Normalize();
-            hitPos = kaqing.GetRayPosition3D(kaqing.GetPlayerManager().GetPlayerOffsetPosition().position, forward, kaqing.GetKaqingState().KaqingData.ESkillRange);
-        }
-        kaqing.GetKaqingThrowTeleporter().SetElementalHitPosition(hitPos);
+        Vector3 dir = GetKaqingState().GetKaqing().LookAtClosestTarget();
+        Vector3 hitpos = GetKaqingState().GetKaqing().GetRayPosition3D(GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerOffsetPosition().position, dir, GetKaqingState().GetKaqing().GetKaqingState().KaqingData.ESkillRange);
+        GetKaqingState().GetKaqing().GetKaqingAim().SetAimTargetPosition(hitpos);
     }
 
     public override void ElementalBurstTrigger()

@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AprilData
+public class AprilData : CommonCharactersData
 {
     private April april;
     public LineRenderer connectedLineRenderer;
     public MarkerData m_MarkerData;
+
+    public AprilData(int maxAttackPhase, April a) : base(maxAttackPhase)
+    {
+        april = a;
+        m_MarkerData = new MarkerData();
+    }
 
     public void UpdateConnections()
     {
@@ -49,9 +55,5 @@ public class AprilData
             april.DestroyLine();
     }
 
-    public AprilData(April april)
-    {
-        this.april = april;
-        m_MarkerData = new MarkerData();
-    }
+
 }

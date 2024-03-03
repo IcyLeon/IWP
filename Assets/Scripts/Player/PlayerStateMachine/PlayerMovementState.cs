@@ -258,7 +258,6 @@ public class PlayerMovementState : IState
         if (GetPlayerState().rb == null)
             return;
 
-
         if (playerCharacter)
             if (playerCharacter.GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || this is PlayerAttackState)
                 return;
@@ -272,9 +271,10 @@ public class PlayerMovementState : IState
         if (GetInputDirection() == Vector3.zero)
             return;
 
-        if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable || GetPlayerState().PlayerData.SpeedModifier == 0)
+        if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable)
             return;
 
+        Debug.Log("t");
         GetPlayerState().rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 

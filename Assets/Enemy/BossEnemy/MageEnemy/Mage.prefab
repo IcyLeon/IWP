@@ -1281,11 +1281,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FootStepSO: {fileID: 0}
   CharactersSO: {fileID: 11400000, guid: 6afa8b83329c43542a6654f4afcfd9f5, type: 2}
-  MiddlePositionTransform: {fileID: 475036}
+  Collider: {fileID: 1002647185652568759}
   Animator: {fileID: 9586004}
   Model: {fileID: 136476}
   HealthBarPivotParent: {fileID: 0}
-  col: {fileID: 1002647185652568759}
   rb: {fileID: 410695672762724629}
   NavMeshAgent: {fileID: 5740191625167085291}
   EnemyValueDropSO: {fileID: 11400000, guid: 2b4c69c0e0f950e4ea16a8316dc25cd9, type: 2}

@@ -592,7 +592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FootStepSO: {fileID: 0}
   CharactersSO: {fileID: 11400000, guid: 51fbb7eade2f2db4ca572735df86710b, type: 2}
-  MiddlePositionTransform: {fileID: 5451188606560323715}
+  Collider: {fileID: 1885799479104116459}
   Animator: {fileID: 180813408494787390}
   Model: {fileID: 830556997584466379}
   HealthBarPivotParent: {fileID: 5896426863554007873}

@@ -51,7 +51,7 @@ public class Amber : BowCharacters, ICoordinateAttack
     private Vector3 GetShootPositionAndDirection(int i)
     {
         float speed = 35f;
-        float angle = 45f;
+        float angle = 50f;
         float UpOffset = 0.5f;
         Vector3 forward = GetPlayerManager().transform.forward;
         if (NearestTarget != null)

@@ -26,7 +26,6 @@ public class BowAimState : BowControlState
         if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
             return;
 
-        GetBowCharactersState().GetBowCharacters().InitHitPos_Aim();
         UpdateBowAim();
 
         if (StartDelay)
@@ -59,6 +58,7 @@ public class BowAimState : BowControlState
         BowData BowData = GetBowCharactersState().GetBowData();
         if (Time.time - BowData.LastClickedTime > BowData.ChargedAttackRate)
         {
+            BowData.Direction = GetBowCharactersState().GetBowCharacters().GetAim().GetAimDirection();
             BowData.ShootElemental = BowData.CurrentElemental;
             GetBowCharactersState().GetPlayerCharacters().GetAnimator().SetBool("Attack1", true);
             BowData.LastClickedTime = Time.time;
@@ -74,6 +74,7 @@ public class BowAimState : BowControlState
 
     private void UpdateBowAim()
     {
+        GetBowCharactersState().GetBowCharacters().InitHitPos_Aim();
         GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
         GetBowCharactersState().GetBowCharacters().SpawnChargeEmitter();
 

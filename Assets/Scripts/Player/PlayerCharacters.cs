@@ -285,9 +285,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager() == null)
             return;
 
-        Debug.Log(PlayerCharacterState.GetCurrentState());
-        Debug.Log(GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState());
-
         GetPlayerCharacterState().Update();
 
         if (GetPlayerManager().isDeadState())
@@ -399,20 +396,21 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         return false;
     }
 
-    public virtual void OnBurstAnimationDone()
-    {
-        SetBurstActive(false);
-    }
 
-    public virtual void SetLookAtTarget()
+    public Vector3 LookAtClosestTarget()
     {
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+
         if (GetNearestIDamage() != null)
         {
-            Vector3 forward = GetNearestIDamage().GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
+            forward = GetNearestIDamage().GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
             forward.y = 0;
             forward.Normalize();
-            LookAtDirection(forward);
         }
+        LookAtDirection(forward);
+        return forward;
     }
 
     public IDamage GetNearestIDamage()
@@ -448,7 +446,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         PlayerManager.onCharacterChange += OnCharacterChanged;
     }
 
-    protected void BasicAttackTrigger()
+    public void BasicAttackTrigger()
     {
         PlayerCoordinateAttackManager.CallCoordinateAttack();
     }
@@ -480,23 +478,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         PlayerManager.onCharacterChange -= OnCharacterChanged;
     }
 
-    public void TriggerOnAnimationTransition()
-    {
-        GetPlayerManager().GetPlayerController().OnAnimationTransition();
-    }
-
-    public void TriggerOnCharacterStateAnimationTransition()
-    {
-        GetPlayerCharacterState().OnAnimationTransition();
-    }
-
-    public void TriggerNextAtkTransition()
-    {
-        //ResetAttack();
-        //if (ContainsParam(Animator, "NextAtk"))
-        //    Animator.SetBool("NextAtk", true);
-    }
-
     public virtual void UpdateISkills()
     {
         GetPlayerCharacterState().UpdateElementalSkill();
@@ -504,15 +485,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public virtual void UpdateEveryTime()
     {
 
-    }
-
-    public void StopBurstAnimation()
-    {
-        if (GetBurstCamera())
-        {
-            GetBurstCamera().gameObject.SetActive(false);
-            GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
-        }
     }
 
     public virtual bool ISkillsEnded()

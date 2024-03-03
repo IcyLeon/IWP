@@ -11,11 +11,10 @@ public class BowData : CommonCharactersData
     public float ChargeElapsed;
 
 
-    public const float OriginalFireSpeed = 800f;
-    public float BaseFireSpeed;
+    public const float BaseFireSpeed = 800f;
     public const float ChargedAttackRate = 0.5f;
     public Elemental ShootElemental;
-    public Vector3 Direction, ShootDirection;
+    public Vector3 Direction;
 
     public BowData(int maxAttackPhase) : base(maxAttackPhase)
     {

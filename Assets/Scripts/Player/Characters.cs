@@ -42,7 +42,7 @@ public class Characters : MonoBehaviour, IDamage
     protected float CurrentHealth;
     [SerializeField] FootStepSO FootStepSO;
     [SerializeField] protected CharactersSO CharactersSO;
-    [SerializeField] protected Transform MiddlePositionTransform;
+    [SerializeField] protected Collider Collider;
     [SerializeField] protected Animator Animator;
     [SerializeField] protected GameObject Model;
     [SerializeField] protected Transform HealthBarPivotParent;
@@ -157,16 +157,6 @@ public class Characters : MonoBehaviour, IDamage
                 Animator.SetBool("isDead", IsDead());
             }
         }
-    }
-
-    private void OnAnimatorMove()
-    {
-        if (Animator == null)
-        {
-            return;
-        }
-
-        AnimatorMove(Animator.deltaPosition, Animator.rootRotation);
     }
 
     public virtual void AnimatorMove(Vector3 deltaPosition, Quaternion rootRotation)
@@ -347,10 +337,10 @@ public class Characters : MonoBehaviour, IDamage
 
     public virtual Vector3 GetPointOfContact()
     {
-        if (MiddlePositionTransform == null)
+        if (Collider == null)
             return default(Vector3);
 
-        return MiddlePositionTransform.position;
+        return Collider.bounds.center;
     }
 
     public virtual float GetEM()

@@ -10,7 +10,7 @@ public class BurstState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        pc = animator.GetComponent<PlayerCharacters>();
+        pc = animator.transform.parent.GetComponent<PlayerCharacters>();
         if (pc != null)
         {
             if (pc.GetBurstCamera())
@@ -21,18 +21,10 @@ public class BurstState : StateMachineBehaviour
         }
     }
 
-    //// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (stateInfo.normalizedTime >= 0.95f)
-        {
-            if (pc != null)
-            {
-                pc.StopBurstAnimation();
-                pc.OnBurstAnimationDone();
-            }
-        }
-    }
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

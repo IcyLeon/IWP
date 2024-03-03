@@ -8,12 +8,12 @@ public class AprilState : SwordCharacterState
     {
         return (April)GetPlayerCharacters();
     }
-    public AprilData aprilData;
+    public AprilData aprilData { get { return (AprilData)CommonCharactersData; } }
     public AprilElementalSkillState aprilElementalSkillState;
     public AprilElementalBurstState aprilElementalBurstState;
     public AprilState(Characters Characters) : base(Characters)
     {
-        aprilData = new AprilData(GetApril());
+        CommonCharactersData = new AprilData(4, GetApril());
         aprilElementalSkillState = new AprilElementalSkillState(this);
         aprilElementalBurstState = new AprilElementalBurstState(this);
         swordIdleState = new AprilIdleState(this);

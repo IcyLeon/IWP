@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class BowCharacters : PlayerCharacters
 {
-    [SerializeField] GameObject ArrowPrefab;
     [SerializeField] Transform EmitterPivot;
+    [SerializeField] Aim Aim;
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     [SerializeField] BowSoundSO BowSoundSO;
     private ParticleSystem ChargeUpEmitter;
@@ -40,33 +40,9 @@ public class BowCharacters : PlayerCharacters
         return (BowCharactersState)PlayerCharacterState;
     }
 
-    private void FireArrows()
+    public BowSoundSO GetBowSoundSO()
     {
-        BowData bowData = GetBowCharactersState().GetBowData();
-        bowData.ShootDirection = bowData.Direction;
-        Arrow ArrowFire = Instantiate(ArrowPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
-        ParticleSystem arrowLuanch = Instantiate(AssetManager.GetInstance().ArrowLaunchPrefab, GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Destroy(arrowLuanch.gameObject, arrowLuanch.main.duration);
-        ArrowFire.SetElements(new Elements(GetBowCharactersState().GetBowData().ShootElemental));
-        ArrowFire.SetCharacterData(this);
-        ArrowFire.transform.rotation = Quaternion.LookRotation(bowData.ShootDirection);
-
-        if (!GetPlayerManager().IsAiming())
-        {
-            GetSoundManager().PlaySFXSound(BowSoundSO.GetRandomBasicFireAudioClip());
-            GetBowCharactersState().GetBowData().BaseFireSpeed = BowData.OriginalFireSpeed * 0.68f;
-        }
-        else
-        {
-            GetSoundManager().PlaySFXSound(BowSoundSO.AimFireAudioClip);
-            GetBowCharactersState().GetBowData().BaseFireSpeed = BowData.OriginalFireSpeed;
-        }
-
-        ArrowFire.GetRigidbody().AddForce(bowData.ShootDirection.normalized * GetBowCharactersState().GetBowData().BaseFireSpeed * (1 + GetBowCharactersState().GetBowData().ChargeElapsed));
-
-        DestroyChargeUpEmitter();
-        GetBowCharactersState().GetBowData().ShootElemental = Elemental.NONE;
-        BasicAttackTrigger();
+        return BowSoundSO;
     }
 
     protected override Collider[] PlungeAttackGroundHit(Vector3 HitPos)
@@ -148,24 +124,13 @@ public class BowCharacters : PlayerCharacters
         if (CrossHair == null)
             CrossHair = AssetManager.GetInstance().SpawnCrossHair();
 
-        GetBowCharactersState().GetBowData().Direction = GetFirstTargetHits(25f) - EmitterPivot.position;
-        LookAtDirection(Camera.main.transform.forward);
+        GetAim().SetAimTargetPosition(GetFirstTargetHits(25f));
     }
 
-    public override void SetLookAtTarget()
+    public Aim GetAim()
     {
-        GetBowCharactersState().GetBowData().Direction = GetPlayerManager().transform.forward;
-        if (NearestTarget != null)
-        {
-            Vector3 lookdir = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
-            Vector3 forward = lookdir;
-            forward.y = 0;
-            forward.Normalize();
-            LookAtDirection(forward);
-            GetBowCharactersState().GetBowData().Direction = lookdir;
-        }
+        return Aim;
     }
-
     public void DestroyChargeUpEmitter()
     {
         if (ChargeUpEmitter)

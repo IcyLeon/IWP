@@ -215,6 +215,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GetPlayerManager().GetCharacterRB() == null)
             return;
+
         playerState.FixedUpdate();
     }
 
