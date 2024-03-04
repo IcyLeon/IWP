@@ -20,7 +20,7 @@ public class Shop : MarkerIndicatorInteraction, IInteract
         return true;
     }
 
-    public void OnInteractUpdate(IInteract interactComponent)
+    public void OnInteractEnter(IInteract interactComponent)
     {
     }
     public void OnInteractExit(IInteract interactComponent)

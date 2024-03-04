@@ -34,7 +34,7 @@ public class Amber : BowCharacters, ICoordinateAttack
     public void Spawn4Arrows()
     {
         Vector3 targetPos = GetContactPoint();
-        Vector3 lookatDir = targetPos - GetPlayerManager().transform.position;
+        Vector3 lookatDir = targetPos - GetPlayerManager().GetPlayerOffsetPosition().position;
         lookatDir.y = 0;
         lookatDir.Normalize();
         LookAtDirection(lookatDir);
@@ -54,11 +54,6 @@ public class Amber : BowCharacters, ICoordinateAttack
         float angle = 50f;
         float UpOffset = 0.5f;
         Vector3 forward = GetPlayerManager().transform.forward;
-        if (NearestTarget != null)
-        {
-            forward = NearestTarget.GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
-            forward.Normalize();
-        }
 
         Vector3 dir = Quaternion.Euler(0, ((-angle / 2) * (SkillsArrows - 1)) + (i * angle), 0) * forward;
         dir.y = 0;

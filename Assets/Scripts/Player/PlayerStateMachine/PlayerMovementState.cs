@@ -274,7 +274,6 @@ public class PlayerMovementState : IState
         if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable)
             return;
 
-        Debug.Log("t");
         GetPlayerState().rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 

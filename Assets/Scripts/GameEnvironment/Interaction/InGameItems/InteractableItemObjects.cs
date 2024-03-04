@@ -73,7 +73,7 @@ public class InteractableItemObjects : MonoBehaviour, IInteract
     {
     }
 
-    public void OnInteractUpdate(IInteract interactComponent)
+    public void OnInteractEnter(IInteract interactComponent)
     {
     }
 }

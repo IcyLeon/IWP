@@ -22,15 +22,15 @@ public class Aim : MonoBehaviour
 
     public void LookAtAimTarget()
     {
-        Vector3 dir = GetAimDirection();
+        Vector3 dir = GetAimDirection(PlayerCharactersRef.GetPlayerManager().GetPlayerOffsetPosition().position);
         dir.y = 0;
         dir.Normalize();
         PlayerCharactersRef.LookAtDirection(dir);
     }
 
-    public Vector3 GetAimDirection()
+    public Vector3 GetAimDirection(Vector3 EmitterPosition)
     {
-        Vector3 dir = AimTargetPosition - PlayerCharactersRef.GetPlayerManager().GetPlayerOffsetPosition().position;
+        Vector3 dir = AimTargetPosition - EmitterPosition;
         dir.Normalize();
         return dir;
     }

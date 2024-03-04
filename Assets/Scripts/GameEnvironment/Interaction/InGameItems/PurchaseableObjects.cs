@@ -83,7 +83,7 @@ public abstract class PurchaseableObjects : MonoBehaviour, IGamePurchase
         return GetPurchaseableObjectSO().PurchaseableObjectName;
     }
 
-    public virtual void OnInteractUpdate(IInteract interactComponent)
+    public virtual void OnInteractEnter(IInteract interactComponent)
     {
         worldText.gameObject.SetActive(true);
     }

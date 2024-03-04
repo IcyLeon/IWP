@@ -29,7 +29,6 @@ public class AssetManager : MonoBehaviour
     public GameObject PlungeParticlesEffect;
 
     [Header("Bow")]
-    public GameObject CrossHair;
     public GameObject HitEffect;
     public GameObject HitExplosion;
     public ParticleSystem ChargeUpEmitterPrefab;
@@ -188,12 +187,6 @@ public class AssetManager : MonoBehaviour
             ItemREF = item;
         }
         itemGO.SetItemsREF(ItemREF);
-    }
-
-    public GameObject SpawnCrossHair()
-    {
-        GameObject go = Instantiate(CrossHair, GetCanvasGO().transform);
-        return go;
     }
 
     public ItemCollectedUI SpawnItemCollectedUI(ItemTemplate itemTemplate)

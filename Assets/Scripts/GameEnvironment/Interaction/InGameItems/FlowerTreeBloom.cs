@@ -97,7 +97,7 @@ public class FlowerTreeBloom : MonoBehaviour, IInteract
 
     }
 
-    public void OnInteractUpdate(IInteract interactComponent)
+    public void OnInteractEnter(IInteract interactComponent)
     {
 
     }

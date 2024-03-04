@@ -8,6 +8,9 @@ public class PlayerCanvasUI : MonoBehaviour
     [SerializeField] HealthBarScript PlayerHealthBarREF;
     [SerializeField] StaminaScript StaminaBarREF;
 
+    [Header("Bow")]
+    [SerializeField] GameObject BowGO;
+
     [Header("Interaction Content")]
     [SerializeField] InteractionContentUI InteractOptionsUI;
 
@@ -25,7 +28,15 @@ public class PlayerCanvasUI : MonoBehaviour
     {
         AssetManager.OnSpawnArrow += SpawnArrowIndicator;
     }
+    private void Start()
+    {
+        ShowCrossHair(false);
+    }
 
+    public PlayerManager GetPlayerManager()
+    {
+        return playerManager;
+    }
     private void OnDestroy()
     {
         AssetManager.OnSpawnArrow -= SpawnArrowIndicator;
@@ -35,6 +46,11 @@ public class PlayerCanvasUI : MonoBehaviour
     {
         UpdateContent();
         RemoveNullReferenceForArrowList();
+    }
+
+    public void ShowCrossHair(bool val)
+    {
+        BowGO.gameObject.SetActive(val);
     }
 
     public InteractionContentUI GetInteractOptionsUI()

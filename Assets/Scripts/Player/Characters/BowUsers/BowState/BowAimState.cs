@@ -14,6 +14,7 @@ public class BowAimState : BowControlState
     public override void Enter()
     {
         base.Enter();
+        GetBowCharactersState().GetBowCharacters().GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(true);
         StartDelay = false;
         DelayToIdleElasped = Time.time;
         GetBowCharactersState().GetBowData().isChargedFinish = false;
@@ -27,7 +28,7 @@ public class BowAimState : BowControlState
             return;
 
         UpdateBowAim();
-
+        
         if (StartDelay)
         {
             if (Time.time - DelayToIdleElasped > DelayToIdle)
@@ -58,7 +59,6 @@ public class BowAimState : BowControlState
         BowData BowData = GetBowCharactersState().GetBowData();
         if (Time.time - BowData.LastClickedTime > BowData.ChargedAttackRate)
         {
-            BowData.Direction = GetBowCharactersState().GetBowCharacters().GetAim().GetAimDirection();
             BowData.ShootElemental = BowData.CurrentElemental;
             GetBowCharactersState().GetPlayerCharacters().GetAnimator().SetBool("Attack1", true);
             BowData.LastClickedTime = Time.time;
@@ -72,9 +72,32 @@ public class BowAimState : BowControlState
         StartDelay = false;
     }
 
+    private Vector3 GetFirstTargetHits(float length)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        RaycastHit[] raycastsHitAll = GetBowCharactersState().GetBowCharacters().GetRayPositionAll3D(ray.origin, ray.direction, length);
+        List<RaycastHit> hits = new List<RaycastHit>(raycastsHitAll);
+
+        for (int i = hits.Count - 1; i >= 0; i--)
+        {
+            RaycastHit hit = hits[i];
+            if (Vector3.Distance(hit.point, ray.origin) < Vector3.Distance(ray.origin, GetBowCharactersState().GetBowCharacters().GetEmitterPivot().position))
+            {
+                hits.Remove(hit);
+            }
+        }
+
+        hits.Sort((hit1, hit2) => hit1.distance.CompareTo(hit2.distance));
+
+        if (hits.Count > 0)
+            return hits[0].point;
+
+        return ray.origin + ray.direction * length;
+    }
+
     private void UpdateBowAim()
     {
-        GetBowCharactersState().GetBowCharacters().InitHitPos_Aim();
+        GetBowCharactersState().GetBowCharacters().GetAim().SetAimTargetPosition(GetFirstTargetHits(25f));
         GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
         GetBowCharactersState().GetBowCharacters().SpawnChargeEmitter();
 
@@ -92,20 +115,22 @@ public class BowAimState : BowControlState
             return;
         }
 
+        BowData BowData = GetBowCharactersState().GetBowData();
+        BowData.Direction = GetBowCharactersState().GetBowCharacters().GetAim().GetAimDirection(GetBowCharactersState().GetBowCharacters().GetEmitterPivot().position);
 
-        if (GetBowCharactersState().GetBowData().ChargeElapsed < GetBowCharactersState().GetBowData().ChargedMaxElapsed)
+        if (BowData.ChargeElapsed < GetBowCharactersState().GetBowData().ChargedMaxElapsed)
         {
-            GetBowCharactersState().GetBowData().ChargeElapsed += Time.deltaTime;
-            GetBowCharactersState().GetBowData().CurrentElemental = Elemental.NONE;
+            BowData.ChargeElapsed += Time.deltaTime;
+            BowData.CurrentElemental = Elemental.NONE;
         }
         else
         {
-            if (!GetBowCharactersState().GetBowData().isChargedFinish)
+            if (!BowData.isChargedFinish)
             {
                 GetBowCharactersState().GetBowCharacters().SpawnChargeUpFinish();
-                GetBowCharactersState().GetBowData().isChargedFinish = true;
+                BowData.isChargedFinish = true;
             }
-            GetBowCharactersState().GetBowData().CurrentElemental = GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData().GetPlayerCharacterSO().Elemental;
+            BowData.CurrentElemental = GetPlayerCharacterState().GetPlayerCharacters().GetCharacterData().GetPlayerCharacterSO().Elemental;
         }
     }
 
@@ -115,7 +140,7 @@ public class BowAimState : BowControlState
         ResetCharge();
         GetBowCharactersState().GetBowData().isChargedFinish = false;
 
-        GetBowCharactersState().GetBowCharacters().DestroyCrossHair();
+        GetBowCharactersState().GetBowCharacters().GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(false);
         GetBowCharactersState().GetBowCharacters().DestroyChargeUpEmitter();
     }
 }

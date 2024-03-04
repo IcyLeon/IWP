@@ -41,7 +41,7 @@ public class Teleporter : MonoBehaviour, IInteract
         return true;
     }
 
-    public void OnInteractUpdate(IInteract interactComponent)
+    public void OnInteractEnter(IInteract interactComponent)
     {
     }
     public void OnInteractExit(IInteract interactComponent)

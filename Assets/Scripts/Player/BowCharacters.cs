@@ -11,7 +11,6 @@ public class BowCharacters : PlayerCharacters
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     [SerializeField] BowSoundSO BowSoundSO;
     private ParticleSystem ChargeUpEmitter;
-    private GameObject CrossHair;
 
     public Transform GetEmitterPivot()
     {
@@ -93,40 +92,6 @@ public class BowCharacters : PlayerCharacters
         ChargeUpEmitter.Play();
     }
 
-    private Vector3 GetFirstTargetHits(float length)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        RaycastHit[] raycastsHitAll = GetRayPositionAll3D(ray.origin, ray.direction, length);
-        List<RaycastHit> hits = new List<RaycastHit>(raycastsHitAll);
-
-        for(int i = hits.Count - 1; i >= 0; i--)
-        {
-            RaycastHit hit = hits[i];
-            if (Vector3.Distance(hit.point, ray.origin) < Vector3.Distance(ray.origin, EmitterPivot.position))
-            {
-                hits.Remove(hit);
-            }
-        }
-
-        hits.Sort((hit1, hit2) => hit1.distance.CompareTo(hit2.distance));
-
-        if (hits.Count > 0)
-            return hits[0].point;
-
-        return ray.origin + ray.direction * length;
-    }
-
-    public void InitHitPos_Aim()
-    {
-        if (Time.timeScale == 0)
-            return;
-
-        if (CrossHair == null)
-            CrossHair = AssetManager.GetInstance().SpawnCrossHair();
-
-        GetAim().SetAimTargetPosition(GetFirstTargetHits(25f));
-    }
-
     public Aim GetAim()
     {
         return Aim;
@@ -143,17 +108,12 @@ public class BowCharacters : PlayerCharacters
         }
     }
 
-    public void DestroyCrossHair()
-    {
-        if (CrossHair)
-            Destroy(CrossHair);
-    }
-
     protected override void OnCharacterChanged(CharacterData c, PlayerCharacters playerCharacters)
     {
         base.OnCharacterChanged(c, playerCharacters);
-        DestroyCrossHair();
+        GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(false);
     }
+
     protected override void OnDisable()
     {
         DestroyChargeUpEmitter();

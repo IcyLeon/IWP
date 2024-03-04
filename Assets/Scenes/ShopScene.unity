@@ -328,11 +328,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1016010540749042060, guid: 545f296f5d02c184eb6bd51c644f1198,
-        type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1084449378623250619, guid: 545f296f5d02c184eb6bd51c644f1198,
         type: 3}
       propertyPath: m_RootOrder
@@ -393,25 +388,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal
       objectReference: {fileID: 0}
-    - target: {fileID: 2537129753148490767, guid: 545f296f5d02c184eb6bd51c644f1198,
-        type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3424907965446595603, guid: 545f296f5d02c184eb6bd51c644f1198,
-        type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5253942107877182548, guid: 545f296f5d02c184eb6bd51c644f1198,
         type: 3}
       propertyPath: scene
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8928658998274361369, guid: 545f296f5d02c184eb6bd51c644f1198,
-        type: 3}
-      propertyPath: m_Layer
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 545f296f5d02c184eb6bd51c644f1198, type: 3}
@@ -851,6 +831,11 @@ PrefabInstance:
     - target: {fileID: 3148042997483374586, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5212639532712353166, guid: 9d67fce8649e5e64dae6a91c08c83d40,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6073783216335080523, guid: 9d67fce8649e5e64dae6a91c08c83d40,

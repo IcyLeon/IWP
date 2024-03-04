@@ -26,7 +26,7 @@ public class BowUsersAnimationEvents : PlayerAnimationEvents
         else
             GetBowCharacters().GetSoundManager().PlaySFXSound(GetBowCharacters().GetBowSoundSO().AimFireAudioClip);
 
-        ArrowFire.GetRigidbody().AddForce(bowData.Direction.normalized * BowData.BaseFireSpeed * (1 + GetBowCharacters().GetBowCharactersState().GetBowData().ChargeElapsed));
+        ArrowFire.GetRigidbody().velocity = bowData.Direction.normalized * BowData.BaseFireSpeed * (1 + GetBowCharacters().GetBowCharactersState().GetBowData().ChargeElapsed);
 
         GetBowCharacters().DestroyChargeUpEmitter();
         GetBowCharacters().GetBowCharactersState().GetBowData().ShootElemental = Elemental.NONE;

@@ -53,7 +53,11 @@ public class Kaqing : SwordCharacters
         UltiRange = 8f;
         CurrentElement = Elemental.NONE;
     }
-
+    protected override void Update()
+    {
+        base.Update();
+        //Debug.Log(GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState());
+    }
     protected override void OnCharacterChanged(CharacterData characterData, PlayerCharacters playerCharacters)
     {
         base.OnCharacterChanged(characterData, playerCharacters);
