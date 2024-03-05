@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class BowAimState : BowControlState
     private bool AimHold;
     private float DelayToIdle = 0.25f, DelayToIdleElasped;
     private bool StartDelay;
+    public static Action<bool> OnBowAimStatus;
+
     public BowAimState(PlayerCharacterState pcs) : base(pcs)
     {
     }
@@ -14,7 +17,8 @@ public class BowAimState : BowControlState
     public override void Enter()
     {
         base.Enter();
-        GetBowCharactersState().GetBowCharacters().GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(true);
+        GetPlayerCharacterState().GetPlayerCharacters().ToggleAimCamera(true);
+        OnBowAimStatus?.Invoke(true);
         StartDelay = false;
         DelayToIdleElasped = Time.time;
         GetBowCharactersState().GetBowData().isChargedFinish = false;
@@ -72,16 +76,16 @@ public class BowAimState : BowControlState
         StartDelay = false;
     }
 
-    private Vector3 GetFirstTargetHits(float length)
+    public static Vector3 GetFirstTargetHits(Vector3 EmitterPosition, float length)
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        RaycastHit[] raycastsHitAll = GetBowCharactersState().GetBowCharacters().GetRayPositionAll3D(ray.origin, ray.direction, length);
+        RaycastHit[] raycastsHitAll = PlayerController.GetRayPositionAll3D(ray.origin, ray.direction, length);
         List<RaycastHit> hits = new List<RaycastHit>(raycastsHitAll);
 
         for (int i = hits.Count - 1; i >= 0; i--)
         {
             RaycastHit hit = hits[i];
-            if (Vector3.Distance(hit.point, ray.origin) < Vector3.Distance(ray.origin, GetBowCharactersState().GetBowCharacters().GetEmitterPivot().position))
+            if (Vector3.Distance(hit.point, ray.origin) < Vector3.Distance(ray.origin, EmitterPosition))
             {
                 hits.Remove(hit);
             }
@@ -97,8 +101,7 @@ public class BowAimState : BowControlState
 
     private void UpdateBowAim()
     {
-        GetBowCharactersState().GetBowCharacters().GetAim().SetAimTargetPosition(GetFirstTargetHits(25f));
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
+        GetBowCharactersState().GetBowCharacters().GetAimController().SetAimTargetPosition(GetFirstTargetHits(GetBowCharactersState().GetBowCharacters().GetEmitterPivot().position, 25f));
         GetBowCharactersState().GetBowCharacters().SpawnChargeEmitter();
 
         AimHold = Input.GetMouseButton(1);
@@ -111,12 +114,11 @@ public class BowAimState : BowControlState
         if (Input.GetMouseButtonUp(1))
         {
             GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);
-            GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0f);
             return;
         }
 
         BowData BowData = GetBowCharactersState().GetBowData();
-        BowData.Direction = GetBowCharactersState().GetBowCharacters().GetAim().GetAimDirection(GetBowCharactersState().GetBowCharacters().GetEmitterPivot().position);
+        BowData.Direction = GetBowCharactersState().GetBowCharacters().GetAimController().GetAimDirection(GetBowCharactersState().GetBowCharacters().GetEmitterPivot().position);
 
         if (BowData.ChargeElapsed < GetBowCharactersState().GetBowData().ChargedMaxElapsed)
         {
@@ -138,9 +140,9 @@ public class BowAimState : BowControlState
     {
         base.Exit();
         ResetCharge();
+        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0f);
         GetBowCharactersState().GetBowData().isChargedFinish = false;
-
-        GetBowCharactersState().GetBowCharacters().GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(false);
+        OnBowAimStatus?.Invoke(false);
         GetBowCharactersState().GetBowCharacters().DestroyChargeUpEmitter();
     }
 }

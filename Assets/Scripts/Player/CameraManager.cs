@@ -97,9 +97,6 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateCamera()
     {
-        if (playerController.GetPlayerManager().GetCharacterRB() == null)
-            return;
-
         playerCamera.Follow = playerController.GetPlayerManager().GetPlayerOffsetPosition();
         aimCamera.Follow = playerCamera.Follow;
 
@@ -120,14 +117,9 @@ public class CameraManager : MonoBehaviour
         playerPOV.m_HorizontalRecentering.m_enabled = false;
     }
 
-    public void CameraDefault()
+    public void ToggleAimCamera(bool val)
     {
-        aimCamera.gameObject.SetActive(false);
-    }
-
-    public void CameraAim()
-    {
-        aimCamera.gameObject.SetActive(true);
+        aimCamera.gameObject.SetActive(val);
     }
 
     private void Awake()

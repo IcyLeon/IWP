@@ -7,7 +7,7 @@ public class PlayerAimState : PlayerMovementState
     private float AimSpeed;
     public PlayerAimState(PlayerState playerState) : base(playerState)
     {
-        AimSpeed = GetWalkSpeed() / 2f;
+        AimSpeed = 1f;
     }
     public override void Enter()
     {
@@ -25,7 +25,7 @@ public class PlayerAimState : PlayerMovementState
             DecelerateHorizontal();
         }
 
-        if (GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter() is Kaqing)
+        if (GetPlayerState().GetPlayerManager().GetCurrentCharacter() is Kaqing)
         {
             return;
         }

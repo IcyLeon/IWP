@@ -28,10 +28,10 @@ public class PlayerAttackState : PlayerGroundState
         base.Update();
 
         
-        playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        playerCharacter = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
-            if ((!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState) || GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
+            if ((!playerCharacter.GetisAttacking() && GetPlayerState().GetPlayerMovementState() is not PlayerDashState) || GetPlayerState().GetPlayerManager().IsSkillCasting())
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
                 return;

@@ -16,7 +16,7 @@ public class PlayerDashState : PlayerGroundState
         ResetAllBasicAtk();
         StartAnimation("isDashing");
         GetPlayerState().PlayerData.CurrentJumpForceXZ = 5f;
-        DashDirection = GetPlayerState().GetPlayerController().transform.forward;
+        DashDirection = GetPlayerState().GetPlayerManager().transform.forward;
         Dash();
         GetPlayerState().PlayerData.StartDashTime = Time.time;
     }
@@ -50,7 +50,7 @@ public class PlayerDashState : PlayerGroundState
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
             DisableDash();
         }
-        GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().GetStaminaSO().DashCost);
+        GetPlayerState().GetPlayerManager().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerManager().GetStaminaManager().GetStaminaSO().DashCost);
     }
 
     public override void Exit()
@@ -85,7 +85,7 @@ public class PlayerDashState : PlayerGroundState
 
     private void ResetAllBasicAtk()
     {
-        PlayerCharacters pc = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        PlayerCharacters pc = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
         if (pc != null)
         {
             pc.GetPlayerCharacterState().ResetBasicAttacks();

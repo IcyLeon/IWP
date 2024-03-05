@@ -5,12 +5,14 @@ using UnityEngine.UIElements.Experimental;
 
 public class KaqingIdleState : SwordIdleState
 {
+    protected Kaqing Kaqing;
     private float threasHold_Charged;
     public KaqingIdleState(PlayerCharacterState pcs) : base(pcs)
     {
+        Kaqing = GetKaqingState().GetKaqing();
     }
 
-    public KaqingState GetKaqingState()
+    protected KaqingState GetKaqingState()
     {
         return (KaqingState)GetPlayerCharacterState();
     }
@@ -63,9 +65,9 @@ public class KaqingIdleState : SwordIdleState
 
     private void ElementalSkillHitPos_NoAim()
     {
-        Vector3 dir = GetKaqingState().GetKaqing().LookAtClosestTarget();
-        Vector3 hitpos = GetKaqingState().GetKaqing().GetRayPosition3D(GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerOffsetPosition().position, dir, GetKaqingState().GetKaqing().GetKaqingState().KaqingData.ESkillRange);
-        GetKaqingState().GetKaqing().GetKaqingAim().SetAimTargetPosition(hitpos);
+        Vector3 dir = Kaqing.LookAtClosestTarget();
+        Vector3 hitpos = PlayerController.GetRayPosition3D(Kaqing.GetPointOfContact(), dir, GetKaqingState().KaqingData.ESkillRange);
+        Kaqing.GetKaqingAimController().SetAimTargetPosition(hitpos);
     }
 
     public override void ElementalBurstTrigger()

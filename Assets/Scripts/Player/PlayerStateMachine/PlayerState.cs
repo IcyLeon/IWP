@@ -17,7 +17,7 @@ public class PlayerState
 
     public Rigidbody rb;
 
-    private PlayerController PlayerController;
+    private PlayerManager PlayerManager;
 
     public PlayerData PlayerData;
     public PlayerStoppingState playerStoppingState { get; }
@@ -71,13 +71,13 @@ public class PlayerState
         currentState.OnAnimationTransition();
     }
 
-    public PlayerController GetPlayerController()
+    public PlayerManager GetPlayerManager()
     {
-        return PlayerController;
+        return PlayerManager;
     }
-    public PlayerState(PlayerController playerController)
+    public PlayerState(PlayerManager playerManager)
     {
-        PlayerController = playerController;
+        PlayerManager = playerManager;
         PlayerData = new PlayerData();
         playerStoppingState = new PlayerStoppingState(this);
         playerFallingState = new PlayerFallingState(this);
@@ -99,13 +99,5 @@ public class PlayerState
     private void OnCharacterChange(CharacterData cd, PlayerCharacters playerCharacters)
     {
         ChangeState(playerIdleState);
-    }
-
-    public bool IsDeadState()
-    {
-        if (currentState == null)
-            return false;
-
-        return currentState is PlayerDeadState;
     }
 }

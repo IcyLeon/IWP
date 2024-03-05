@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField] PlayerController playerController;
+    [SerializeField] PlayerCanvasUI PlayerCanvasUI;
     [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
     [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
-    [SerializeField] PlayerCanvasUI PlayerCanvasUI;
     [SerializeField] Transform CameraLook;
 
     [Header("Common Audio")]
@@ -16,7 +17,6 @@ public class PlayerManager : MonoBehaviour
     private Rigidbody rb;
     private List<PlayerCharacters> PlayerCharactersList = new();
     private PlayerCharacters CurrentCharacter;
-    private PlayerController playerController;
 
     private StaminaManager staminaManager;
     private InventoryManager inventoryManager;
@@ -29,11 +29,17 @@ public class PlayerManager : MonoBehaviour
     private ItemCollectedUI ItemCollectedUI;
     private GadgetItem currentEquipGadgetItem;
 
+    private PlayerState playerState;
+
     public static void CallEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage IDamage)
     {
         onEntityHitSendInfo?.Invoke(ER, e, IDamage);
     }
 
+    public PlayerCanvasUI GetPlayerCanvasUI()
+    {
+        return PlayerCanvasUI;
+    }
     public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
     {
         return PlayerCoordinateAttackManager;
@@ -54,10 +60,6 @@ public class PlayerManager : MonoBehaviour
         return PlayerElementalSkillandBurstManager;
     }
 
-    public PlayerCanvasUI GetPlayerCanvasUI()
-    {
-        return PlayerCanvasUI;
-    }
     public void SpawnItemCollectedUI(ItemTemplate itemSO)
     {
         AssetManager AM = AssetManager.GetInstance();
@@ -71,13 +73,29 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerController = GetComponent<PlayerController>();
-        PlayerController.OnGadgetUse += OnGadgetUse;
+        playerState = new PlayerState(this);
         characterManager = CharacterManager.GetInstance();
+        characterManager.SetPlayerManager(this);
+        PlayerController.OnGadgetUse += OnGadgetUse;
         SceneManager.OnSceneChanged += OnSceneChanged;
         FallenUI.OnReviveChange += ReviveAllCharacters;
-        characterManager.SetPlayerManager(this);
+        PlayerController.OnNumsKeyInput += SwapCharactersControls;
     }
+
+    public void OnAnimationTransition()
+    {
+        playerState.OnAnimationTransition();
+    }
+    public PlayerState GetPlayerState()
+    {
+        return playerState;
+    }
+    private void Start()
+    {
+        inventoryManager = InventoryManager.GetInstance();
+        staminaManager = StaminaManager.GetInstance();
+    }
+
 
     public InventoryManager GetInventoryManager()
     {
@@ -91,14 +109,6 @@ public class PlayerManager : MonoBehaviour
         GetInventoryManager().SetCurrentGadgetItemEquipped(gadgetItem);
         currentEquipGadgetItem = GetInventoryManager().GetCurrentGadgetItem();
         OnGadgetItemChange?.Invoke(gadgetItem);
-    }
-
-
-    private void Start()
-    {
-        inventoryManager = InventoryManager.GetInstance();
-        staminaManager = StaminaManager.GetInstance();
-        SubscribeToKeyInputs();
     }
 
     private void OnGadgetUse()
@@ -120,7 +130,6 @@ public class PlayerManager : MonoBehaviour
     private void OnSceneChanged(SceneEnum s)
     {
         PlayerCharactersList.Clear();
-        SubscribeToKeyInputs();
         StartCoroutine(SpawnInitDelay());
     }
 
@@ -237,11 +246,6 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private void SubscribeToKeyInputs()
-    {
-        PlayerController.OnNumsKeyInput += SwapCharactersControls;
-    }
-
     private void OnDestroy()
     {
         PlayerController.OnNumsKeyInput -= SwapCharactersControls;
@@ -308,8 +312,31 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdatePlayerState();
         UpdateGadget();
         UpdateCharacterData();
+    }
+
+    void UpdatePlayerState()
+    {
+        if (GetPlayerState() == null)
+            return;
+
+        if (Time.timeScale == 0)
+            return;
+
+        GetPlayerState().Update();
+    }
+
+    void FixedUpdate()
+    {
+        if (GetPlayerState() != null)
+            GetPlayerState().FixedUpdate();    
+    }
+
+    public float GetAnimationSpeed()
+    {
+        return playerState.GetPlayerMovementState().GetAnimationSpeed();
     }
 
     private void UpdateGadget()
@@ -354,18 +381,12 @@ public class PlayerManager : MonoBehaviour
 
     public PlayerMovementState GetPlayerMovementState()
     {
-        return GetPlayerController().GetPlayerState().GetPlayerMovementState();
+        return GetPlayerState().GetPlayerMovementState();
     }
 
     private void SwapCharactersControls(float index)
     {
-        if (isBurstState())
-            return;
-
-        if (isDeadState() || IsAiming() || GetPlayerMovementState() is PlayerAirborneState)
-            return;
-
-        if (IsSkillCasting())
+        if (IsSkillCasting() || isBurstState() || isDeadState() || IsAiming() || GetPlayerMovementState() is PlayerAirborneState)
             return;
 
         SwapCharacters((int)index - 1);

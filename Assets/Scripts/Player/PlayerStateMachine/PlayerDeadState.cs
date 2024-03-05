@@ -13,7 +13,7 @@ public class PlayerDeadState : PlayerMovementState
     {
         base.Enter();
         StartAnimation("isDead");
-        GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter().PlayRandomFallenVoice();
+        GetPlayerState().GetPlayerManager().GetCurrentCharacter().PlayRandomFallenVoice();
         StartDead = false;
     }
 
@@ -35,13 +35,13 @@ public class PlayerDeadState : PlayerMovementState
 
     private void ChangeCharacter()
     {
-        GetPlayerState().GetPlayerController().GetPlayerManager().SwapCharacters(GetAliveCharacters(), true);
+        GetPlayerState().GetPlayerManager().SwapCharacters(GetAliveCharacters(), true);
         GetPlayerState().PlayerData.TimeForImmuneDamageElapsed = Time.time;
     }
 
     private CharacterData GetAliveCharacters()
     {
-        return GetPlayerState().GetPlayerController().GetPlayerManager().GetAliveCharacters();
+        return GetPlayerState().GetPlayerManager().GetAliveCharacters();
     }
 
     public override void Update()
@@ -57,7 +57,7 @@ public class PlayerDeadState : PlayerMovementState
             }
             else
             {
-                GetPlayerState().GetPlayerController().GetMainUI().OpenFallenPanel();
+                GetPlayerState().GetPlayerManager().GetPlayerController().GetMainUI().OpenFallenPanel();
                 return;
             }
         }

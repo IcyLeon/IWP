@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aim : MonoBehaviour
+public class AimController : MonoBehaviour
 {
     [SerializeField] protected PlayerCharacters PlayerCharactersRef;
     protected Vector3 AimTargetPosition;
@@ -40,7 +40,7 @@ public class Aim : MonoBehaviour
         if (PlayerCharactersRef == null)
             return;
 
-        PlayerMovementState PMS = PlayerCharactersRef.GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState();
+        PlayerMovementState PMS = PlayerCharactersRef.GetPlayerManager().GetPlayerState().GetPlayerMovementState();
 
         if (PMS is not PlayerAimState)
         {

@@ -18,7 +18,7 @@ public class PlayerRunState : PlayerMovingState
 
     public override float GetAnimationSpeed()
     {
-        return 0.6f;
+        return 0.5f;
     }
 
 

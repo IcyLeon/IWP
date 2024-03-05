@@ -11,26 +11,19 @@ public class PlayerAirborneState : PlayerMovementState
     public override void Enter()
     {
         base.Enter();
+        PlayerController.OnChargeTrigger += OnPlungeAttack;
     }
 
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        CheckPlunge();
-    }
-
-    private void CheckPlunge()
+    private void OnPlungeAttack()
     {
         float PlungeAttackRange = 2f;
 
+        if (GetPlayerState().GetPlayerManager().GetCurrentCharacter() == null)
+            return;
+
         if (!Physics.Raycast(GetPlayerState().rb.position, Vector3.down, PlungeAttackRange, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore) && !IsTouchingTerrain())
         {
-            if (Input.GetMouseButtonDown(0) && this is not PlayerPlungeState && !GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
+            if (this is not PlayerPlungeState && !GetPlayerState().GetPlayerManager().IsSkillCasting())
             {
                 GetPlayerState().ChangeState(GetPlayerState().playerPlungeState);
                 return;
@@ -41,5 +34,6 @@ public class PlayerAirborneState : PlayerMovementState
     public override void Exit()
     {
         base.Exit();
+        PlayerController.OnChargeTrigger -= OnPlungeAttack;
     }
 }

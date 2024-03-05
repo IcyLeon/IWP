@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 public class KaqingBurstState : SwordElementalBurstState
 {
-    public KaqingState GetKaqingState()
+    private Kaqing Kaqing;
+
+    protected KaqingState GetKaqingState()
     {
         return (KaqingState)GetPlayerCharacterState();
     }
@@ -25,6 +27,7 @@ public class KaqingBurstState : SwordElementalBurstState
 
     public KaqingBurstState(PlayerCharacterState pcs) : base(pcs)
     {
+        Kaqing = GetKaqingState().GetKaqing();
         TimeInBetweenHits = 2.5f / (TotalHits * 2f);
     }
 
@@ -32,24 +35,19 @@ public class KaqingBurstState : SwordElementalBurstState
     {
         base.Enter();
         StartBurst = false;
-        GetKaqingState().GetKaqing().SpawnEffects();
+        Kaqing.SpawnEffects();
         elementalBurst = ElementalBurst.First_Phase;
         CurrentHits = 0;
         HitElapsed = Time.time + TimeInBetweenHits;
-        LastPosition = GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerOffsetPosition().position;
+        LastPosition = Kaqing.GetPlayerManager().GetPlayerOffsetPosition().position;
 
-        GetKaqingState().GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(GetKaqingState().GetKaqing());
+        Kaqing.GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(Kaqing);
     }
 
     public override void Exit()
     {
         base.Exit();
         HitElapsed = 0;
-    }
-
-    public override void Update()
-    {
-        base.Update();
     }
 
     public override void UpdateBurst()
@@ -59,16 +57,15 @@ public class KaqingBurstState : SwordElementalBurstState
 
     private void BurstAreaDamage(Vector3 pos)
     {
-        Collider[] colliders = Physics.OverlapSphere(pos, GetKaqingState().GetKaqing().GetUltiRange(), LayerMask.GetMask("Entity", "BossEntity"));
+        Collider[] colliders = Physics.OverlapSphere(pos, Kaqing.GetUltiRange(), LayerMask.GetMask("Entity", "BossEntity"));
         for (int i = 0; i < colliders.Length; i++)
         {
-            Collider collider = colliders[i];
-            IDamage damage = collider.GetComponent<IDamage>();
+            IDamage damage = colliders[i].GetComponent<IDamage>();
             if (damage != null)
             {
                 if (!damage.IsDead())
                 {
-                    GetKaqingState().GetKaqing().SpawnHitEffect(damage);
+                    Kaqing.SpawnHitEffect(damage);
                 }
             }
         }
@@ -88,8 +85,8 @@ public class KaqingBurstState : SwordElementalBurstState
 
                     if (Visible)
                     {
-                        GetPlayerCharacterState().GetPlayerCharacters().GetModel().SetActive(true);
-                        GetPlayerCharacterState().GetPlayerCharacters().SetBurstActive(false);
+                        Kaqing.GetModel().SetActive(true);
+                        Kaqing.SetBurstActive(false);
                         StopAnimation("isBurst");
                     }
 
@@ -108,7 +105,7 @@ public class KaqingBurstState : SwordElementalBurstState
                     }
                     break;
                 case ElementalBurst.Last_Hit:
-                    GetKaqingState().GetKaqing().DestroyUltiSlash();
+                    Kaqing.DestroyUltiSlash();
                     if (Time.time - LastHitTimer > 0.8f)
                     {
                         BurstAreaDamage(LastPosition);
@@ -123,9 +120,9 @@ public class KaqingBurstState : SwordElementalBurstState
 
     public override void OnAnimationTransition()
     {
-        GetKaqingState().GetKaqing().GetModel().SetActive(false);
-        GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
+        Kaqing.GetModel().SetActive(false);
+        Kaqing.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
         StartBurst = true;
-        GetKaqingState().GetKaqing().SpawnUltiSlash();
+        Kaqing.SpawnUltiSlash();
     }
 }

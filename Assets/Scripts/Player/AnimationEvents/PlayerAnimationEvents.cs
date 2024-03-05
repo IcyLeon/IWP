@@ -38,7 +38,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void TriggerOnAnimationTransition()
     {
-        playerCharacters.GetPlayerManager().GetPlayerController().OnAnimationTransition();
+        playerCharacters.GetPlayerManager().OnAnimationTransition();
     }
 
     private void StopBurstAnimation()

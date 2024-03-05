@@ -7,7 +7,7 @@ using UnityEngine;
 public class BowCharacters : PlayerCharacters
 {
     [SerializeField] Transform EmitterPivot;
-    [SerializeField] Aim Aim;
+    [SerializeField] AimController AimController;
     [SerializeField] ParticleSystem ChargeUpFinishPrefab;
     [SerializeField] BowSoundSO BowSoundSO;
     private ParticleSystem ChargeUpEmitter;
@@ -92,9 +92,9 @@ public class BowCharacters : PlayerCharacters
         ChargeUpEmitter.Play();
     }
 
-    public Aim GetAim()
+    public AimController GetAimController()
     {
-        return Aim;
+        return AimController;
     }
     public void DestroyChargeUpEmitter()
     {
@@ -111,7 +111,7 @@ public class BowCharacters : PlayerCharacters
     protected override void OnCharacterChanged(CharacterData c, PlayerCharacters playerCharacters)
     {
         base.OnCharacterChanged(c, playerCharacters);
-        GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(false);
+        BowAimState.OnBowAimStatus?.Invoke(false);
     }
 
     protected override void OnDisable()

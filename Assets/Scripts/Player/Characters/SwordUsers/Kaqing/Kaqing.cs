@@ -9,7 +9,7 @@ public class Kaqing : SwordCharacters
     private float CurrentElementalSwordFusion;
     [SerializeField] GameObject ElectroSlashPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
-    [SerializeField] KaqingAim KaqingAim;
+    [SerializeField] KaqingAimController KaqingAim;
     private ParticleSystem BurstRangeEffect;
     [SerializeField] GameObject UltiSlashPrefab;
     [SerializeField] GameObject ElectroPlungeAttack;
@@ -120,7 +120,7 @@ public class Kaqing : SwordCharacters
         return true;
     }
 
-    public KaqingAim GetKaqingAim()
+    public KaqingAimController GetKaqingAimController()
     {
         return KaqingAim;
     }

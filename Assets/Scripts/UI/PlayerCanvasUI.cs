@@ -26,6 +26,7 @@ public class PlayerCanvasUI : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        BowAimState.OnBowAimStatus += ShowCrossHair;
         AssetManager.OnSpawnArrow += SpawnArrowIndicator;
     }
     private void Start()
@@ -40,6 +41,7 @@ public class PlayerCanvasUI : MonoBehaviour
     private void OnDestroy()
     {
         AssetManager.OnSpawnArrow -= SpawnArrowIndicator;
+        BowAimState.OnBowAimStatus -= ShowCrossHair;
     }
     // Update is called once per frame
     void Update()
@@ -48,7 +50,7 @@ public class PlayerCanvasUI : MonoBehaviour
         RemoveNullReferenceForArrowList();
     }
 
-    public void ShowCrossHair(bool val)
+    private void ShowCrossHair(bool val)
     {
         BowGO.gameObject.SetActive(val);
     }

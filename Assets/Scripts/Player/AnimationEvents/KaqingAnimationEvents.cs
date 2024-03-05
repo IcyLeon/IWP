@@ -36,6 +36,6 @@ public class KaqingAnimationEvents : SwordUsersAnimationEvents
     private void SpawnESlash()
     {
         AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordCharacters().GetSwordModel().GetSlashPivot());
-        GetKaqing().GetKaqingAim().DestroyTeleporter();
+        GetKaqing().GetKaqingAimController().DestroyTeleporter();
     }
 }

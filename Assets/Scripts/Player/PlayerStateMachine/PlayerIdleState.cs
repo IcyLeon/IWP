@@ -20,7 +20,7 @@ public class PlayerIdleState : PlayerGroundState
     {
         base.Update();
 
-        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
             if (playerCharacter.GetisAttacking())

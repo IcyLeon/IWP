@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KaqingAim : Aim
+public class KaqingAimController : AimController
 {
     [SerializeField] GameObject TeleporterPrefab;
     private GameObject targetOrb;

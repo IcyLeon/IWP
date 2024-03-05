@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class KaqingElementalSkillState : SwordElementalSkillState
 {
-    public KaqingState GetKaqingState()
+    protected Kaqing Kaqing;
+    protected KaqingState GetKaqingState()
     {
         return (KaqingState)GetSwordCharactersState();
     }
@@ -16,5 +17,6 @@ public class KaqingElementalSkillState : SwordElementalSkillState
 
     public KaqingElementalSkillState(PlayerCharacterState pcs) : base(pcs)
     {
+        Kaqing = GetKaqingState().GetKaqing();
     }
 }

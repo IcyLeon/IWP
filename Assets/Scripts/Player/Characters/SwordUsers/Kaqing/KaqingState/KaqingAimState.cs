@@ -14,7 +14,8 @@ public class KaqingAimState : KaqingElementalSkillState
     {
         base.Enter();
         Timer = 0f;
-        GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(false);
+        Kaqing.ToggleAimCamera(true);
+        Kaqing.GetSwordModel().gameObject.SetActive(false);
     }
 
     public override void ElementalSkillTrigger()
@@ -24,20 +25,24 @@ public class KaqingAimState : KaqingElementalSkillState
 
     private void ElementalSkillHitPos_Aim()
     {
+        Vector3 EmitterPosition = Kaqing.GetPointOfContact();
         Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        Vector3 hitdir = (ray.origin + ray.direction * (GetKaqingState().KaqingData.ESkillRange + GetOffSet(EmitterPosition))) - EmitterPosition;
+        Kaqing.GetKaqingAimController().UpdateTargetOrb(PlayerController.GetRayPosition3D(EmitterPosition, hitdir, GetKaqingState().KaqingData.ESkillRange));
+    }
 
-        Vector3 hitdir = (ray.origin + ray.direction * GetKaqingState().GetKaqing().GetKaqingState().KaqingData.ESkillRange) - GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerOffsetPosition().position;
-        GetKaqingState().GetKaqing().GetKaqingAim().UpdateTargetOrb(GetKaqingState().GetKaqing().GetRayPosition3D(GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerOffsetPosition().position, hitdir, GetKaqingState().GetKaqing().GetKaqingState().KaqingData.ESkillRange));
+    private float GetOffSet(Vector3 EmitterPos)
+    {
+        return Mathf.Sqrt((Camera.main.transform.position - EmitterPos).magnitude);
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (Kaqing.GetPlayerManager().isDeadState())
             return;
 
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateCameraAim();
         ElementalSkillHitPos_Aim();
 
         if (Timer >= MaxTimer)
@@ -50,6 +55,6 @@ public class KaqingAimState : KaqingElementalSkillState
 
     public override void Exit()
     {
-        GetKaqingState().GetKaqing().GetKaqingAim().DestroyTargetOrb();
+        Kaqing.GetKaqingAimController().DestroyTargetOrb();
     }
 }

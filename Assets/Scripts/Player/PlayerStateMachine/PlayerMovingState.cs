@@ -12,7 +12,7 @@ public class PlayerMovingState : PlayerGroundState
     public override void Update()
     {
         base.Update();
-        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+        PlayerCharacters playerCharacter = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
             if (playerCharacter.GetisAttacking())

@@ -46,7 +46,7 @@ public class PlayerGroundState : PlayerMovementState
         if (IsBurstActive())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
-            PlayerCharacters playerCharacter = GetPlayerState().GetPlayerController().GetPlayerManager().GetCurrentCharacter();
+            PlayerCharacters playerCharacter = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
             if (playerCharacter != null)
             {
                 playerCharacter.GetPlayerCharacterState().ResetBasicAttacks();
@@ -57,7 +57,7 @@ public class PlayerGroundState : PlayerMovementState
         {
             OnAimInput();
 
-            if (GetPlayerState().GetPlayerController().GetPlayerManager().IsSkillCasting())
+            if (GetPlayerState().GetPlayerManager().IsSkillCasting())
                 return;
 
             if (IsAiming())

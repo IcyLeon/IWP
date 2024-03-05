@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CameraManager cameraManager;
     private PlayerManager playerManager;
     private LockMovement lockMovement;
-    private PlayerState playerState;
 
     public delegate bool OnElemental();
     public static OnElemental OnElementalSkillHold;
@@ -50,10 +49,6 @@ public class PlayerController : MonoBehaviour
     {
         return lockMovement;
     }
-    public float GetAnimationSpeed()
-    {
-        return playerState.GetPlayerMovementState().GetAnimationSpeed();
-    }
 
     public bool isCursorVisible()
     {
@@ -63,7 +58,6 @@ public class PlayerController : MonoBehaviour
     {
         lockMovement = LockMovement.Enable;
         playerManager = GetComponent<PlayerManager>();
-        playerState = new PlayerState(this);
         PlayerManager.onCharacterChange += RecalculateSize;
     }
 
@@ -89,15 +83,6 @@ public class PlayerController : MonoBehaviour
         resizeableCollider.Resize();
     }
 
-    public PlayerState GetPlayerState()
-    {
-        return playerState;
-    }
-
-    public void OnAnimationTransition()
-    {
-        playerState.OnAnimationTransition();
-    }
 
     void Update()
     {
@@ -105,10 +90,6 @@ public class PlayerController : MonoBehaviour
             return;
 
         UpdateControls();
-        if (Time.timeScale != 0)
-        {
-            playerState.Update();
-        }
     }
 
     public CapsuleCollider GetCapsuleCollider()
@@ -129,7 +110,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
+    public static Vector3 GetRayPosition3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
         if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, maxdistance, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision")))
         {
@@ -138,7 +119,7 @@ public class PlayerController : MonoBehaviour
         return origin + direction.normalized * maxdistance;
     }
 
-    public RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
+    public static RaycastHit[] GetRayPositionAll3D(Vector3 origin, Vector3 direction, float maxdistance)
     {
         RaycastHit[] RaycastAll = Physics.RaycastAll(origin, direction.normalized, maxdistance, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"));
         return RaycastAll;
@@ -172,7 +153,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (playerState.IsDeadState())
+        if (GetPlayerManager().isDeadState())
             return;
 
         OnScroll?.Invoke(Input.mouseScrollDelta.y);
@@ -200,28 +181,10 @@ public class PlayerController : MonoBehaviour
     {
         return cameraManager;
     }
-    public void UpdateDefaultPosOffsetAndZoom()
-    {
-        GetCameraManager().CameraDefault();
-    }
-
-    public void UpdateAim()
-    {
-        GetCameraManager().CameraAim();
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (GetPlayerManager().GetCharacterRB() == null)
-            return;
-
-        playerState.FixedUpdate();
-    }
 
     public Vector3 GetInputDirection()
     {
-        return playerState.GetPlayerMovementState().GetInputDirection();
+        return GetPlayerManager().GetPlayerState().GetPlayerMovementState().GetInputDirection();
     }
  
 }

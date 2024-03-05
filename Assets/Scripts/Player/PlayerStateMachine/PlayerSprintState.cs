@@ -36,7 +36,7 @@ public class PlayerSprintState : PlayerMovingState
 
     private void StopSprinting()
     {
-        float ActualSprint = Time.deltaTime * GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().GetStaminaSO().SprintCostPerSec;
+        float ActualSprint = Time.deltaTime * GetPlayerState().GetPlayerManager().GetStaminaManager().GetStaminaSO().SprintCostPerSec;
 
         if (GetPlayerState().PlayerData.Direction == Vector3.zero)
         {
@@ -44,13 +44,13 @@ public class PlayerSprintState : PlayerMovingState
             return;
         }
 
-        if (!GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().CanPerformStaminaAction(ActualSprint))
+        if (!GetPlayerState().GetPlayerManager().GetStaminaManager().CanPerformStaminaAction(ActualSprint))
         {
             GetPlayerState().ChangeState(GetPlayerState().playerRunState);
             return;
         }
 
-        GetPlayerState().GetPlayerController().GetPlayerManager().GetStaminaManager().PerformStaminaAction(ActualSprint);
+        GetPlayerState().GetPlayerManager().GetStaminaManager().PerformStaminaAction(ActualSprint);
     }
 
     public override void FixedUpdate()

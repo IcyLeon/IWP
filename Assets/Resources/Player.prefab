@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &608362007801202913
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9207,9 +9207,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5a53470f0e1ed4cb6d4ebdd40432dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 804135296878626476}
+  PlayerCanvasUI: {fileID: 8400702461292456739}
   PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
   PlayerElementalSkillandBurstManager: {fileID: 6785168847716851814}
-  PlayerCanvasUI: {fileID: 8400702461292456739}
   CameraLook: {fileID: 2798339205668980939}
   SwitchSoundEffectsClip: {fileID: 8300000, guid: cc332e6c5a1ec214abf96aac1a8a779c,
     type: 3}

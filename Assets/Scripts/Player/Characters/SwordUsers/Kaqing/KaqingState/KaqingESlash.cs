@@ -12,19 +12,19 @@ public class KaqingESlash : KaqingElementalSkillState
     {
         base.Enter();
         StartAnimation("ESlash");
-        GetKaqingState().GetKaqing().GetPlayerManager().GetPlayerMovementState().ResetVelocity();
-        GetKaqingState().GetKaqing().GetModel().SetActive(true);
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0f);
-        GetKaqingState().GetKaqing().StartElementalTimer();
+        Kaqing.GetPlayerManager().GetPlayerMovementState().ResetVelocity();
+        Kaqing.GetModel().SetActive(true);
+        Kaqing.UpdateDefaultPosOffsetAndZoom(0f);
+        Kaqing.StartElementalTimer();
 
         GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsRecastVoice();
     }
 
     public override void OnAnimationTransition()
     {
-        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerController().GetPlayerState().GetPlayerMovementState().ResetVelocity();
+        Kaqing.GetPlayerManager().GetPlayerMovementState().ResetVelocity();
         GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
-        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = true;
+        Kaqing.GetPlayerManager().GetCharacterRB().useGravity = true;
     }
 
     public override void Exit()

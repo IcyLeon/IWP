@@ -17,9 +17,9 @@ public class KaqingTeleportState : KaqingElementalSkillState
         Range = GetKaqingState().KaqingData.ESkillRange;
         TargetPosition = GetTargetPosition();
 
-        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetCharacterRB().useGravity = false;
-        GetKaqingState().GetKaqing().GetModel().SetActive(false);
-        GetKaqingState().GetKaqing().GetKaqingAim().LookAtAimTarget();
+        Kaqing.GetPlayerManager().GetCharacterRB().useGravity = false;
+        Kaqing.GetModel().SetActive(false);
+        Kaqing.GetKaqingAimController().LookAtAimTarget();
     }
 
     public override void Update()
@@ -30,10 +30,10 @@ public class KaqingTeleportState : KaqingElementalSkillState
 
     private void UpdateTravelling()
     {
-        if ((GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position - TargetPosition).magnitude > 1f)
+        if ((Kaqing.GetPlayerManager().GetCharacterRB().position - TargetPosition).magnitude > 1f)
         {
-            GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position = Vector3.MoveTowards(
-                GetKaqingState().GetKaqing().GetPlayerManager().GetCharacterRB().position, TargetPosition, Time.deltaTime * 50f
+            Kaqing.GetPlayerManager().GetCharacterRB().position = Vector3.MoveTowards(
+                Kaqing.GetPlayerManager().GetCharacterRB().position, TargetPosition, Time.deltaTime * 50f
                 );
         }
         else
@@ -44,16 +44,16 @@ public class KaqingTeleportState : KaqingElementalSkillState
     }
     private Vector3 GetTargetPosition()
     {
-        Vector3 dir = GetKaqingState().KaqingData.kaqingTeleporter.transform.position - GetKaqingState().GetKaqing().GetPointOfContact();
+        Vector3 dir = GetKaqingState().KaqingData.kaqingTeleporter.transform.position - Kaqing.GetPointOfContact();
 
-        if (Physics.Raycast(GetKaqingState().GetKaqing().GetPointOfContact(), dir.normalized, out RaycastHit hit, Range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(Kaqing.GetPointOfContact(), dir.normalized, out RaycastHit hit, Range, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
         {
             return hit.point;
         }
         else
         {
             if (dir.magnitude >= Range)
-                return GetKaqingState().GetKaqing().GetPointOfContact() + dir.normalized * Range;
+                return Kaqing.GetPointOfContact() + dir.normalized * Range;
         }
 
         return GetKaqingState().KaqingData.kaqingTeleporter.transform.position;
