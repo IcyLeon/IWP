@@ -15,7 +15,6 @@ public class SwordCharacters : PlayerCharacters
 
     public virtual void SpawnSlash()
     {
-        BasicAttackTrigger();
         AssetManager.GetInstance().SpawnSlashEffect(GetSwordModel().GetSlashPivot());
         GetSwordModel().ResetHits();
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAimState : PlayerMovementState
+public class PlayerAimState : PlayerGroundState
 {
     private float AimSpeed;
     public PlayerAimState(PlayerState playerState) : base(playerState)
@@ -18,16 +18,10 @@ public class PlayerAimState : PlayerMovementState
 
     public override void FixedUpdate()
     {
-        Float();
 
         if (IsMovingHorizontally())
         {
             DecelerateHorizontal();
-        }
-
-        if (GetPlayerState().GetPlayerManager().GetCurrentCharacter() is Kaqing)
-        {
-            return;
         }
 
         if (CheckIfisAboutToFall())
@@ -41,7 +35,7 @@ public class PlayerAimState : PlayerMovementState
     public override void Update()
     {
         base.Update();
-        OnDashInput();
+
         if (!IsAiming())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);

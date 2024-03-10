@@ -13,23 +13,22 @@ public class PlayerPlungeState : PlayerAirborneState
         base.Enter();
         ResetVelocity();
         GetPlayerState().rb.useGravity = false;
-        GetPlayerState().GetPlayerManager().GetPlayerController().GetCapsuleCollider().isTrigger = true;
+        GetPlayerState().GetPlayerController().GetCapsuleCollider().isTrigger = true;
         StartAnimation("isPlunging");
     }
     public override void Exit()
     {
         base.Exit();
         GetPlayerState().rb.useGravity = true;
-        GetPlayerState().GetPlayerManager().GetPlayerController().GetCapsuleCollider().isTrigger = false;
+        GetPlayerState().GetPlayerController().GetCapsuleCollider().isTrigger = false;
         OnPlungeAttack();
         StopAnimation("isPlunging");
     }
     private void OnPlungeAttack()
     {
-        Vector3 hitpos = GetCapsuleCollider().bounds.center + Vector3.down * (GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f);
-        GetPlayerState().GetPlayerManager().GetPlayerController().CallPlungeAtk(hitpos);
-        
-        GetPlayerState().GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(3.5f, 3.5f, 1.5f);
+        Vector3 hitpos = GetCapsuleCollider().bounds.center + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f);
+        GetPlayerState().GetPlayerController().CallPlungeAtk(hitpos);
+        GetPlayerState().GetPlayerController().GetCameraManager().CameraShake(3.5f, 3.5f, 1.5f);
     }
 
     public override void OnAnimationTransition()
@@ -51,7 +50,7 @@ public class PlayerPlungeState : PlayerAirborneState
     public override void Update()
     {
         base.Update();
-        if (IsTouchingTerrain(true))
+        if (IsTouchingTerrain())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerIdleState);
             return;

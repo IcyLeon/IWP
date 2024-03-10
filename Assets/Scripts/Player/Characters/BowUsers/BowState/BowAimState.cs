@@ -8,7 +8,6 @@ public class BowAimState : BowControlState
     private bool AimHold;
     private float DelayToIdle = 0.25f, DelayToIdleElasped;
     private bool StartDelay;
-    public static Action<bool> OnBowAimStatus;
 
     public BowAimState(PlayerCharacterState pcs) : base(pcs)
     {
@@ -18,7 +17,6 @@ public class BowAimState : BowControlState
     {
         base.Enter();
         GetPlayerCharacterState().GetPlayerCharacters().ToggleAimCamera(true);
-        OnBowAimStatus?.Invoke(true);
         StartDelay = false;
         DelayToIdleElasped = Time.time;
         GetBowCharactersState().GetBowData().isChargedFinish = false;
@@ -28,8 +26,14 @@ public class BowAimState : BowControlState
     {
         base.Update();
 
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDeadState())
             return;
+
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing())
+        {
+            GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);
+            return;
+        }
 
         UpdateBowAim();
         
@@ -38,7 +42,6 @@ public class BowAimState : BowControlState
             if (Time.time - DelayToIdleElasped > DelayToIdle)
             {
                 GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);
-                GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0);
                 DelayToIdleElasped = Time.time;
             }
         }
@@ -140,9 +143,8 @@ public class BowAimState : BowControlState
     {
         base.Exit();
         ResetCharge();
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0f);
+        GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0f);
         GetBowCharactersState().GetBowData().isChargedFinish = false;
-        OnBowAimStatus?.Invoke(false);
         GetBowCharactersState().GetBowCharacters().DestroyChargeUpEmitter();
     }
 }

@@ -1294,7 +1294,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5129130083501095028}
   - component: {fileID: 2679040628979708824}
-  - component: {fileID: 5667366209482266760}
   m_Layer: 3
   m_Name: AimRig
   m_TagString: Untagged
@@ -1341,20 +1340,6 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
---- !u!114 &5667366209482266760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2713200612215417652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a9d8063ab10ad46a27a51b601d8b29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Rig: {fileID: 2679040628979708824}
-  TargetTransform: {fileID: 7420063114275974404}
 --- !u!1 &2797057522411628156
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,7 +1912,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCharactersRef: {fileID: 2636089109557027792}
-  AimLookAt: {fileID: 5667366209482266760}
+  Rig: {fileID: 2679040628979708824}
+  TargetTransform: {fileID: 7420063114275974404}
 --- !u!1 &3572042621577613190
 GameObject:
   m_ObjectHideFlags: 0

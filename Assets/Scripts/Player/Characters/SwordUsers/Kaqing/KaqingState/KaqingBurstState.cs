@@ -40,8 +40,6 @@ public class KaqingBurstState : SwordElementalBurstState
         CurrentHits = 0;
         HitElapsed = Time.time + TimeInBetweenHits;
         LastPosition = Kaqing.GetPlayerManager().GetPlayerOffsetPosition().position;
-
-        Kaqing.GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(Kaqing);
     }
 
     public override void Exit()
@@ -120,6 +118,7 @@ public class KaqingBurstState : SwordElementalBurstState
 
     public override void OnAnimationTransition()
     {
+        Kaqing.GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(Kaqing);
         Kaqing.GetModel().SetActive(false);
         Kaqing.GetPlayerManager().GetPlayerController().GetCameraManager().Recentering();
         StartBurst = true;

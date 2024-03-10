@@ -7,9 +7,8 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerCanvasUI PlayerCanvasUI;
-    [SerializeField] PlayerCoordinateAttackManager PlayerCoordinateAttackManager;
     [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
-    [SerializeField] Transform CameraLook;
+    [SerializeField] Transform OffsetCameraLook;
 
     [Header("Common Audio")]
     [SerializeField] AudioClip SwitchSoundEffectsClip;
@@ -40,10 +39,6 @@ public class PlayerManager : MonoBehaviour
     {
         return PlayerCanvasUI;
     }
-    public PlayerCoordinateAttackManager GetPlayerCoordinateAttackManager()
-    {
-        return PlayerCoordinateAttackManager;
-    }
 
     private void ReviveAllCharacters()
     {
@@ -73,7 +68,6 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerState = new PlayerState(this);
         characterManager = CharacterManager.GetInstance();
         characterManager.SetPlayerManager(this);
         PlayerController.OnGadgetUse += OnGadgetUse;
@@ -92,6 +86,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void Start()
     {
+        playerState = new PlayerState(this, playerController);
         inventoryManager = InventoryManager.GetInstance();
         staminaManager = StaminaManager.GetInstance();
     }
@@ -257,14 +252,14 @@ public class PlayerManager : MonoBehaviour
 
     public Transform GetPlayerOffsetPosition()
     {
-        return CameraLook;
+        return OffsetCameraLook;
     }
 
     public bool CanPerformAction()
     {
         return (GetPlayerMovementState() is PlayerGroundState || GetPlayerMovementState() is PlayerAttackState) &&
             !IsSkillCasting() &&
-            !isBurstState();
+            !IsBurstState();
     }
 
     public bool IsGrounded()
@@ -277,7 +272,7 @@ public class PlayerManager : MonoBehaviour
         return characterManager;
     }
 
-    public bool isBurstActive()
+    public bool IsBurstActive()
     {
         if (GetCurrentCharacter() == null)
             return false;
@@ -285,12 +280,12 @@ public class PlayerManager : MonoBehaviour
         return GetCurrentCharacter().GetBurstActive();
     }
 
-    public bool isDeadState()
+    public bool IsDeadState()
     {
         return GetPlayerMovementState() is PlayerDeadState;
     }
 
-    public bool isBurstState()
+    public bool IsBurstState()
     {
         return GetPlayerMovementState() is PlayerBurstState;
     }
@@ -386,7 +381,7 @@ public class PlayerManager : MonoBehaviour
 
     private void SwapCharactersControls(float index)
     {
-        if (IsSkillCasting() || isBurstState() || isDeadState() || IsAiming() || GetPlayerMovementState() is PlayerAirborneState)
+        if (IsSkillCasting() || IsDeadState() || IsAiming() || GetPlayerMovementState() is PlayerAirborneState)
             return;
 
         SwapCharacters((int)index - 1);
@@ -461,7 +456,7 @@ public class PlayerManager : MonoBehaviour
         if (GetCurrentCharacter().GetPlayerCharacterState() == null)
             return false;
 
-        return (GetCurrentCharacter().GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || isBurstState());
+        return (GetCurrentCharacter().GetPlayerCharacterState().GetCurrentState() is PlayerElementalSkillState || IsBurstState());
     }
 
     private PlayerCharacters GetPlayerCharacter(PlayerCharacterSO playersSO)

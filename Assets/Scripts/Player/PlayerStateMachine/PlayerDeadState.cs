@@ -57,7 +57,7 @@ public class PlayerDeadState : PlayerMovementState
             }
             else
             {
-                GetPlayerState().GetPlayerManager().GetPlayerController().GetMainUI().OpenFallenPanel();
+                GetPlayerState().GetPlayerController().GetMainUI().OpenFallenPanel();
                 return;
             }
         }

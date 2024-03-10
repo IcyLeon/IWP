@@ -14,6 +14,7 @@ public class KaqingAimState : KaqingElementalSkillState
     {
         base.Enter();
         Timer = 0f;
+        Kaqing.GetPlayerManager().GetPlayerController().DisableInput(Kaqing.GetPlayerManager().GetPlayerController().GetPlayerActions().Move, this is KaqingAimState);
         Kaqing.ToggleAimCamera(true);
         Kaqing.GetSwordModel().gameObject.SetActive(false);
     }
@@ -40,10 +41,10 @@ public class KaqingAimState : KaqingElementalSkillState
     {
         base.Update();
 
-        if (Kaqing.GetPlayerManager().isDeadState())
+        if (Kaqing.GetPlayerManager().IsDeadState())
             return;
 
-        ElementalSkillHitPos_Aim();
+        //ElementalSkillHitPos_Aim();
 
         if (Timer >= MaxTimer)
         {
@@ -53,6 +54,16 @@ public class KaqingAimState : KaqingElementalSkillState
         Timer += Time.deltaTime;
     }
 
+    public override void LateUpdate()
+    {
+        base.LateUpdate();
+
+        if (Kaqing.GetPlayerManager().IsDeadState())
+            return;
+
+        ElementalSkillHitPos_Aim();
+
+    }
     public override void Exit()
     {
         Kaqing.GetKaqingAimController().DestroyTargetOrb();

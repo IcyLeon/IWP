@@ -11,11 +11,11 @@ public class SwordIdleState : SwordControlState
     public override void Enter()
     {
         base.Enter();
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0);
+        GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0);
     }
     public override void ChargeTrigger()
     {
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDeadState())
             return;
 
         LaunchBasicAttack();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,12 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
     private List<PlayerCharacters> PlayerElementalSkillStateList;
     private List<PlayerCharacters> PlayerElementalBurstStateList;
     private List<PlayerCharacters> PlayerCharacterList;
+    public static event Action OnCoordinateAttack;
+
+    public static void CallCoordinateAttack()
+    {
+        OnCoordinateAttack?.Invoke();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -94,7 +101,7 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
             if (ca != null)
             {
                 ca.UpdateISkills();
-                if (ca.ISkillsEnded())
+                if (ca.IsISkillsEnded())
                 {
                     PlayerElementalSkillStateList.RemoveAt(i);
                     i--;
@@ -111,7 +118,7 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
             if (ca != null)
             {
                 ca.UpdateIBursts();
-                if (ca.IBurstEnded())
+                if (ca.IsIBurstEnded())
                 {
                     PlayerElementalBurstStateList.RemoveAt(i);
                     i--;

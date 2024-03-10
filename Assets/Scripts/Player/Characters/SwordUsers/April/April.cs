@@ -9,26 +9,16 @@ public class April : SwordCharacters
 {
     [SerializeField] GameObject ShieldPrefab;
     [SerializeField] GameObject ShieldExplosion;
-    [SerializeField] GameObject HealPrefab;
-    [SerializeField] GameObject EnemyMarkerPrefab;
     [SerializeField] LineRenderer ConnectionPrefab;
-    private List<ParticleSystem> ExplosionShield;
     private float ShieldTimerElapsed;
     private float nextHitExplosion;
     private ParticleSystem Shield;
 
     protected override void Start()
     {
-        ExplosionShield = new();
         PlayerCharacterState = new AprilState(this);
         base.Start();
         UltiRange = 4f;
-    }
-
-    private MarkerOnTargets GetEnemyMarker()
-    {
-        MarkerOnTargets go = Instantiate(EnemyMarkerPrefab).GetComponent<MarkerOnTargets>();
-        return go;
     }
 
     public LineRenderer GetConnectionLine()
@@ -37,7 +27,7 @@ public class April : SwordCharacters
         return go;
     }
 
-    private AprilState GetAprilState()
+    public AprilState GetAprilState()
     {
         return (AprilState)PlayerCharacterState;
     }
@@ -47,12 +37,13 @@ public class April : SwordCharacters
         ShieldTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer;
         if (Shield == null)
             Shield = Instantiate(ShieldPrefab).GetComponent<ParticleSystem>();
+
         Destroy(Shield.gameObject, ShieldTimerElapsed);
     }
 
     private void DamageEnemies()
     {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerManager().GetPlayerOffsetPosition().position, 2.8f, LayerMask.GetMask("Entity", "BossEntity"));
+        Collider[] colliders = Physics.OverlapSphere(GetPointOfContact(), 2.8f, LayerMask.GetMask("Entity", "BossEntity"));
         for (int i = 0; i < colliders.Length; i++)
         {
             IDamage dmg = colliders[i].GetComponent<IDamage>();
@@ -65,11 +56,11 @@ public class April : SwordCharacters
                 }
             }
         }
-        ParticleSystem ps = Instantiate(ShieldExplosion, GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
+        ParticleSystem ps = Instantiate(ShieldExplosion, GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
+        ps.transform.SetParent(GetPlayerManager().transform, true);
+
         Destroy(ps.gameObject, ps.main.duration);
-        ExplosionShield.Add(ps);
         GetPlayerManager().HealCharacter(GetPlayerManager().GetCurrentCharacter().GetCharacterData(), 0.03f * GetMaxHealth());
-        nextHitExplosion = Time.time;
     }
 
     public void DrainHealth()
@@ -83,13 +74,13 @@ public class April : SwordCharacters
         ShieldTimerElapsed -= Time.deltaTime;
         ShieldTimerElapsed = Mathf.Clamp(ShieldTimerElapsed, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer);
 
-        for (int i = ExplosionShield.Count - 1; i > 0; i--)
-        {
-            if (ExplosionShield[i] == null)
-                ExplosionShield.RemoveAt(i);
-            else
-                ExplosionShield[i].transform.position = GetPlayerManager().GetPlayerOffsetPosition().position;
-        }
+        //for (int i = ExplosionShield.Count - 1; i > 0; i--)
+        //{
+        //    if (ExplosionShield[i] == null)
+        //        ExplosionShield.RemoveAt(i);
+        //    else
+        //        ExplosionShield[i].transform.position = GetPointOfContact();
+        //}
 
         if (Shield)
         {
@@ -102,49 +93,22 @@ public class April : SwordCharacters
                 if (Time.time - nextHitExplosion > 1.5f)
                 {
                     DamageEnemies();
+                    nextHitExplosion = Time.time;
                 }
-                Shield.transform.position = GetPlayerManager().transform.position;
             }
+
+            Shield.transform.position = GetPointOfContact();
         }
     }
 
-    public void SpawnHeal()
+    public override bool IsISkillsEnded()
     {
-        ParticleSystem heal = Instantiate(HealPrefab, GetPlayerManager().transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Destroy(heal.gameObject, heal.main.duration);
+        return base.IsISkillsEnded();
     }
 
-    public override bool ISkillsEnded()
+    public override bool IsIBurstEnded()
     {
-        if (IsDead())
-            return true;
-
-        return ShieldTimerElapsed <= 0f;
-    }
-
-    public override bool IBurstEnded()
-    {
-        if (IsDead())
-            return true;
-
-        return false;
-    }
-
-    private void SetMarkersOnEnemy()
-    {
-        Collider[] colliders = Physics.OverlapSphere(GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerOffsetPosition().position, GetPlayerCharacterState().GetPlayerCharacters().GetUltiRange(), LayerMask.GetMask("Entity", "BossEntity"));
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            IDamage dmg = colliders[i].GetComponent<IDamage>();
-            if (dmg != null)
-            {
-                MarkerEnemyData NewMarkerAdded = GetAprilState().aprilData.m_MarkerData.AddMarkerToEnemy(dmg, GetPlayersSO().ElementalBurstTimer);
-                if (NewMarkerAdded != null)
-                {
-                    NewMarkerAdded.InitTargets(GetEnemyMarker());
-                }
-            }
-        }
+        return base.IsIBurstEnded();
     }
 
     public override void OnEntityHitSendInfo(ElementalReactionsTrigger ER, Elements e, IDamage d)
@@ -185,7 +149,7 @@ public class April : SwordCharacters
 
     public override void UpdateEveryTime()
     {
-        if (IBurstEnded())
+        if (IsIBurstEnded())
             GetAprilState().aprilData.RemoveAllMarkers();
     }
 }

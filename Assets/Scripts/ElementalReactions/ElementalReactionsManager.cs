@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum ElementalReactionState
@@ -51,7 +52,7 @@ public class ElementalReactionsManager : MonoBehaviour
         return elementalColorSO;
     }
 
-    public ElementalReactionsInfo GetElementalReactionState(List<Elements> Elementals)
+    public ElementalReactionsInfo GetElementalReactionState(Dictionary<Elemental, Elements> Elementals)
     {
         if (Elementals.Count == 0)
             return null;
@@ -59,7 +60,7 @@ public class ElementalReactionsManager : MonoBehaviour
         for (int i = 0; i < elementalReactionsInfo.Length; i++)
         {
             int FoundCount = 0;
-            List<Elements> ElementalsCopy = new List<Elements>(Elementals);
+            List<Elements> ElementalsCopy = new List<Elements>(Elementals.Values.ToList());
 
             ElementalReactionsInfo info = elementalReactionsInfo[i];
             for (int j = 0; j < info.elementals.Length; j++)

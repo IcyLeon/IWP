@@ -27,6 +27,9 @@ public class PlayerDashState : PlayerGroundState
     //}
     private void Dash()
     {
+        if (playerCharacter != null)
+            playerCharacter.ToggleAimCamera(false);
+
         if (Time.time - GetPlayerState().PlayerData.StartDashTime > PlayerData.TimeToBeConsideredConsecutive)
         {
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
@@ -51,6 +54,11 @@ public class PlayerDashState : PlayerGroundState
             DisableDash();
         }
         GetPlayerState().GetPlayerManager().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerManager().GetStaminaManager().GetStaminaSO().DashCost);
+    }
+
+    private void DisableDash()
+    {
+        GetPlayerState().GetPlayerController().DisableInput(GetPlayerState().GetPlayerController().GetPlayerActions().Dash, true, GetPlayerState().PlayerData.DashLimitReachedCooldown);
     }
 
     public override void Exit()

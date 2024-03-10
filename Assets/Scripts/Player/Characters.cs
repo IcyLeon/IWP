@@ -21,9 +21,6 @@ public interface IDamage {
 
 public interface ICoordinateAttack
 {
-    void UpdateCoordinateAttack();
-    bool CoordinateAttackEnded();
-
     bool CoordinateCanShoot();
 
 }
@@ -32,8 +29,13 @@ public interface ISkillsBurstManager
 {
     void UpdateISkills();
     void UpdateIBursts();
-    bool ISkillsEnded();
-    bool IBurstEnded();
+    bool IsISkillsEnded();
+    bool IsIBurstEnded();
+
+    void ISkillEnter();
+    void ISkillExit();
+    void IBurstEnter();
+    void IBurstExit();
 
 }
 

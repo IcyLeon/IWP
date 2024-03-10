@@ -85,7 +85,7 @@ public class ElementsIndicator : MonoBehaviour
             {
                 for (int i = 0; i < IDamage.GetElementalReaction().GetElementList().Count; i++)
                 {
-                    Elements e = IDamage.GetElementalReaction().GetElementList()[i];
+                    Elements e = IDamage.GetElementalReaction().GetElementsAt(i);
                     ElementalColorSO.ElementalInfo ElementalInfo = ElementalReactionsManager.GetInstance().GetElementalColorSO().GetElementalInfo(e.GetElements());
 
                     if (ElementalInfo != null)

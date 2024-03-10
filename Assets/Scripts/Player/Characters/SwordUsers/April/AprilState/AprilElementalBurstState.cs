@@ -22,7 +22,6 @@ public class AprilElementalBurstState : SwordElementalBurstState
     public override void OnAnimationTransition()
     {
         base.OnAnimationTransition();
-        GetAprilState().GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(GetAprilState().GetApril());
     }
 
     public override void Exit()

@@ -9,6 +9,7 @@ public class BowElementalBurstState : PlayerElementalBurstState
     }
     public override void OnAnimationTransition()
     {
+        base.OnAnimationTransition();
         GetBowCharactersState().ChangeState(GetBowCharactersState().bowIdleState);
     }
 }

@@ -8,6 +8,7 @@ public interface IState
     void Exit();
     void Update();
     void FixedUpdate();
+    void LateUpdate();
     public void OnAnimationTransition();
 }
 
@@ -18,6 +19,7 @@ public class PlayerState
     public Rigidbody rb;
 
     private PlayerManager PlayerManager;
+    private PlayerController PlayerController;
 
     public PlayerData PlayerData;
     public PlayerStoppingState playerStoppingState { get; }
@@ -57,27 +59,39 @@ public class PlayerState
     }
     public void Update()
     {
-        //Debug.Log(currentState);
-        currentState.Update();
+        if (currentState != null)
+            currentState.Update();
     }
 
     public void FixedUpdate()
     {
-        currentState.FixedUpdate();
+        if (currentState != null)
+            currentState.FixedUpdate();
+    }
+    public void LateUpdate()
+    {
+        if (currentState != null)
+            currentState.LateUpdate();
     }
 
     public void OnAnimationTransition()
     {
-        currentState.OnAnimationTransition();
+        if (currentState != null)
+            currentState.OnAnimationTransition();
     }
 
     public PlayerManager GetPlayerManager()
     {
         return PlayerManager;
     }
-    public PlayerState(PlayerManager playerManager)
+    public PlayerController GetPlayerController()
+    {
+        return PlayerController;
+    }
+    public PlayerState(PlayerManager playerManager, PlayerController playerController)
     {
         PlayerManager = playerManager;
+        PlayerController = playerController;
         PlayerData = new PlayerData();
         playerStoppingState = new PlayerStoppingState(this);
         playerFallingState = new PlayerFallingState(this);
@@ -94,6 +108,7 @@ public class PlayerState
         playerLandingState = new PlayerLandingState(this);
 
         ChangeState(playerIdleState);
+        PlayerController = playerController;
     }
 
     private void OnCharacterChange(CharacterData cd, PlayerCharacters playerCharacters)

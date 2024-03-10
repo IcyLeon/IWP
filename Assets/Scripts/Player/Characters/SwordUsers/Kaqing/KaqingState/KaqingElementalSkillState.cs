@@ -15,6 +15,11 @@ public class KaqingElementalSkillState : SwordElementalSkillState
         ResetAllAttacks();
     }
 
+    public override void Exit()
+    {
+        base.Exit();
+    }
+
     public KaqingElementalSkillState(PlayerCharacterState pcs) : base(pcs)
     {
         Kaqing = GetKaqingState().GetKaqing();

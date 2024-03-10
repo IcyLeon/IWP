@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerCanvasUI : MonoBehaviour
 {
+    private AssetManager assetManager;
     [Header("Player Content")]
     [SerializeField] HealthBarScript PlayerHealthBarREF;
     [SerializeField] StaminaScript StaminaBarREF;
 
     [Header("Bow")]
-    [SerializeField] GameObject BowGO;
+    [SerializeField] GameObject BowCrossHair;
 
     [Header("Interaction Content")]
     [SerializeField] InteractionContentUI InteractOptionsUI;
@@ -19,18 +21,18 @@ public class PlayerCanvasUI : MonoBehaviour
 
     [Header("Player Manager")]
     [SerializeField] PlayerManager playerManager;
-    private List<ArrowIndicator> ArrowIndicatorList = new();
+    private Dictionary<GameObject, ArrowIndicator> ArrowIndicatorList = new();
 
     [SerializeField] GameObject[] HideUIList;
 
     // Start is called before the first frame update
     void Awake()
     {
-        BowAimState.OnBowAimStatus += ShowCrossHair;
         AssetManager.OnSpawnArrow += SpawnArrowIndicator;
     }
     private void Start()
     {
+        assetManager = AssetManager.GetInstance();
         ShowCrossHair(false);
     }
 
@@ -41,7 +43,6 @@ public class PlayerCanvasUI : MonoBehaviour
     private void OnDestroy()
     {
         AssetManager.OnSpawnArrow -= SpawnArrowIndicator;
-        BowAimState.OnBowAimStatus -= ShowCrossHair;
     }
     // Update is called once per frame
     void Update()
@@ -50,9 +51,9 @@ public class PlayerCanvasUI : MonoBehaviour
         RemoveNullReferenceForArrowList();
     }
 
-    private void ShowCrossHair(bool val)
+    public void ShowCrossHair(bool val)
     {
-        BowGO.gameObject.SetActive(val);
+        BowCrossHair.gameObject.SetActive(val);
     }
 
     public InteractionContentUI GetInteractOptionsUI()
@@ -67,32 +68,31 @@ public class PlayerCanvasUI : MonoBehaviour
     }
     private void RemoveNullReferenceForArrowList()
     {
-        for (int i = ArrowIndicatorList.Count - 1; i > 0; i--)
+        for (int i = ArrowIndicatorList.Count - 1; i >= 0; i--)
         {
-            ArrowIndicator a = ArrowIndicatorList[i];
-            if (a.GetSource() == null)
-                ArrowIndicatorList.Remove(a);
+            KeyValuePair<GameObject, ArrowIndicator> ArrowIndicatorKeyValuePair = ArrowIndicatorList.ElementAt(i);
+            if (ArrowIndicatorList.TryGetValue(ArrowIndicatorKeyValuePair.Key, out ArrowIndicator a))
+            {
+                if (a.GetSource() == null)
+                    ArrowIndicatorList.Remove(ArrowIndicatorKeyValuePair.Key);
+            }
         }
     }
 
     private void SpawnArrowIndicator(GameObject source, Color32 color)
     {
-        AssetManager assetManager = AssetManager.GetInstance();
         if (isExistInList(source) == null)
         {
             ArrowIndicator a = assetManager.SpawnArrowIndicator(source, playerManager.gameObject, ArrowIndicatorPivot);
             a.SetArrowColor(color);
-            ArrowIndicatorList.Add(a);
+            ArrowIndicatorList.Add(source, a);
         }
     }
 
     private ArrowIndicator isExistInList(GameObject source)
     {
-        for (int i = 0; i < ArrowIndicatorList.Count; i++)
-        {
-            ArrowIndicator a = ArrowIndicatorList[i];
-            if (a.GetSource() == source)
-                return a;
+        if (ArrowIndicatorList.TryGetValue(source, out ArrowIndicator ArrowIndicator)) {
+            return ArrowIndicator;
         }
         return null;
     }

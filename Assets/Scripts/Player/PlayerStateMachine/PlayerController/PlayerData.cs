@@ -15,7 +15,6 @@ public class PlayerData
     public const int ConsecutiveDashesLimitAmount = 2;
     public const float TimeToBeConsideredConsecutive = 1f;
     public float DashLimitReachedCooldown { get; } = 1.75f;
-    public float DashLimitReachedElasped;
 
     public float CurrentJumpForceXZ;
     public Vector3 PreviousPosition;

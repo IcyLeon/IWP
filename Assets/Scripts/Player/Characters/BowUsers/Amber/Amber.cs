@@ -20,7 +20,7 @@ public class Amber : BowCharacters, ICoordinateAttack
         PlayerCharacterState = new AmberState(this);
         base.Start();
         CoodinateTimerElapsed = 0;
-        PlayerCoordinateAttackManager.OnCoordinateAttack += BasicAtkTrigger;
+        PlayerElementalSkillandBurstManager.OnCoordinateAttack += ShootCoordinateArrows;
     }
 
     public void SpawnAura()
@@ -31,12 +31,17 @@ public class Amber : BowCharacters, ICoordinateAttack
         Destroy(BurstAura.gameObject, CoodinateTimerElapsed);
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        Debug.Log(PlayerCharacterState.GetCurrentState());
+        Debug.Log(GetPlayerManager().GetPlayerMovementState());
+    }
+
     public void Spawn4Arrows()
     {
         Vector3 targetPos = GetContactPoint();
-        Vector3 lookatDir = targetPos - GetPlayerManager().GetPlayerOffsetPosition().position;
-        lookatDir.y = 0;
-        lookatDir.Normalize();
+        Vector3 lookatDir = targetPos - GetPointOfContact();
         LookAtDirection(lookatDir);
 
         for (int i = 0; i < SkillsArrows; i++)
@@ -73,7 +78,7 @@ public class Amber : BowCharacters, ICoordinateAttack
         {
             Vector3 forward = transform.forward;
             forward.y = 0;
-            Vector3 endPos = GetPlayerManager().GetPlayerOffsetPosition().position + forward * range;
+            Vector3 endPos = GetPointOfContact() + forward * range;
             if (Physics.Raycast(endPos, Vector3.down, out RaycastHit hit))
             {
                 endPos = hit.point;
@@ -85,7 +90,7 @@ public class Amber : BowCharacters, ICoordinateAttack
     }
 
 
-    public void UpdateCoordinateAttack()
+    public override void UpdateIBursts()
     {
         CoodinateTimerElapsed -= Time.deltaTime;
         CoodinateTimerElapsed = Mathf.Clamp(CoodinateTimerElapsed, 0f, GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer);
@@ -103,27 +108,24 @@ public class Amber : BowCharacters, ICoordinateAttack
         }
     }
 
-    public bool CoordinateAttackEnded()
+    public override bool IsIBurstEnded()
     {
-        if (IsDead())
-            return true;
-
-        return CoodinateTimerElapsed <= 0f;
+        return CoodinateTimerElapsed <= 0f || base.IsIBurstEnded();
     }
 
     public bool CoordinateCanShoot()
     {
-        if (Time.time > nextFire)
+        if (Time.time > nextFire && !IsIBurstEnded())
         {
-            nextFire = Time.time + 0.5f;
+            nextFire = Time.time;
             return true;
         }
         return false;
     }
 
-    private void BasicAtkTrigger()
+    private void ShootCoordinateArrows()
     {
-        if (!CoordinateCanShoot() || CoordinateAttackEnded())
+        if (!CoordinateCanShoot())
             return;
 
         if (GetPlayerManager() == null)

@@ -12,8 +12,9 @@ public class SwordUsersAnimationEvents : PlayerAnimationEvents
         GetSwordCharacters().GetSwordModel().SetCanHit(true);
     }
 
-    public void SpawnSlash()
+    protected override void Attack()
     {
+        base.Attack();
         GetSwordCharacters().SpawnSlash();
     }
 

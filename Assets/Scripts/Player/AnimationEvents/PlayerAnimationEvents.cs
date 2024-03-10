@@ -54,4 +54,9 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         playerCharacters.GetPlayerCharacterState().OnAnimationTransition();
     }
+
+    protected virtual void Attack()
+    {
+        PlayerElementalSkillandBurstManager.CallCoordinateAttack();
+    }
 }

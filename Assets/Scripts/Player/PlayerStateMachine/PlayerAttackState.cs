@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerGroundState
 {
-    private PlayerCharacters playerCharacter;
     public PlayerAttackState(PlayerState playerState) : base(playerState)
     {
     }

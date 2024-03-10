@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ElementalReaction
 {
-    private List<Elements> ElementsList;
+    private Dictionary<Elemental, Elements> ElementsDictionary;
     private ElementalReactionsManager elementalReactionsManager;
     public delegate void OnElementChanged(bool isChanged);
     public OnElementChanged onElementChanged;
@@ -14,22 +15,24 @@ public class ElementalReaction
 
     public void UpdateElementsList()
     {
-        for (int i = 0; i < ElementsList.Count; i++)
+        for (int i = ElementsDictionary.Count; i > ElementsDictionary.Count; i--)
         {
-            Elements elements = ElementsList[i];
-            if (elements.GetActive())
+            Elements elements = GetElementsAt(i);
+            if (elements != null)
             {
-                elements.UpdateElementalEffectTime();
-            }
-            else
-            {
-                ElementsList.Remove(elements);
-                i--;
+                if (elements.GetActive())
+                {
+                    elements.UpdateElementalEffectTime();
+                }
+                else
+                {
+                    ElementsDictionary.Remove(elements.GetElements());
+                }
             }
         }
     }
 
-    private ElementalReactionsInfo GetElementalReactionsInfo(List<Elements> Elementals)
+    private ElementalReactionsInfo GetElementalReactionsInfo(Dictionary<Elemental, Elements> Elementals)
     {
         if (elementalReactionsManager == null)
             return null;
@@ -83,12 +86,12 @@ public class ElementalReaction
         if (!CanAddElements())
             return;
 
-        Elements ExistingElements = isElementsAlreadyExisted(elements);
+        Elements ExistingElements = isElementsAlreadyExisted(elements.GetElements());
 
         if (ExistingElements == null)
         {
             elements.ResetElementalEffect();
-            ElementsList.Add(elements);
+            ElementsDictionary.Add(elements.GetElements(), elements);
         }
         else
         {
@@ -98,41 +101,34 @@ public class ElementalReaction
         onElementChanged?.Invoke(ExistingElements == null);
     }
 
-    public Elements isElementsAlreadyExisted(Elements e)
-    {
-        for (int i = 0; i < ElementsList.Count; i++)
-        {
-            Elements elements = ElementsList[i];
-            if (elements.GetElements() == e.GetElements())
-            {
-                return elements;
-            }
-        }
-        return null;
-    }
-
     public Elements isElementsAlreadyExisted(Elemental e)
     {
-        for (int i = 0; i < ElementsList.Count; i++)
+        if (ElementsDictionary.TryGetValue(e, out var elements))
         {
-            Elements elements = ElementsList[i];
-            if (elements.GetElements() == e)
-            {
-                return elements;
-            }
+            return elements;
+        }
+        return null;
+    }
+
+    public Elements GetElementsAt(int i)
+    {
+        KeyValuePair<Elemental, Elements> elementsKeyValuePair = ElementsDictionary.ElementAt(i);
+        if (ElementsDictionary.TryGetValue(elementsKeyValuePair.Key, out Elements elements))
+        {
+            return elements;
         }
         return null;
     }
 
 
-    public List<Elements> GetElementList()
+    public Dictionary<Elemental, Elements> GetElementList()
     {
-        return ElementsList;
+        return ElementsDictionary;
     }
 
     public ElementalReaction()
     {
-        ElementsList = new List<Elements>();
+        ElementsDictionary = new();
         DisableReactionElasped = 0;
         elementalReactionsManager = ElementalReactionsManager.GetInstance();
     }

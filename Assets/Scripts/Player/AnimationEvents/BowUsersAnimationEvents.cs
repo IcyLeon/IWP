@@ -11,7 +11,7 @@ public class BowUsersAnimationEvents : PlayerAnimationEvents
         return playerCharacters as BowCharacters;
     }
 
-    private void FireArrows()
+    protected override void Attack()
     {
         BowData bowData = GetBowCharacters().GetBowCharactersState().GetBowData();
         Arrow ArrowFire = Instantiate(ArrowPrefab, GetBowCharacters().GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
@@ -30,6 +30,7 @@ public class BowUsersAnimationEvents : PlayerAnimationEvents
 
         GetBowCharacters().DestroyChargeUpEmitter();
         GetBowCharacters().GetBowCharactersState().GetBowData().ShootElemental = Elemental.NONE;
-        GetBowCharacters().BasicAttackTrigger();
+
+        base.Attack();
     }
 }

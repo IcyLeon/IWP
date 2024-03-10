@@ -19,7 +19,7 @@ public class KaqingAimController : AimController
         KaqingTeleporter Orb = Instantiate(TeleporterPrefab, EmitterPivot.position, Quaternion.identity).GetComponent<KaqingTeleporter>();
         Orb.SetElements(new Elements(PlayerCharactersRef.GetPlayersSO().Elemental));
         Orb.SetCharacterData(PlayerCharactersRef);
-        Orb.SetTargetLoc(AimTargetPosition);
+        Orb.SetTargetLoc(GetAimTargetPosition());
         Orb.OnDestroyOrb += OnDestroyOrb;
         GetKaqing().GetKaqingState().KaqingData.kaqingTeleporter = Orb;
     }
@@ -41,7 +41,7 @@ public class KaqingAimController : AimController
             targetOrb = Instantiate(TargetOrbPrefab);
 
         SetAimTargetPosition(pos);
-        targetOrb.transform.position = AimTargetPosition;
+        targetOrb.transform.position = GetAimTargetPosition();
     }
 
     public void DestroyTargetOrb()

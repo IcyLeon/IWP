@@ -847,7 +847,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4820324849886427478}
   - component: {fileID: 1366178177771311796}
-  - component: {fileID: 1966875755660281132}
   m_Layer: 3
   m_Name: AimRig
   m_TagString: Untagged
@@ -894,20 +893,6 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
---- !u!114 &1966875755660281132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436944816065770068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a9d8063ab10ad46a27a51b601d8b29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Rig: {fileID: 1366178177771311796}
-  TargetTransform: {fileID: 2013009695408328642}
 --- !u!1 &443968257123094404
 GameObject:
   m_ObjectHideFlags: 0
@@ -11714,7 +11699,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCharactersRef: {fileID: 1005708915066032896}
-  AimLookAt: {fileID: 1966875755660281132}
+  Rig: {fileID: 1366178177771311796}
+  TargetTransform: {fileID: 2013009695408328642}
   TeleporterPrefab: {fileID: 8455810837854244540, guid: 038cc286a7384c54e86b6e5e09da6fdb,
     type: 3}
   TargetOrbPrefab: {fileID: 260796668554883667, guid: c7219445ca073fd4088e1595e66881e1,

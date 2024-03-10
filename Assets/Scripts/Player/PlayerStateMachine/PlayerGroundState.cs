@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerGroundState : PlayerMovementState
 {
@@ -18,9 +19,16 @@ public class PlayerGroundState : PlayerMovementState
         base.Exit();
     }
 
-    protected void DisableDash()
+    protected override void SubscribeInput()
     {
-        GetPlayerState().PlayerData.DashLimitReachedElasped = GetPlayerState().PlayerData.DashLimitReachedCooldown;
+        base.SubscribeInput();
+        GetPlayerState().GetPlayerController().GetPlayerActions().Jump.started += OnJumpAction;
+    }
+
+    protected override void UnsubscribeInput()
+    {
+        base.UnsubscribeInput();
+        GetPlayerState().GetPlayerController().GetPlayerActions().Jump.started -= OnJumpAction;
     }
 
     public override void FixedUpdate()
@@ -46,7 +54,6 @@ public class PlayerGroundState : PlayerMovementState
         if (IsBurstActive())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
-            PlayerCharacters playerCharacter = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
             if (playerCharacter != null)
             {
                 playerCharacter.GetPlayerCharacterState().ResetBasicAttacks();
@@ -55,16 +62,14 @@ public class PlayerGroundState : PlayerMovementState
         }
         else
         {
-            OnAimInput();
 
-            if (GetPlayerState().GetPlayerManager().IsSkillCasting())
-                return;
+            OnAimInput();
 
             if (IsAiming())
                 return;
 
-            OnJumpInput();
-            OnDashInput();
+            if (GetPlayerState().GetPlayerManager().IsSkillCasting())
+                return;
 
             if (IsMovingDown(0.15f) && !IsTouchingTerrain() && GetPlayerState().GetPlayerMovementState() is not PlayerJumpState
                 && GetPlayerState().GetPlayerMovementState() is not PlayerDashState)
@@ -75,22 +80,16 @@ public class PlayerGroundState : PlayerMovementState
         }
     }
     
-    private void OnJumpInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            OnJump();
-    }
-
 
     private void OnAimInput()
     {
-        if (IsAiming())
+        if (IsAiming() && this is not PlayerAimState)
         {
             GetPlayerState().ChangeState(GetPlayerState().playerAimState);
         }
     }
 
-    private void OnJump()
+    private void OnJumpAction(InputAction.CallbackContext CallbackContext)
     {
         if (IsAttacking())
             return;

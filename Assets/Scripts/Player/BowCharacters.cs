@@ -31,7 +31,7 @@ public class BowCharacters : PlayerCharacters
         if (Animator)
         {
             Animator.SetFloat("AimVelocityX", GetPlayerManager().GetPlayerController().GetInputDirection().x, 0.1f, Time.deltaTime);
-            Animator.SetFloat("AimVelocityZ", GetPlayerManager().GetPlayerController().GetInputDirection().z, 0.1f, Time.deltaTime);
+            Animator.SetFloat("AimVelocityZ", GetPlayerManager().GetPlayerController().GetInputDirection().y, 0.1f, Time.deltaTime);
         }
     }
     public BowCharactersState GetBowCharactersState()
@@ -106,12 +106,6 @@ public class BowCharacters : PlayerCharacters
             GetBowCharactersState().GetBowData().isChargedFinish = false;
             GetBowCharactersState().GetBowData().ChargeElapsed = 0;
         }
-    }
-
-    protected override void OnCharacterChanged(CharacterData c, PlayerCharacters playerCharacters)
-    {
-        base.OnCharacterChanged(c, playerCharacters);
-        BowAimState.OnBowAimStatus?.Invoke(false);
     }
 
     protected override void OnDisable()

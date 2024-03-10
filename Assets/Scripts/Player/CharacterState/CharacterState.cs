@@ -33,6 +33,11 @@ public class CharacterState
         if (currentState != null)
             currentState.FixedUpdate();
     }
+    public void LateUpdate()
+    {
+        if (currentState != null)
+            currentState.LateUpdate();
+    }
 
     public void OnAnimationTransition()
     {

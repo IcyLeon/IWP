@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements.Experimental;
 
 public class KaqingIdleState : SwordIdleState
 {
@@ -41,7 +40,7 @@ public class KaqingIdleState : SwordIdleState
         if (GetKaqingState().KaqingData.kaqingTeleporter != null)
             return;
 
-        if (threasHold_Charged > 0.25f)
+        if (threasHold_Charged > 0.2f)
         {
             GetKaqingState().ChangeState(GetKaqingState().kaqingAimState);
             return;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class PlayerCharacters : Characters, ISkillsBurstManager
+public class PlayerCharacters : Characters, ISkillsBurstManager
 {
     protected float AimSpeed = 20f;
     private CharacterData characterData;
@@ -112,7 +112,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     }
     public override Elements TakeDamage(Vector3 pos, Elements elementsREF, float amt, IDamage source, bool callHitInfo = true)
     {
-        if (GetPlayerManager().isBurstState() || !GetModel().activeSelf)
+        if (GetPlayerManager().IsBurstState() || !GetModel().activeSelf)
             return null;
 
         if (characterData != null)
@@ -255,7 +255,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         yield return null;
     }
 
-    public void UpdateDefaultPosOffsetAndZoom(float delay)
+    public void ToggleOffAimCameraDelay(float delay)
     {
         if (CameraZoomAndPosOffsetCoroutine != null)
         {
@@ -278,16 +278,14 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     protected override void Update()
     {
         base.Update();
+        Debug.Log(GetPlayerManager().GetPlayerMovementState());
 
         if (Time.timeScale == 0)
             return;
 
-        if (GetPlayerManager() == null)
-            return;
-
         GetPlayerCharacterState().Update();
 
-        if (GetPlayerManager().isDeadState())
+        if (GetPlayerManager().IsDeadState())
             return;
 
         NearestTarget = GetNearestCharacters(GetPointOfContact(), Range, LayerMask.GetMask("Entity", "BossEntity"));
@@ -308,11 +306,22 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (Animator)
         {
             Animator.SetBool("isFalling", GetPlayerManager().GetPlayerMovementState() is PlayerFallingState && !GetPlayerManager().IsGrounded());
-            Animator.SetFloat("Velocity", GetPlayerManager().GetAnimationSpeed(), 0.15f, Time.deltaTime);
+            Animator.SetFloat("Velocity", GetPlayerManager().GetAnimationSpeed(), 0.1f, Time.deltaTime);
             Animator.SetBool("isGrounded", GetPlayerManager().IsGrounded());
             if (ContainsParam(Animator, "isWalking"))
                 Animator.SetBool("isWalking", GetPlayerManager().IsMoving());
         }
+    }
+
+    private void LateUpdate()
+    {
+        if (Time.timeScale == 0)
+            return;
+
+        if (GetPlayerManager() == null)
+            return;
+
+        GetPlayerCharacterState().LateUpdate();
     }
 
     private void SetTargetRotation(Quaternion quaternion)
@@ -320,19 +329,31 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager() == null)
             return;
 
-        GetPlayerManager().GetPlayerState().GetPlayerMovementState().UpdateTargetRotation_Instant(quaternion);
+        GetPlayerManager().GetPlayerState().PlayerData.Target_Rotation = quaternion;
+        GetPlayerManager().GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerManager().GetPlayerState().PlayerData.Target_Rotation;
+
+        Quaternion targetRotation = Quaternion.Euler(0f, GetPlayerManager().GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, 0f);
+        GetPlayerManager().GetCharacterRB().MoveRotation(targetRotation);
     }
 
-    public void LookAtDirection(Vector3 dir)
+    public Vector3 LookAtDirection(Vector3 dir)
     {
+        dir.y = 0;
+        dir.Normalize();
         Quaternion quaternion = Quaternion.LookRotation(dir);
         SetTargetRotation(quaternion);
+        return dir;
     }
 
     public void ToggleAimCamera(bool val)
     {
         if (GetPlayerManager() == null)
             return;
+
+        if (this is BowCharacters)
+        {
+            GetPlayerManager().GetPlayerCanvasUI().ShowCrossHair(val);
+        }
 
         GetPlayerManager().GetPlayerController().GetCameraManager().ToggleAimCamera(val);
     }
@@ -347,7 +368,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual bool ElementalSkillTrigger()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction() || GetPlayerManager().IsAiming())
             return false;
 
         GetPlayerCharacterState().ElementalSkillTrigger();
@@ -358,7 +379,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual bool ElementalSkillHold()
     {
-        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction())
+        if (!GetCharacterData().CanTriggerESKill() || !GetPlayerManager().CanPerformAction() || GetPlayerManager().IsAiming())
             return false;
 
         GetPlayerCharacterState().ElementalSkillHold();
@@ -384,16 +405,12 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
     public Vector3 LookAtClosestTarget()
     {
         Vector3 forward = transform.forward;
-        forward.y = 0;
-        forward.Normalize();
 
         if (GetNearestIDamage() != null)
         {
-            forward = GetNearestIDamage().GetPointOfContact() - GetPlayerManager().GetPlayerOffsetPosition().position;
-            forward.y = 0;
-            forward.Normalize();
+            forward = GetNearestIDamage().GetPointOfContact() - GetPointOfContact();
         }
-        LookAtDirection(forward);
+        forward = LookAtDirection(forward);
         return forward;
     }
 
@@ -430,11 +447,6 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         PlayerManager.onCharacterChange += OnCharacterChanged;
     }
 
-    public void BasicAttackTrigger()
-    {
-        PlayerCoordinateAttackManager.CallCoordinateAttack();
-    }
-
     protected override void OnDestroy()
     {
         base.OnDestroy();
@@ -448,7 +460,7 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     protected virtual void OnCharacterChanged(CharacterData c, PlayerCharacters playerCharacters)
     {
-        UpdateDefaultPosOffsetAndZoom(0f);
+        ToggleOffAimCameraDelay(0f);
     }
 
     private void DisableInputs()
@@ -471,9 +483,9 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
 
     }
 
-    public virtual bool ISkillsEnded()
+    public virtual bool IsISkillsEnded()
     {
-        return true;
+        return IsDead();
     }
 
     public virtual void UpdateIBursts()
@@ -481,8 +493,29 @@ public abstract class PlayerCharacters : Characters, ISkillsBurstManager
         GetPlayerCharacterState().UpdateBurst();
     }
 
-    public virtual bool IBurstEnded()
+    public virtual bool IsIBurstEnded()
     {
-        return true;
+        return IsDead();
+    }
+
+    public virtual void ISkillEnter()
+    {
+
+    }
+
+    public virtual void ISkillExit()
+    {
+
+    }
+
+    public virtual void IBurstEnter()
+    {
+
+    }
+
+
+    public virtual void IBurstExit()
+    {
+
     }
 }

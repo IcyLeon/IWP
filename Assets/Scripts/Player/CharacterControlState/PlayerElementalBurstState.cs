@@ -14,4 +14,10 @@ public class PlayerElementalBurstState : PlayerControlState
 
         GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsBurstVoice();
     }
+
+    public override void OnAnimationTransition()
+    {
+        GetPlayerCharacterState().GetPlayerCharacters().SetBurstActive(false);
+        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(GetPlayerCharacterState().GetPlayerCharacters());
+    }
 }

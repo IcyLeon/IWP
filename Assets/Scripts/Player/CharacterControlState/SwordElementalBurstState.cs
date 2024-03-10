@@ -10,6 +10,7 @@ public class SwordElementalBurstState : PlayerElementalBurstState
 
     public override void OnAnimationTransition()
     {
+        base.OnAnimationTransition();
         GetSwordCharactersState().ChangeState(GetSwordCharactersState().swordIdleState);
     }
 }

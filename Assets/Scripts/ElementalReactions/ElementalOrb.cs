@@ -37,9 +37,9 @@ public class ElementalOrb : MonoBehaviour
         rb.position = Vector3.MoveTowards(rb.position, pm.GetPlayerOffsetPosition().position, currentForce * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        PlayerCharacters playerCharacters = collision.transform.GetComponent<PlayerCharacters>();
+        PlayerCharacters playerCharacters = collider.transform.GetComponent<PlayerCharacters>();
         if (playerCharacters != null)
         {
             for (int i = 0; i < pm.GetCharactersOwnedList().Count; i++)

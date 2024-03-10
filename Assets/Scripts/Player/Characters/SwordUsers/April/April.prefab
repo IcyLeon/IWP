@@ -163,6 +163,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15056453abf7bb448a056b20ffc12e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyMarkerPrefab: {fileID: 5843656760640273766, guid: 52093c3e13ef7dd4491fbc6052ad9d39,
+    type: 3}
+  HealPrefab: {fileID: 1282364566017586, guid: 38e2ad2405a73b94ca4acff97076788a, type: 3}
 --- !u!1 &643616338073190757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1391,7 +1394,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4795640412758466519}
-  m_LocalRotation: {x: -0.0011926653, y: 0.99833894, z: -0.053049315, w: -0.022444857}
+  m_LocalRotation: {x: -0.0011926657, y: 0.99833894, z: -0.05304931, w: -0.022444867}
   m_LocalPosition: {x: 0.035, y: 1.2830001, z: 0.778}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

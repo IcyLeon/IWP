@@ -1,16 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementState : IState
 {
     private PlayerState PlayerState;
-    private float WalkSpeed;
+    private float WalkSpeed = 4.5f;
     private float Speed;
     private float DecelerateForce = 4.5f;
-    private PlayerCharacters playerCharacter;
+    protected PlayerCharacters playerCharacter;
     protected void SetSpeedModifier(float sp)
     {
         GetPlayerState().PlayerData.SpeedModifier = sp;
@@ -37,24 +35,28 @@ public class PlayerMovementState : IState
 
     public Vector3 GetInputDirection()
     {
-        float HorizontalInput = Input.GetAxisRaw("Horizontal");
-        float VerticalInput = Input.GetAxisRaw("Vertical");
-
-        Vector3 InputDirection = new Vector3(HorizontalInput, 0f, VerticalInput);
-        InputDirection.Normalize();
-
-        return InputDirection;
+        Vector2 InputValues = GetPlayerState().GetPlayerController().GetPlayerActions().Move.ReadValue<Vector2>();
+        return InputValues;
     }
+
+    protected virtual void SubscribeInput()
+    {
+        GetPlayerState().GetPlayerController().GetPlayerActions().Dash.started += OnDashAction;
+    }
+    protected virtual void UnsubscribeInput()
+    {
+        GetPlayerState().GetPlayerController().GetPlayerActions().Dash.started -= OnDashAction;
+    }
+
     public PlayerMovementState(PlayerState playerState)
     {
         PlayerState = playerState;
-        WalkSpeed = 4.5f;
         GetPlayerState().PlayerData.dampedTargetRotationPassedTime = 0;
     }
 
     protected bool IsBurstActive()
     {
-        return GetPlayerState().GetPlayerManager().isBurstActive();
+        return GetPlayerState().GetPlayerManager().IsBurstActive();
     }
 
     public PlayerState GetPlayerState()
@@ -63,10 +65,13 @@ public class PlayerMovementState : IState
     }
     public virtual void Enter()
     {
+        GetPlayerState().rb = GetPlayerState().GetPlayerManager().GetCharacterRB();
+        SubscribeInput();
     }
 
     public virtual void Exit()
     {
+        UnsubscribeInput();
     }
 
     protected void StartAnimation(string animationString)
@@ -94,7 +99,7 @@ public class PlayerMovementState : IState
 
     protected bool IsAiming()
     {
-        return GetPlayerState().GetPlayerManager().GetPlayerController().GetCameraManager().GetAimCamera().gameObject.activeSelf;
+        return GetPlayerState().GetPlayerController().GetCameraManager().GetAimCamera().gameObject.activeSelf;
     }
 
     protected bool IsAttacking()
@@ -104,9 +109,7 @@ public class PlayerMovementState : IState
 
     public virtual void Update()
     {
-        GetPlayerState().rb = GetPlayerState().GetPlayerManager().GetCharacterRB();
         UpdatePreviousPosition();
-
         playerCharacter = GetPlayerState().GetPlayerManager().GetCurrentCharacter();
         if (playerCharacter != null)
         {
@@ -121,9 +124,10 @@ public class PlayerMovementState : IState
         }
 
         GatherInput();
-        UpdateDash();
     }
-
+    public virtual void LateUpdate()
+    {
+    }
     protected void LimitFallVelocity()
     {
         float FallSpeedLimit = 35f;
@@ -142,16 +146,9 @@ public class PlayerMovementState : IState
         return 0;
     }
 
-    private void UpdateDash()
-    {
-        if (GetPlayerState().PlayerData.DashLimitReachedElasped > 0)
-            GetPlayerState().PlayerData.DashLimitReachedElasped -= Time.deltaTime;
-
-        GetPlayerState().PlayerData.DashLimitReachedElasped = Mathf.Clamp(GetPlayerState().PlayerData.DashLimitReachedElasped, 0f, GetPlayerState().PlayerData.DashLimitReachedCooldown);
-    }
     private float SetSlopeSpeedModifierOnAngle(float angle)
     {
-        float slopeSpeedModifier = GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetSlopeSpeedAngles().Evaluate(angle);
+        float slopeSpeedModifier = GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeSpeedAngles().Evaluate(angle);
         return slopeSpeedModifier;
     }
 
@@ -160,7 +157,7 @@ public class PlayerMovementState : IState
         if (GetPlayerState().rb == null)
             return;
 
-        if (GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider() == null || GetCapsuleCollider() == null)
+        if (GetPlayerState().GetPlayerController().GetResizeableCollider() == null || GetCapsuleCollider() == null)
             return;
 
         if (!GetPlayerState().rb.useGravity)
@@ -170,7 +167,7 @@ public class PlayerMovementState : IState
 
         Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
 
-        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(capsuleColliderCenterInWorldSpace, Vector3.down, out RaycastHit hit, GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().FloatRayDistance, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore))
         {
             float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 
@@ -185,14 +182,14 @@ public class PlayerMovementState : IState
             SetSpeedModifier(slopeSpeedModifier);
 
             GetPlayerState().PlayerData.HitDistance = hit.distance;
-            float distanceToFloatingPoint = GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * GetPlayerState().rb.transform.localScale.y - hit.distance;
+            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * GetPlayerState().rb.transform.localScale.y - hit.distance;
 
             if (distanceToFloatingPoint == 0f)
             {
                 return;
             }
 
-            float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
+            float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
 
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
             GetPlayerState().rb.AddForce(liftForce, ForceMode.VelocityChange);
@@ -202,8 +199,8 @@ public class PlayerMovementState : IState
             if (!IsTouchingTerrain())
                 return;
 
-            float distanceToFloatingPoint = GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * GetPlayerState().rb.transform.localScale.y - GetPlayerState().PlayerData.HitDistance;
-            float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
+            float distanceToFloatingPoint = GetPlayerState().GetPlayerController().GetResizeableCollider().GetColliderCenterInLocalSpace().y * GetPlayerState().rb.transform.localScale.y - GetPlayerState().PlayerData.HitDistance;
+            float amountToLift = distanceToFloatingPoint * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepReachForce - GetVerticalVelocity().y;
 
             Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
             GetPlayerState().rb.AddForce(liftForce, ForceMode.VelocityChange);
@@ -263,11 +260,10 @@ public class PlayerMovementState : IState
         if (GetPlayerState().rb == null)
             return;
 
-        if (playerCharacter)
-            if (playerCharacter.GetPlayerCharacterState().GetPlayerControlState() is PlayerElementalSkillState || this is PlayerAttackState)
-                return;
+        if (GetPlayerState().GetPlayerManager().IsSkillCasting() || IsAttacking())
+            return;
 
-        if (this is not PlayerAimState)
+        if (!IsAiming())
         {
             UpdateInputTargetQuaternion();
             UpdateTargetRotation();
@@ -276,13 +272,14 @@ public class PlayerMovementState : IState
         if (GetInputDirection() == Vector3.zero)
             return;
 
-        if (GetPlayerState().GetPlayerManager().GetPlayerController().GetLockMovement() == LockMovement.Enable)
+        if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable)
             return;
 
-        GetPlayerState().rb.AddForce((GetPlayerState().PlayerData.Direction * Speed * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+        //GetPlayerState().rb.MovePosition(GetPlayerState().rb.position + GetPlayerState().PlayerData.Direction * GetSpeed() * GetPlayerState().PlayerData.SpeedModifier * Time.deltaTime);
+        GetPlayerState().rb.AddForce((GetPlayerState().PlayerData.Direction * GetSpeed() * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
-    protected bool IsTouchingTerrain(bool ignoreEnemies = false)
+    protected bool IsTouchingTerrain()
     {
         if (GetPlayerState().rb == null || GetCapsuleCollider() == null)
             return false;
@@ -291,17 +288,8 @@ public class PlayerMovementState : IState
             return false;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
-        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerManager().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore);
+        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore);
         List<Collider> colliderCopy = new(Colliders);
-        for(int i = colliderCopy.Count - 1; i >= 0; i--)
-        {
-            IDamage dmg = colliderCopy[i].GetComponent<IDamage>();
-            if (dmg != null)
-            {
-                if (dmg.IsDead())
-                    colliderCopy.RemoveAt(i);
-            }
-        }
 
         return colliderCopy.Count > 0;
     }
@@ -333,17 +321,6 @@ public class PlayerMovementState : IState
             GetPlayerState().PlayerData.dampedTargetRotationPassedTime = 0f;
         }
         RotateTowardsTargetRotation();
-
-    }
-
-    public void UpdateTargetRotation_Instant(Quaternion quaternion)
-    {
-        SetTargetRotation(quaternion);
-
-        GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
-
-        Quaternion targetRotation = Quaternion.Euler(0f, GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, 0f);
-        GetPlayerState().rb.MoveRotation(targetRotation);
 
     }
 
@@ -444,23 +421,23 @@ public class PlayerMovementState : IState
 
     private void GatherInput()
     {
-        GetPlayerState().PlayerData.Direction = (Camera.main.transform.forward * GetInputDirection().z) + (Camera.main.transform.right * GetInputDirection().x);
+        GetPlayerState().PlayerData.Direction = (Camera.main.transform.forward * GetInputDirection().y) + (Camera.main.transform.right * GetInputDirection().x);
         GetPlayerState().PlayerData.Direction.y = 0;
         GetPlayerState().PlayerData.Direction.Normalize();
     }
 
-    protected void OnDashInput()
+    private void OnDashAction(InputAction.CallbackContext CallbackContext)
     {
         if (!GetPlayerState().GetPlayerManager().GetStaminaManager().CanPerformDash() || !CanDash())
             return;
 
-        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && GetPlayerState().GetPlayerManager().CanPerformAction())
+        if (GetPlayerState().GetPlayerManager().CanPerformAction())
             GetPlayerState().ChangeState(GetPlayerState().playerDashState);
     }
 
     private bool CanDash()
     {
-        return GetPlayerState().PlayerData.DashLimitReachedElasped <= 0;
+        return GetPlayerState().GetPlayerController().GetPlayerActions().Dash.enabled;
     }
 
     public virtual void OnAnimationTransition()

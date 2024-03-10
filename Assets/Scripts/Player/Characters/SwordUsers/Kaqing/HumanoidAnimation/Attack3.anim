@@ -75144,7 +75144,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.76666665
-    functionName: SpawnSlash
+    functionName: Attack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -75179,7 +75179,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.7
-    functionName: SpawnSlash
+    functionName: Attack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

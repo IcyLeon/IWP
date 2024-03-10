@@ -63,7 +63,7 @@ public class CameraManager : MonoBehaviour
 
     private void LockWhenPaused()
     {
-        if (!playerController.isCursorVisible())
+        if (!Cursor.visible)
         {
             if (playerPOV != null)
             {

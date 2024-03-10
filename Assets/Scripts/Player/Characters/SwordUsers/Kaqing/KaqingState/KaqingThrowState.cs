@@ -25,6 +25,6 @@ public class KaqingThrowState : KaqingElementalSkillState
     {
         StopAnimation("isThrowing");
         GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(true);
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0.2f);
+        GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0.2f);
     }
 }

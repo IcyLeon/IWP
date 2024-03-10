@@ -49,28 +49,29 @@ public class PlayerControlState : IPlayerCharactersState
     public virtual void Exit()
     {
     }
-
     public virtual void FixedUpdate()
     {
     }
-
+    public virtual void LateUpdate()
+    {
+    }
     public virtual void OnAnimationTransition()
     {
     }
     private void InterruptUpdate()
     {
-        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDeadState())
             return;
 
         switch (GetPlayerCharacterState())
         {
             case BowCharactersState bcs:
-                if (GetPlayerCharacterState().GetPlayerControlState() is not BowIdleState)
-                    GetPlayerCharacterState().ChangeState(bcs.bowIdleState);
+                if (bcs.GetCurrentState() is not BowIdleState)
+                    bcs.ChangeState(bcs.bowIdleState);
                 break;
             case SwordCharacterState scs:
-                if (GetPlayerCharacterState().GetPlayerControlState() is not SwordIdleState)
-                    GetPlayerCharacterState().ChangeState(scs.swordIdleState);
+                if (scs.GetCurrentState() is not SwordIdleState)
+                    scs.ChangeState(scs.swordIdleState);
                 break;
         }
     }

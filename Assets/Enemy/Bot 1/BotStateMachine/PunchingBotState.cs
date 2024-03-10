@@ -27,7 +27,9 @@ public class PunchingBotState : IState
     public virtual void FixedUpdate()
     {
     }
-
+    public virtual void LateUpdate()
+    {
+    }
     public virtual void OnAnimationTransition()
     {
     }

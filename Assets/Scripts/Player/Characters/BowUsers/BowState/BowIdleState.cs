@@ -14,7 +14,7 @@ public class BowIdleState : BowControlState
     public override void Enter()
     {
         base.Enter();
-        GetPlayerCharacterState().GetPlayerCharacters().UpdateDefaultPosOffsetAndZoom(0);
+        GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0);
         threasHold_Charged = 0;
     }
 
@@ -26,7 +26,7 @@ public class BowIdleState : BowControlState
 
     public override void ChargeHold()
     {
-        if (GetBowCharactersState().GetBowCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (!CanAim())
             return;
 
         if (threasHold_Charged > 0.25f)
@@ -39,7 +39,7 @@ public class BowIdleState : BowControlState
 
     public override void ChargeTrigger()
     {
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (!CanAim())
             return;
 
         LaunchBasicAttack();
@@ -60,12 +60,19 @@ public class BowIdleState : BowControlState
         }
     }
 
-    private void UpdateBowAimThresHold()
+    private bool CanAim()
     {
         if (!GetBowCharactersState().GetBowCharacters().GetPlayerManager().CanPerformAction() || GetBowCharactersState().GetBowCharacters().GetBurstActive())
-            return;
+            return false;
 
-        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().isDeadState())
+        if (GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDashing() || GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDeadState())
+            return false;
+
+        return true;
+    }
+    private void UpdateBowAimThresHold()
+    {
+        if (!CanAim())
             return;
 
         if (Input.GetMouseButton(1))

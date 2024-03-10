@@ -33,7 +33,7 @@ MonoBehaviour:
     type: 3}
   ElementalSkillsCooldown: 15
   UltiSkillCooldown: 10
-  EnergyCost: 70
+  EnergyCost: 1
   ElementalBurstTimer: 10
   ElementalSkillsTimer: 12
   AttackVoiceList:

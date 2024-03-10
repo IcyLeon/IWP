@@ -969,7 +969,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2798339205668980939}
   m_Layer: 3
-  m_Name: CameraLook
+  m_Name: OffsetPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1561,7 +1561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerHealthBarREF: {fileID: 4399391855229664205}
   StaminaBarREF: {fileID: 2948903281894507977}
-  BowGO: {fileID: 17602334374357447}
+  BowCrossHair: {fileID: 17602334374357447}
   InteractOptionsUI: {fileID: 7463307055825011746}
   ArrowIndicatorPivot: {fileID: 7924955808067407999}
   playerManager: {fileID: 6677480311715409904}
@@ -2226,7 +2226,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 50
+    FieldOfView: 40
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 100
@@ -2998,12 +2998,12 @@ MonoBehaviour:
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
   m_XDamping: 0
-  m_YDamping: 0
+  m_YDamping: 0.08
   m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.3
   m_ScreenY: 0.5
-  m_CameraDistance: 2
+  m_CameraDistance: 2.8
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -3331,7 +3331,7 @@ MonoBehaviour:
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
   m_XDamping: 0.2
-  m_YDamping: 0.4
+  m_YDamping: 0.08
   m_ZDamping: 0.6
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
@@ -9021,7 +9021,6 @@ GameObject:
   - component: {fileID: 8466442129360495665}
   - component: {fileID: 6912044472943968364}
   - component: {fileID: 804135296878626476}
-  - component: {fileID: 5889022338644147868}
   - component: {fileID: 5113795436203482261}
   - component: {fileID: 7182423578951183842}
   - component: {fileID: 4563240697774977713}
@@ -9081,18 +9080,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 5113795436203482261}
---- !u!114 &5889022338644147868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8466442129360495668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2819cd84226eb3244858c83a6ef34055, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5113795436203482261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9209,9 +9196,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 804135296878626476}
   PlayerCanvasUI: {fileID: 8400702461292456739}
-  PlayerCoordinateAttackManager: {fileID: 5889022338644147868}
+  PlayerCoordinateAttackManager: {fileID: 0}
   PlayerElementalSkillandBurstManager: {fileID: 6785168847716851814}
-  CameraLook: {fileID: 2798339205668980939}
+  OffsetCameraLook: {fileID: 2798339205668980939}
   SwitchSoundEffectsClip: {fileID: 8300000, guid: cc332e6c5a1ec214abf96aac1a8a779c,
     type: 3}
 --- !u!114 &6785168847716851814

@@ -64,13 +64,6 @@ public class PlayerCharacterState : CharacterState
             GetIPlayerCharactersState().ChargeTrigger();
     }
 
-    public PlayerControlState GetPlayerControlState()
-    {
-        PlayerControlState p = GetIPlayerCharactersState() as PlayerControlState;
-
-        return p;
-    }
-
     public void ResetBasicAttacks()
     {
         if (CommonCharactersData == null)
@@ -87,5 +80,4 @@ public class PlayerCharacterState : CharacterState
 
         GetPlayerCharacters().ResetAttack();
     }
-
 }

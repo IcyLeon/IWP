@@ -9,9 +9,7 @@ public class CharacterData : UpgradableItems
     private float CurrentEnergyBurstCost;
     private float EnergyBurstCost;
     private float CurrentElementalSkillCooldown;
-    private float ElementalSkillCooldown;
     private float CurrentElementalBurstEnergyCooldown;
-    private float ElementalBurstEnergyCooldown;
     private int MaxAscensionLevel;
     private int CurrentAscension;
     private ElementalReaction elementalReaction;
@@ -108,8 +106,6 @@ public class CharacterData : UpgradableItems
         MaxAscensionLevel = CurrentAscension = 0;
         SetItemsSO(playerCharacterSO);
         ResetEnergyCost();
-        ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
-        ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
         CurrentElementalSkillCooldown = 0;
         CurrentElementalBurstEnergyCooldown = 0;
         EnergyBurstCost = playerCharacterSO.EnergyCost;
@@ -128,8 +124,6 @@ public class CharacterData : UpgradableItems
         CurrentHealth = GetActualMaxHealth(GetLevel());
         SetPreviousHealthRatio(GetHealth() / GetActualMaxHealth(GetLevel()));
         CurrentEnergyBurstCost = currentEnergy;
-        ElementalSkillCooldown = playerCharacterSO.ElementalSkillsCooldown;
-        ElementalBurstEnergyCooldown = playerCharacterSO.UltiSkillCooldown;
         CurrentElementalSkillCooldown = 0;
         CurrentElementalBurstEnergyCooldown = 0;
         CurrentAscension = 0;
@@ -156,10 +150,10 @@ public class CharacterData : UpgradableItems
     public void Update()
     {
         CurrentElementalSkillCooldown -= Time.deltaTime;
-        CurrentElementalSkillCooldown = Mathf.Clamp(CurrentElementalSkillCooldown, 0f, ElementalSkillCooldown);
+        CurrentElementalSkillCooldown = Mathf.Clamp(CurrentElementalSkillCooldown, 0f, GetPlayerCharacterSO().ElementalSkillsCooldown);
 
         CurrentElementalBurstEnergyCooldown -= Time.deltaTime;
-        CurrentElementalBurstEnergyCooldown = Mathf.Clamp(CurrentElementalBurstEnergyCooldown, 0f, ElementalBurstEnergyCooldown);
+        CurrentElementalBurstEnergyCooldown = Mathf.Clamp(CurrentElementalBurstEnergyCooldown, 0f, GetPlayerCharacterSO().UltiSkillCooldown);
 
         CurrentEnergyBurstCost = Mathf.Clamp(CurrentEnergyBurstCost, 0f, EnergyBurstCost);
 
@@ -176,12 +170,12 @@ public class CharacterData : UpgradableItems
 
     public void ResetElementalSkillCooldown()
     {
-        CurrentElementalSkillCooldown = ElementalSkillCooldown;
+        CurrentElementalSkillCooldown = GetPlayerCharacterSO().ElementalSkillsCooldown;
     }
 
     public void ResetElementalBurstCooldown()
     {
-        CurrentElementalBurstEnergyCooldown = ElementalBurstEnergyCooldown;
+        CurrentElementalBurstEnergyCooldown = GetPlayerCharacterSO().UltiSkillCooldown;
         ResetEnergyCost();
     }
 
