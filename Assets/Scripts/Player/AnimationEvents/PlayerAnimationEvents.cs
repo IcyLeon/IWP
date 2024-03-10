@@ -6,11 +6,6 @@ public class PlayerAnimationEvents : MonoBehaviour
 {
     protected PlayerCharacters playerCharacters;
 
-    private void PlayRandomSkillsBurstVoice()
-    {
-        playerCharacters.PlayRandomSkillsBurstVoice();
-    }
-
     private void PlayRandomFallenVoice()
     {
         playerCharacters.PlayRandomFallenVoice();
@@ -58,5 +53,8 @@ public class PlayerAnimationEvents : MonoBehaviour
     protected virtual void Attack()
     {
         PlayerElementalSkillandBurstManager.CallCoordinateAttack();
+
+        if (playerCharacters)
+            playerCharacters.SetisAttacking(false);
     }
 }

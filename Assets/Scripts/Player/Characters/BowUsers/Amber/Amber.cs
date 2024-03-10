@@ -25,10 +25,15 @@ public class Amber : BowCharacters, ICoordinateAttack
 
     public void SpawnAura()
     {
-        CoodinateTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer;
         if (BurstAura == null)
             BurstAura = Instantiate(AmberAuraBurstPrefab).GetComponent<ParticleSystem>();
         Destroy(BurstAura.gameObject, CoodinateTimerElapsed);
+    }
+
+    public override void IBurstEnter()
+    {
+        base.IBurstEnter();
+        CoodinateTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer;
     }
 
     protected override void Update()

@@ -6,6 +6,7 @@ using Cinemachine;
 public class CameraManager : MonoBehaviour
 {
     private PlayerController playerController;
+    [SerializeField] Transform OffsetCameraLook;
     [SerializeField] Transform CameraParent;
     [SerializeField] CinemachineVirtualCamera playerCamera;
     [SerializeField] CinemachineVirtualCamera aimCamera;
@@ -17,6 +18,11 @@ public class CameraManager : MonoBehaviour
     private CinemachineFramingTransposer CFT;
     private float targetDistance;
     private Coroutine ScreenShakeCoroutine;
+
+    public Transform GetOffsetCameraLook()
+    {
+        return OffsetCameraLook;
+    }
 
     public GameObject GetAimCamera()
     {

@@ -9092,6 +9092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24bacb644fd373c42b05c049a8e6e3b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OffsetCameraLook: {fileID: 2798339205668980939}
   CameraParent: {fileID: 7715159405007249263}
   playerCamera: {fileID: 931365486111115041}
   aimCamera: {fileID: 2064248198544333813}
@@ -9196,10 +9197,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 804135296878626476}
   PlayerCanvasUI: {fileID: 8400702461292456739}
-  PlayerCoordinateAttackManager: {fileID: 0}
   PlayerElementalSkillandBurstManager: {fileID: 6785168847716851814}
-  OffsetCameraLook: {fileID: 2798339205668980939}
   SwitchSoundEffectsClip: {fileID: 8300000, guid: cc332e6c5a1ec214abf96aac1a8a779c,
+    type: 3}
+  DashEffects: {fileID: 3157203378364174824, guid: c21aa1502b182b347a0543960540f923,
+    type: 3}
+  SwitchCharacterEffect: {fileID: 2605316480486226868, guid: 114ab6919cf39484e946697e02cfa078,
     type: 3}
 --- !u!114 &6785168847716851814
 MonoBehaviour:

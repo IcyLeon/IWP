@@ -48,7 +48,7 @@ public class BowCharacters : PlayerCharacters
     {
         Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
 
-        AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
+        AssetManager.GetInstance().SpawnParticlesEffect(AssetManager.GetInstance().PlungeParticlesEffect, HitPos);
 
         foreach (Collider collider in colliders)
         {

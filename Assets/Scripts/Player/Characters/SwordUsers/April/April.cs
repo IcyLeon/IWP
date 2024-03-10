@@ -56,7 +56,7 @@ public class April : SwordCharacters
                 }
             }
         }
-        ParticleSystem ps = Instantiate(ShieldExplosion, GetPointOfContact(), Quaternion.identity).GetComponent<ParticleSystem>();
+        ParticleSystem ps = Instantiate(ShieldExplosion, GetPlayerManager().GetPlayerOffsetPosition().position, Quaternion.identity).GetComponent<ParticleSystem>();
         ps.transform.SetParent(GetPlayerManager().transform, true);
 
         Destroy(ps.gameObject, ps.main.duration);
@@ -97,7 +97,7 @@ public class April : SwordCharacters
                 }
             }
 
-            Shield.transform.position = GetPointOfContact();
+            Shield.transform.position = GetPlayerManager().GetPlayerOffsetPosition().position;
         }
     }
 

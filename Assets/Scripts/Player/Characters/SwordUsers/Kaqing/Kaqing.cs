@@ -39,7 +39,7 @@ public class Kaqing : SwordCharacters
         Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
 
         if (GetCurrentSwordElemental() != Elemental.NONE)
-            AssetManager.GetInstance().SpawnParticlesEffect(HitPos, ElectroPlungeAttack);
+            AssetManager.GetInstance().SpawnParticlesEffect(ElectroPlungeAttack, HitPos);
         
         return colliders;
     }
@@ -88,9 +88,9 @@ public class Kaqing : SwordCharacters
         GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeSkillsState(this);
     }
 
-
-    public void SpawnEffects()
+    public override void IBurstEnter()
     {
+        base.IBurstEnter();
         StartCoroutine(SpawnEffectsCoroutine());
     }
 

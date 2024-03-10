@@ -54,10 +54,6 @@ public class PlayerGroundState : PlayerMovementState
         if (IsBurstActive())
         {
             GetPlayerState().ChangeState(GetPlayerState().playerBurstState);
-            if (playerCharacter != null)
-            {
-                playerCharacter.GetPlayerCharacterState().ResetBasicAttacks();
-            }
             return;
         }
         else

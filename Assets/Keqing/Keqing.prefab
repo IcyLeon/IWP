@@ -790,7 +790,6 @@ GameObject:
   m_Component:
   - component: {fileID: 291115132933082694}
   - component: {fileID: 7315344365255477452}
-  - component: {fileID: 2473306963681224068}
   m_Layer: 3
   m_Name: AimRig
   m_TagString: Untagged
@@ -837,21 +836,6 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
---- !u!114 &2473306963681224068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 304611043107313525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a9d8063ab10ad46a27a51b601d8b29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Rig: {fileID: 7315344365255477452}
-  PlayerCharactersRef: {fileID: 5925227093044607599}
-  TargetTransform: {fileID: 8705689119256144629}
 --- !u!1 &306214249567869759
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,12 +1942,11 @@ MonoBehaviour:
     type: 3}
   BurstRangeEffectPrefab: {fileID: 6484485155401033903, guid: 6d66f1935347e634b8714e0ddf6eaafb,
     type: 3}
-  KaqingThrowTeleporter: {fileID: 2167385561653191694}
+  KaqingAim: {fileID: 0}
   UltiSlashPrefab: {fileID: 6171312371999307619, guid: ba5fbea4e031e9a4eb88ede1f32f7494,
     type: 3}
   ElectroPlungeAttack: {fileID: 7798454740234354683, guid: 21eb81f095b2fd745a0d481cc23406c3,
     type: 3}
-  KaqingESlashCollider: {fileID: 5454232350259253011}
 --- !u!136 &8277075308650760468
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1990,9 +1973,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76e17babee21ae45847ea1ec5d2211f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerCharactersRef: {fileID: 5925227093044607599}
+  Rig: {fileID: 7315344365255477452}
+  TargetTransform: {fileID: 0}
   TeleporterPrefab: {fileID: 8455810837854244540, guid: 038cc286a7384c54e86b6e5e09da6fdb,
     type: 3}
-  AimLookAt: {fileID: 2473306963681224068}
   TargetOrbPrefab: {fileID: 260796668554883667, guid: c7219445ca073fd4088e1595e66881e1,
     type: 3}
   EmitterPivot: {fileID: 4718011531169770864}
@@ -8798,7 +8783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ca884c3c154919a4ef012d33b4a4aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.1
+  radius: 0.12
 --- !u!1 &3691011085389837672
 GameObject:
   m_ObjectHideFlags: 0
@@ -19780,7 +19765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ca884c3c154919a4ef012d33b4a4aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.1
+  radius: 0.12
 --- !u!1 &8989181911769061100
 GameObject:
   m_ObjectHideFlags: 0

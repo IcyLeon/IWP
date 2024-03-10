@@ -25,7 +25,6 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject WorldText;
     [SerializeField] GameObject SlashPrefab;
     [SerializeField] GameObject ObtainUIPrefab;
-    public GameObject SwitchCharacterParticlesEffect;
     public GameObject PlungeParticlesEffect;
 
     [Header("Bow")]
@@ -249,9 +248,12 @@ public class AssetManager : MonoBehaviour
         m.SetMessage(text);
     }
 
-    public void SpawnParticlesEffect(Vector3 position, GameObject prefab)
+    public void SpawnParticlesEffect(GameObject prefab, Vector3 position, Quaternion rotation = default(Quaternion))
     {
-        ParticleSystem ps = Instantiate(prefab, position, Quaternion.identity).GetComponent<ParticleSystem>();
+        if (rotation == default(Quaternion))
+            rotation = Quaternion.identity;
+
+        ParticleSystem ps = Instantiate(prefab, position, rotation).GetComponent<ParticleSystem>();
         Destroy(ps.gameObject, ps.main.duration);
     }
 

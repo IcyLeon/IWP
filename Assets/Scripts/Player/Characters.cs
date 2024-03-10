@@ -82,10 +82,6 @@ public class Characters : MonoBehaviour, IDamage
         soundManager = SoundEffectsManager.GetInstance();
         OnHit += HitEvent;
     }
-    public void ResetAttack()
-    {
-        isAttacking = false;
-    }
     // Start is called before the first frame update
 
     public virtual float GetElementalShield()
@@ -187,7 +183,10 @@ public class Characters : MonoBehaviour, IDamage
         return IsDead();
     }
 
-
+    public Collider GetCollider()
+    {
+        return Collider;
+    }
     public IDamage[] GetAllNearestCharacters(Vector3 currentPos, float range, LayerMask mask)
     {
         Collider[] colliders = Physics.OverlapSphere(currentPos, range, mask);

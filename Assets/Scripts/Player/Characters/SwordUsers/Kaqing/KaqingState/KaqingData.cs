@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KaqingData : CommonCharactersData
 {
-    public float ESkillRange = 5f;
+    public float ESkillRange = 6f;
     public KaqingTeleporter kaqingTeleporter;
 
     public KaqingData(int maxAttackPhase) : base(maxAttackPhase)

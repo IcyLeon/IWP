@@ -75,7 +75,7 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
         if (AssetManager.isInProbabilityRange(0.8f))
             GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomSkillVoice());
     }
-    public void PlayRandomSkillsBurstVoice()
+    private void PlayRandomSkillsBurstVoice()
     {
         if (GetPlayersSO() == null)
             return;
@@ -279,6 +279,7 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
     {
         base.Update();
         Debug.Log(GetPlayerManager().GetPlayerMovementState());
+        Debug.Log(GetisAttacking());
 
         if (Time.timeScale == 0)
             return;
@@ -510,9 +511,9 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
 
     public virtual void IBurstEnter()
     {
-
+        GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(this);
+        PlayRandomSkillsBurstVoice();
     }
-
 
     public virtual void IBurstExit()
     {

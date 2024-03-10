@@ -32,7 +32,7 @@ public class SwordCharacters : PlayerCharacters
         Collider[] colliders = base.PlungeAttackGroundHit(HitPos);
 
         if (GetCurrentSwordElemental() == Elemental.NONE)
-            AssetManager.GetInstance().SpawnParticlesEffect(HitPos, AssetManager.GetInstance().PlungeParticlesEffect);
+            AssetManager.GetInstance().SpawnParticlesEffect(AssetManager.GetInstance().PlungeParticlesEffect, HitPos);
 
         foreach (Collider collider in colliders)
         {

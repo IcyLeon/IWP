@@ -22,7 +22,6 @@ public class AmberElementalBurstState : BowElementalBurstState
     public override void OnAnimationTransition()
     {
         base.OnAnimationTransition();
-        GetAmberState().GetAmber().SpawnAura();
     }
 
     public override void Exit()

@@ -8,10 +8,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerCanvasUI PlayerCanvasUI;
     [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
-    [SerializeField] Transform OffsetCameraLook;
 
     [Header("Common Audio")]
     [SerializeField] AudioClip SwitchSoundEffectsClip;
+    [Header("Effects")]
+    [SerializeField] GameObject DashEffects;
+    [SerializeField] GameObject SwitchCharacterEffect;
 
     private Rigidbody rb;
     private List<PlayerCharacters> PlayerCharactersList = new();
@@ -158,12 +160,18 @@ public class PlayerManager : MonoBehaviour
 
     }
 
+    public void SpawnDashEffects(Vector3 dir)
+    {
+        Quaternion rotation = Quaternion.Euler(0f, 180 + Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg, 0f);
+        AssetManager.GetInstance().SpawnParticlesEffect(DashEffects, GetPlayerOffsetPosition().position, rotation);
+    }
+
     private void CharacterChange(CharacterData cd)
     {
         if (cd == null)
             return;
 
-        AssetManager.GetInstance().SpawnParticlesEffect(GetPlayerCharacter(cd.GetPlayerCharacterSO()).transform.position, AssetManager.GetInstance().SwitchCharacterParticlesEffect);
+        AssetManager.GetInstance().SpawnParticlesEffect(SwitchCharacterEffect, GetPlayerCharacter(cd.GetPlayerCharacterSO()).transform.position);
     }
 
     public List<CharacterData> GetCharactersOwnedList()
@@ -252,7 +260,7 @@ public class PlayerManager : MonoBehaviour
 
     public Transform GetPlayerOffsetPosition()
     {
-        return OffsetCameraLook;
+        return playerController.GetCameraManager().GetOffsetCameraLook();
     }
 
     public bool CanPerformAction()
@@ -417,13 +425,11 @@ public class PlayerManager : MonoBehaviour
             if (playerCharacters.IsDead())
                 return;
 
-            for (int i = 0; i < PlayerCharactersList.Count; i++)
-            {
-                PlayerCharactersList[i].gameObject.SetActive(false);
-            }
+            foreach(PlayerCharacters pc in PlayerCharactersList)
+                pc.gameObject.SetActive(false);
 
             playerCharacters.SetCharacterData(characterData);
-            playerCharacters.ResetAttack();
+            playerCharacters.SetisAttacking(false);
             playerCharacters.ResetElementsIndicator();
             GetInventoryManager().SetCurrentEquipCharacter(characterData);
             SetCurrentCharacter(playerCharacters);

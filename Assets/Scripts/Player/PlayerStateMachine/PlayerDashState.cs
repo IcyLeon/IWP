@@ -54,6 +54,7 @@ public class PlayerDashState : PlayerGroundState
             DisableDash();
         }
         GetPlayerState().GetPlayerManager().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerManager().GetStaminaManager().GetStaminaSO().DashCost);
+        GetPlayerState().GetPlayerManager().SpawnDashEffects(DashDirection);
     }
 
     private void DisableDash()

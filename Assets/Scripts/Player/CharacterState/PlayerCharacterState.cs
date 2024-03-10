@@ -78,6 +78,6 @@ public class PlayerCharacterState : CharacterState
                 Characters.GetAnimator().SetBool(AtkName, false);
         }
 
-        GetPlayerCharacters().ResetAttack();
+        GetPlayerCharacters().SetisAttacking(false);
     }
 }

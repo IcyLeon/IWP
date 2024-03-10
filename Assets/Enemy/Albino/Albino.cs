@@ -288,7 +288,7 @@ public class Albino : BaseEnemy
         Animator.SetTrigger("Slam");
         JumpOnAir = false;
         yield return new WaitForSeconds(0.25f);
-        ResetAttack();
+        SetisAttacking(false);
         state = States.CHASE;
         SlamCoroutine = null;
     }

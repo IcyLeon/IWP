@@ -87,6 +87,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -1753,6 +1755,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -2066,6 +2070,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -2252,6 +2258,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -2343,6 +2351,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -2857,6 +2867,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -3288,6 +3300,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -3939,6 +3953,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -4584,6 +4600,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -4675,6 +4693,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -5742,7 +5762,7 @@ MonoBehaviour:
   KaqingAim: {fileID: 63962083893232046}
   UltiSlashPrefab: {fileID: 6171312371999307619, guid: ba5fbea4e031e9a4eb88ede1f32f7494,
     type: 3}
-  ElectroPlungeAttack: {fileID: 7798454740234354683, guid: 21eb81f095b2fd745a0d481cc23406c3,
+  ElectroPlungeAttack: {fileID: 1930965935750191783, guid: a083a47ba705c30459d96225910647bf,
     type: 3}
 --- !u!136 &4020335968690510227
 CapsuleCollider:
@@ -5942,6 +5962,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -6098,6 +6120,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -6381,6 +6405,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -6622,6 +6648,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -7342,6 +7370,51 @@ Transform:
   m_Father: {fileID: 8050377058951686979}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2842955781198906861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 721832211296259280}
+  - component: {fileID: 6621610499927209814}
+  m_Layer: 3
+  m_Name: SkirtCollider1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &721832211296259280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2842955781198906861}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0001, y: -0.00165, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5755069099142655339}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6621610499927209814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2842955781198906861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ca884c3c154919a4ef012d33b4a4aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.1
 --- !u!1 &2856031475698275231
 GameObject:
   m_ObjectHideFlags: 0
@@ -7688,6 +7761,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -8536,6 +8611,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -8791,6 +8868,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -8914,6 +8993,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -9005,6 +9086,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -9223,6 +9306,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -10061,6 +10146,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -11190,6 +11277,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -12021,6 +12110,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -12207,6 +12298,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -12511,6 +12604,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -13813,6 +13908,51 @@ Transform:
   m_Father: {fileID: 5867723853341112213}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6134322812046504948
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9021902694095093027}
+  - component: {fileID: 6999180341924122227}
+  m_Layer: 3
+  m_Name: SkirtCollider2 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9021902694095093027
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6134322812046504948}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0001, y: -0.00165, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7733892082081797831}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6999180341924122227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6134322812046504948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ca884c3c154919a4ef012d33b4a4aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.1
 --- !u!1 &6171485440074395941
 GameObject:
   m_ObjectHideFlags: 0
@@ -14286,6 +14426,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -14774,6 +14916,7 @@ Transform:
   m_Children:
   - {fileID: 6391867722080177061}
   - {fileID: 5836343589650548218}
+  - {fileID: 721832211296259280}
   m_Father: {fileID: 3735698762525888141}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15473,6 +15616,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -15992,6 +16137,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -16083,6 +16230,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -16459,6 +16608,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -16550,6 +16701,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -16736,6 +16889,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -17331,6 +17486,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -17838,6 +17995,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -18238,6 +18397,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}
@@ -18608,6 +18769,7 @@ Transform:
   m_Children:
   - {fileID: 599776878654236725}
   - {fileID: 694235218331576509}
+  - {fileID: 9021902694095093027}
   m_Father: {fileID: 3735698762525888141}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20265,6 +20427,8 @@ MonoBehaviour:
   colliders:
   - {fileID: 69989330138379076}
   - {fileID: 2826867042206533938}
+  - {fileID: 6621610499927209814}
+  - {fileID: 6999180341924122227}
   - {fileID: 2872316566559877688}
   - {fileID: 8845115661038871486}
   - {fileID: 3741586420932058709}

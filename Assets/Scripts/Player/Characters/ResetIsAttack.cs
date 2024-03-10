@@ -7,7 +7,7 @@ public class ResetIsAttack : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacters playerCharacters = animator.GetComponent<PlayerCharacters>();
+        PlayerCharacters playerCharacters = animator.transform.parent.GetComponent<PlayerCharacters>();
         if (playerCharacters != null)
         {
             if (Characters.ContainsParam(animator, "isDashing"))

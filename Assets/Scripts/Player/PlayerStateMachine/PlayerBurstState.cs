@@ -15,7 +15,10 @@ public class PlayerBurstState : PlayerGroundState
         StartAnimation("isBurst");
 
         if (playerCharacter)
+        {
+            playerCharacter.GetPlayerCharacterState().ResetBasicAttacks();
             playerCharacter.ToggleAimCamera(false);
+        }
     }
 
     public override void FixedUpdate()

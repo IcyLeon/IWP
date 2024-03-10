@@ -33,7 +33,7 @@ public class AIAttackState : StateMachineBehaviour
         BaseEnemy baseEnemy = animator.GetComponent<BaseEnemy>();
         if (baseEnemy)
         {
-            baseEnemy.ResetAttack();
+            baseEnemy.SetisAttacking(false);
         }
         if (navMesh != null)
         {

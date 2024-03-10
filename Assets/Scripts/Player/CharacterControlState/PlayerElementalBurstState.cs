@@ -11,13 +11,17 @@ public class PlayerElementalBurstState : PlayerControlState
     public override void Enter()
     {
         base.Enter();
-
-        GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsBurstVoice();
+        GetPlayerCharacterState().GetPlayerCharacters().IBurstEnter();
     }
 
     public override void OnAnimationTransition()
     {
         GetPlayerCharacterState().GetPlayerCharacters().SetBurstActive(false);
-        GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().GetPlayerElementalSkillandBurstManager().SubscribeBurstState(GetPlayerCharacterState().GetPlayerCharacters());
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        GetPlayerCharacterState().GetPlayerCharacters().IBurstExit();
     }
 }
