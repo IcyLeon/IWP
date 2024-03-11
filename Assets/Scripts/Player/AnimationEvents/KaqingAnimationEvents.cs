@@ -17,6 +17,18 @@ public class KaqingAnimationEvents : SwordUsersAnimationEvents
         KaqingESlashCollider.SetKaqing(GetKaqing());
     }
 
+    protected override void SpawnSlash()
+    {
+        if (GetKaqing().GetCurrentSwordElemental() == Elemental.NONE)
+            base.SpawnSlash();
+        else
+            SpawnElectroSlash();
+    }
+    protected override void SpawnPoke()
+    {
+        base.SpawnPoke();
+    }
+
     private void ToggleOnESlash()
     {
         if (!GetSwordCharacters().GetSwordModel())
@@ -32,10 +44,16 @@ public class KaqingAnimationEvents : SwordUsersAnimationEvents
 
         KaqingESlashCollider.SetCanHit(false);
     }
-
+    private void SpawnElectroSlash()
+    {
+        AssetManager.SpawnSlashEffect(ElectroSlashPrefab, GetSwordCharacters().GetSwordModel().GetSlashPivot());
+    }
     private void SpawnESlash()
     {
-        AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordCharacters().GetSwordModel().GetSlashPivot());
+        SpawnElectroSlash();
+        Attack();
         GetKaqing().GetKaqingAimController().DestroyTeleporter();
     }
+
+
 }

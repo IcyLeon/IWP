@@ -13,12 +13,6 @@ public class SwordCharacters : PlayerCharacters
         return SwordModel;
     }
 
-    public virtual void SpawnSlash()
-    {
-        AssetManager.GetInstance().SpawnSlashEffect(GetSwordModel().GetSlashPivot());
-        GetSwordModel().ResetHits();
-    }
-
     // Start is called before the first frame update
     protected override void Start()
     {

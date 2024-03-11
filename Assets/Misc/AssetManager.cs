@@ -23,7 +23,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] ItemsList itemlisttemplate;
     [SerializeField] GameObject DamageText;
     [SerializeField] GameObject WorldText;
-    [SerializeField] GameObject SlashPrefab;
+
     [SerializeField] GameObject ObtainUIPrefab;
     public GameObject PlungeParticlesEffect;
 
@@ -64,9 +64,6 @@ public class AssetManager : MonoBehaviour
 
     [Header("FriendlyKillers")]
     public GameObject FirePrefab;
-
-    [Header("Dash")]
-    [SerializeField] GameObject DashPrefab;
 
     [Header("InteractableItemObject")]
     [SerializeField] GameObject InteractableItemObjectPrefab;
@@ -214,11 +211,6 @@ public class AssetManager : MonoBehaviour
         GameObject go = Instantiate(ObtainUIPrefab, GetCanvasGO().transform);
     }
 
-    public void SpawnDash(Vector3 pos, Quaternion rot)
-    {
-        ParticleSystem go = Instantiate(DashPrefab, pos, rot).GetComponent<ParticleSystem>();
-        Destroy(go, go.main.duration);
-    }
     public Sprite GetCurrencySprite(CurrencyType type)
     {
         switch(type)
@@ -333,14 +325,7 @@ public class AssetManager : MonoBehaviour
         dt.SpawnText(position, element, text);
     }
 
-    public void SpawnSlashEffect(Transform source)
-    {
-        GameObject slash = Instantiate(SlashPrefab, source);
-        slash.transform.SetParent(null);
-        Destroy(slash, 0.5f);
-    }
-
-    public void SpawnSlashEffect(GameObject prefab, Transform source)
+    public static void SpawnSlashEffect(GameObject prefab, Transform source)
     {
         GameObject slash = Instantiate(prefab, source);
         slash.transform.SetParent(null);

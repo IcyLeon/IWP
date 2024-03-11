@@ -122,7 +122,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556025944887194207}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -163,6 +163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15056453abf7bb448a056b20ffc12e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SlashPrefab: {fileID: 3850188118278125534, guid: 7e7f04c10d088b44ca6d0c6ef88359db,
+    type: 3}
+  PokePrefab: {fileID: 259458667642674785, guid: ec4ed5da00b02624c920ccf39ec510fb,
+    type: 3}
   EnemyMarkerPrefab: {fileID: 5843656760640273766, guid: 52093c3e13ef7dd4491fbc6052ad9d39,
     type: 3}
   HealPrefab: {fileID: 1282364566017586, guid: 38e2ad2405a73b94ca4acff97076788a, type: 3}
@@ -350,12 +354,9 @@ MonoBehaviour:
   HealthBarPivotParent: {fileID: 0}
   BurstCamera: {fileID: 6811335622352421577}
   SwordModel: {fileID: 1362067131492042087}
-  ShieldPrefab: {fileID: 1337227094590760, guid: 44ba1124063ecc34689bab1bf0165861,
+  RainBowPrefab: {fileID: 6949701332044175114, guid: f374838b7359f5443a930f9ca2fd9b1a,
     type: 3}
   ShieldExplosion: {fileID: 2804463155698594004, guid: ff82cef3a9843ad4f868ee4325b9c0e7,
-    type: 3}
-  HealPrefab: {fileID: 1282364566017586, guid: 38e2ad2405a73b94ca4acff97076788a, type: 3}
-  EnemyMarkerPrefab: {fileID: 5843656760640273766, guid: 52093c3e13ef7dd4491fbc6052ad9d39,
     type: 3}
   ConnectionPrefab: {fileID: 5741767689826894581, guid: 8b0856e85c8bc6f44a2889bcd05ce833,
     type: 3}
@@ -1394,7 +1395,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4795640412758466519}
-  m_LocalRotation: {x: -0.0011926657, y: 0.99833894, z: -0.05304931, w: -0.022444867}
+  m_LocalRotation: {x: -0.0011926653, y: 0.99833894, z: -0.053049315, w: -0.022444857}
   m_LocalPosition: {x: 0.035, y: 1.2830001, z: 0.778}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2658,11 +2659,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2191777260264216433}
     m_Modifications:
-    - target: {fileID: 25985674160297539, guid: eb7c6d468911dbf4293b6e834dc5de85,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 51881127414958178, guid: eb7c6d468911dbf4293b6e834dc5de85,
         type: 3}
       propertyPath: m_Name
@@ -2687,16 +2683,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9107736225787897751, guid: eb7c6d468911dbf4293b6e834dc5de85,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9107736225787897751, guid: eb7c6d468911dbf4293b6e834dc5de85,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 130
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb7c6d468911dbf4293b6e834dc5de85, type: 3}

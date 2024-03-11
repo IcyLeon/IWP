@@ -14,12 +14,13 @@ public class BowUsersAnimationEvents : PlayerAnimationEvents
     protected override void Attack()
     {
         BowData bowData = GetBowCharacters().GetBowCharactersState().GetBowData();
-        Arrow ArrowFire = Instantiate(ArrowPrefab, GetBowCharacters().GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<Arrow>();
-        ParticleSystem arrowLuanch = Instantiate(AssetManager.GetInstance().ArrowLaunchPrefab, GetBowCharacters().GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        Destroy(arrowLuanch.gameObject, arrowLuanch.main.duration);
+        Arrow ArrowFire = Instantiate(ArrowPrefab, GetBowCharacters().GetEmitterPivot().transform).GetComponent<Arrow>();
         ArrowFire.SetElements(new Elements(GetBowCharacters().GetBowCharactersState().GetBowData().ShootElemental));
         ArrowFire.SetCharacterData(GetBowCharacters());
-        ArrowFire.transform.rotation = Quaternion.LookRotation(bowData.Direction);
+        ArrowFire.transform.SetParent(null);
+
+        ParticleSystem arrowLuanch = Instantiate(AssetManager.GetInstance().ArrowLaunchPrefab, GetBowCharacters().GetEmitterPivot().transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        Destroy(arrowLuanch.gameObject, arrowLuanch.main.duration);
 
         if (!GetBowCharacters().GetPlayerManager().IsAiming())
             GetBowCharacters().GetSoundManager().PlaySFXSound(GetBowCharacters().GetBowSoundSO().GetRandomBasicFireAudioClip());

@@ -7,12 +7,12 @@ using UnityEngine;
 
 public class April : SwordCharacters
 {
-    [SerializeField] GameObject ShieldPrefab;
+    [SerializeField] GameObject RainBowPrefab;
     [SerializeField] GameObject ShieldExplosion;
     [SerializeField] LineRenderer ConnectionPrefab;
     private float ShieldTimerElapsed;
     private float nextHitExplosion;
-    private ParticleSystem Shield;
+    private GameObject RainBow;
 
     protected override void Start()
     {
@@ -35,10 +35,10 @@ public class April : SwordCharacters
     public void SpawnShield()
     {
         ShieldTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalSkillsTimer;
-        if (Shield == null)
-            Shield = Instantiate(ShieldPrefab).GetComponent<ParticleSystem>();
+        if (RainBow == null)
+            RainBow = Instantiate(RainBowPrefab);
 
-        Destroy(Shield.gameObject, ShieldTimerElapsed);
+        Destroy(RainBow.gameObject, ShieldTimerElapsed);
     }
 
     private void DamageEnemies()
@@ -82,11 +82,11 @@ public class April : SwordCharacters
         //        ExplosionShield[i].transform.position = GetPointOfContact();
         //}
 
-        if (Shield)
+        if (RainBow)
         {
             if (IsDead())
             {
-                Destroy(Shield.gameObject);
+                Destroy(RainBow.gameObject);
             }
             else
             {
@@ -97,7 +97,7 @@ public class April : SwordCharacters
                 }
             }
 
-            Shield.transform.position = GetPlayerManager().GetPlayerOffsetPosition().position;
+            RainBow.transform.position = GetPlayerManager().GetPlayerOffsetPosition().position;
         }
     }
 

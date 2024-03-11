@@ -678,7 +678,7 @@ ModelImporter:
     - name: "\u80F8\u4E0A.R"
       parentName: "\u304A\u3063\u3071\u3044\u8ABF\u6574"
       position: {x: 0.0004328796, y: 0.00013201122, z: 0.00008989413}
-      rotation: {x: 0.54529804, y: 0.5031776, z: 0.5031775, w: 0.44302896}
+      rotation: {x: 0.5452981, y: 0.50317764, z: 0.5031776, w: 0.443029}
       scale: {x: 1, y: 1, z: 0.99999994}
     - name: "\u80F8\u4E0A.R_end"
       parentName: "\u80F8\u4E0A.R"
@@ -763,7 +763,7 @@ ModelImporter:
     - name: "\u5E26_9_1.L"
       parentName: "\u5E26_8_1.L"
       position: {x: 1.8626448e-10, y: 0.0005017715, z: -5.681068e-10}
-      rotation: {x: 0.96860236, y: -0.06503156, z: -0.06503164, w: 0.23097889}
+      rotation: {x: 0.96860236, y: -0.06503157, z: -0.06503164, w: 0.23097892}
       scale: {x: 1, y: 1, z: 1.0000007}
     - name: "\u5E26_9_1.L_end"
       parentName: "\u5E26_9_1.L"
@@ -1029,7 +1029,7 @@ ModelImporter:
     - name: "\u4E2D\u6307\uFF13.L"
       parentName: "\u4E2D\u6307\uFF12.L"
       position: {x: -8.731148e-12, y: 0.00023978748, z: 8.945589e-10}
-      rotation: {x: 0.041109707, y: -0.0012646045, z: -0.00043181944, w: 0.99915373}
+      rotation: {x: 0.041109715, y: -0.0012646045, z: -0.0004318195, w: 0.99915373}
       scale: {x: 1, y: 1, z: 1}
     - name: "\u4E2D\u6307\u5148.L"
       parentName: "\u4E2D\u6307\uFF13.L"
@@ -1049,7 +1049,7 @@ ModelImporter:
     - name: "\u4EBA\u6307\uFF12.L"
       parentName: "\u4EBA\u6307\uFF11.L"
       position: {x: -1.8626451e-11, y: 0.00025145253, z: 8.9304353e-10}
-      rotation: {x: 0.021890467, y: -0.00031516913, z: -0.036166895, w: 0.99910593}
+      rotation: {x: 0.02189047, y: -0.00031516913, z: -0.036166903, w: 0.99910593}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: "\u4EBA\u6307\uFF13.L"
       parentName: "\u4EBA\u6307\uFF12.L"

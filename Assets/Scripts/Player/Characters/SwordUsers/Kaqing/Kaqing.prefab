@@ -5107,7 +5107,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109403457525059256}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 
@@ -5755,8 +5755,6 @@ MonoBehaviour:
   HealthBarPivotParent: {fileID: 0}
   BurstCamera: {fileID: 5768029138009864271}
   SwordModel: {fileID: 8028831205666693409}
-  ElectroSlashPrefab: {fileID: 4339637571636687090, guid: c7364b6ba3e03904a9cd240f20c17bb2,
-    type: 3}
   BurstRangeEffectPrefab: {fileID: 6484485155401033903, guid: 6d66f1935347e634b8714e0ddf6eaafb,
     type: 3}
   KaqingAim: {fileID: 63962083893232046}
@@ -6496,8 +6494,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2495398830886866932}
-  m_LocalRotation: {x: 0.51444846, y: 0.85468596, z: 0.024289023, w: -0.06530476}
-  m_LocalPosition: {x: 0.000439, y: -0.00061, z: 0.001055}
+  m_LocalRotation: {x: -0.5138452, y: -0.831225, z: -0.08617975, w: 0.19391003}
+  m_LocalPosition: {x: 0.00041, y: -0.00089, z: 0.00096}
   m_LocalScale: {x: 0.008, y: 0.008, z: 0.008}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6505,7 +6503,7 @@ Transform:
   - {fileID: 5105231770426024091}
   m_Father: {fileID: 6296918849754251497}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -6.241, y: 185, z: 61.816}
+  m_LocalEulerAnglesHint: {x: -18.998, y: 191.008, z: 60.368}
 --- !u!1 &2498859998145868891
 GameObject:
   m_ObjectHideFlags: 0
@@ -11772,6 +11770,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2dd5d09b88240449b500a825e040e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SlashPrefab: {fileID: 3850188118278125534, guid: 7e7f04c10d088b44ca6d0c6ef88359db,
+    type: 3}
+  PokePrefab: {fileID: 259458667642674785, guid: ec4ed5da00b02624c920ccf39ec510fb,
+    type: 3}
   ElectroSlashPrefab: {fileID: 4339637571636687090, guid: c7364b6ba3e03904a9cd240f20c17bb2,
     type: 3}
   KaqingESlashCollider: {fileID: 2922313798765275684}
@@ -11806,7 +11808,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c8ec3aa3fdd7a3e42a87787e94aaae5d, type: 3}
   m_Controller: {fileID: 9100000, guid: 32890ec2e859ab34191d3940d01e6153, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 1
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -20479,11 +20481,6 @@ PrefabInstance:
     - target: {fileID: 861174000417362648, guid: eb7c6d468911dbf4293b6e834dc5de85,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 861174000417362648, guid: eb7c6d468911dbf4293b6e834dc5de85,
-        type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 861174000417362648, guid: eb7c6d468911dbf4293b6e834dc5de85,

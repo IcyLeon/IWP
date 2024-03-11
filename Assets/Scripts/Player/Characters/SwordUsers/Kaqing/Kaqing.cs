@@ -7,7 +7,6 @@ using UnityEngine;
 public class Kaqing : SwordCharacters
 {
     private float CurrentElementalSwordFusion;
-    [SerializeField] GameObject ElectroSlashPrefab;
     [SerializeField] GameObject BurstRangeEffectPrefab;
     [SerializeField] KaqingAimController KaqingAim;
     private ParticleSystem BurstRangeEffect;
@@ -60,26 +59,12 @@ public class Kaqing : SwordCharacters
         GetModel().SetActive(true);
     }
 
-    public override void SpawnSlash()
-    {
-        if (GetCurrentSwordElemental() == Elemental.NONE)
-            base.SpawnSlash();
-        else
-            SpawnElectroSlash();
-    }
-
     public override float GetATK()
     {
         if (GetCurrentSwordElemental() == Elemental.NONE)
             return base.GetATK();
         else
             return base.GetATK() * 1.25f;
-    }
-
-    private void SpawnElectroSlash()
-    {
-        AssetManager.GetInstance().SpawnSlashEffect(ElectroSlashPrefab, GetSwordModel().GetSlashPivot());
-        GetSwordModel().ResetHits();
     }
 
     public void StartElementalTimer()
