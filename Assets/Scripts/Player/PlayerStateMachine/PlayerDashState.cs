@@ -28,7 +28,9 @@ public class PlayerDashState : PlayerGroundState
     private void Dash()
     {
         if (playerCharacter != null)
+        {
             playerCharacter.ToggleAimCamera(false);
+        }
 
         if (Time.time - GetPlayerState().PlayerData.StartDashTime > PlayerData.TimeToBeConsideredConsecutive)
         {
@@ -45,14 +47,14 @@ public class PlayerDashState : PlayerGroundState
         DashDirection.Normalize();
         SetTargetRotation(Quaternion.LookRotation(DashDirection));
 
-        if (!CheckIfisAboutToFall())
-            GetPlayerState().rb.velocity = DashDirection * 10f;
+        GetPlayerState().rb.velocity = DashDirection * 10f;
 
         if (GetPlayerState().PlayerData.consecutiveDashesUsed == PlayerData.ConsecutiveDashesLimitAmount)
         {
             GetPlayerState().PlayerData.consecutiveDashesUsed = 0;
             DisableDash();
         }
+
         GetPlayerState().GetPlayerManager().GetStaminaManager().PerformStaminaAction(GetPlayerState().GetPlayerManager().GetStaminaManager().GetStaminaSO().DashCost);
         GetPlayerState().GetPlayerManager().SpawnDashEffects(DashDirection);
     }

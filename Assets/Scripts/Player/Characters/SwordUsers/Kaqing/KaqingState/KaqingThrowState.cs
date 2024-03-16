@@ -12,19 +12,20 @@ public class KaqingThrowState : KaqingElementalSkillState
     {
         base.Enter();
         StartAnimation("isThrowing");
-        GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(false);
+        Kaqing.GetSwordModel().gameObject.SetActive(false);
     }
 
     public override void OnAnimationTransition()
     {
         GetKaqingState().ChangeState(GetKaqingState().swordIdleState);
+        Kaqing.PlayAimSound(false);
         GetPlayerCharacterState().GetPlayerCharacters().PlayRandomSkillsVoice();
     }
 
     public override void Exit()
     {
         StopAnimation("isThrowing");
-        GetKaqingState().GetKaqing().GetSwordModel().gameObject.SetActive(true);
+        Kaqing.GetSwordModel().gameObject.SetActive(true);
         GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0.2f);
     }
 }

@@ -34,8 +34,9 @@ public class SwordIdleState : SwordControlState
             string AtkName = "Attack" + GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase;
             Animator animator = GetPlayerCharacterState().GetPlayerCharacters().GetAnimator();
             if (Characters.ContainsParam(animator, AtkName))
+            {
                 animator.SetBool(AtkName, true);
-
+            }
             GetPlayerCharacterState().CommonCharactersData.LastClickedTime = Time.time;
         }
     }

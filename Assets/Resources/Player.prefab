@@ -197,6 +197,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7715159405007249263}
+  - component: {fileID: 4578531690524283164}
   m_Layer: 0
   m_Name: VirtualCam
   m_TagString: Untagged
@@ -221,6 +222,25 @@ Transform:
   m_Father: {fileID: 8466442129360495665}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4578531690524283164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84706994438003580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24bacb644fd373c42b05c049a8e6e3b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 804135296878626476}
+  OffsetCameraLook: {fileID: 2798339205668980939}
+  playerCamera: {fileID: 931365486111115041}
+  aimCamera: {fileID: 2064248198544333813}
+  ZoomSoothing: 4
+  MinDistance: 1.25
+  MaxDistance: 4.25
 --- !u!1 &313527218130352910
 GameObject:
   m_ObjectHideFlags: 0
@@ -9021,11 +9041,9 @@ GameObject:
   - component: {fileID: 8466442129360495665}
   - component: {fileID: 6912044472943968364}
   - component: {fileID: 804135296878626476}
-  - component: {fileID: 5113795436203482261}
   - component: {fileID: 7182423578951183842}
   - component: {fileID: 4563240697774977713}
   - component: {fileID: 6677480311715409904}
-  - component: {fileID: 6785168847716851814}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -9079,26 +9097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64be746642b6dcd4799935d023c5d34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraManager: {fileID: 5113795436203482261}
---- !u!114 &5113795436203482261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8466442129360495668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24bacb644fd373c42b05c049a8e6e3b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OffsetCameraLook: {fileID: 2798339205668980939}
-  CameraParent: {fileID: 7715159405007249263}
-  playerCamera: {fileID: 931365486111115041}
-  aimCamera: {fileID: 2064248198544333813}
-  ZoomSoothing: 4
-  MinDistance: 1.25
-  MaxDistance: 4.25
+  cameraManager: {fileID: 4578531690524283164}
+  resizeableCollider: {fileID: 7182423578951183842}
 --- !u!114 &7182423578951183842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9117,9 +9117,9 @@ MonoBehaviour:
     CenterY: 0.86
     Radius: 0.3
   SlopeData:
-    StepHeightPercentage: 0.25
-    FloatRayDistance: 2
-    StepReachForce: 25
+    StepHeightPercentage: 0.15
+    FloatRayDistance: 1.5
+    StepReachForce: 10
   SlopeSpeedAngles:
     serializedVersion: 2
     m_Curve:
@@ -9197,25 +9197,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 804135296878626476}
   PlayerCanvasUI: {fileID: 8400702461292456739}
-  PlayerElementalSkillandBurstManager: {fileID: 6785168847716851814}
-  SwitchSoundEffectsClip: {fileID: 8300000, guid: cc332e6c5a1ec214abf96aac1a8a779c,
-    type: 3}
+  SwitchClip: {fileID: 8300000, guid: cc332e6c5a1ec214abf96aac1a8a779c, type: 3}
+  DashClip:
+  - {fileID: 8300000, guid: cae4ffabb964c4f409a472b8464fe931, type: 3}
+  - {fileID: 8300000, guid: e1a5801b10cf4df41bd3e0d33ea3fd68, type: 3}
+  - {fileID: 8300000, guid: 69463dc8935dade4ba6305b885db7d52, type: 3}
   DashEffects: {fileID: 3157203378364174824, guid: c21aa1502b182b347a0543960540f923,
     type: 3}
   SwitchCharacterEffect: {fileID: 2605316480486226868, guid: 114ab6919cf39484e946697e02cfa078,
     type: 3}
---- !u!114 &6785168847716851814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8466442129360495668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad60337606b6301479e4c5e3c21c1336, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8528960288967385246
 GameObject:
   m_ObjectHideFlags: 0

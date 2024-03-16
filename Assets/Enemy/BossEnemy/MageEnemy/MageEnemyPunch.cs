@@ -45,7 +45,7 @@ public class MageEnemyPunch : MonoBehaviour
                     {
                         if (IDmg is PlayerCharacters player)
                         {
-                            Vector3 ForceDir = HeadPivot.transform.forward * 15f;
+                            Vector3 ForceDir = 15f * HeadPivot.transform.forward;
                             player.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
                         }
 

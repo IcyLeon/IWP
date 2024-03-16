@@ -276,12 +276,12 @@ public class Albino : BaseEnemy
 
         while (true)
         {
-            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 0.5f, ~LayerMask.GetMask("Player"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit GroundHit, 0.5f, ~LayerMask.GetMask("Player", "FF"), QueryTriggerInteraction.Ignore))
             {
                 SlamAreaDamage();
                 break;
             }
-            rb.AddForce(Vector3.down * 1000f * Time.deltaTime);
+            rb.AddForce(1000f * Time.deltaTime * Vector3.down);
             yield return null;
         }
         Collider.isTrigger = false;
@@ -322,7 +322,7 @@ public class Albino : BaseEnemy
     }
     public void DealDamageToPlayer()
     {
-        Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player"));
+        Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player", "FF"));
         for (int i = 0; i < Colliders.Length; i++)
         {
             IDamage pc = Colliders[i].GetComponent<IDamage>();
@@ -336,7 +336,7 @@ public class Albino : BaseEnemy
     }
     public void SlamAreaDamage()
     {
-        Collider[] Colliders = Physics.OverlapSphere(transform.position, 2.5f, LayerMask.GetMask("Player"));
+        Collider[] Colliders = Physics.OverlapSphere(transform.position, 2.5f, LayerMask.GetMask("Player", "FF"));
         for (int i = 0; i < Colliders.Length; i++)
         {
             PlayerCharacters pc = Colliders[i].GetComponent<PlayerCharacters>();
@@ -345,9 +345,9 @@ public class Albino : BaseEnemy
                 if (pc.GetBurstActive())
                     return;
 
-                Elements e = pc.TakeDamage(pc.transform.position, new Elements(Elemental.NONE), 100f, this);
+                Elements e = pc.TakeDamage(pc.GetPointOfContact(), new Elements(Elemental.NONE), 100f, this);
                 if (e != null)
-                    pc.GetPlayerManager().GetCharacterRB().AddForce(((pc.GetPlayerManager().GetCharacterRB().position - pc.transform.position).normalized + Vector3.up).normalized * 15f, ForceMode.Impulse); ;
+                    pc.GetPlayerManager().GetCharacterRB().AddForce(15f * ((pc.GetPointOfContact() - transform.position).normalized + Vector3.up).normalized, ForceMode.Impulse); ;
             }
         }
         ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().HitEffect, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();

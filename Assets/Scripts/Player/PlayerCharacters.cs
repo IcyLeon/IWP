@@ -32,14 +32,6 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
 
     }
 
-    public override void FootstepSound()
-    {
-        if (GetPlayerManager().GetPlayerState().GetPlayerMovementState() is not PlayerMovingState)
-            return;
-
-        base.FootstepSound();
-    }
-
     public void SetBurstActive(bool value)
     {
         isBurstActive = value;
@@ -140,18 +132,6 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
     public PlayerCharacterSO GetPlayersSO()
     {
         return CharactersSO as PlayerCharacterSO;
-    }
-
-    public override void AnimatorMove(Vector3 deltaPosition, Quaternion rootRotation)
-    {
-        if (GetPlayerManager() == null)
-            return;
-
-        if (!GetPlayerManager().GetPlayerMovementState().CheckIfisAboutToFall())
-        {
-            GetPlayerManager().GetCharacterRB().MovePosition(GetPlayerManager().GetCharacterRB().position + deltaPosition);
-        }
-        GetPlayerManager().GetCharacterRB().transform.rotation = rootRotation;
     }
 
     public void SetCharacterData(CharacterData characterData)
@@ -278,8 +258,8 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
     protected override void Update()
     {
         base.Update();
-        Debug.Log(GetPlayerManager().GetPlayerMovementState());
-        Debug.Log(GetisAttacking());
+        //Debug.Log(GetPlayerManager().GetPlayerMovementState());
+        //Debug.Log(GetisAttacking());
 
         if (Time.timeScale == 0)
             return;

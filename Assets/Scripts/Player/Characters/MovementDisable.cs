@@ -35,6 +35,7 @@ public class MovementDisable : StateMachineBehaviour
                     break;
                 case Lock.Disable:
                     playerCharacters.GetPlayerManager().GetPlayerController().SetLockMovemnt(LockMovement.Disable);
+                    playerCharacters.SetisAttacking(false);
                     break;
             }
         }

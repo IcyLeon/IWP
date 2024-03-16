@@ -6,7 +6,7 @@ using UnityEngine;
 public class KaqingTeleportState : KaqingElementalSkillState
 {
     private float Range;
-    private Vector3 TargetPosition;
+    private Vector3 TargetPosition, CurrentPosition;
 
     public KaqingTeleportState(PlayerCharacterState pcs) : base(pcs)
     {
@@ -15,6 +15,8 @@ public class KaqingTeleportState : KaqingElementalSkillState
     public override void Enter()
     {
         Range = GetKaqingState().KaqingData.ESkillRange;
+        CurrentPosition = Kaqing.GetPointOfContact();
+
         Kaqing.GetPlayerManager().GetCharacterRB().useGravity = false;
         Kaqing.GetModel().SetActive(false);
         Kaqing.GetKaqingAimController().LookAtAimTarget();
@@ -28,9 +30,12 @@ public class KaqingTeleportState : KaqingElementalSkillState
 
     private void UpdateTravelling()
     {
-        TargetPosition = GetTargetPosition() - Vector3.up * Kaqing.GetCollider().bounds.size.y / 2;
+        Vector3 dir = (GetTargetPosition() - CurrentPosition);
+        Range = Mathf.Min(dir.magnitude, GetKaqingState().KaqingData.ESkillRange);
+        TargetPosition = (Range * dir.normalized) + CurrentPosition;
+        TargetPosition.y = TargetPosition.y - Kaqing.GetCharacterHeight() / 2;
 
-        if ((Kaqing.GetPlayerManager().GetCharacterRB().position - TargetPosition).magnitude >= 1.5f)
+        if ((Kaqing.GetPointOfContact() - TargetPosition).magnitude >= 1.5f)
         {
             Kaqing.GetPlayerManager().GetCharacterRB().position = Vector3.MoveTowards(
                 Kaqing.GetPlayerManager().GetCharacterRB().position, TargetPosition, Time.deltaTime * 40f

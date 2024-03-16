@@ -2,15 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;
     [SerializeField] PlayerCanvasUI PlayerCanvasUI;
-    [SerializeField] PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
+    private PlayerElementalSkillandBurstManager PlayerElementalSkillandBurstManager;
 
     [Header("Common Audio")]
-    [SerializeField] AudioClip SwitchSoundEffectsClip;
+    [SerializeField] AudioClip SwitchClip;
+    [SerializeField] AudioClip[] DashClip;
+
     [Header("Effects")]
     [SerializeField] GameObject DashEffects;
     [SerializeField] GameObject SwitchCharacterEffect;
@@ -40,6 +43,23 @@ public class PlayerManager : MonoBehaviour
     public PlayerCanvasUI GetPlayerCanvasUI()
     {
         return PlayerCanvasUI;
+    }
+
+    //private void OnDrawGizmos()
+    //{
+    //    if (CurrentCharacter == null)
+    //        return;
+    //    CapsuleCollider c = CurrentCharacter.GetComponent<CapsuleCollider>();
+    //    Gizmos.DrawSphere(CurrentCharacter.GetPointOfContact() + Vector3.down * (c.height / 2f - c.radius / 2f), c.radius);
+    //}
+
+    private void PlayRandomDashSound()
+    {
+        if (DashClip.Length == 0)
+            return;
+
+        AudioClip audioClip = DashClip[Random.Range(0, DashClip.Length)];
+        SoundEffectsManager.GetInstance().PlaySFXSound(audioClip, 1, rb.position);
     }
 
     private void ReviveAllCharacters()
@@ -89,6 +109,7 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         playerState = new PlayerState(this, playerController);
+        PlayerElementalSkillandBurstManager = new PlayerElementalSkillandBurstManager();
         inventoryManager = InventoryManager.GetInstance();
         staminaManager = StaminaManager.GetInstance();
     }
@@ -164,6 +185,8 @@ public class PlayerManager : MonoBehaviour
     {
         Quaternion rotation = Quaternion.Euler(0f, 180 + Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg, 0f);
         AssetManager.GetInstance().SpawnParticlesEffect(DashEffects, GetPlayerOffsetPosition().position, rotation);
+
+        PlayRandomDashSound();
     }
 
     private void CharacterChange(CharacterData cd)
@@ -328,6 +351,7 @@ public class PlayerManager : MonoBehaviour
         if (Time.timeScale == 0)
             return;
 
+        PlayerElementalSkillandBurstManager.UpdateAll();
         GetPlayerState().Update();
     }
 
@@ -439,7 +463,7 @@ public class PlayerManager : MonoBehaviour
                 CharacterChange(characterData);
 
             GetInventoryManager().SetCurrentEquipCharacter(characterData);
-            SoundEffectsManager.GetInstance().PlaySFXSound(SwitchSoundEffectsClip);
+            SoundEffectsManager.GetInstance().PlaySFXSound(SwitchClip);
             onCharacterChange?.Invoke(CurrentCharacter.GetCharacterData(), CurrentCharacter);
         }
     }

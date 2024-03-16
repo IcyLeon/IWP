@@ -111,7 +111,7 @@ public class MageEnemy : BaseEnemy
                 {
                     if (IDmg is PlayerCharacters player)
                     {
-                        Vector3 ForceDir = (player.GetPointOfContact() - GetPointOfContact()).normalized * 15f;
+                        Vector3 ForceDir = 15f * (player.GetPointOfContact() - GetPointOfContact()).normalized;
                         player.GetPlayerManager().GetCharacterRB().AddForce(ForceDir, ForceMode.Impulse);
                     }
                 }
@@ -144,7 +144,7 @@ public class MageEnemy : BaseEnemy
         Collider[] colliders = Physics.OverlapCapsule(GetFireBreathingCollider().bounds.min,
                                                       GetFireBreathingCollider().bounds.max,
                                                       GetFireBreathingCollider().radius,
-                                                      LayerMask.GetMask("Player"));
+                                                      LayerMask.GetMask("Player", "FF"));
 
         foreach (Collider other in colliders)
         {
@@ -379,7 +379,7 @@ public class MageEnemy : BaseEnemy
 
     public void NukePlayer(Vector3 TargetPos, float range, float dmg)
     {
-        Collider[] AllNearestPlayer = Physics.OverlapSphere(TargetPos, range, LayerMask.GetMask("Player"));
+        Collider[] AllNearestPlayer = Physics.OverlapSphere(TargetPos, range, LayerMask.GetMask("Player", "FF"));
         for (int i = 0; i < AllNearestPlayer.Length; i++)
         {
             IDamage d = AllNearestPlayer[i].GetComponent<IDamage>();

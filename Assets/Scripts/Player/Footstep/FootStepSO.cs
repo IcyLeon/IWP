@@ -6,6 +6,7 @@ using UnityEngine;
 public class FootStepSO : ScriptableObject
 {
     public AudioClip[] FootstepClip;
+    public AudioClip LandingClip;
 
     public AudioClip GetRandomFootstepSound()
     {

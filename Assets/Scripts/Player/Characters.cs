@@ -39,10 +39,15 @@ public interface ISkillsBurstManager
 
 }
 
-public class Characters : MonoBehaviour, IDamage
+public interface IKnockback
 {
+
+}
+
+public class Characters : MonoBehaviour, IDamage, IKnockback
+{
+    private float CharacterHeight;
     protected float CurrentHealth;
-    [SerializeField] FootStepSO FootStepSO;
     [SerializeField] protected CharactersSO CharactersSO;
     [SerializeField] protected Collider Collider;
     [SerializeField] protected Animator Animator;
@@ -66,16 +71,20 @@ public class Characters : MonoBehaviour, IDamage
         return soundManager;
     }
 
-    public virtual void FootstepSound()
-    {
-        SoundEffectsManager.GetInstance().PlaySFXSound(FootStepSO.GetRandomFootstepSound(), 1f, GetPointOfContact(), 0.5f);
-    }
-
     public static bool isOutofBound(Vector3 pos)
     {
         return pos.y <= -100f;
     }
 
+    private void Awake()
+    {
+        CharacterHeight = Collider.bounds.size.y;
+    }
+
+    public float GetCharacterHeight()
+    {
+        return CharacterHeight;
+    }
     protected virtual void Start()
     {
         isAttacking = false;
@@ -183,10 +192,6 @@ public class Characters : MonoBehaviour, IDamage
         return IsDead();
     }
 
-    public Collider GetCollider()
-    {
-        return Collider;
-    }
     public IDamage[] GetAllNearestCharacters(Vector3 currentPos, float range, LayerMask mask)
     {
         Collider[] colliders = Physics.OverlapSphere(currentPos, range, mask);

@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class PlayerElementalSkillandBurstManager : MonoBehaviour
+public class PlayerElementalSkillandBurstManager
 {
-    private List<PlayerCharacters> PlayerElementalSkillStateList;
-    private List<PlayerCharacters> PlayerElementalBurstStateList;
-    private List<PlayerCharacters> PlayerCharacterList;
+    private Dictionary<PlayerCharacterSO, PlayerCharacters> PlayerElementalSkillStateList;
+    private Dictionary<PlayerCharacterSO, PlayerCharacters> PlayerElementalBurstStateList;
+    private Dictionary<PlayerCharacterSO, PlayerCharacters> PlayerCharacterList;
     public static event Action OnCoordinateAttack;
 
     public static void CallCoordinateAttack()
@@ -16,7 +17,7 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public PlayerElementalSkillandBurstManager()
     {
         PlayerElementalSkillStateList = new();
         PlayerElementalBurstStateList = new();
@@ -25,7 +26,7 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
 
     public void Subscribe(PlayerCharacters p)
     {
-        PlayerCharacterList.Add(p);
+        PlayerCharacterList.Add(p.GetPlayersSO(), p);
     }
 
     public void SubscribeSkillsState(PlayerCharacters c)
@@ -35,7 +36,7 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
 
         if (IsSkillStateExisted(c) == null)
         {
-            PlayerElementalSkillStateList.Add(c);
+            PlayerElementalSkillStateList.Add(c.GetPlayersSO(), c);
         }
     }
 
@@ -47,81 +48,82 @@ public class PlayerElementalSkillandBurstManager : MonoBehaviour
 
         if (IsBurstStateExisted(c) == null)
         {
-            PlayerElementalBurstStateList.Add(c);
+            PlayerElementalBurstStateList.Add(c.GetPlayersSO(), c);
         }
     }
 
     private PlayerCharacters IsSkillStateExisted(PlayerCharacters characters)
     {
-        for (int i = 0; i < PlayerElementalSkillStateList.Count; i++)
+        if (PlayerElementalSkillStateList.TryGetValue(characters.GetPlayersSO(), out PlayerCharacters playerCharacters))
         {
-            PlayerCharacters c = PlayerElementalSkillStateList[i];
-            if (c.GetPlayersSO() == characters.GetPlayersSO())
-            {
-                return c;
-            }
+            return playerCharacters;
         }
         return null;
     }
 
     private PlayerCharacters IsBurstStateExisted(PlayerCharacters characters)
     {
-        for (int i = 0; i < PlayerElementalBurstStateList.Count; i++)
+        if (PlayerElementalBurstStateList.TryGetValue(characters.GetPlayersSO(), out PlayerCharacters playerCharacters))
         {
-            PlayerCharacters c = PlayerElementalBurstStateList[i];
-            if (c.GetPlayersSO() == characters.GetPlayersSO())
-            {
-                return c;
-            }
+            return playerCharacters;
         }
         return null;
     }
 
     // Update is called once per frame
-    void Update()
+    public void UpdateAll()
     {
         UpdateESkills();
         UpdateBurstSkills();
         UpdateCharactersEverytime();
     }
 
-    void UpdateCharactersEverytime()
+    private void UpdateCharactersEverytime()
     {
         for (int i = 0; i < PlayerCharacterList.Count; i++)
         {
-            PlayerCharacterList[i].UpdateEveryTime();
+            KeyValuePair<PlayerCharacterSO, PlayerCharacters> PlayerCharacterkeyValuePair = PlayerCharacterList.ElementAt(i);
+            PlayerCharacterkeyValuePair.Value.UpdateEveryTime();
         }
     }
 
-    void UpdateESkills()
+    private void UpdateESkills()
     {
         for (int i = 0; i < PlayerElementalSkillStateList.Count; i++)
         {
-            ISkillsBurstManager ca = PlayerElementalSkillStateList[i].GetComponent<ISkillsBurstManager>();
-            if (ca != null)
+            KeyValuePair<PlayerCharacterSO, PlayerCharacters> PlayerCharacterkeyValuePair = PlayerElementalSkillStateList.ElementAt(i);
+            if (PlayerElementalSkillStateList.TryGetValue(PlayerCharacterkeyValuePair.Key, out PlayerCharacters PC))
             {
-                ca.UpdateISkills();
-                if (ca.IsISkillsEnded())
+                ISkillsBurstManager ca = PC.GetComponent<ISkillsBurstManager>();
+                if (ca != null)
                 {
-                    PlayerElementalSkillStateList.RemoveAt(i);
-                    i--;
+                    ca.UpdateISkills();
+                    if (ca.IsISkillsEnded())
+                    {
+                        PlayerElementalSkillStateList.Remove(PlayerCharacterkeyValuePair.Key);
+                        i--;
+                    }
                 }
             }
         }
     }
 
-    void UpdateBurstSkills()
+    private void UpdateBurstSkills()
     {
         for (int i = 0; i < PlayerElementalBurstStateList.Count; i++)
         {
-            ISkillsBurstManager ca = PlayerElementalBurstStateList[i].GetComponent<ISkillsBurstManager>();
-            if (ca != null)
+            KeyValuePair<PlayerCharacterSO, PlayerCharacters> PlayerCharacterkeyValuePair = PlayerElementalBurstStateList.ElementAt(i);
+            if (PlayerElementalBurstStateList.TryGetValue(PlayerCharacterkeyValuePair.Key, out PlayerCharacters PC))
             {
-                ca.UpdateIBursts();
-                if (ca.IsIBurstEnded())
+                ISkillsBurstManager ca = PC.GetComponent<ISkillsBurstManager>();
+                if (ca != null)
                 {
-                    PlayerElementalBurstStateList.RemoveAt(i);
-                    i--;
+                    ca.UpdateIBursts();
+                    if (ca.IsIBurstEnded())
+                    {
+                        PlayerElementalBurstStateList.Remove(PlayerCharacterkeyValuePair.Key);
+                        i--;
+                    }
                 }
             }
         }

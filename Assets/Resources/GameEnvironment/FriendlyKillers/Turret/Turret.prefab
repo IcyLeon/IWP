@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5860864602334975098}
   - component: {fileID: 1623839402785325973}
   - component: {fileID: 6690135039124098502}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: Turret
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -110,6 +110,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2362433833393462758}
     m_Modifications:
+    - target: {fileID: 535314163324614138, guid: 7bec6786966094e4e93dfa8038a74765,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 2500359841924546866, guid: 7bec6786966094e4e93dfa8038a74765,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -124,6 +129,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889570091359596643, guid: 7bec6786966094e4e93dfa8038a74765,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5309906563984556931, guid: 7bec6786966094e4e93dfa8038a74765,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478704288121278047, guid: 7bec6786966094e4e93dfa8038a74765,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5957382628967168102, guid: 7bec6786966094e4e93dfa8038a74765,
         type: 3}
@@ -149,6 +169,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: turret_double
+      objectReference: {fileID: 0}
+    - target: {fileID: 6478163371112522460, guid: 7bec6786966094e4e93dfa8038a74765,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8135457417722243694, guid: 7bec6786966094e4e93dfa8038a74765,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bec6786966094e4e93dfa8038a74765, type: 3}

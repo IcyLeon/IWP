@@ -14,12 +14,23 @@ public class Kaqing : SwordCharacters
     [SerializeField] GameObject ElectroPlungeAttack;
     private ParticleSystem UltiSlash;
 
+    [Header("Aim Sound")]
+    [SerializeField] AudioSource AimLoopAudioSound;
+
     public void SpawnUltiSlash()
     {
         if (UltiSlash != null)
             DestroyUltiSlash();
 
         UltiSlash = Instantiate(UltiSlashPrefab, GetPlayerManager().GetPlayerOffsetPosition().position + Vector3.up * 1f, Quaternion.identity).GetComponent<ParticleSystem>();
+    }
+
+    public void PlayAimSound(bool play)
+    {
+        if (play)
+            AimLoopAudioSound.Play();
+        else
+            AimLoopAudioSound.Stop();
     }
 
     public void DestroyUltiSlash()

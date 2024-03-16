@@ -160,7 +160,7 @@ public class Spitter : BaseEnemy
 
     public void DealDamageToPlayer()
     {
-        Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player"));
+        Collider[] Colliders = Physics.OverlapSphere(transform.position + Vector3.up + transform.forward * 2f, 1f, LayerMask.GetMask("Player", "FF"));
         for (int i = 0; i < Colliders.Length; i++)
         {
             IDamage pc = Colliders[i].GetComponent<IDamage>();

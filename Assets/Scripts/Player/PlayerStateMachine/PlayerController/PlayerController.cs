@@ -16,6 +16,7 @@ public enum LockMovement
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] CameraManager cameraManager;
+    [SerializeField] ResizeableCollider resizeableCollider;
     private InputSystem InputSystem;
     private PlayerManager playerManager;
     private LockMovement lockMovement;
@@ -33,12 +34,10 @@ public class PlayerController : MonoBehaviour
     public delegate void onNumsKeyInput(float val);
     public static onNumsKeyInput OnNumsKeyInput;
     public static onNumsKeyInput OnScroll;
-    private ResizeableCollider resizeableCollider;
     private MainUI mainUI;
 
     private void OnEnable()
     {
-
         InputSystem.Enable();
     }
 
@@ -72,7 +71,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         mainUI = MainUI.GetInstance();
-        resizeableCollider = GetComponent<ResizeableCollider>();
     }
 
     private void OnDestroy()

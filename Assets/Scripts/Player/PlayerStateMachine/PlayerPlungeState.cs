@@ -41,7 +41,7 @@ public class PlayerPlungeState : PlayerAirborneState
         Float();
         if (GetPlayerState().rb.useGravity)
         {
-            GetPlayerState().rb.AddForce(Vector3.down * 50f, ForceMode.Acceleration);
+            GetPlayerState().rb.AddForce(45f * Vector3.down, ForceMode.Acceleration);
             LimitFallVelocity();
         }
     }

@@ -295,6 +295,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1495933667470717534, guid: 9d67fce8649e5e64dae6a91c08c83d40,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1495933667470717534, guid: 9d67fce8649e5e64dae6a91c08c83d40,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1741218322945949887, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -368,6 +378,11 @@ PrefabInstance:
     - target: {fileID: 3148042997483374586, guid: 9d67fce8649e5e64dae6a91c08c83d40,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5212639532712353166, guid: 9d67fce8649e5e64dae6a91c08c83d40,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6073783216335080523, guid: 9d67fce8649e5e64dae6a91c08c83d40,
@@ -573,7 +588,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 863
+    m_Bits: 3935
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -669,8 +684,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146676999}
-  m_LocalRotation: {x: 0.08086653, y: -0.88170815, z: 0.16392978, w: 0.43494648}
-  m_LocalPosition: {x: 27.38168, y: 2.7579792, z: 51.50765}
+  m_LocalRotation: {x: 0.080866404, y: -0.8817082, z: 0.16392957, w: 0.4349464}
+  m_LocalPosition: {x: 30.03168, y: 0.7879791, z: 44.037647}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

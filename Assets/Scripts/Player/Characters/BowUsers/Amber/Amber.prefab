@@ -1054,7 +1054,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f38c0ae1a849234abb2b1a741cb28cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FootStepSO: {fileID: 11400000, guid: 4cf4fd07e9589a84a93771033aadb205, type: 2}
   CharactersSO: {fileID: 11400000, guid: cb95ce3b5ea4cd148bdf48d8736622da, type: 2}
   Collider: {fileID: 3322154553483885159}
   Animator: {fileID: 4811819441576321419}
@@ -1834,7 +1833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3530693208514629267}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1897,6 +1896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb1c376328fe24c4ea8700b3eea7a771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FootStepSO: {fileID: 11400000, guid: 4cf4fd07e9589a84a93771033aadb205, type: 2}
   ArrowPrefab: {fileID: 5779037978997602820, guid: 9c8df042e2c3a364089d27072470d9ae,
     type: 3}
 --- !u!114 &8065507106638023102

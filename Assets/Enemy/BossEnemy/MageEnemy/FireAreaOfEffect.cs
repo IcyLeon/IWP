@@ -32,7 +32,7 @@ public class FireAreaOfEffect : MonoBehaviour
 
         if (Time.time - FireIntervalElasped > FireInterval)
         {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, 2.5f, LayerMask.GetMask("Player"));
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 2.5f, LayerMask.GetMask("Player", "FF"));
             for (int i = 0; i < colliders.Length; i++)
             {
                 IDamage damage = colliders[i].GetComponent<IDamage>();

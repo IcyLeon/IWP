@@ -16,12 +16,14 @@ public class KaqingAimState : KaqingElementalSkillState
         Timer = 0f;
         Kaqing.GetPlayerManager().GetPlayerController().DisableInput(Kaqing.GetPlayerManager().GetPlayerController().GetPlayerActions().Move, this is KaqingAimState);
         Kaqing.ToggleAimCamera(true);
+        Kaqing.PlayAimSound(true);
         Kaqing.GetSwordModel().gameObject.SetActive(false);
     }
 
     public override void ElementalSkillTrigger()
     {
         GetKaqingState().ChangeState(GetKaqingState().kaqingThrowState);
+        return;
     }
 
     private void ElementalSkillHitPos_Aim()

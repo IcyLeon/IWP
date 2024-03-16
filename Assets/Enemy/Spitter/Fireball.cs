@@ -34,7 +34,7 @@ public class Fireball : MonoBehaviour
     {
         Explosion explosion = Instantiate(AssetManager.GetInstance().HitExplosion, transform.position, Quaternion.identity).GetComponent<Explosion>();
         explosion.SetExplosionSound(explosionClipSound);
-        explosion.Init(elemental, LayerMask.GetMask("Player"), 2.5f, 100f, source);
+        explosion.Init(elemental, LayerMask.GetMask("Player", "FF"), 2.5f, 100f, source);
     }
 
     private void OnTriggerEnter(Collider other)

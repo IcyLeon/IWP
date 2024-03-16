@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class KaqingTeleporter : MonoBehaviour
 {
+    [SerializeField] AudioSource ExplosionAudioSource;
     [SerializeField] GameObject ExplosionEffects;
     private Elements elements;
     private PlayerCharacters PlayerCharacters;
@@ -78,6 +79,7 @@ public class KaqingTeleporter : MonoBehaviour
 
         ParticleSystem ps = Instantiate(ExplosionEffects, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         Destroy(ps.gameObject, ps.main.duration);
+        ExplosionAudioSource.Play();
     }
 
     public void SetCharacterData(PlayerCharacters characterData)

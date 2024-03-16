@@ -1,10 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerAnimationEvents : MonoBehaviour
 {
+    [SerializeField] FootStepSO FootStepSO;
     protected PlayerCharacters playerCharacters;
+
+    private void OnFootstep()
+    {
+        if (playerCharacters.GetPlayerManager().GetPlayerState().GetPlayerMovementState() is not PlayerMovingState)
+            return;
+
+        SoundEffectsManager.GetInstance().PlaySFXSound(FootStepSO.GetRandomFootstepSound(), 1, playerCharacters.GetPointOfContact(), 1f);
+    }
+
+    private void OnLand()
+    {
+        SoundEffectsManager.GetInstance().PlaySFXSound(FootStepSO.GetRandomFootstepSound(), 1, playerCharacters.GetPointOfContact(), 1f);
+    }
 
     private void PlayRandomFallenVoice()
     {
@@ -18,12 +33,23 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-        if (playerCharacters.GetAnimator() == null)
-        {
+        if (playerCharacters == null)
             return;
-        }
 
-        playerCharacters.AnimatorMove(playerCharacters.GetAnimator().deltaPosition, playerCharacters.GetAnimator().rootRotation);
+        Animator animator = playerCharacters.GetAnimator();
+        PlayerManager PM = playerCharacters.GetPlayerManager();
+
+        if (animator == null)
+            return;
+
+        if (PM == null)
+            return;
+
+        if (!PM.GetPlayerMovementState().CheckIfisAboutToFall())
+        {
+            PM.GetCharacterRB().transform.position += animator.deltaPosition;
+        }
+        playerCharacters.GetPlayerManager().GetCharacterRB().transform.rotation = animator.rootRotation;
     }
 
     protected virtual void Awake()
@@ -53,8 +79,5 @@ public class PlayerAnimationEvents : MonoBehaviour
     protected virtual void Attack()
     {
         PlayerElementalSkillandBurstManager.CallCoordinateAttack();
-
-        if (playerCharacters)
-            playerCharacters.SetisAttacking(false);
     }
 }

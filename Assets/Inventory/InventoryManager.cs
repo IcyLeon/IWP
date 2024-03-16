@@ -261,10 +261,10 @@ public class InventoryManager : MonoBehaviour {
         switch (type)
         {
             case CurrencyType.COINS:
-                GetPlayerStats().RemoveCoins(amt);
+                GetPlayerStats().AddCoins(-amt);
                 break;
             case CurrencyType.CASH:
-                GetPlayerStats().RemoveCash(amt);
+                GetPlayerStats().AddCash(-amt);
                 break;
         }
     }

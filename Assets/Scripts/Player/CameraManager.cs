@@ -5,9 +5,8 @@ using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
-    private PlayerController playerController;
+    [SerializeField] PlayerController playerController;
     [SerializeField] Transform OffsetCameraLook;
-    [SerializeField] Transform CameraParent;
     [SerializeField] CinemachineVirtualCamera playerCamera;
     [SerializeField] CinemachineVirtualCamera aimCamera;
     [SerializeField][Range(0f, 20f)] float ZoomSoothing = 4f;
@@ -107,10 +106,8 @@ public class CameraManager : MonoBehaviour
         aimCamera.Follow = playerCamera.Follow;
 
         LockWhenPaused();
-        //Vector3 d = testCamera.LookAt.position - (playerController.GetPlayerOffsetPosition().position);
-        //d.Normalize();
-        //testCamera.m_XAxis.Value = Mathf.Atan2(d.x, d.z) * Mathf.Rad2Deg - 15f;
     }
+
     public void Recentering()
     {
         StartCoroutine(RecenteringCoroutine());
@@ -135,7 +132,7 @@ public class CameraManager : MonoBehaviour
         CFT = playerCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         playerPOV = playerCamera.GetCinemachineComponent<CinemachinePOV>();
         aimPOV = aimCamera.GetCinemachineComponent<CinemachinePOV>();
-        CameraParent.transform.SetParent(null);
+        transform.SetParent(null);
         targetDistance = MaxDistance;
     }
 
@@ -155,12 +152,6 @@ public class CameraManager : MonoBehaviour
             return;
 
         CFT.m_CameraDistance = Mathf.Lerp(CFT.m_CameraDistance, targetDistance, ZoomSoothing * Time.deltaTime);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerController = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame

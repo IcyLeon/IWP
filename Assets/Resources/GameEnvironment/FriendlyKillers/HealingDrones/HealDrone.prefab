@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6188349261095274515}
   - component: {fileID: 2468113213950513829}
   - component: {fileID: 7511657973510650404}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: BaseShieldTurret1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 708504817495568999}
   - component: {fileID: 1088747052094111020}
   - component: {fileID: 5426137281072773855}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: Gun3ShieldTurret1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 8800368555222865524}
   - component: {fileID: 5761790215465361665}
   - component: {fileID: 320990179119752210}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: StorageShieldTurret1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 6244413586641525241}
   - component: {fileID: 1296248012296899}
   - component: {fileID: 5801225204874573742}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: Gun1ShieldTurret1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,7 +346,7 @@ GameObject:
   - component: {fileID: 5375132744481729082}
   - component: {fileID: 6292796611424413268}
   - component: {fileID: 7195990987205761878}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: Gun2ShieldTurret1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 256911613996562223}
   - component: {fileID: 2251851968255072074}
   - component: {fileID: 2905780407713180488}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: MiddleShieldTurret1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +511,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6966162321100194271}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: WorldTxtPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -543,7 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6966162322816042344}
   - component: {fileID: 6966162322816042348}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: HealDrone
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -598,7 +598,7 @@ GameObject:
   - component: {fileID: 989268262652202773}
   - component: {fileID: 5416040333067532722}
   - component: {fileID: 2459214968145552898}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: ShieldTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}

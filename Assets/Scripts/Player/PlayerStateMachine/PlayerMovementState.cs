@@ -276,7 +276,7 @@ public class PlayerMovementState : IState
             return;
 
         //GetPlayerState().rb.MovePosition(GetPlayerState().rb.position + GetPlayerState().PlayerData.Direction * GetSpeed() * GetPlayerState().PlayerData.SpeedModifier * Time.deltaTime);
-        GetPlayerState().rb.AddForce((GetPlayerState().PlayerData.Direction * GetSpeed() * GetPlayerState().PlayerData.SpeedModifier) - GetHorizontalVelocity(), ForceMode.VelocityChange);
+        GetPlayerState().rb.AddForce((GetSpeed() * GetPlayerState().PlayerData.SpeedModifier * GetPlayerState().PlayerData.Direction) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
     protected bool IsTouchingTerrain()
@@ -288,10 +288,8 @@ public class PlayerMovementState : IState
             return false;
 
         Vector3 capsuleColliderCenterInWorldSpace = GetCapsuleCollider().bounds.center;
-        Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore);
-        List<Collider> colliderCopy = new(Colliders);
-
-        return colliderCopy.Count > 0;
+        //Collider[] Colliders = Physics.OverlapSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius / 1.5f, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision"), QueryTriggerInteraction.Ignore);
+        return Physics.CheckSphere(capsuleColliderCenterInWorldSpace + Vector3.down * (GetPlayerState().GetPlayerController().GetResizeableCollider().GetDefaultColliderData_height() * GetPlayerState().GetPlayerController().GetResizeableCollider().GetSlopeData().StepHeightPercentage + GetCapsuleCollider().height / 2f - GetCapsuleCollider().radius / 2f), GetCapsuleCollider().radius, ~LayerMask.GetMask("Ignore Raycast", "Ignore Collision", "Player"), QueryTriggerInteraction.Ignore);
     }
 
     protected CapsuleCollider GetCapsuleCollider()
@@ -377,12 +375,12 @@ public class PlayerMovementState : IState
     protected void DecelerateVertically()
     {
         Vector3 playerVerticalVelocity = GetVerticalVelocity();
-        GetPlayerState().rb.AddForce(-playerVerticalVelocity * DecelerateForce, ForceMode.Acceleration);
+        GetPlayerState().rb.AddForce(DecelerateForce * -playerVerticalVelocity, ForceMode.Acceleration);
     }
     protected void DecelerateHorizontal()
     {
         Vector3 playerHorizontalVelocity = GetHorizontalVelocity();
-        GetPlayerState().rb.AddForce(-playerHorizontalVelocity * DecelerateForce, ForceMode.Acceleration);
+        GetPlayerState().rb.AddForce(DecelerateForce * -playerHorizontalVelocity, ForceMode.Acceleration);
     }
 
     protected bool IsMovingUp(float minimumVelocity = 0f)

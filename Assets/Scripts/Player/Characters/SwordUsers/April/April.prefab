@@ -122,7 +122,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556025944887194207}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15056453abf7bb448a056b20ffc12e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FootStepSO: {fileID: 11400000, guid: 4cf4fd07e9589a84a93771033aadb205, type: 2}
   SlashPrefab: {fileID: 3850188118278125534, guid: 7e7f04c10d088b44ca6d0c6ef88359db,
     type: 3}
   PokePrefab: {fileID: 259458667642674785, guid: ec4ed5da00b02624c920ccf39ec510fb,
@@ -346,7 +347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ccc6c16b02a014eb8aaa1e54739fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FootStepSO: {fileID: 11400000, guid: 4cf4fd07e9589a84a93771033aadb205, type: 2}
   CharactersSO: {fileID: 11400000, guid: 1f82e998edf14f041978ed9b72e14bc4, type: 2}
   Collider: {fileID: 8339764944362983642}
   Animator: {fileID: 5803034033840538762}
