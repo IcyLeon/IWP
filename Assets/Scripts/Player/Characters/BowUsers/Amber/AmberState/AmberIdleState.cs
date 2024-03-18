@@ -22,4 +22,9 @@ public class AmberIdleState : BowIdleState
     {
         GetAmberState().ChangeState(GetAmberState().amberElementalBurstState);
     }
+
+    protected override void TransitionToAttackState()
+    {
+        GetAmberState().ChangeState(GetAmberState().amberAttackState);
+    }
 }

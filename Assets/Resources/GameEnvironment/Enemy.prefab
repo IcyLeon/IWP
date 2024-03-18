@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1738650214646950392}
   - component: {fileID: 1738650214646950393}
   - component: {fileID: 1738650214646950398}
-  - component: {fileID: 1738650214646950399}
   - component: {fileID: 1738650214646950396}
   - component: {fileID: 7041954999751715595}
+  - component: {fileID: 2599430404110729523}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -100,22 +100,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1738650214646950399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738650214646950397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4134fb083fb027945aa9856180ccd55d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharactersSO: {fileID: 11400000, guid: 1a82a0021acc11046b4411c70213c94b, type: 2}
-  Animator: {fileID: 0}
-  Model: {fileID: 1738650214646950397}
-  NavMeshAgent: {fileID: 0}
 --- !u!54 &1738650214646950396
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -139,7 +123,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1738650214646950397}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -147,10 +131,30 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2599430404110729523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738650214646950397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 024c43312a69f6f458bff26cfc96eb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharactersSO: {fileID: 11400000, guid: 2acebbcf09148f941bccabf9071d9073, type: 2}
+  Collider: {fileID: 1738650214646950398}
+  Animator: {fileID: 0}
+  Model: {fileID: 1738650214646950397}
+  HealthBarPivotParent: {fileID: 1738650214646950395}
+  rb: {fileID: 1738650214646950396}
+  NavMeshAgent: {fileID: 7041954999751715595}
+  EnemyValueDropSO: {fileID: 11400000, guid: 2b4c69c0e0f950e4ea16a8316dc25cd9, type: 2}

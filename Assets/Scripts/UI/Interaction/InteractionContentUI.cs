@@ -6,11 +6,10 @@ using UnityEngine;
 public class InteractionContentUI : MonoBehaviour
 {
     [SerializeField] Transform InteractOptionsPivot;
-    [SerializeField] GameObject SelectionArrowPrefab;
     [SerializeField] GameObject InteractablePrefab;
     private Dictionary<IInteract, InteractOptions> InteractOptionList;
     [SerializeField] PlayerCanvasUI playerCanvasUI;
-    private GameObject SelectionArrow;
+    [SerializeField] GameObject SelectionArrow;
     private int CurrentIdx;
 
     private void Awake()
@@ -28,7 +27,7 @@ public class InteractionContentUI : MonoBehaviour
         if (val == 0)
             return;
 
-        if (SelectionArrow == null || InteractOptionList.Count == 0)
+        if (InteractOptionList.Count == 0)
             return;
 
         int value = (int)Mathf.Clamp(val, -1f, 1f);
@@ -43,7 +42,6 @@ public class InteractionContentUI : MonoBehaviour
             CurrentIdx = 0;
         if (CurrentIdx < 0)
             CurrentIdx = InteractOptionList.Count - 1;
-
     }
 
     private void InteractObj()
@@ -70,17 +68,7 @@ public class InteractionContentUI : MonoBehaviour
 
     private void UpdateArrowPosition()
     {
-
-        if (InteractOptionList.Count != 0)
-        {
-            if (SelectionArrow == null)
-                SelectionArrow = playerCanvasUI.GetInteractOptionsUI().SpawnInteractionArrow();
-        }
-        else
-        {
-            if (SelectionArrow != null)
-                Destroy(SelectionArrow.gameObject);
-        }
+        SelectionArrow.SetActive(InteractOptionList.Count != 0);
 
         if (CurrentIdx == -1 || InteractOptionList.Count == 0)
             return;
@@ -132,11 +120,5 @@ public class InteractionContentUI : MonoBehaviour
     public Transform GetInteractOptionsPivot()
     {
         return InteractOptionsPivot;
-    }
-
-    public GameObject SpawnInteractionArrow()
-    {
-        GameObject go = Instantiate(SelectionArrowPrefab, transform);
-        return go;
     }
 }

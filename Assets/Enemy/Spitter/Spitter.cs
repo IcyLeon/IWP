@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Spitter : BaseEnemy
+public class Spitter : KnockableEnemy
 {
     public enum States
     {

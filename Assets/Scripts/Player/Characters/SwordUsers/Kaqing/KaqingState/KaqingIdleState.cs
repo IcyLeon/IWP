@@ -30,11 +30,6 @@ public class KaqingIdleState : SwordIdleState
         threasHold_Charged = 0f;
     }
 
-    public override void Update()
-    {
-        base.Update();
-    }
-
     public override void ElementalSkillHold()
     {
         if (GetKaqingState().KaqingData.kaqingTeleporter != null)
@@ -72,5 +67,10 @@ public class KaqingIdleState : SwordIdleState
     public override void ElementalBurstTrigger()
     {
         GetKaqingState().ChangeState(GetKaqingState().kaqingBurstState);
+    }
+
+    protected override void TransitionToAttackState()
+    {
+        GetKaqingState().ChangeState(GetKaqingState().kaqingAttackState);
     }
 }

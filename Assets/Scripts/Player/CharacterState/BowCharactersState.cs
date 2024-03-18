@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BowCharactersState : PlayerCharacterState
+public class BowCharacterState : PlayerCharacterState
 {
-    public BowAimState bowAimState { get; }
+    public BowAimState bowAimState;
     public BowIdleState bowIdleState;
+    public BowJumpState bowJumpState;
 
     public BowCharacters GetBowCharacters()
     {
@@ -18,9 +19,11 @@ public class BowCharactersState : PlayerCharacterState
         return p;
     }
 
-    public BowCharactersState(Characters Characters) : base(Characters)
+    public BowCharacterState(Characters Characters) : base(Characters)
     {
         CommonCharactersData = new BowData(1);
+        characterDeadState = new BowDeadState(this);
+        bowJumpState = new BowJumpState(this);
         bowAimState = new BowAimState(this);
     }
 

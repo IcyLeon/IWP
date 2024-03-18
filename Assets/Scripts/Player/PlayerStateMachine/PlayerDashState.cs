@@ -105,7 +105,7 @@ public class PlayerDashState : PlayerGroundState
     public override void FixedUpdate()
     {
         Float();
-        UpdateInputTargetQuaternion();
+        HandleInputDirection();
         UpdateTargetRotation();
     }
 }

@@ -26,7 +26,7 @@ public class PlayerJumpState : PlayerAirborneState
 
         if (shouldKeepRotating)
         {
-            UpdateInputTargetQuaternion();
+            HandleInputDirection();
         }
 
         Vector3 JumpForceDir = GetPlayerState().PlayerData.CurrentJumpForceXZ * direction.normalized;

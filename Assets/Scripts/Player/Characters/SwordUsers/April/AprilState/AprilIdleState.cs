@@ -22,4 +22,9 @@ public class AprilIdleState : SwordIdleState
     {
         GetAprilState().ChangeState(GetAprilState().aprilElementalBurstState);
     }
+
+    protected override void TransitionToAttackState()
+    {
+        GetAprilState().ChangeState(GetAprilState().aprilAttackState);
+    }
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class KaqingState : SwordCharacterState
 {
-    public KaqingBurstState kaqingBurstState { get; }
-    public KaqingTeleportState kaqingTeleportState { get; }
-    public KaqingThrowState kaqingThrowState { get; }
-    public KaqingESlash kaqingESlash { get; }
-    public KaqingAimState kaqingAimState { get; }
-
+    public KaqingBurstState kaqingBurstState;
+    public KaqingTeleportState kaqingTeleportState;
+    public KaqingThrowState kaqingThrowState;
+    public KaqingESlash kaqingESlash;
+    public KaqingAimState kaqingAimState;
+    public KaqingAttackState kaqingAttackState;
 
     public Kaqing GetKaqing()
     {
@@ -30,7 +30,7 @@ public class KaqingState : SwordCharacterState
         kaqingTeleportState = new KaqingTeleportState(this);
         swordIdleState = new KaqingIdleState(this);
         kaqingThrowState = new KaqingThrowState(this);
-
+        kaqingAttackState = new KaqingAttackState(this);
         ChangeState(swordIdleState);
     }
 }

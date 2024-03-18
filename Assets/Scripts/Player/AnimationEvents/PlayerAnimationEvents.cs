@@ -21,11 +21,6 @@ public class PlayerAnimationEvents : MonoBehaviour
         SoundEffectsManager.GetInstance().PlaySFXSound(FootStepSO.GetRandomFootstepSound(), 1, playerCharacters.GetPointOfContact(), 1f);
     }
 
-    private void PlayRandomFallenVoice()
-    {
-        playerCharacters.PlayRandomFallenVoice();
-    }
-
     private void PlayRandomBasicAttackVoice()
     {
         playerCharacters.PlayRandomBasicAttackVoice();

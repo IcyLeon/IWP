@@ -32,11 +32,6 @@ public class PunchingBotAttackState : PunchingBotState
 
     }
 
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        UpdateTargetRotation();
-    }
 
     protected void OnIdleState()
     {

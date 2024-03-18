@@ -11,9 +11,9 @@ public class PlayerControlState : IPlayerCharactersState
         playerCharacterState = pcs;
     }
 
-    public BowCharactersState GetBowCharactersState()
+    public BowCharacterState GetBowCharactersState()
     {
-        return (BowCharactersState)GetPlayerCharacterState();
+        return (BowCharacterState)GetPlayerCharacterState();
     }
     public SwordCharacterState GetSwordCharactersState()
     {
@@ -58,26 +58,21 @@ public class PlayerControlState : IPlayerCharactersState
     public virtual void OnAnimationTransition()
     {
     }
-    private void InterruptUpdate()
+    protected virtual void DeadUpdate()
     {
         if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsDeadState())
             return;
 
-        switch (GetPlayerCharacterState())
-        {
-            case BowCharactersState bcs:
-                if (bcs.GetCurrentState() is not BowIdleState)
-                    bcs.ChangeState(bcs.bowIdleState);
-                break;
-            case SwordCharacterState scs:
-                if (scs.GetCurrentState() is not SwordIdleState)
-                    scs.ChangeState(scs.swordIdleState);
-                break;
-        }
+        if (GetPlayerCharacterState().GetCurrentState() is not CharacterDeadState)
+            GetPlayerCharacterState().ChangeState(GetPlayerCharacterState().characterDeadState);
+    }
+    protected virtual void TransitionToAttackState()
+    {
+
     }
     public virtual void Update()
     {
-        InterruptUpdate();
+        DeadUpdate();
         UpdateBasicAttacks();
     }
 

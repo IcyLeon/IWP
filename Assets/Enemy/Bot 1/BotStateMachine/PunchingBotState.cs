@@ -26,6 +26,7 @@ public class PunchingBotState : IState
 
     public virtual void FixedUpdate()
     {
+        RotateTowardsTargetRotation();
     }
     public virtual void LateUpdate()
     {
@@ -34,16 +35,7 @@ public class PunchingBotState : IState
     {
     }
 
-    protected void UpdateTargetRotation()
-    {
-        if (GetPunchingBotStateMachine().PunchingBotData.CurrentTargetRotation != GetPunchingBotStateMachine().PunchingBotData.Target_Rotation)
-        {
-            GetPunchingBotStateMachine().PunchingBotData.CurrentTargetRotation = GetPunchingBotStateMachine().PunchingBotData.Target_Rotation;
-            GetPunchingBotStateMachine().PunchingBotData.dampedTargetRotationPassedTime = 0f;
-        }
-        RotateTowardsTargetRotation();
 
-    }
     private void RotateTowardsTargetRotation()
     {
         if (rb == null)
@@ -67,16 +59,14 @@ public class PunchingBotState : IState
     public void UpdateTargetRotation_Instant(Quaternion quaternion)
     {
         SetTargetRotation(quaternion);
-
-        GetPunchingBotStateMachine().PunchingBotData.CurrentTargetRotation = GetPunchingBotStateMachine().PunchingBotData.Target_Rotation;
-
         Quaternion targetRotation = Quaternion.Euler(0f, GetPunchingBotStateMachine().PunchingBotData.CurrentTargetRotation.eulerAngles.y, 0f);
         rb.MoveRotation(targetRotation);
 
     }
     protected void SetTargetRotation(Quaternion quaternion)
     {
-        GetPunchingBotStateMachine().PunchingBotData.Target_Rotation = quaternion;
+        GetPunchingBotStateMachine().PunchingBotData.CurrentTargetRotation = quaternion;
+        GetPunchingBotStateMachine().PunchingBotData.dampedTargetRotationPassedTime = 0f;
     }
 
     protected Vector3 GetTargetRotationDirection(float targetRotationAngle)

@@ -23,6 +23,8 @@ public class PlayerLandingState : PlayerGroundState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        HandleInputDirection();
+        UpdateTargetRotation();
     }
 
     public override void Exit()

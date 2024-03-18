@@ -390,6 +390,15 @@ public class PlayerManager : MonoBehaviour
     {
         return GetPlayerMovementState() is PlayerAimState;
     }
+    public bool IsAttacking()
+    {
+        return GetPlayerMovementState() is PlayerAttackState;
+    }
+
+    public bool IsJumping()
+    {
+        return GetPlayerMovementState() is PlayerJumpState;
+    }
 
     public bool IsMoving()
     {

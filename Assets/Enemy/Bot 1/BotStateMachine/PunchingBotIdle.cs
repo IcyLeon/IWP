@@ -23,12 +23,6 @@ public class PunchingBotIdle : PunchingBotState
         WaitForActionElapsed = 0f;
     }
 
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        UpdateTargetRotation();
-    }
-
     private bool isCloseToPlayer()
     {
         return GetPunchingBotStateMachine().GetPunchingBot().HasReachedTargetLocation(GetPunchingBotStateMachine().GetPunchingBot().GetPlayerLocation());

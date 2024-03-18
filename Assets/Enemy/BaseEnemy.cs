@@ -246,7 +246,7 @@ public class BaseEnemy : Characters
 
         Elements e = base.TakeDamage(pos, elements, actualamt, source, callHitInfo);
 
-        if (healthBarScript && !BossEnemyType)
+        if (healthBarScript)
         {
             if (healthBarScript.GetElementsIndicator() == null)
                 healthBarScript.SetElementsIndicator(this);
@@ -318,14 +318,14 @@ public class BaseEnemy : Characters
         if (GetNavMeshAgent() == null)
             return;
 
-        GetNavMeshAgent().updatePosition = false;
-        GetNavMeshAgent().updateRotation = false;
-        GetNavMeshAgent().velocity = Vector3.zero;
         if (GetNavMeshAgent().enabled)
         {
+            GetNavMeshAgent().updatePosition = false;
+            GetNavMeshAgent().updateRotation = false;
+            GetNavMeshAgent().velocity = Vector3.zero;
             GetNavMeshAgent().isStopped = true;
-            GetNavMeshAgent().enabled = false;
         }
+        GetNavMeshAgent().enabled = false;
     }
 
     public void EnableAgent()
@@ -334,6 +334,8 @@ public class BaseEnemy : Characters
             return;
 
         GetNavMeshAgent().enabled = true;
+
+        GetNavMeshAgent().Warp(rb.position);
         GetNavMeshAgent().updatePosition = true;
         GetNavMeshAgent().updateRotation = true;
         GetNavMeshAgent().isStopped = false;

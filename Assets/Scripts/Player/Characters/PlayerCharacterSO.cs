@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public enum Elemental
 {
@@ -33,6 +34,7 @@ public class PlayerCharacterSO : CharactersSO
 
     [Header("Sound")]
     public AudioClip[] AttackVoiceList;
+    public AudioClip[] JumpVoiceList;
     public AudioClip[] ElementalSkillVoiceList;
     public AudioClip[] ElementalSkillRecastVoiceList;
     public AudioClip[] ElementalBurstVoiceList;
@@ -45,29 +47,53 @@ public class PlayerCharacterSO : CharactersSO
 
     public AudioClip GetRandomSkillVoice()
     {
+        if (ElementalSkillVoiceList.Length == 0)
+            return null;
+
         int index = Random.Range(0, ElementalSkillVoiceList.Length);
         return ElementalSkillVoiceList[index];
     }
 
     public AudioClip GetRandomSkillRecastVoice()
     {
+        if (ElementalSkillRecastVoiceList.Length == 0)
+            return null;
+
         int index = Random.Range(0, ElementalSkillRecastVoiceList.Length);
         return ElementalSkillRecastVoiceList[index];
     }
 
     public AudioClip GetRandomFallenVoice()
     {
+        if (FallenVoiceList.Length == 0)
+            return null;
+
         int index = Random.Range(0, FallenVoiceList.Length);
         return FallenVoiceList[index];
     }
     public AudioClip GetRandomBasicAttackVoice()
     {
+        if (AttackVoiceList.Length == 0)
+            return null;
+
         int index = Random.Range(0, AttackVoiceList.Length);
         return AttackVoiceList[index];
     }
     public AudioClip GetRandomBurstVoice()
     {
+        if (ElementalBurstVoiceList.Length == 0)
+            return null;
+
         int index = Random.Range(0, ElementalBurstVoiceList.Length);
         return ElementalBurstVoiceList[index];
+    }
+
+    public AudioClip GetRandomJumpVoice()
+    {
+        if (JumpVoiceList.Length == 0)
+            return null;
+
+        int index = Random.Range(0, JumpVoiceList.Length);
+        return JumpVoiceList[index];
     }
 }

@@ -36,13 +36,6 @@ public class Amber : BowCharacters, ICoordinateAttack
         CoodinateTimerElapsed = GetCharacterData().GetPlayerCharacterSO().ElementalBurstTimer;
     }
 
-    protected override void Update()
-    {
-        base.Update();
-        Debug.Log(PlayerCharacterState.GetCurrentState());
-        Debug.Log(GetPlayerManager().GetPlayerMovementState());
-    }
-
     public void Spawn4Arrows()
     {
         Vector3 targetPos = GetContactPoint();

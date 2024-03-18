@@ -34,9 +34,9 @@ public class BowCharacters : PlayerCharacters
             Animator.SetFloat("AimVelocityZ", GetPlayerManager().GetPlayerController().GetInputDirection().y, 0.1f, Time.deltaTime);
         }
     }
-    public BowCharactersState GetBowCharactersState()
+    public BowCharacterState GetBowCharactersState()
     {
-        return (BowCharactersState)PlayerCharacterState;
+        return (BowCharacterState)PlayerCharacterState;
     }
 
     public BowSoundSO GetBowSoundSO()

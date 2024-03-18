@@ -39,12 +39,6 @@ public class Sword : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         FriendlyKillers friendlyKillers = other.GetComponent<FriendlyKillers>();
@@ -66,6 +60,13 @@ public class Sword : MonoBehaviour
                 ParticleSystem hitEffect = Instantiate(AssetManager.GetInstance().BasicAttackHitEffect, hitPosition, Quaternion.identity).GetComponent<ParticleSystem>();
                 Destroy(hitEffect.gameObject, hitEffect.main.duration);
                 damageObj.TakeDamage(hitPosition, new Elements(SwordCharacters.GetCurrentSwordElemental()), SwordCharacters.GetATK(), SwordCharacters);
+                
+                if (other.TryGetComponent(out IKnockback knockbackGO)) {
+                    Vector3 force = 5000f * -(hitPosition - damageObj.GetPointOfContact()).normalized;
+                    force.y = 0;
+                    knockbackGO.ApplyKnockBack(force);
+                }
+            
                 SwordCharacters.GetPlayerManager().GetPlayerController().GetCameraManager().CameraShake(2f, 2f, 0.15f);
 
 

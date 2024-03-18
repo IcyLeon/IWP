@@ -265,7 +265,7 @@ public class PlayerMovementState : IState
 
         if (!IsAiming())
         {
-            UpdateInputTargetQuaternion();
+            HandleInputDirection();
             UpdateTargetRotation();
         }
 
@@ -275,7 +275,6 @@ public class PlayerMovementState : IState
         if (GetPlayerState().GetPlayerController().GetLockMovement() == LockMovement.Enable)
             return;
 
-        //GetPlayerState().rb.MovePosition(GetPlayerState().rb.position + GetPlayerState().PlayerData.Direction * GetSpeed() * GetPlayerState().PlayerData.SpeedModifier * Time.deltaTime);
         GetPlayerState().rb.AddForce((GetSpeed() * GetPlayerState().PlayerData.SpeedModifier * GetPlayerState().PlayerData.Direction) - GetHorizontalVelocity(), ForceMode.VelocityChange);
     }
 
@@ -303,7 +302,7 @@ public class PlayerMovementState : IState
         return GetPlayerState().GetPlayerManager().GetCurrentCharacter().GetComponent<CapsuleCollider>();
     }
 
-    public void UpdateInputTargetQuaternion()
+    protected void HandleInputDirection()
     {
         if (GetPlayerState().PlayerData.Direction == Vector3.zero)
             return;
@@ -311,20 +310,10 @@ public class PlayerMovementState : IState
         SetTargetRotation(Quaternion.LookRotation(GetPlayerState().PlayerData.Direction));
     }
 
-    protected void UpdateTargetRotation()
-    {
-        if (GetPlayerState().PlayerData.CurrentTargetRotation != GetPlayerState().PlayerData.Target_Rotation)
-        {
-            GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerState().PlayerData.Target_Rotation;
-            GetPlayerState().PlayerData.dampedTargetRotationPassedTime = 0f;
-        }
-        RotateTowardsTargetRotation();
-
-    }
-
     protected void SetTargetRotation(Quaternion quaternion)
     {
-        GetPlayerState().PlayerData.Target_Rotation = quaternion;
+        GetPlayerState().PlayerData.CurrentTargetRotation = quaternion;
+        GetPlayerState().PlayerData.dampedTargetRotationPassedTime = 0f;
     }
 
     protected Vector3 GetTargetRotationDirection(float targetRotationAngle)
@@ -332,7 +321,7 @@ public class PlayerMovementState : IState
         return Quaternion.Euler(0f, targetRotationAngle, 0f) * Vector3.forward;
     }
 
-    private void RotateTowardsTargetRotation()
+    protected void UpdateTargetRotation()
     {
         if (GetPlayerState().rb == null)
             return;

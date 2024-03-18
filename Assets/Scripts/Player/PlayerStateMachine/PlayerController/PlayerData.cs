@@ -8,7 +8,7 @@ public class PlayerData
     public const float timeToReachTargetRotation = 0.14f;
     public float dampedTargetRotationCurrentVelocity;
     public float dampedTargetRotationPassedTime;
-    public Quaternion CurrentTargetRotation, Target_Rotation;
+    public Quaternion CurrentTargetRotation;
     public float SpeedModifier = 1f;
     public float StartDashTime;
     public int consecutiveDashesUsed;

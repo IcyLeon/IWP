@@ -13,7 +13,6 @@ public class PlayerDeadState : PlayerMovementState
     {
         base.Enter();
         StartAnimation("isDead");
-        GetPlayerState().GetPlayerManager().GetCurrentCharacter().PlayRandomFallenVoice();
         StartDead = false;
     }
 

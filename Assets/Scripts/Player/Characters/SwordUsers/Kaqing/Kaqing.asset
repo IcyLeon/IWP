@@ -44,6 +44,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 009f74bb86d7e594abff63c2e1e37d5e, type: 3}
   - {fileID: 8300000, guid: 47b71cb18f8face4d8d33a34913aa5b6, type: 3}
   - {fileID: 8300000, guid: c06da33ce346a52478d692ae99afc98e, type: 3}
+  JumpVoiceList:
+  - {fileID: 8300000, guid: 8e50013e4bdc4b84e8da9bd46e8588a1, type: 3}
+  - {fileID: 8300000, guid: c93515e6728090a4295a8e8456ecd444, type: 3}
+  - {fileID: 8300000, guid: 791f93ddb6d204a429ce1bfa6126a0fe, type: 3}
+  - {fileID: 8300000, guid: f119060f270a08848ac90cb85e6d7032, type: 3}
+  - {fileID: 8300000, guid: c10d0a229d8c434429647a0cc8668ac3, type: 3}
   ElementalSkillVoiceList:
   - {fileID: 8300000, guid: a62a78fc57efd264f88c99696dadcd65, type: 3}
   - {fileID: 8300000, guid: 49dde1be7f13b4144a7d4fda969ba1de, type: 3}

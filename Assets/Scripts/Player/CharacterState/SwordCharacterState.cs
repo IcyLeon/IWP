@@ -5,6 +5,7 @@ using UnityEngine;
 public class SwordCharacterState : PlayerCharacterState
 {
     public SwordIdleState swordIdleState;
+    public SwordJumpState swordJumpState;
 
     public SwordCharacters GetSwordCharacters()
     {
@@ -12,5 +13,7 @@ public class SwordCharacterState : PlayerCharacterState
     }
     public SwordCharacterState(Characters Characters) : base(Characters)
     {
+        characterDeadState = new SwordDeadState(this);
+        swordJumpState = new SwordJumpState(this);
     }
 }

@@ -11,7 +11,6 @@ public class SwordIdleState : SwordControlState
     public override void Enter()
     {
         base.Enter();
-        GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0);
     }
     public override void ChargeTrigger()
     {
@@ -21,6 +20,20 @@ public class SwordIdleState : SwordControlState
         LaunchBasicAttack();
     }
 
+    private void UpdateJumpState()
+    {
+        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsJumping())
+            return;
+
+        GetSwordCharactersState().ChangeState(GetSwordCharactersState().swordJumpState);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        UpdateJumpState();
+    }
+
     protected override void LaunchBasicAttack()
     {
         if (Time.timeScale == 0 || HasReachedEndOfBasicAttackAnimation())
@@ -28,16 +41,9 @@ public class SwordIdleState : SwordControlState
 
         if (Time.time - GetPlayerCharacterState().CommonCharactersData.LastClickedTime > CommonCharactersData.AttackRate && !GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsSkillCasting())
         {
-            GetPlayerCharacterState().GetPlayerCharacters().LookAtClosestTarget();
-            GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase++;
-
-            string AtkName = "Attack" + GetPlayerCharacterState().CommonCharactersData.BasicAttackPhase;
-            Animator animator = GetPlayerCharacterState().GetPlayerCharacters().GetAnimator();
-            if (Characters.ContainsParam(animator, AtkName))
-            {
-                animator.SetBool(AtkName, true);
-            }
+            TransitionToAttackState();
             GetPlayerCharacterState().CommonCharactersData.LastClickedTime = Time.time;
+            return;
         }
     }
 }

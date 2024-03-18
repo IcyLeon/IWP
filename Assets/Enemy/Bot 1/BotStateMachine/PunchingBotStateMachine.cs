@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PunchingBotStateMachine : CharacterState
+public class PunchingBotStateMachine : BaseEnemyStateMachine
 {
     public PunchingBotData PunchingBotData;
     public PunchingBotIdle PunchingBotIdle { get; }
@@ -12,7 +12,7 @@ public class PunchingBotStateMachine : CharacterState
     public PunchingBotChaseState PunchingBotChaseState { get; }
     public PunchingBot GetPunchingBot()
     {
-        return (PunchingBot)Characters;
+        return (PunchingBot)GetBaseEnemy();
     }
     public PunchingBotStateMachine(Characters Characters) : base(Characters)
     {

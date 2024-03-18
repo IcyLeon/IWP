@@ -23,7 +23,6 @@ public interface IInteract
 
 public class InteractManager : MonoBehaviour
 {
-    //[SerializeField] GameObject InteractablePrefab;
     private List<IInteract> currentIInteractList;
     private float InteractRange = 3f;
 
@@ -47,7 +46,7 @@ public class InteractManager : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, InteractRange);
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent<IInteract>(out IInteract interact))
+            if (collider.TryGetComponent(out IInteract interact))
             {
                 if (!currentIInteractList.Contains(interact))
                 {
@@ -67,7 +66,7 @@ public class InteractManager : MonoBehaviour
 
             foreach (Collider collider in colliders)
             {
-                if (collider.TryGetComponent<IInteract>(out IInteract colliderInteract) && colliderInteract == existinteract)
+                if (collider.TryGetComponent(out IInteract colliderInteract) && colliderInteract == existinteract)
                 {
                     foundInColliders = true;
                     break;
@@ -82,28 +81,5 @@ public class InteractManager : MonoBehaviour
             }
         }
 
-
-
-        //List<IInteract> InteractableList = new();
-
-        //foreach (Collider collider in colliders)
-        //{
-        //    IInteract interactable = null;
-        //    GetRootParent r = collider.GetComponent<GetRootParent>();
-        //    if (r != null)
-        //    {
-        //        interactable = r.GetOwner().GetComponent<IInteract>();
-        //    }
-        //    else
-        //    {
-        //        interactable = collider.GetComponent<IInteract>();
-        //    }
-
-        //    if (interactable != null)
-        //    {
-        //        if (interactable.CanInteract())
-        //            InteractableList.Add(interactable);
-        //    }
-        //}
     }
 }

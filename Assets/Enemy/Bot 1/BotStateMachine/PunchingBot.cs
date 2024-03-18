@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PunchingBot : BaseEnemy
+public class PunchingBot : KnockableEnemy
 {
     private PunchingBotStateMachine m_StateMachine;
     [SerializeField] PunchingBotPunchCollider m_PunchCollider;

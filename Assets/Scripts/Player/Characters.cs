@@ -25,26 +25,7 @@ public interface ICoordinateAttack
 
 }
 
-public interface ISkillsBurstManager
-{
-    void UpdateISkills();
-    void UpdateIBursts();
-    bool IsISkillsEnded();
-    bool IsIBurstEnded();
-
-    void ISkillEnter();
-    void ISkillExit();
-    void IBurstEnter();
-    void IBurstExit();
-
-}
-
-public interface IKnockback
-{
-
-}
-
-public class Characters : MonoBehaviour, IDamage, IKnockback
+public class Characters : MonoBehaviour, IDamage
 {
     private float CharacterHeight;
     protected float CurrentHealth;

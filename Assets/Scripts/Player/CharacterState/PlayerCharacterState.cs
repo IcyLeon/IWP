@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCharacterState : CharacterState
 {
     public CommonCharactersData CommonCharactersData;
+    public CharacterDeadState characterDeadState;
 
     public PlayerCharacterState(Characters Characters) : base(Characters)
     {

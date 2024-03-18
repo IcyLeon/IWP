@@ -10,7 +10,7 @@ public class PunchingBotData
     public float timeToReachTargetRotation { get; } = 0.14f;
     public float dampedTargetRotationCurrentVelocity;
     public float dampedTargetRotationPassedTime;
-    public Quaternion CurrentTargetRotation, Target_Rotation;
+    public Quaternion CurrentTargetRotation;
 
     public PunchingBotData()
     {
@@ -19,7 +19,7 @@ public class PunchingBotData
 
     public float GetRandomAttackInterval()
     {
-        float AttackOpp = Random.Range(OriginalAttackInterval - 0.2f, OriginalAttackInterval + 0.2f);
+        float AttackOpp = Random.Range(OriginalAttackInterval - 0.2f, OriginalAttackInterval + 0.1f);
         return AttackOpp;
     }
 

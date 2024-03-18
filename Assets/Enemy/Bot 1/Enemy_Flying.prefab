@@ -590,13 +590,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cdb22567991c834faf3585ef2887ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FootStepSO: {fileID: 0}
   CharactersSO: {fileID: 11400000, guid: 51fbb7eade2f2db4ca572735df86710b, type: 2}
   Collider: {fileID: 1885799479104116459}
   Animator: {fileID: 180813408494787390}
   Model: {fileID: 830556997584466379}
   HealthBarPivotParent: {fileID: 5896426863554007873}
-  col: {fileID: 1885799479104116459}
   rb: {fileID: 6608964527767133807}
   NavMeshAgent: {fileID: 5436847361277336052}
   EnemyValueDropSO: {fileID: 11400000, guid: bef8fb8d50e0b1d44a20c18d4404fe35, type: 2}
@@ -609,7 +607,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6857184180266605566}
   serializedVersion: 2
-  m_Mass: 10
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1

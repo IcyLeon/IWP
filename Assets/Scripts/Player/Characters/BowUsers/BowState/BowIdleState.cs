@@ -14,14 +14,22 @@ public class BowIdleState : BowControlState
     public override void Enter()
     {
         base.Enter();
-        GetPlayerCharacterState().GetPlayerCharacters().ToggleOffAimCameraDelay(0);
         threasHold_Charged = 0;
     }
 
     public override void Update()
     {
         base.Update();
+        UpdateJumpState();
         UpdateBowAimThresHold();
+    }
+
+    private void UpdateJumpState()
+    {
+        if (!GetPlayerCharacterState().GetPlayerCharacters().GetPlayerManager().IsJumping())
+            return;
+
+        GetBowCharactersState().ChangeState(GetBowCharactersState().bowJumpState);
     }
 
     public override void ChargeHold()
@@ -51,14 +59,13 @@ public class BowIdleState : BowControlState
         if (Time.timeScale == 0)
             return;
 
-        BowData BowData = GetBowCharactersState().GetBowData();
-        if (Time.time - BowData.LastClickedTime > CommonCharactersData.AttackRate)
+        if (Time.time - GetBowData().LastClickedTime > CommonCharactersData.AttackRate)
         {
-            BowData.Direction = GetBowCharactersState().GetPlayerCharacters().LookAtClosestTarget();
-            GetBowCharactersState().GetPlayerCharacters().GetAnimator().SetBool("Attack1", true);
-            BowData.LastClickedTime = Time.time;
+            TransitionToAttackState();
+            GetBowData().LastClickedTime = Time.time;
         }
     }
+
 
     private bool CanAim()
     {

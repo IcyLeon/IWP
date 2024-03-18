@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Albino : BaseEnemy
+public class Albino : KnockableEnemy
 {
     public enum States
     {

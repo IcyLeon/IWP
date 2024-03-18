@@ -5,6 +5,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public interface ISkillsBurstManager
+{
+    void UpdateISkills();
+    void UpdateIBursts();
+    bool IsISkillsEnded();
+    bool IsIBurstEnded();
+
+    void ISkillEnter();
+    void ISkillExit();
+    void IBurstEnter();
+    void IBurstExit();
+
+}
+
+
 public class PlayerCharacters : Characters, ISkillsBurstManager
 {
     protected float AimSpeed = 20f;
@@ -67,6 +82,16 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
         if (AssetManager.isInProbabilityRange(0.8f))
             GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomSkillVoice());
     }
+
+    public void PlayRandomJumpVoice()
+    {
+        if (GetPlayersSO() == null)
+            return;
+
+        if (AssetManager.isInProbabilityRange(0.8f))
+            GetSoundManager().PlayVOSound(GetPlayersSO().GetRandomJumpVoice());
+    }
+
     private void PlayRandomSkillsBurstVoice()
     {
         if (GetPlayersSO() == null)
@@ -310,8 +335,7 @@ public class PlayerCharacters : Characters, ISkillsBurstManager
         if (GetPlayerManager() == null)
             return;
 
-        GetPlayerManager().GetPlayerState().PlayerData.Target_Rotation = quaternion;
-        GetPlayerManager().GetPlayerState().PlayerData.CurrentTargetRotation = GetPlayerManager().GetPlayerState().PlayerData.Target_Rotation;
+        GetPlayerManager().GetPlayerState().PlayerData.CurrentTargetRotation = quaternion;
 
         Quaternion targetRotation = Quaternion.Euler(0f, GetPlayerManager().GetPlayerState().PlayerData.CurrentTargetRotation.eulerAngles.y, 0f);
         GetPlayerManager().GetCharacterRB().MoveRotation(targetRotation);
